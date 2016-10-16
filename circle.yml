@@ -1,0 +1,28 @@
+machine:
+  java:
+    version: oraclejdk8
+  environment:
+    JAVA_OPTS: "-Xms512m -Xmx2048m"
+
+dependencies:
+  pre:
+    - mkdir -p ${ANDROID_HOME}/licenses
+    - echo $ANDROID_SDK_LICENSE > ${ANDROID_HOME}/licenses/android-sdk-license
+    - bash ./misc/download_keystore.sh
+  override:
+    # we are cheating because there is a problem with constraint layout ATM
+    # see: https://code.google.com/p/android/issues/detail?id=212128
+    - ./gradlew dependencies || true
+
+test:
+  override:
+    # Build the code
+    - ./gradlew clean assemble -Dpre-dex=false --console=plain --stacktrace
+
+    # Execute Unit Tests
+    - ./gradlew test --console=plain
+
+    - ./gradlew lint --console=plain
+
+    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r app/build/test-results/* $CIRCLE_TEST_REPORTS
