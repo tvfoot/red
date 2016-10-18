@@ -3,6 +3,8 @@ package io.oldering.tvfoot.red.view.item;
 import com.genius.groupie.GroupAdapter;
 import com.genius.groupie.Item;
 
+import java.util.List;
+
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.customview.EmptiableRecyclerView;
 import io.oldering.tvfoot.red.databinding.MatchItemBinding;
@@ -37,5 +39,10 @@ public class MatchItem extends Item<MatchItemBinding> {
             broadcastersAdapter.add(new BroadcasterItem("ic_tv_black_18px"));
         }
         recyclerView.setAdapter(broadcastersAdapter);
+    }
+
+    @Override
+    public void bind(MatchItemBinding viewBinding, int position, List<Object> payloads) {
+        super.bind(viewBinding, position, payloads);
     }
 }

@@ -18,6 +18,7 @@ public abstract class Match {
     @SerializedName("start-at")
     public abstract Date getStartAt();
 
+    @Nullable
     public abstract String getMatchday();
 
     @SerializedName("home-team")

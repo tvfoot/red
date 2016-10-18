@@ -9,6 +9,11 @@ import java.util.Date;
 
 @AutoValue
 public abstract class DayHeaderViewModel {
+    private static final int ONE_SECOND = 1000;
+    private static final int ONE_MINUTE = 60 * ONE_SECOND;
+    private static final int ONE_HOUR = 60 * ONE_MINUTE;
+    private static final long ONE_DAY = 24 * ONE_HOUR;
+
     public abstract String getDanger();
 
     public abstract String getDisplayedDate();
@@ -26,6 +31,8 @@ public abstract class DayHeaderViewModel {
         }
         if (DateUtils.isToday(date.getTime())) {
             danger = "AUJOURD'HUI";
+        } else if (DateUtils.isToday(date.getTime() - ONE_DAY)) {
+            danger = "DEMAIN";
         }
         displayedDate = headerKey;
         return new AutoValue_DayHeaderViewModel(danger, displayedDate);
