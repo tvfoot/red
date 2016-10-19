@@ -9,9 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.genius.groupie.GroupAdapter;
 import com.genius.groupie.Item;
@@ -30,11 +29,13 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
     private static final String TAG = "MatchListActivity";
 
     private GroupAdapter matchListGroupAdapter;
+    private ProgressBar progressBar;
     @Inject
     MatchListViewModel matchListVM;
     @Inject
     BaseSchedulerProvider schedulerProvider;
     private final CompositeDisposable disposables = new CompositeDisposable();
+    private boolean loadingMore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,10 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
         Toolbar toolbar = (Toolbar) findViewById(R.id.match_list_filter_toolbar);
         setSupportActionBar(toolbar);
 
+        progressBar = dataBinding.progressPaging;
+        // TODO(benoit) remove this line
+        progressBar.setVisibility(View.VISIBLE);
+
         RecyclerView recyclerView = dataBinding.matchListRecyclerView;
         matchListGroupAdapter = new GroupAdapter(this);
         recyclerView.setAdapter(matchListGroupAdapter);
@@ -52,6 +57,11 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onLoadMore(int current_page) {
                 Log.d(TAG, "onLoadMore: " + current_page);
+
+//                if (loadingMore) return;
+//
+//                progressBar.setVisibility(View.VISIBLE);
+//                loadingMore = true;
                 matchListVM.getMore();
             }
         });
@@ -68,6 +78,7 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
         super.onStart();
         bind();
 
+//        progressBar.setVisibility(View.VISIBLE);
         matchListVM.getMatches();
     }
 
@@ -95,27 +106,27 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
         matchListGroupAdapter.add(item);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_match_list, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_match_list, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public void onClick(View v) {
