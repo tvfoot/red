@@ -10,37 +10,32 @@ import java.util.TimeZone;
 import javax.inject.Inject;
 
 import io.oldering.tvfoot.red.api.MatchService;
-import io.oldering.tvfoot.red.di.DaggerAppComponent;
 import io.oldering.tvfoot.red.model.Match;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.oldering.tvfoot.red.view.item.DayHeaderItem;
 import io.oldering.tvfoot.red.view.item.MatchItem;
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
-import io.reactivex.subjects.PublishSubject;
 
-// TODO(benoit) delete and only use MatchViewModel
+// TODO(benoit) delete and only use MatchViewModel / WHY ?
 public class MatchListViewModel {
     private final MatchService matchService;
-    @Inject
-    BaseSchedulerProvider schedulerProvider;
+    private final BaseSchedulerProvider schedulerProvider;
     public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
-    private PublishSubject<Match> subject = PublishSubject.create();
-    private int offset = 0;
 
     @Inject
-    public MatchListViewModel(MatchService matchService) {
+    public MatchListViewModel(MatchService matchService, BaseSchedulerProvider schedulerProvider) {
         this.matchService = matchService;
-        DaggerAppComponent.create().inject(this);
+        this.schedulerProvider = schedulerProvider;
 
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
     }
 
-    /**
-     * Well, this is messy
-     */
-    public Observable<Item> matchStream() {
-        return subject
+    public Observable<Item> getMatches(int pageIndex) {
+        return matchService
+                .findFuture(getFilter(pageIndex * 30))
+                .toObservable()
+                .flatMap(Observable::fromIterable)
                 .groupBy(
                         match -> simpleDateFormat.format(match.getStartAt()),
                         (Function<Match, Item>) match -> new MatchItem(MatchViewModel.create(match))
@@ -56,23 +51,7 @@ public class MatchListViewModel {
                                 )
                         ))
                 .flatMap(itemObservable -> itemObservable)
-                .subscribeOn(schedulerProvider.computation());
-    }
-
-    public void getMatches() {
-        matchService
-                .findFuture(getFilter(offset))
-                .toObservable()
-                .flatMap(Observable::fromIterable)
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.computation())
-                .subscribe(subject::onNext);
-    }
-
-    public void getMore() {
-        // TODO(benoit) return match but in the same stream as getMatches...
-        offset += 30;
-        getMatches();
+                .subscribeOn(schedulerProvider.io());
     }
 
     private String getFilter(int offset) {

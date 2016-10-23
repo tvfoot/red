@@ -5,7 +5,6 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import io.oldering.tvfoot.red.view.MatchListActivity;
-import io.oldering.tvfoot.red.viewmodel.MatchListViewModel;
 
 @Singleton
 @Component(
@@ -16,7 +15,5 @@ import io.oldering.tvfoot.red.viewmodel.MatchListViewModel;
         }
 )
 public interface AppComponent {
-        void inject(MatchListActivity matchListActivity);
-
-        void inject(MatchListViewModel matchListViewModel);
+    void inject(MatchListActivity matchListActivity);
 }

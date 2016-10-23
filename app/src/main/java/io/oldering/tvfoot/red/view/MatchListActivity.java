@@ -8,9 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.genius.groupie.GroupAdapter;
 import com.genius.groupie.Item;
@@ -24,31 +22,32 @@ import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.oldering.tvfoot.red.view.item.DayHeaderItem;
 import io.oldering.tvfoot.red.viewmodel.MatchListViewModel;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
+import timber.log.Timber;
 
 public class MatchListActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "MatchListActivity";
-
     private GroupAdapter matchListGroupAdapter;
-    private ProgressBar progressBar;
     @Inject
     MatchListViewModel matchListVM;
     @Inject
     BaseSchedulerProvider schedulerProvider;
+    private PublishSubject<Integer> paginatorSubject;
     private final CompositeDisposable disposables = new CompositeDisposable();
-    private boolean loadingMore;
+    private boolean requestUnderWay;
+    private int pageIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerAppComponent.create().inject(this);
 
-        ActivityMatchListBinding dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_match_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.match_list_filter_toolbar);
-        setSupportActionBar(toolbar);
+        paginatorSubject = PublishSubject.create();
+        pageIndex = 0;
 
-        progressBar = dataBinding.progressPaging;
-        // TODO(benoit) remove this line
-        progressBar.setVisibility(View.VISIBLE);
+        ActivityMatchListBinding dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_match_list);
+        Toolbar toolbar = dataBinding.matchListFilterToolbar;
+        setSupportActionBar(toolbar);
 
         RecyclerView recyclerView = dataBinding.matchListRecyclerView;
         matchListGroupAdapter = new GroupAdapter(this);
@@ -56,20 +55,16 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
         recyclerView.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) recyclerView.getLayoutManager()) {
             @Override
             public void onLoadMore(int current_page) {
-                Log.d(TAG, "onLoadMore: " + current_page);
+                Timber.d("onLoadMore %d, %d", current_page, pageIndex);
+                if (requestUnderWay) return;
 
-//                if (loadingMore) return;
-//
-//                progressBar.setVisibility(View.VISIBLE);
-//                loadingMore = true;
-                matchListVM.getMore();
+                paginatorSubject.onNext(++pageIndex);
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.match_list_filter_fab);
+        FloatingActionButton fab = dataBinding.matchListFilterFab;
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
-
         );
     }
 
@@ -79,14 +74,29 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
         bind();
 
 //        progressBar.setVisibility(View.VISIBLE);
-        matchListVM.getMatches();
+        paginatorSubject.onNext(pageIndex);
     }
 
     private void bind() {
-        disposables.add(matchListVM
-                .matchStream()
+        Disposable matchDisposable = paginatorSubject
+                .doOnNext(integer -> {
+                    requestUnderWay = true;
+                    Timber.d("Loading page : %d", pageIndex);
+                    // TODO _progressBar.setVisibility(View.VISIBLE);
+                })
+                .concatMap(matchListVM::getMatches)
                 .observeOn(schedulerProvider.ui())
-                .subscribe(this::addItem));
+                .map(item -> {
+                    MatchListActivity.this.addItem(item);
+                    return 69; // dummy
+                })
+                .doOnNext(i -> {
+                    requestUnderWay = false;
+                    // TODO(benoit) _progressBar.setVisibility(View.INVISIBLE);
+                })
+                .subscribe();
+
+        disposables.add(matchDisposable);
     }
 
     @Override
@@ -101,35 +111,13 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
 
     private void addItem(Item item) {
         if (item instanceof DayHeaderItem) {
-            Log.d(TAG, "addItem: is day header" + ((DayHeaderItem) item).dayHeaderVM.getDisplayedDate());
+            Timber.d("addItem: is day header %s", ((DayHeaderItem) item).dayHeaderVM.getDisplayedDate());
         }
         matchListGroupAdapter.add(item);
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_match_list, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
     @Override
     public void onClick(View v) {
-        Log.d(TAG, "onClick: ");
+        Timber.d("onClick: ");
     }
 }
