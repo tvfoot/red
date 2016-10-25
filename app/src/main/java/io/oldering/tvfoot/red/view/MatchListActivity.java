@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.genius.groupie.GroupAdapter;
 import com.genius.groupie.Item;
@@ -36,6 +37,7 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
     private final CompositeDisposable disposables = new CompositeDisposable();
     private boolean requestUnderWay;
     private int pageIndex;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,8 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
         ActivityMatchListBinding dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_match_list);
         Toolbar toolbar = dataBinding.matchListFilterToolbar;
         setSupportActionBar(toolbar);
+
+        progressBar = dataBinding.progressPaging;
 
         RecyclerView recyclerView = dataBinding.matchListRecyclerView;
         matchListGroupAdapter = new GroupAdapter(this);
@@ -82,7 +86,7 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
                 .doOnNext(integer -> {
                     requestUnderWay = true;
                     Timber.d("Loading page : %d", pageIndex);
-                    // TODO _progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
                 })
                 .concatMap(matchListVM::getMatches)
                 .observeOn(schedulerProvider.ui())
@@ -92,7 +96,7 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
                 })
                 .doOnNext(i -> {
                     requestUnderWay = false;
-                    // TODO(benoit) _progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
                 })
                 .subscribe();
 

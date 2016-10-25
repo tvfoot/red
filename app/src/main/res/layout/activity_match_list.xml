@@ -32,6 +32,16 @@
             tools:listitem="@layout/match_item"
             tools:showIn="@layout/activity_match_list" />
 
+        <ProgressBar
+            android:id="@+id/progress_paging"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="visible"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:visibility="visible" />
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/match_list_filter_fab"
             android:layout_width="wrap_content"
