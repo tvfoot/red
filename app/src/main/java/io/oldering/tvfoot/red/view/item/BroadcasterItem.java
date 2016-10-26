@@ -4,6 +4,7 @@ import com.genius.groupie.Item;
 
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.BroadcasterItemBinding;
+import timber.log.Timber;
 
 public class BroadcasterItem extends Item<BroadcasterItemBinding> {
     private String broadcasterDrawableName;
@@ -19,6 +20,7 @@ public class BroadcasterItem extends Item<BroadcasterItemBinding> {
 
     @Override
     public void bind(BroadcasterItemBinding viewBinding, int position) {
+        Timber.d("binding Boardcaster with %s at %d", broadcasterDrawableName, position);
         viewBinding.setBroadcasterDrawableName(broadcasterDrawableName);
     }
 }

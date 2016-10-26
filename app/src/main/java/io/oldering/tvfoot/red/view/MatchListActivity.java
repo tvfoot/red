@@ -54,7 +54,7 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
         progressBar = dataBinding.progressPaging;
 
         RecyclerView recyclerView = dataBinding.matchListRecyclerView;
-        matchListGroupAdapter = new GroupAdapter(this);
+        matchListGroupAdapter = new GroupAdapter();
         recyclerView.setAdapter(matchListGroupAdapter);
         recyclerView.addOnScrollListener(new InfiniteScrollListener((LinearLayoutManager) recyclerView.getLayoutManager()) {
             @Override
