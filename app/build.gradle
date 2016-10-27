@@ -79,6 +79,7 @@ dependencies {
     compile 'com.google.dagger:dagger:2.7'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.google.firebase:firebase-core:9.6.1'
+    provided 'com.google.code.findbugs:jsr305:3.0.1'
     testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.7'
     apt 'com.google.auto.value:auto-value:1.2'
