@@ -110,6 +110,9 @@ dependencies {
     // androidTestCompile 'org.powermock:powermock-module-junit4:1.6.5'
     // androidTestCompile 'org.powermock:powermock-api-mockito:1.6.5'
     // androidTestCompile 'org.powermock:powermock-api-mockito-common:1.6.5'
+
+    // jmockit and dexmaker are not good friends
+    // androidTestCompile 'org.jmockit:jmockit:1.8'
 }
 
 apply plugin: 'com.google.gms.google-services'
