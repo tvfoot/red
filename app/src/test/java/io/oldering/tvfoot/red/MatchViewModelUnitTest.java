@@ -19,25 +19,13 @@ import io.oldering.tvfoot.red.viewmodel.MatchViewModel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ViewModelUnitTest {
+public class MatchViewModelUnitTest {
     @Test
-    public void BroadcasterViewModel_create() {
-        String name = "名前";
-        String code = "コード";
-        String url = "url";
-        Broadcaster broadcaster = Broadcaster.create(name, code, url);
-
-        BroadcasterViewModel broadcasterViewModel = BroadcasterViewModel.create(broadcaster);
-
-        assertEquals(broadcasterViewModel.getCode(), code);
+    public void create() {
     }
 
     @Test
-    public void MatchViewModel_create() {
-    }
-
-    @Test
-    public void MatchViewModel_parseStartTime() {
+    public void parseStartTime() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
         Date startTime = Calendar.getInstance().getTime();
@@ -47,7 +35,7 @@ public class ViewModelUnitTest {
     }
 
     @Test
-    public void MatchViewModel_parseBroadcasters() {
+    public void parseBroadcasters() {
         List<Broadcaster> broadcasters = generateBroadcasters();
 
         List<BroadcasterViewModel> broadcasterVMs = MatchViewModel.parseBroadcasters(broadcasters);
@@ -58,12 +46,12 @@ public class ViewModelUnitTest {
     }
 
     @Test
-    public void MatchViewModel_parseBroadcasters_empty() {
+    public void parseBroadcasters_empty() {
         assertEquals(MatchViewModel.parseBroadcasters(null), new ArrayList<>());
     }
 
     @Test
-    public void MatchViewModel_parseHeadline() {
+    public void parseHeadline() {
         String homeAwayName = "home";
         Team homeTeam = Team.create(null, homeAwayName, null, null, null, null, null, null, null);
         String notEmpty = "not empty";
@@ -77,7 +65,7 @@ public class ViewModelUnitTest {
     }
 
     @Test
-    public void MatchViewModel_parseHeadline_noteam() {
+    public void parseHeadline_noteam() {
         Team homeTeam = Team.create(null, null, null, null, null, null, null, null, null);
         Team awayTeam = Team.create(null, null, null, null, null, null, null, null, null);
         String matchLabel = "label";
@@ -89,7 +77,7 @@ public class ViewModelUnitTest {
     }
 
     @Test
-    public void MatchViewModel_parseCompetition() {
+    public void parseCompetition() {
         String code = "code";
         String name = "name";
         String country = "country";
@@ -101,7 +89,7 @@ public class ViewModelUnitTest {
     }
 
     @Test
-    public void MatchViewModel_parseMatchDay() {
+    public void parseMatchDay() {
         String label = "label";
         String matchDay = "matchDay";
 
@@ -109,19 +97,19 @@ public class ViewModelUnitTest {
     }
 
     @Test
-    public void MatchViewModel_parseMatchDay_empty() {
+    public void parseMatchDay_empty() {
         String matchDay = "matchDay";
         assertEquals(MatchViewModel.parseMatchDay("", matchDay), "J. " + matchDay);
     }
 
     @Test
-    public void MatchViewModel_parseMatchDay_null() {
+    public void parseMatchDay_null() {
         String matchDay = "matchDay";
         assertEquals(MatchViewModel.parseMatchDay(null, matchDay), "J. " + matchDay);
     }
 
     @Test
-    public void MatchViewModel_isMatchLive() {
+    public void isMatchLive() {
         assertTrue(true);
     }
 

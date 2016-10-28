@@ -27,8 +27,10 @@ public abstract class DayHeaderViewModel {
             date = MatchListViewModel.simpleDateFormat.parse(headerKey);
         } catch (ParseException e) {
             e.printStackTrace();
-            throw new UnsupportedOperationException("What is this date anyway?");
+            throw new UnsupportedOperationException("What is this date anyway? " + headerKey);
         }
+        // TODO(benoit) refactor this so it does not depend on Android APIs
+        // and DateUtils.isToday uses deprecated Time class
         if (DateUtils.isToday(date.getTime())) {
             danger = "AUJOURD'HUI";
         } else if (DateUtils.isToday(date.getTime() - ONE_DAY)) {
