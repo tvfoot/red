@@ -105,6 +105,11 @@ dependencies {
     androidTestCompile 'org.mockito:mockito-core:1.10.19'
     androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
     androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+    // powermock and dexmaker are not good friends
+    // http://stackoverflow.com/q/27953270/1004274
+    // androidTestCompile 'org.powermock:powermock-module-junit4:1.6.5'
+    // androidTestCompile 'org.powermock:powermock-api-mockito:1.6.5'
+    // androidTestCompile 'org.powermock:powermock-api-mockito-common:1.6.5'
 }
 
 apply plugin: 'com.google.gms.google-services'
