@@ -17,6 +17,7 @@ import io.oldering.tvfoot.red.viewmodel.BroadcasterViewModel;
 import io.oldering.tvfoot.red.viewmodel.MatchViewModel;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class MatchViewModelUnitTest {
@@ -108,9 +109,34 @@ public class MatchViewModelUnitTest {
         assertEquals(MatchViewModel.parseMatchDay(null, matchDay), "J. " + matchDay);
     }
 
+    static final int ONE_MINUTE = 1000 * 60;
+
     @Test
-    public void isMatchLive() {
-        assertTrue(true);
+    public void isMatchLive_notYet() {
+        Date startDate = new Date(System.currentTimeMillis() + ONE_MINUTE);
+
+        assertFalse(MatchViewModel.isMatchLive(startDate));
+    }
+
+    @Test
+    public void isMatchLive_AlmostFinished() {
+        Date startDate = new Date(System.currentTimeMillis() - ONE_MINUTE);
+
+        assertTrue(MatchViewModel.isMatchLive(startDate));
+    }
+
+    @Test
+    public void isMatchLive_JustStarted() {
+        Date startDate = new Date(System.currentTimeMillis() - 104 * ONE_MINUTE);
+
+        assertTrue(MatchViewModel.isMatchLive(startDate));
+    }
+
+    @Test
+    public void isMatchLive_notAnymore() {
+        Date startDate = new Date(System.currentTimeMillis() - 106 * ONE_MINUTE);
+
+        assertFalse(MatchViewModel.isMatchLive(startDate));
     }
 
     private List<Broadcaster> generateBroadcasters() {
