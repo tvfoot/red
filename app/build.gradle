@@ -112,6 +112,7 @@ dependencies {
     // androidTestCompile 'org.powermock:powermock-api-mockito-common:1.6.5'
 
     // jmockit and dexmaker are not good friends
+    // http://stackoverflow.com/a/36946031/1004274
     // androidTestCompile 'org.jmockit:jmockit:1.8'
 }
 
