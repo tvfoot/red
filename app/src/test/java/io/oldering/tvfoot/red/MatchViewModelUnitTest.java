@@ -1,6 +1,9 @@
 package io.oldering.tvfoot.red;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,13 +23,82 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(MatchViewModel.class)
 public class MatchViewModelUnitTest {
-    @Test
-    public void create() {
-        // TODO(benoit) need to test
-        // 1. all parse* and isMatchLive are called
-        // plus, they are passed to the AutoValue constructor which is also called
-    }
+
+    // TODO(benoit) not sure how to test create here
+    // 1. all parse* and isMatchLive are called
+    // plus, they are passed to the AutoValue constructor which is also called
+    // @Test
+    // public void create() {
+    //
+    //     Date date = mock(Date.class);
+    //     Date date2 = mock(Date.class);
+    //
+    //     MatchViewModel matchVM = PowerMockito.mock(MatchViewModel.class);
+    //     matchVM.getCompetition();
+    //
+    //     when(matchVM.parseStartTime(date)).thenReturn("startTime");
+    //
+    ////     mockStatic(MatchViewModel.class);
+    ////     when(MatchViewModel.parseStartTime(date)).thenReturn("startTime");
+    //
+    //     Team homeTeam = mock(Team.class);
+    //     when(homeTeam.isEmpty()).thenReturn(true);
+    //
+    //     Competition competition = mock(Competition.class);
+    //     when(competition.getName()).thenReturn("competition name");
+    //
+    //     Match match = mock(Match.class);
+    //     when(match.getStartAt()).thenReturn(date);
+    //     when(match.getHomeTeam()).thenReturn(homeTeam);
+    //     when(match.getCompetition()).thenReturn(competition);
+    //     when(match.getLabel()).thenReturn("match label");
+    //     matchVM.create(match);
+    //
+    //     verify(matchVM).parseStartTime(date2);
+    //     verify(matchVM).parseHeadLine(homeTeam, null, "yoyo");
+    // }
+    //
+    // @Test
+    // public void create_otherversion() {
+    //     // TODO(benoit) need to test
+    //     // 1. all parse* and isMatchLive are called
+    //     // plus, they are passed to the AutoValue constructor which is also called
+    //
+    //     Date date = mock(Date.class);
+    //     Date date2 = mock(Date.class);
+    //     List<Broadcaster> broadcasters = new ArrayList<>();
+    //     List<BroadcasterViewModel> broadcasterVMs = new ArrayList<>();
+    //
+    //     Team homeTeam = mock(Team.class);
+    //     when(homeTeam.isEmpty()).thenReturn(true);
+    //
+    //     String matchLabel = "matchLabel";
+    //
+    //     String competitionName = "competitionName";
+    //     Competition competition = mock(Competition.class);
+    //     when(competition.getName()).thenReturn(competitionName);
+    //
+    //     mockStatic(MatchViewModel.class);
+    //     when(MatchViewModel.parseStartTime(date)).thenReturn("startTime");
+    //     when(MatchViewModel.parseBroadcasters(broadcasters)).thenReturn(broadcasterVMs);
+    //     when(MatchViewModel.parseHeadLine(homeTeam, null, matchLabel)).thenReturn(matchLabel);
+    //     when(MatchViewModel.parseCompetition(competition)).thenReturn(competitionName);
+    //     when(MatchViewModel.parseMatchDay(matchLabel, null)).thenReturn(matchLabel);
+    //     when(MatchViewModel.isMatchLive(date)).thenReturn(true);
+    //
+    //     Match match = mock(Match.class);
+    //     when(match.getStartAt()).thenReturn(date);
+    //     when(match.getHomeTeam()).thenReturn(homeTeam);
+    //     when(match.getCompetition()).thenReturn(competition);
+    //     when(match.getLabel()).thenReturn(matchLabel);
+    //     MatchViewModel.create(match);
+    //
+    //     verifyStatic();
+    //     verify(MatchViewModel.parseStartTime(date2));
+    // }
 
     @Test
     public void parseStartTime() {

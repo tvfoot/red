@@ -1,15 +1,16 @@
 package io.oldering.tvfoot.red;
 
-import android.support.test.runner.AndroidJUnit4;
+import android.content.Context;
+import android.content.res.Resources;
 import android.view.View;
+import android.widget.ImageView;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@RunWith(AndroidJUnit4.class)
 public class DataBindingAdaptersTest {
     @Test
     public void setVisibilityGone() {
@@ -25,15 +26,22 @@ public class DataBindingAdaptersTest {
         verify(view).setVisibility(View.VISIBLE);
     }
 
-    // TODO(benoit) don't know how to test this properly
-    // @Test
-    // public void setImageResource() {
-    //      Resources resources = mock(Resources.class);
-    //      Context context = mock(Context.class);
-    //      when(context.getResources()).thenReturn(resources);
-    //      ImageView imageView = new ImageView(context);
-    //
-    //      DataBindingAdapters.setImageResource(imageView, "b1");
-    //      verify(imageView).setImageResource(R.drawable.b1);
-    // }
+    @Test
+    public void setImageResource() {
+        String resourceName = "b1";
+        String packageName = "packageName";
+
+        Resources resources = mock(Resources.class);
+        when(resources.getIdentifier(resourceName, "drawable", packageName)).thenReturn(R.drawable.b1);
+
+        Context context = mock(Context.class);
+        when(context.getResources()).thenReturn(resources);
+        when(context.getPackageName()).thenReturn(packageName);
+
+        ImageView imageView = mock(ImageView.class);
+        when(imageView.getContext()).thenReturn(context);
+
+        DataBindingAdapters.setImageResource(imageView, resourceName);
+        verify(imageView).setImageResource(R.drawable.b1);
+    }
 }
