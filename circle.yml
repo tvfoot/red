@@ -11,7 +11,8 @@ dependencies:
     - bash ./misc/download_keystore.sh
     - bash ./misc/download_google-services.sh
   override:
-    - echo y | android update sdk --no-ui --all --filter build-tools-25.0.0
+    - echo y | android update sdk --no-ui --all --filter android-`grep -oP '(?<=compileSdkVersion )[0-9].*[0-9]' app/build.gradle`,extra-android-m2repository,build-tools-`grep -oP "(?<=buildToolsVersion .)[0-9].*[0-9]" app/build.gradle`
+
     # we are cheating because there is a problem with constraint layout ATM
     # see: https://code.google.com/p/android/issues/detail?id=212128
     - ./gradlew dependencies || true
