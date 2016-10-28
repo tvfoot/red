@@ -48,7 +48,27 @@ android {
     dexOptions {
         preDexLibraries = Boolean.valueOf(System.getProperty('pre-dex', 'true'))
     }
+    productFlavors {
+        mock {
+            applicationIdSuffix = ".mock"
+        }
+        prod {
 
+        }
+    }
+    // Remove mockRelease as it's not needed.
+    android.variantFilter { variant ->
+        if(variant.buildType.name.equals('release')
+                && variant.getFlavors().get(0).name.equals('mock')) {
+            variant.setIgnore(true);
+        }
+    }
+    // Always show the result of every unit test, even if it passes.
+    testOptions.unitTests.all {
+        testLogging {
+            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+        }
+    }
     lintOptions {
         warning 'InvalidPackage' // prevent error from references of non-Android package
     }
