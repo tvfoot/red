@@ -33,7 +33,7 @@ public abstract class MatchViewModel {
 
     public abstract boolean isLive();
 
-    static MatchViewModel create(Match match) {
+    public static MatchViewModel create(Match match) {
         return new AutoValue_MatchViewModel(
                 parseStartTime(match.getStartAt()),
                 parseBroadcasters(match.getBroadcasters()),

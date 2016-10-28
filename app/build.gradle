@@ -90,6 +90,8 @@ dependencies {
     // JVM Tests
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-all:1.10.19'
+    // testCompile 'org.powermock:powermock-api-easymock:1.6.5'
 
     // Android Tests
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

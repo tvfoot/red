@@ -23,6 +23,9 @@ import static org.junit.Assert.assertTrue;
 public class MatchViewModelUnitTest {
     @Test
     public void create() {
+        // TODO(benoit) need to test
+        // 1. all parse* and isMatchLive are called
+        // plus, they are passed to the AutoValue constructor which is also called
     }
 
     @Test
