@@ -46,7 +46,7 @@ android {
         }
     }
     dexOptions {
-        preDexLibraries = Boolean.valueOf(System.getProperty("pre-dex", "true"))
+        preDexLibraries = Boolean.valueOf(System.getProperty('pre-dex', 'true'))
     }
 
     lintOptions {
@@ -56,10 +56,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+
     compile 'com.jakewharton.timber:timber:4.3.1'
     compile 'com.android.support:support-annotations:24.2.1'
     compile 'com.android.support:appcompat-v7:24.2.1'
@@ -80,16 +77,31 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.google.firebase:firebase-core:9.6.1'
     provided 'com.google.code.findbugs:jsr305:3.0.1'
-    testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.7'
     apt 'com.google.auto.value:auto-value:1.2'
     apt 'com.ryanharter.auto.value:auto-value-gson:0.4.2'
     provided 'com.google.auto.value:auto-value:1.2'
     provided 'com.ryanharter.auto.value:auto-value-gson:0.4.2'
 
+
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
+    // JVM Tests
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'junit:junit:4.12'
+
+    // Android Tests
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    // androidTestCompile 'org.powermock:powermock-api-easymock:1.6.5'
+
+    // mockito 2 does not work with dexmaker ?
+    // http://stackoverflow.com/a/32522862/1004274
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
