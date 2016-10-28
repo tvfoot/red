@@ -11,6 +11,7 @@ dependencies:
     - bash ./misc/download_keystore.sh
     - bash ./misc/download_google-services.sh
   override:
+    - echo y | android update sdk --no-ui --all --filter build-tools-25.0.0
     # we are cheating because there is a problem with constraint layout ATM
     # see: https://code.google.com/p/android/issues/detail?id=212128
     - ./gradlew dependencies || true
