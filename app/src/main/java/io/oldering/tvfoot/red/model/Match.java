@@ -40,4 +40,16 @@ public abstract class Match {
     public static TypeAdapter<Match> typeAdapter(Gson gson) {
         return new AutoValue_Match.GsonTypeAdapter(gson);
     }
+
+    public static Match create(String label,
+                               Date startAt,
+                               String matchDay,
+                               Team homeTeam,
+                               Team awayTeam,
+                               List<Broadcaster> broadcasters,
+                               String place,
+                               Competition competition,
+                               boolean isPostponed) {
+        return new AutoValue_Match(label, startAt, matchDay, homeTeam, awayTeam, broadcasters, place, competition, isPostponed);
+    }
 }
