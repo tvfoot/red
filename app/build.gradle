@@ -58,7 +58,7 @@ android {
     }
     // Remove mockRelease as it's not needed.
     android.variantFilter { variant ->
-        if(variant.buildType.name.equals('release')
+        if (variant.buildType.name.equals('release')
                 && variant.getFlavors().get(0).name.equals('mock')) {
             variant.setIgnore(true);
         }
@@ -84,14 +84,14 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta1'
     compile 'com.genius:groupie:0.3.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.0-RC1'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.0-RC2'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.0'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.0'
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0-RC2'
+    compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.google.dagger:dagger:2.7'
     compile 'com.google.code.gson:gson:2.7'
