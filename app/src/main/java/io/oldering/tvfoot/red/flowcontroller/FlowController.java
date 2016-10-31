@@ -9,4 +9,8 @@ public class FlowController {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tvfoot://matchListActivity"));
         context.startActivity(intent);
     }
+    public static void launchMatchDetailActivity(Context context) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tvfoot://matchDetailActivity"));
+        context.startActivity(intent);
+    }
 }
