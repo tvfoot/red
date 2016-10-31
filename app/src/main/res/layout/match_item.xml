@@ -25,7 +25,7 @@
         tools:showIn="@layout/activity_match_list">
 
         <TextView
-            android:id="@+id/match_startTime"
+            android:id="@+id/match_start_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -66,7 +66,7 @@
             android:maxWidth="50dp"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             app:layout_constraintHorizontal_weight=".2"
-            app:layout_constraintLeft_toRightOf="@+id/match_startTime"
+            app:layout_constraintLeft_toRightOf="@+id/match_start_time"
             app:layout_constraintRight_toLeftOf="@+id/match_headline"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/broadcaster_item" />
@@ -89,8 +89,6 @@
             android:id="@+id/match_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="4dp"
             android:background="@color/colorDanger"
             android:paddingLeft="4dp"
