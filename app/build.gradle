@@ -42,6 +42,7 @@ android {
         main {
             res {
                 srcDir 'src/main/res_broadcasters'
+                srcDir 'src/main/res_teams'
             }
         }
     }
