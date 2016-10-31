@@ -19,7 +19,7 @@ import io.oldering.tvfoot.red.model.Team;
 public abstract class MatchViewModel {
     private static final String TAG = "MatchViewModel";
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
-    private static long ONE_MATCH_TIME = 105 * 60;
+    private static long ONE_MATCH_TIME = 105 * 60 * 1000;
 
     public abstract String getStartTime();
 
@@ -33,7 +33,7 @@ public abstract class MatchViewModel {
 
     public abstract boolean isLive();
 
-    static MatchViewModel create(Match match) {
+    public static MatchViewModel create(Match match) {
         return new AutoValue_MatchViewModel(
                 parseStartTime(match.getStartAt()),
                 parseBroadcasters(match.getBroadcasters()),

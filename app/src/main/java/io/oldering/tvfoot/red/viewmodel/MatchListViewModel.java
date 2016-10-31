@@ -32,6 +32,7 @@ public class MatchListViewModel {
     }
 
     public Observable<Item> getMatches(int pageIndex) {
+        // TODO(benoit) should pass the filter as a param?
         return matchService
                 .findFuture(getFilter(pageIndex * 30))
                 .toObservable()
@@ -54,7 +55,7 @@ public class MatchListViewModel {
                 .subscribeOn(schedulerProvider.io());
     }
 
-    private String getFilter(int offset) {
+    public String getFilter(int offset) {
         return "{\"where\":{\"deleted\":{\"neq\":1}},\"order\":\"start-at ASC, weight ASC\",\"limit\":30,\"offset\":" + offset + "}";
     }
 }
