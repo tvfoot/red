@@ -31,7 +31,7 @@
         android:id="@+id/match_detail_start_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="@+id/match_detail_headline"
         app:layout_constraintRight_toRightOf="@+id/match_detail_headline"
         app:layout_constraintTop_toBottomOf="@+id/match_detail_competition"
