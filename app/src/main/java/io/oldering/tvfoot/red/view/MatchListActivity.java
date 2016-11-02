@@ -20,6 +20,9 @@ import javax.inject.Inject;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.ActivityMatchListBinding;
 import io.oldering.tvfoot.red.di.DaggerAppComponent;
+import io.oldering.tvfoot.red.flowcontroller.FlowController;
+import io.oldering.tvfoot.red.util.rxbus.RxBus;
+import io.oldering.tvfoot.red.util.rxbus.event.MatchClickEvent;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.oldering.tvfoot.red.view.item.DayHeaderItem;
 import io.oldering.tvfoot.red.viewmodel.MatchListViewModel;
@@ -34,19 +37,18 @@ public class MatchListActivity extends AppCompatActivity {
     MatchListViewModel matchListVM;
     @Inject
     BaseSchedulerProvider schedulerProvider;
-    private PublishSubject<Integer> paginatorSubject;
+    private PublishSubject<Integer> paginatorSubject = PublishSubject.create();
     private final CompositeDisposable disposables = new CompositeDisposable();
     private boolean requestUnderWay;
-    private int pageIndex;
+    private int pageIndex = 0;
     private ProgressBar progressBar;
+    @Inject
+    RxBus rxBus;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerAppComponent.create().inject(this);
-
-        paginatorSubject = PublishSubject.create();
-        pageIndex = 0;
 
         ActivityMatchListBinding dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_match_list);
         Toolbar toolbar = dataBinding.matchListFilterToolbar;
@@ -101,7 +103,18 @@ public class MatchListActivity extends AppCompatActivity {
                 })
                 .subscribe();
 
+        Disposable matchClick = rxBus
+                .toObservable()
+                .subscribe(event -> {
+                    if (event instanceof MatchClickEvent) {
+                        MatchClickEvent matchClickEvent = (MatchClickEvent) event;
+                        FlowController.launchMatchDetailActivity(MatchListActivity.this, matchClickEvent.getMatchVM());
+                        MatchListActivity.this.finish();
+                    }
+                });
+
         disposables.add(matchDisposable);
+        disposables.add(matchClick);
     }
 
     @Override

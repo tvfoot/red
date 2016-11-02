@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import io.oldering.tvfoot.red.api.MatchService;
 import io.oldering.tvfoot.red.model.Match;
+import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.oldering.tvfoot.red.view.item.DayHeaderItem;
 import io.oldering.tvfoot.red.view.item.MatchItem;
@@ -22,11 +23,13 @@ public class MatchListViewModel {
     private final MatchService matchService;
     private final BaseSchedulerProvider schedulerProvider;
     public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
+    private final RxBus rxBus;
 
     @Inject
-    public MatchListViewModel(MatchService matchService, BaseSchedulerProvider schedulerProvider) {
+    public MatchListViewModel(MatchService matchService, BaseSchedulerProvider schedulerProvider, RxBus rxBus) {
         this.matchService = matchService;
         this.schedulerProvider = schedulerProvider;
+        this.rxBus = rxBus;
 
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
     }
@@ -39,7 +42,7 @@ public class MatchListViewModel {
                 .flatMap(Observable::fromIterable)
                 .groupBy(
                         match -> simpleDateFormat.format(match.getStartAt()),
-                        (Function<Match, Item>) match -> new MatchItem(MatchViewModel.create(match))
+                        (Function<Match, Item>) match -> new MatchItem(MatchViewModel.create(match, rxBus))
                 )
                 .map(stringItemGroupedObservable -> stringItemGroupedObservable
                         .startWith(

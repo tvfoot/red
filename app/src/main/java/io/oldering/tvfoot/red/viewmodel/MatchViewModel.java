@@ -17,14 +17,21 @@ import io.oldering.tvfoot.red.model.Broadcaster;
 import io.oldering.tvfoot.red.model.Competition;
 import io.oldering.tvfoot.red.model.Match;
 import io.oldering.tvfoot.red.model.Team;
-import timber.log.Timber;
+import io.oldering.tvfoot.red.util.rxbus.RxBus;
+import io.oldering.tvfoot.red.util.rxbus.event.MatchClickEvent;
+import io.reactivex.subjects.PublishSubject;
 
+/**
+ * TODO(benoit) think about splitting this into two view model, listrow and detail
+ * TODO(benoit) should not probably use AutoValue here... troublesome about DI and stuff.
+ */
 @AutoValue
 public abstract class MatchViewModel implements Parcelable {
-    // TODO(benoit) think about splitting this into two view model, listrow and detail
 
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
     private static long ONE_MATCH_TIME_IN_MILLIS = 105 * 60 * 1000;
+
+    private RxBus rxBus;
 
     public abstract String getStartTime();
 
@@ -48,8 +55,8 @@ public abstract class MatchViewModel implements Parcelable {
 
     public abstract String getMatchId();
 
-    public static MatchViewModel create(Match match) {
-        return new AutoValue_MatchViewModel(
+    public static MatchViewModel create(Match match, RxBus rxBus) {
+        MatchViewModel matchViewModel = new AutoValue_MatchViewModel(
                 parseStartTime(match.getStartAt()),
                 parseBroadcasters(match.getBroadcasters()),
                 parseHeadLine(match.getHomeTeam(), match.getAwayTeam(), match.getLabel()),
@@ -61,6 +68,8 @@ public abstract class MatchViewModel implements Parcelable {
                 parseAwayTeamDrawableName(match.getAwayTeam()),
                 parseSummary(match),
                 match.getId());
+        matchViewModel.setRxBus(rxBus);
+        return matchViewModel;
     }
 
     public static String parseStartTime(Date startAt) {
@@ -113,13 +122,13 @@ public abstract class MatchViewModel implements Parcelable {
     }
 
     private static String parseHomeTeamDrawableName(Team homeTeam) {
-        // TODO(benoit)
-        return "hometeam";
+        // TODO(benoit) check null
+        return homeTeam.getCode();
     }
 
     private static String parseAwayTeamDrawableName(Team awayTeam) {
-        // TODO(benoit)
-        return "awayteam";
+        // TODO(benoit) check null
+        return awayTeam.getCode();
     }
 
     private static String parseSummary(Match match) {
@@ -127,7 +136,15 @@ public abstract class MatchViewModel implements Parcelable {
         return "summary";
     }
 
+    private PublishSubject<MatchViewModel> matchClickSubject;
+
     public void onMatchClick(View view) {
-        Timber.d("onClick: from MatchViewModel");
+        if (rxBus.hasObservers()) {
+            rxBus.send(new MatchClickEvent(this));
+        }
+    }
+
+    public void setRxBus(RxBus rxBus) {
+        this.rxBus = rxBus;
     }
 }
