@@ -33,6 +33,14 @@ public abstract class MatchViewModel {
 
     public abstract boolean isLive();
 
+    public abstract String getStartTimeInText();
+
+    public abstract String getHomeTeamDrawableName();
+
+    public abstract String getAwayTeamDrawableName();
+
+    public abstract String getSummary();
+
     public static MatchViewModel create(Match match) {
         return new AutoValue_MatchViewModel(
                 parseStartTime(match.getStartAt()),
@@ -40,7 +48,11 @@ public abstract class MatchViewModel {
                 parseHeadLine(match.getHomeTeam(), match.getAwayTeam(), match.getLabel()),
                 parseCompetition(match.getCompetition()),
                 parseMatchDay(match.getLabel(), match.getMatchday()),
-                isMatchLive(match.getStartAt()));
+                isMatchLive(match.getStartAt()),
+                parseStartTimeInText(match.getStartAt()),
+                parseHomeTeamDrawableName(match.getHomeTeam()),
+                parseAwayTeamDrawableName(match.getAwayTeam()),
+                parseSummary(match));
     }
 
     public static String parseStartTime(Date startAt) {
@@ -85,5 +97,25 @@ public abstract class MatchViewModel {
         long now = Calendar.getInstance().getTimeInMillis();
         long startTimeInMillis = startAt.getTime();
         return now >= startTimeInMillis && now <= startTimeInMillis + ONE_MATCH_TIME;
+    }
+
+    private static String parseStartTimeInText(Date startAt) {
+        // TODO(benoit)
+        return "parseStartTimeInText";
+    }
+
+    private static String parseHomeTeamDrawableName(Team homeTeam) {
+        // TODO(benoit)
+        return "hometeam";
+    }
+
+    private static String parseAwayTeamDrawableName(Team awayTeam) {
+        // TODO(benoit)
+        return "awayteam";
+    }
+
+    private static String parseSummary(Match match) {
+        // TODO(benoit)
+        return "summary";
     }
 }

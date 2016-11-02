@@ -5,14 +5,6 @@
 
     <data>
 
-        <import type="android.view.View" />
-
-        <import type="android.graphics.drawable.Drawable" />
-
-        <variable
-            name="broadcastImage"
-            type="Drawable" />
-
         <variable
             name="match"
             type="io.oldering.tvfoot.red.viewmodel.MatchViewModel" />
@@ -21,6 +13,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/ripple_white_background"
         tools:showIn="@layout/activity_match_list">
 
@@ -29,7 +23,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="@{match.startTime}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -61,7 +54,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:gravity="top|center_horizontal"
             android:maxWidth="50dp"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
@@ -76,7 +68,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:text="@{match.headline}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             app:layout_constraintHorizontal_weight=".65"
