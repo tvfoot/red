@@ -20,7 +20,6 @@ public class BroadcasterItem extends Item<BroadcasterItemBinding> {
 
     @Override
     public void bind(BroadcasterItemBinding viewBinding, int position) {
-        Timber.d("binding Boardcaster with %s at %d", broadcasterDrawableName, position);
         viewBinding.setBroadcasterDrawableName(broadcasterDrawableName);
     }
 }

@@ -2,6 +2,7 @@ package io.oldering.tvfoot.red.view;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +28,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
 import timber.log.Timber;
 
-public class MatchListActivity extends AppCompatActivity implements View.OnClickListener {
+public class MatchListActivity extends AppCompatActivity {
     private GroupAdapter matchListGroupAdapter;
     @Inject
     MatchListViewModel matchListVM;
@@ -40,7 +41,7 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
     private ProgressBar progressBar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerAppComponent.create().inject(this);
 
@@ -118,10 +119,5 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
             Timber.d("addItem: is day header %s", ((DayHeaderItem) item).dayHeaderVM.getDisplayedDate());
         }
         matchListGroupAdapter.add(item);
-    }
-
-    @Override
-    public void onClick(View v) {
-        Timber.d("onClick: ");
     }
 }

@@ -86,6 +86,7 @@ public class MatchListViewModelUnitTest {
 
     private Match createMatch(String code, int delayInDays) {
         return Match.create(
+                "id",
                 "label" + code,
                 new Date(System.currentTimeMillis() + (delayInDays * ONE_DAY_IN_MILLIS)),
                 "matchDay" + code,

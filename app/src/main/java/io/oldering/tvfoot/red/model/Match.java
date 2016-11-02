@@ -12,6 +12,8 @@ import java.util.List;
 
 @AutoValue
 public abstract class Match {
+    public abstract String getId();
+
     @Nullable
     public abstract String getLabel();
 
@@ -41,7 +43,8 @@ public abstract class Match {
         return new AutoValue_Match.GsonTypeAdapter(gson);
     }
 
-    public static Match create(String label,
+    public static Match create(String id,
+                               String label,
                                Date startAt,
                                String matchDay,
                                Team homeTeam,
@@ -50,6 +53,6 @@ public abstract class Match {
                                String place,
                                Competition competition,
                                boolean isPostponed) {
-        return new AutoValue_Match(label, startAt, matchDay, homeTeam, awayTeam, broadcasters, place, competition, isPostponed);
+        return new AutoValue_Match(id, label, startAt, matchDay, homeTeam, awayTeam, broadcasters, place, competition, isPostponed);
     }
 }

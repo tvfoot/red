@@ -1,5 +1,8 @@
 package io.oldering.tvfoot.red.viewmodel;
 
+import android.os.Parcelable;
+import android.view.View;
+
 import com.google.auto.value.AutoValue;
 
 import java.text.SimpleDateFormat;
@@ -14,12 +17,14 @@ import io.oldering.tvfoot.red.model.Broadcaster;
 import io.oldering.tvfoot.red.model.Competition;
 import io.oldering.tvfoot.red.model.Match;
 import io.oldering.tvfoot.red.model.Team;
+import timber.log.Timber;
 
 @AutoValue
-public abstract class MatchViewModel {
-    private static final String TAG = "MatchViewModel";
+public abstract class MatchViewModel implements Parcelable {
+    // TODO(benoit) think about splitting this into two view model, listrow and detail
+
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
-    private static long ONE_MATCH_TIME = 105 * 60 * 1000;
+    private static long ONE_MATCH_TIME_IN_MILLIS = 105 * 60 * 1000;
 
     public abstract String getStartTime();
 
@@ -41,6 +46,8 @@ public abstract class MatchViewModel {
 
     public abstract String getSummary();
 
+    public abstract String getMatchId();
+
     public static MatchViewModel create(Match match) {
         return new AutoValue_MatchViewModel(
                 parseStartTime(match.getStartAt()),
@@ -52,7 +59,8 @@ public abstract class MatchViewModel {
                 parseStartTimeInText(match.getStartAt()),
                 parseHomeTeamDrawableName(match.getHomeTeam()),
                 parseAwayTeamDrawableName(match.getAwayTeam()),
-                parseSummary(match));
+                parseSummary(match),
+                match.getId());
     }
 
     public static String parseStartTime(Date startAt) {
@@ -96,7 +104,7 @@ public abstract class MatchViewModel {
     public static boolean isMatchLive(Date startAt) {
         long now = Calendar.getInstance().getTimeInMillis();
         long startTimeInMillis = startAt.getTime();
-        return now >= startTimeInMillis && now <= startTimeInMillis + ONE_MATCH_TIME;
+        return now >= startTimeInMillis && now <= startTimeInMillis + ONE_MATCH_TIME_IN_MILLIS;
     }
 
     private static String parseStartTimeInText(Date startAt) {
@@ -117,5 +125,9 @@ public abstract class MatchViewModel {
     private static String parseSummary(Match match) {
         // TODO(benoit)
         return "summary";
+    }
+
+    public void onMatchClick(View view) {
+        Timber.d("onClick: from MatchViewModel");
     }
 }
