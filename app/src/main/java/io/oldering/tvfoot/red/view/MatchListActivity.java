@@ -119,7 +119,7 @@ public class MatchListActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        super.onResume();
+        super.onStop();
         unbind();
     }
 

@@ -123,12 +123,18 @@ public abstract class MatchViewModel implements Parcelable {
 
     private static String parseHomeTeamDrawableName(Team homeTeam) {
         // TODO(benoit) check null
-        return homeTeam.getCode();
+        if (homeTeam.getCode() != null) {
+            return homeTeam.getCode().toLowerCase();
+        }
+        return null;
     }
 
     private static String parseAwayTeamDrawableName(Team awayTeam) {
         // TODO(benoit) check null
-        return awayTeam.getCode();
+        if (awayTeam.getCode() != null) {
+            return awayTeam.getCode().toLowerCase();
+        }
+        return null;
     }
 
     private static String parseSummary(Match match) {

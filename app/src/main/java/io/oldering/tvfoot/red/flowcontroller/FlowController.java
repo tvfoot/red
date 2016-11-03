@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import io.oldering.tvfoot.red.view.MatchDetailActivity;
 import io.oldering.tvfoot.red.viewmodel.MatchViewModel;
 
 public class FlowController {
@@ -15,8 +16,12 @@ public class FlowController {
     }
 
     public static void launchMatchDetailActivity(Context context, MatchViewModel matchVM) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tvfoot://matchDetailActivity"));
+        Intent intent = new Intent(context, MatchDetailActivity.class);
         intent.putExtra(MATCH_VIEW_MODEL, matchVM);
         context.startActivity(intent);
+
+//        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tvfoot://matchDetailActivity"));
+//        intent.putExtra(MATCH_VIEW_MODEL, matchVM);
+//        context.startActivity(intent);
     }
 }
