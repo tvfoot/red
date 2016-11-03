@@ -95,7 +95,7 @@ public class MatchListActivity extends AppCompatActivity {
                 .observeOn(schedulerProvider.ui())
                 .map(item -> {
                     MatchListActivity.this.addItem(item);
-                    return 69; // dummy
+                    return 69; // dummy because cannot return null
                 })
                 .doOnNext(i -> {
                     requestUnderWay = false;
@@ -109,7 +109,6 @@ public class MatchListActivity extends AppCompatActivity {
                     if (event instanceof MatchClickEvent) {
                         MatchClickEvent matchClickEvent = (MatchClickEvent) event;
                         FlowController.launchMatchDetailActivity(MatchListActivity.this, matchClickEvent.getMatchVM());
-                        MatchListActivity.this.finish();
                     }
                 });
 
