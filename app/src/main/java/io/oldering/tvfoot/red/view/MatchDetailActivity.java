@@ -46,9 +46,6 @@ public class MatchDetailActivity extends AppCompatActivity {
         for (BroadcasterViewModel broadcasterViewModel : matchVM.getBroadcasters()) {
             broadcastersAdapter.add(new BroadcasterItem(broadcasterViewModel.getCode()));
         }
-        if (broadcastersAdapter.getItemCount() == 0) {
-            broadcastersAdapter.add(new BroadcasterItem("ic_tv_black_18px"));
-        }
         dataBinding.matchDetailBroadcasters.setAdapter(broadcastersAdapter);
     }
 }
