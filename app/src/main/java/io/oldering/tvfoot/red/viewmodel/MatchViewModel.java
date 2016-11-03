@@ -19,7 +19,6 @@ import io.oldering.tvfoot.red.model.Match;
 import io.oldering.tvfoot.red.model.Team;
 import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.rxbus.event.MatchClickEvent;
-import io.reactivex.subjects.PublishSubject;
 
 /**
  * TODO(benoit) think about splitting this into two view model, listrow and detail
@@ -28,7 +27,8 @@ import io.reactivex.subjects.PublishSubject;
 @AutoValue
 public abstract class MatchViewModel implements Parcelable {
 
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
+    private static SimpleDateFormat shortDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
+    private static SimpleDateFormat FullTextDateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy à HH'h'mm", Locale.FRANCE);
     private static long ONE_MATCH_TIME_IN_MILLIS = 105 * 60 * 1000;
 
     private RxBus rxBus;
@@ -51,7 +51,7 @@ public abstract class MatchViewModel implements Parcelable {
 
     public abstract String getAwayTeamDrawableName();
 
-    public abstract String getSummary();
+    public abstract String getLocation();
 
     public abstract String getMatchId();
 
@@ -66,15 +66,15 @@ public abstract class MatchViewModel implements Parcelable {
                 parseStartTimeInText(match.getStartAt()),
                 parseHomeTeamDrawableName(match.getHomeTeam()),
                 parseAwayTeamDrawableName(match.getAwayTeam()),
-                parseSummary(match),
+                parseLocation(match),
                 match.getId());
         matchViewModel.setRxBus(rxBus);
         return matchViewModel;
     }
 
     public static String parseStartTime(Date startAt) {
-        simpleDateFormat.setTimeZone(TimeZone.getDefault());
-        return simpleDateFormat.format(startAt);
+        shortDateFormat.setTimeZone(TimeZone.getDefault());
+        return shortDateFormat.format(startAt);
     }
 
     public static List<BroadcasterViewModel> parseBroadcasters(List<Broadcaster> broadcasters) {
@@ -117,8 +117,8 @@ public abstract class MatchViewModel implements Parcelable {
     }
 
     private static String parseStartTimeInText(Date startAt) {
-        // TODO(benoit)
-        return "parseStartTimeInText";
+        FullTextDateFormat.setTimeZone(TimeZone.getDefault());
+        return FullTextDateFormat.format(startAt);
     }
 
     private static String parseHomeTeamDrawableName(Team homeTeam) {
@@ -126,7 +126,7 @@ public abstract class MatchViewModel implements Parcelable {
         if (homeTeam.getCode() != null) {
             return homeTeam.getCode().toLowerCase();
         }
-        return null;
+        return Team.DEFAULT_CODE;
     }
 
     private static String parseAwayTeamDrawableName(Team awayTeam) {
@@ -134,17 +134,14 @@ public abstract class MatchViewModel implements Parcelable {
         if (awayTeam.getCode() != null) {
             return awayTeam.getCode().toLowerCase();
         }
-        return null;
+        return Team.DEFAULT_CODE;
     }
 
-    private static String parseSummary(Match match) {
-        // TODO(benoit)
-        return "summary";
+    private static String parseLocation(Match match) {
+        return match.getPlace();
     }
 
-    private PublishSubject<MatchViewModel> matchClickSubject;
-
-    public void onMatchClick(View view) {
+    public void onMatchClick(View ignored) {
         if (rxBus.hasObservers()) {
             rxBus.send(new MatchClickEvent(this));
         }

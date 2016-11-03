@@ -8,6 +8,7 @@ import com.google.gson.TypeAdapter;
 
 @AutoValue
 public abstract class Team {
+    public static final String DEFAULT_CODE = "default";
     @Nullable
     public abstract String getCode();
 

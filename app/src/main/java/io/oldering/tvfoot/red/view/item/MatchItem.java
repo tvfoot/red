@@ -38,8 +38,4 @@ public class MatchItem extends Item<MatchItemBinding> {
         }
         recyclerView.setAdapter(broadcastersAdapter);
     }
-
-    public interface OnMatchClickListener {
-        void OnMatchClickListener(MatchItem matchItem);
-    }
 }

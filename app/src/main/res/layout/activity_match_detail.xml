@@ -30,29 +30,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="STRASBOURG - VALENCIENNES" />
 
-        <TextView
-            android:id="@+id/match_detail_competition"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@{match.competition}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/match_detail_headline"
-            tools:text="Ligue 2 - 11ème journée" />
-
-        <TextView
-            android:id="@+id/match_detail_start_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@{match.startTimeInText}"
-            app:layout_constraintLeft_toLeftOf="@+id/match_detail_headline"
-            app:layout_constraintRight_toRightOf="@+id/match_detail_headline"
-            app:layout_constraintTop_toBottomOf="@+id/match_detail_competition"
-            tools:text="Mardi 01 Novembre 2016 à 04h00" />
-
         <ImageView
             android:id="@+id/match_detail_home_team_icon"
             android:layout_width="100dp"
@@ -61,7 +38,7 @@
             android:contentDescription="@string/match_detail_home_team_icon_desc"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/match_detail_away_team_icon"
-            app:layout_constraintTop_toBottomOf="@+id/match_detail_start_time"
+            app:layout_constraintTop_toBottomOf="@+id/match_detail_headline"
             app:tvfootTeamImageResource="@{match.homeTeamDrawableName}"
             tools:src="@drawable/tvfoot_team_gdc" />
 
@@ -73,13 +50,24 @@
             android:contentDescription="@string/match_detail_away_team_icon_desc"
             app:layout_constraintLeft_toRightOf="@+id/match_detail_home_team_icon"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/match_detail_start_time"
+            app:layout_constraintTop_toBottomOf="@+id/match_detail_headline"
             app:tvfootTeamImageResource="@{match.awayTeamDrawableName}"
             tools:src="@drawable/tvfoot_team_cdf" />
 
-        <!--TODO(benoit) might need a webview for aligning text-->
         <TextView
-            android:id="@+id/match_detail_summary"
+            android:id="@+id/match_detail_start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@{match.startTimeInText}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/match_detail_home_team_icon"
+            tools:text="Mardi 01 Novembre 2016 à 04h00" />
+
+        <TextView
+            android:id="@+id/match_detail_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -87,24 +75,36 @@
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingStart="12dp"
-            android:text="@{match.summary}"
+            android:text="@{match.location}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/match_detail_home_team_icon"
-            tools:text="Ce match du Groupe E de l'UEFA Champions League entre Monaco et CSKA Moscou aura lieu le Jeudi 03 Novembre 2016 à 04h45 au Stade Louis II, Monaco, et sera retransmis / diffusé sur beIN SPORTS 1HD et beIN SPORTS 3HD en multiplex." />
+            app:layout_constraintTop_toBottomOf="@+id/match_detail_start_time"
+            tools:text="SKM Stadium, Bakou" />
+
+        <TextView
+            android:id="@+id/match_detail_competition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@{match.competition}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/match_detail_location"
+            tools:text="Ligue 2 - 11ème journée" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/match_detail_broadcasters"
-            android:layout_width="48dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:orientation="horizontal"
-            android:visibility="gone"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.3"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/match_detail_summary"
-            tools:listitem="@layout/broadcaster_item"
-            tools:visibility="visible" />
+            app:layout_constraintTop_toBottomOf="@+id/match_detail_competition"
+            tools:listitem="@layout/broadcaster_item" />
     </android.support.constraint.ConstraintLayout>
 </layout>

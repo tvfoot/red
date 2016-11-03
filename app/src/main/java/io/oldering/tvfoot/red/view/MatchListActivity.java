@@ -80,7 +80,6 @@ public class MatchListActivity extends AppCompatActivity {
         super.onStart();
         bind();
 
-//        progressBar.setVisibility(View.VISIBLE);
         paginatorSubject.onNext(pageIndex);
     }
 
