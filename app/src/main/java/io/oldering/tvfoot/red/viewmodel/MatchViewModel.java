@@ -19,6 +19,7 @@ import io.oldering.tvfoot.red.model.Match;
 import io.oldering.tvfoot.red.model.Team;
 import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.rxbus.event.MatchClickEvent;
+import io.oldering.tvfoot.red.util.string.StringUtils;
 
 /**
  * TODO(benoit) think about splitting this into two view model, listrow and detail
@@ -28,7 +29,7 @@ import io.oldering.tvfoot.red.util.rxbus.event.MatchClickEvent;
 public abstract class MatchViewModel implements Parcelable {
 
     private static SimpleDateFormat shortDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
-    private static SimpleDateFormat FullTextDateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy à HH'h'mm", Locale.FRANCE);
+    private static SimpleDateFormat fullTextDateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy à HH'h'mm", Locale.FRANCE);
     private static long ONE_MATCH_TIME_IN_MILLIS = 105 * 60 * 1000;
 
     private RxBus rxBus;
@@ -117,8 +118,8 @@ public abstract class MatchViewModel implements Parcelable {
     }
 
     private static String parseStartTimeInText(Date startAt) {
-        FullTextDateFormat.setTimeZone(TimeZone.getDefault());
-        return FullTextDateFormat.format(startAt);
+        fullTextDateFormat.setTimeZone(TimeZone.getDefault());
+        return StringUtils.capitalize(fullTextDateFormat.format(startAt));
     }
 
     private static String parseHomeTeamDrawableName(Team homeTeam) {
