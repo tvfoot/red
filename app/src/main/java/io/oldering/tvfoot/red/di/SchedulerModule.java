@@ -9,6 +9,7 @@ import io.oldering.tvfoot.red.util.schedulers.SchedulerProvider;
 
 @Module
 public class SchedulerModule {
+
     @Provides
     @Singleton
     BaseSchedulerProvider provideSchedulerProvider() {

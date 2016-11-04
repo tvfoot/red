@@ -1,5 +1,8 @@
 package io.oldering.tvfoot.red.viewmodel;
 
+import android.os.Parcelable;
+import android.view.View;
+
 import com.google.auto.value.AutoValue;
 
 import java.text.SimpleDateFormat;
@@ -14,12 +17,22 @@ import io.oldering.tvfoot.red.model.Broadcaster;
 import io.oldering.tvfoot.red.model.Competition;
 import io.oldering.tvfoot.red.model.Match;
 import io.oldering.tvfoot.red.model.Team;
+import io.oldering.tvfoot.red.util.rxbus.RxBus;
+import io.oldering.tvfoot.red.util.rxbus.event.MatchClickEvent;
+import io.oldering.tvfoot.red.util.string.StringUtils;
 
+/**
+ * TODO(benoit) think about splitting this into two view model, listrow and detail
+ * TODO(benoit) should not probably use AutoValue here... troublesome about DI and stuff.
+ */
 @AutoValue
-public abstract class MatchViewModel {
-    private static final String TAG = "MatchViewModel";
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
-    private static long ONE_MATCH_TIME = 105 * 60 * 1000;
+public abstract class MatchViewModel implements Parcelable {
+
+    private static SimpleDateFormat shortDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
+    private static SimpleDateFormat fullTextDateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy à HH'h'mm", Locale.FRANCE);
+    private static long ONE_MATCH_TIME_IN_MILLIS = 105 * 60 * 1000;
+
+    private RxBus rxBus;
 
     public abstract String getStartTime();
 
@@ -33,19 +46,36 @@ public abstract class MatchViewModel {
 
     public abstract boolean isLive();
 
-    public static MatchViewModel create(Match match) {
-        return new AutoValue_MatchViewModel(
+    public abstract String getStartTimeInText();
+
+    public abstract String getHomeTeamDrawableName();
+
+    public abstract String getAwayTeamDrawableName();
+
+    public abstract String getLocation();
+
+    public abstract String getMatchId();
+
+    public static MatchViewModel create(Match match, RxBus rxBus) {
+        MatchViewModel matchViewModel = new AutoValue_MatchViewModel(
                 parseStartTime(match.getStartAt()),
                 parseBroadcasters(match.getBroadcasters()),
                 parseHeadLine(match.getHomeTeam(), match.getAwayTeam(), match.getLabel()),
                 parseCompetition(match.getCompetition()),
                 parseMatchDay(match.getLabel(), match.getMatchday()),
-                isMatchLive(match.getStartAt()));
+                isMatchLive(match.getStartAt()),
+                parseStartTimeInText(match.getStartAt()),
+                parseHomeTeamDrawableName(match.getHomeTeam()),
+                parseAwayTeamDrawableName(match.getAwayTeam()),
+                parseLocation(match),
+                match.getId());
+        matchViewModel.setRxBus(rxBus);
+        return matchViewModel;
     }
 
     public static String parseStartTime(Date startAt) {
-        simpleDateFormat.setTimeZone(TimeZone.getDefault());
-        return simpleDateFormat.format(startAt);
+        shortDateFormat.setTimeZone(TimeZone.getDefault());
+        return shortDateFormat.format(startAt);
     }
 
     public static List<BroadcasterViewModel> parseBroadcasters(List<Broadcaster> broadcasters) {
@@ -84,6 +114,41 @@ public abstract class MatchViewModel {
     public static boolean isMatchLive(Date startAt) {
         long now = Calendar.getInstance().getTimeInMillis();
         long startTimeInMillis = startAt.getTime();
-        return now >= startTimeInMillis && now <= startTimeInMillis + ONE_MATCH_TIME;
+        return now >= startTimeInMillis && now <= startTimeInMillis + ONE_MATCH_TIME_IN_MILLIS;
+    }
+
+    private static String parseStartTimeInText(Date startAt) {
+        fullTextDateFormat.setTimeZone(TimeZone.getDefault());
+        return StringUtils.capitalize(fullTextDateFormat.format(startAt));
+    }
+
+    private static String parseHomeTeamDrawableName(Team homeTeam) {
+        // TODO(benoit) check null
+        if (homeTeam.getCode() != null) {
+            return homeTeam.getCode().toLowerCase();
+        }
+        return Team.DEFAULT_CODE;
+    }
+
+    private static String parseAwayTeamDrawableName(Team awayTeam) {
+        // TODO(benoit) check null
+        if (awayTeam.getCode() != null) {
+            return awayTeam.getCode().toLowerCase();
+        }
+        return Team.DEFAULT_CODE;
+    }
+
+    private static String parseLocation(Match match) {
+        return match.getPlace();
+    }
+
+    public void onMatchClick(View ignored) {
+        if (rxBus.hasObservers()) {
+            rxBus.send(MatchClickEvent.create(this));
+        }
+    }
+
+    public void setRxBus(RxBus rxBus) {
+        this.rxBus = rxBus;
     }
 }

@@ -11,7 +11,8 @@ import io.oldering.tvfoot.red.view.MatchListActivity;
         modules = {
                 NetworkingModule.class,
                 ServiceModule.class,
-                SchedulerModule.class
+                SchedulerModule.class,
+                RxBusModule.class
         }
 )
 public interface AppComponent {

@@ -14,6 +14,7 @@ import io.oldering.tvfoot.red.api.MatchService;
 import io.oldering.tvfoot.red.model.Competition;
 import io.oldering.tvfoot.red.model.Match;
 import io.oldering.tvfoot.red.model.Team;
+import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.oldering.tvfoot.red.util.schedulers.ImmediateSchedulerProvider;
 import io.oldering.tvfoot.red.viewmodel.MatchListViewModel;
@@ -36,7 +37,9 @@ public class MatchListViewModelUnitTest {
     public void before() {
         matchService = mock(MatchService.class);
         schedulerProvider = new ImmediateSchedulerProvider();
-        matchListVM = new MatchListViewModel(matchService, schedulerProvider);
+
+        RxBus rxBus = mock(RxBus.class);
+        matchListVM = new MatchListViewModel(matchService, schedulerProvider, rxBus);
     }
 
     @Test
@@ -86,6 +89,7 @@ public class MatchListViewModelUnitTest {
 
     private Match createMatch(String code, int delayInDays) {
         return Match.create(
+                "id",
                 "label" + code,
                 new Date(System.currentTimeMillis() + (delayInDays * ONE_DAY_IN_MILLIS)),
                 "matchDay" + code,

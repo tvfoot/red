@@ -2,6 +2,7 @@ package io.oldering.tvfoot.red.view;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,9 @@ import javax.inject.Inject;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.ActivityMatchListBinding;
 import io.oldering.tvfoot.red.di.DaggerAppComponent;
+import io.oldering.tvfoot.red.flowcontroller.FlowController;
+import io.oldering.tvfoot.red.util.rxbus.RxBus;
+import io.oldering.tvfoot.red.util.rxbus.event.MatchClickEvent;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.oldering.tvfoot.red.view.item.DayHeaderItem;
 import io.oldering.tvfoot.red.viewmodel.MatchListViewModel;
@@ -27,25 +31,24 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
 import timber.log.Timber;
 
-public class MatchListActivity extends AppCompatActivity implements View.OnClickListener {
+public class MatchListActivity extends AppCompatActivity {
     private GroupAdapter matchListGroupAdapter;
     @Inject
     MatchListViewModel matchListVM;
     @Inject
     BaseSchedulerProvider schedulerProvider;
-    private PublishSubject<Integer> paginatorSubject;
+    private PublishSubject<Integer> paginatorSubject = PublishSubject.create();
     private final CompositeDisposable disposables = new CompositeDisposable();
     private boolean requestUnderWay;
-    private int pageIndex;
+    private int pageIndex = 0;
     private ProgressBar progressBar;
+    @Inject
+    RxBus rxBus;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerAppComponent.create().inject(this);
-
-        paginatorSubject = PublishSubject.create();
-        pageIndex = 0;
 
         ActivityMatchListBinding dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_match_list);
         Toolbar toolbar = dataBinding.matchListFilterToolbar;
@@ -77,7 +80,6 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
         super.onStart();
         bind();
 
-//        progressBar.setVisibility(View.VISIBLE);
         paginatorSubject.onNext(pageIndex);
     }
 
@@ -92,7 +94,7 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
                 .observeOn(schedulerProvider.ui())
                 .map(item -> {
                     MatchListActivity.this.addItem(item);
-                    return 69; // dummy
+                    return 69; // dummy because cannot return null
                 })
                 .doOnNext(i -> {
                     requestUnderWay = false;
@@ -100,12 +102,22 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
                 })
                 .subscribe();
 
+        Disposable matchClick = rxBus
+                .toObservable()
+                .subscribe(event -> {
+                    if (event instanceof MatchClickEvent) {
+                        MatchClickEvent matchClickEvent = (MatchClickEvent) event;
+                        FlowController.launchMatchDetailActivity(MatchListActivity.this, matchClickEvent.getMatchVM());
+                    }
+                });
+
         disposables.add(matchDisposable);
+        disposables.add(matchClick);
     }
 
     @Override
     protected void onStop() {
-        super.onResume();
+        super.onStop();
         unbind();
     }
 
@@ -118,10 +130,5 @@ public class MatchListActivity extends AppCompatActivity implements View.OnClick
             Timber.d("addItem: is day header %s", ((DayHeaderItem) item).dayHeaderVM.getDisplayedDate());
         }
         matchListGroupAdapter.add(item);
-    }
-
-    @Override
-    public void onClick(View v) {
-        Timber.d("onClick: ");
     }
 }

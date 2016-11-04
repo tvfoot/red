@@ -20,6 +20,11 @@ public class DataBindingAdapters {
         imageView.setImageResource(identifier);
     }
 
+    @BindingAdapter("tvfootTeamImageResource")
+    public static void setTvFootTeamImageResource(ImageView imageView, String resource) {
+        setImageResource(imageView, "tvfoot_team_" + resource);
+    }
+
     @BindingAdapter("visible")
     public static void setVisibility(View view, boolean shouldBeVisible) {
         view.setVisibility(shouldBeVisible ? View.VISIBLE : View.GONE);
