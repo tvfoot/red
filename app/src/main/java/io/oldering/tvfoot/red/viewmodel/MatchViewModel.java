@@ -143,7 +143,7 @@ public abstract class MatchViewModel implements Parcelable {
 
     public void onMatchClick(View ignored) {
         if (rxBus.hasObservers()) {
-            rxBus.send(new MatchClickEvent(this));
+            rxBus.send(MatchClickEvent.create(this));
         }
     }
 

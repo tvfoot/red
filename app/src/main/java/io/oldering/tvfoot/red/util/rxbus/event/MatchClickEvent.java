@@ -1,16 +1,14 @@
 package io.oldering.tvfoot.red.util.rxbus.event;
 
+import com.google.auto.value.AutoValue;
 
 import io.oldering.tvfoot.red.viewmodel.MatchViewModel;
 
-public class MatchClickEvent {
-    MatchViewModel matchVM;
+@AutoValue
+public abstract class MatchClickEvent {
+    public abstract MatchViewModel getMatchVM();
 
-    public MatchClickEvent(MatchViewModel matchVM) {
-        this.matchVM = matchVM;
-    }
-
-    public MatchViewModel getMatchVM() {
-        return matchVM;
+    public static MatchClickEvent create(MatchViewModel matchVM) {
+        return new AutoValue_MatchClickEvent(matchVM);
     }
 }
