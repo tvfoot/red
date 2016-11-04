@@ -36,6 +36,7 @@ public class MatchListViewModel {
 
     public Observable<Item> getMatches(int pageIndex) {
         // TODO(benoit) should pass the filter as a param?
+        // TODO(benoit) split into functions so gets easy to test
         return matchService
                 .findFuture(getFilter(pageIndex * 30))
                 .toObservable()
