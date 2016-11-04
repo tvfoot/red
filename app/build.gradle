@@ -17,7 +17,7 @@ android {
         applicationId 'io.oldering.tvfoot.red'
         minSdkVersion 21
         targetSdkVersion 24
-        versionCode 4
+        versionCode System.getenv('CIRCLE_BUILD_NUM') ?: 5
         versionName '1.0'
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
         vectorDrawables {
