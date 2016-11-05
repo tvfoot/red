@@ -12,6 +12,7 @@ dependencies:
     - bash ./misc/download_google-services.sh
   override:
     # we are cheating because there is a problem with constraint layout ATM
+    # should be fixed in Android Studio 2.3 ?
     # see: https://code.google.com/p/android/issues/detail?id=212128
     - ./gradlew dependencies || true
 
@@ -29,6 +30,7 @@ test:
     - ./gradlew test --console=plain
     - ./gradlew connectedAndroidTest --console=plain
     - ./gradlew lint --console=plain
+    - [ "$CIRCLE_BRANCH" = develop ] && ./gradlew publishApkRelease
 
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     - cp -r app/build/test-results/* $CIRCLE_TEST_REPORTS

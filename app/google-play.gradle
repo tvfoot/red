@@ -1,0 +1,6 @@
+apply plugin: 'com.github.triplet.play'
+
+play {
+    jsonFile = rootProject.file(System.getenv('SERVICE_ACCOUNT') ?: SERVICE_ACCOUNT)
+    track = 'alpha'
+}
