@@ -30,7 +30,7 @@ test:
     - ./gradlew test --console=plain
     - ./gradlew connectedAndroidTest --console=plain
     - ./gradlew lint --console=plain
-    - [ "$CIRCLE_BRANCH" = develop ] && ./gradlew publishApkRelease
+    - [ "$CIRCLE_BRANCH" = develop ] && ./gradlew publishApkProdRelease
 
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     - cp -r app/build/test-results/* $CIRCLE_TEST_REPORTS
