@@ -41,7 +41,15 @@ public abstract class Team {
         return new AutoValue_Team.GsonTypeAdapter(gson);
     }
 
-    public static Team create(String code, String name, String fullname, String city, String country, String url, String stadium, String twitter, String type) {
+    public static Team create(@Nullable String code,
+                              @Nullable String name,
+                              @Nullable String fullname,
+                              @Nullable String city,
+                              @Nullable String country,
+                              @Nullable String url,
+                              @Nullable String stadium,
+                              @Nullable String twitter,
+                              @Nullable String type) {
         return new AutoValue_Team(code, name, fullname, city, country, url, stadium, twitter, type);
     }
 

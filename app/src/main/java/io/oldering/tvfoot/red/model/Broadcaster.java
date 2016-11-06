@@ -19,7 +19,9 @@ public abstract class Broadcaster {
         return new AutoValue_Broadcaster.GsonTypeAdapter(gson);
     }
 
-    public static Broadcaster create(String name, String code, String url) {
+    public static Broadcaster create(String name,
+                                     String code,
+                                     @Nullable String url) {
         return new AutoValue_Broadcaster(name, code, url);
     }
 }

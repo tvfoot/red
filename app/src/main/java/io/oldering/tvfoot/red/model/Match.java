@@ -44,13 +44,13 @@ public abstract class Match {
     }
 
     public static Match create(String id,
-                               String label,
+                               @Nullable String label,
                                Date startAt,
-                               String matchDay,
+                               @Nullable String matchDay,
                                Team homeTeam,
                                Team awayTeam,
-                               List<Broadcaster> broadcasters,
-                               String place,
+                               @Nullable List<Broadcaster> broadcasters,
+                               @Nullable String place,
                                Competition competition,
                                boolean isPostponed) {
         return new AutoValue_Match(id, label, startAt, matchDay, homeTeam, awayTeam, broadcasters, place, competition, isPostponed);

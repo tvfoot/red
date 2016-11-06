@@ -20,7 +20,7 @@ import io.oldering.tvfoot.red.model.Match;
 import io.oldering.tvfoot.red.model.Team;
 import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.rxbus.event.MatchClickEvent;
-import io.oldering.tvfoot.red.util.string.StringUtils;
+import io.oldering.tvfoot.red.util.StringUtils;
 
 import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS;
 

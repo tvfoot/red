@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.util.string;
+package io.oldering.tvfoot.red.util;
 
 import android.text.TextUtils;
 

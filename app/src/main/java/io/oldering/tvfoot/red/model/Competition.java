@@ -25,7 +25,11 @@ public abstract class Competition {
         return new AutoValue_Competition.GsonTypeAdapter(gson);
     }
 
-    public static Competition create(String code, String name, String country, String url, String gender) {
+    public static Competition create(String code,
+                                     String name,
+                                     @Nullable String country,
+                                     @Nullable String url,
+                                     @Nullable String gender) {
         return new AutoValue_Competition(code, name, country, url, gender);
     }
 }
