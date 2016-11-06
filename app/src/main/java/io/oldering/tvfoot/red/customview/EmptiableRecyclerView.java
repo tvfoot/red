@@ -1,6 +1,7 @@
 package io.oldering.tvfoot.red.customview;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
@@ -37,7 +38,7 @@ public class EmptiableRecyclerView extends RecyclerView {
     }
 
     @Override
-    public void setAdapter(RecyclerView.Adapter adapter) {
+    public void setAdapter(@Nullable RecyclerView.Adapter adapter) {
         if (getAdapter() != null) {
             getAdapter().unregisterAdapterDataObserver(dataObserver);
         }

@@ -7,12 +7,10 @@ import com.google.auto.value.AutoValue;
 import java.text.ParseException;
 import java.util.Date;
 
+import static io.oldering.tvfoot.red.util.TimeConstants.ONE_DAY_IN_MILLIS;
+
 @AutoValue
 public abstract class DayHeaderViewModel {
-    private static final int ONE_SECOND_IN_MILLIS = 1000;
-    private static final int ONE_MINUTE_IN_MILLIS = 60 * ONE_SECOND_IN_MILLIS;
-    private static final int ONE_HOUR_IN_MILLIS = 60 * ONE_MINUTE_IN_MILLIS;
-    public static final long ONE_DAY_IN_MILLIS = 24 * ONE_HOUR_IN_MILLIS;
 
     public abstract String getDanger();
 
@@ -29,7 +27,7 @@ public abstract class DayHeaderViewModel {
             e.printStackTrace();
             throw new UnsupportedOperationException("What is this date anyway? " + headerKey);
         }
-        // TODO(benoit) refactor this so it does not depend on Android APIs
+        // TODO(benoit) refactor this so it does not depend on Android APIs so I can test it
         // and DateUtils.isToday uses deprecated Time class
         if (DateUtils.isToday(date.getTime())) {
             danger = "AUJOURD'HUI";
