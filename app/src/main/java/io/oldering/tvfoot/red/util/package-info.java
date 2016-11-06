@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package io.oldering.tvfoot.red.util.string;
+package io.oldering.tvfoot.red.util;
 
 import javax.annotation.ParametersAreNonnullByDefault;

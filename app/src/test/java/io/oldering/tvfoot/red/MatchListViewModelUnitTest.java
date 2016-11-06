@@ -22,7 +22,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
 
-import static io.oldering.tvfoot.red.viewmodel.DayHeaderViewModel.ONE_DAY_IN_MILLIS;
+import static io.oldering.tvfoot.red.util.TimeConstants.ONE_DAY_IN_MILLIS;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 
 public class MatchListViewModelUnitTest {
     private MatchListViewModel matchListVM;
-    MatchService matchService;
+    private MatchService matchService;
     private BaseSchedulerProvider schedulerProvider;
 
     @Before

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 public class DataBindingAdapters {
 
+    // cannot test it because of `getContext()` being final. Is there another way?
     @BindingAdapter("imageResource")
     public static void setImageResource(ImageView imageView, String resource) {
         Context context = imageView.getContext();

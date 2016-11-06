@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class NetworkingModule {
-    String BASE_URL = "https://tvfoot.net";
+    private String BASE_URL = "https://tvfoot.net";
 
     @Provides
     @Singleton

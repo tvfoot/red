@@ -19,6 +19,7 @@ import io.oldering.tvfoot.red.model.Team;
 import io.oldering.tvfoot.red.viewmodel.BroadcasterViewModel;
 import io.oldering.tvfoot.red.viewmodel.MatchViewModel;
 
+import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MINUTE_IN_MILLIS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -184,32 +185,30 @@ public class MatchViewModelUnitTest {
         assertEquals(MatchViewModel.parseMatchDay(null, matchDay), "J. " + matchDay);
     }
 
-    static final int ONE_MINUTE = 1000 * 60;
-
     @Test
     public void isMatchLive_notYet() {
-        Date startDate = new Date(System.currentTimeMillis() + ONE_MINUTE);
+        Date startDate = new Date(System.currentTimeMillis() + ONE_MINUTE_IN_MILLIS);
 
         assertFalse(MatchViewModel.isMatchLive(startDate));
     }
 
     @Test
     public void isMatchLive_AlmostFinished() {
-        Date startDate = new Date(System.currentTimeMillis() - ONE_MINUTE);
+        Date startDate = new Date(System.currentTimeMillis() - ONE_MINUTE_IN_MILLIS);
 
         assertTrue(MatchViewModel.isMatchLive(startDate));
     }
 
     @Test
     public void isMatchLive_JustStarted() {
-        Date startDate = new Date(System.currentTimeMillis() - 104 * ONE_MINUTE);
+        Date startDate = new Date(System.currentTimeMillis() - 104 * ONE_MINUTE_IN_MILLIS);
 
         assertTrue(MatchViewModel.isMatchLive(startDate));
     }
 
     @Test
     public void isMatchLive_notAnymore() {
-        Date startDate = new Date(System.currentTimeMillis() - 106 * ONE_MINUTE);
+        Date startDate = new Date(System.currentTimeMillis() - 106 * ONE_MINUTE_IN_MILLIS);
 
         assertFalse(MatchViewModel.isMatchLive(startDate));
     }

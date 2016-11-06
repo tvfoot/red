@@ -1,10 +1,10 @@
-package io.oldering.tvfoot.red.util.string;
+package io.oldering.tvfoot.red.util;
 
 import android.text.TextUtils;
 
 public class StringUtils {
     private StringUtils() {
-        throw new RuntimeException("Can't touch me");
+        throw new RuntimeException("Can't touch this");
     }
 
     public static String capitalize(String string) {

@@ -1,6 +1,7 @@
 package io.oldering.tvfoot.red.viewmodel;
 
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.google.auto.value.AutoValue;
@@ -19,7 +20,9 @@ import io.oldering.tvfoot.red.model.Match;
 import io.oldering.tvfoot.red.model.Team;
 import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.rxbus.event.MatchClickEvent;
-import io.oldering.tvfoot.red.util.string.StringUtils;
+import io.oldering.tvfoot.red.util.StringUtils;
+
+import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS;
 
 /**
  * TODO(benoit) think about splitting this into two view model, listrow and detail
@@ -30,7 +33,6 @@ public abstract class MatchViewModel implements Parcelable {
 
     private static SimpleDateFormat shortDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
     private static SimpleDateFormat fullTextDateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy à HH'h'mm", Locale.FRANCE);
-    private static long ONE_MATCH_TIME_IN_MILLIS = 105 * 60 * 1000;
 
     private RxBus rxBus;
 
@@ -78,7 +80,7 @@ public abstract class MatchViewModel implements Parcelable {
         return shortDateFormat.format(startAt);
     }
 
-    public static List<BroadcasterViewModel> parseBroadcasters(List<Broadcaster> broadcasters) {
+    public static List<BroadcasterViewModel> parseBroadcasters(@Nullable List<Broadcaster> broadcasters) {
         if (broadcasters == null) {
             return new ArrayList<>();
         }
@@ -90,9 +92,9 @@ public abstract class MatchViewModel implements Parcelable {
         return broadcastersVM;
     }
 
-    public static String parseHeadLine(Team homeTeam, Team awayTeam, String matchLabel) {
+    public static String parseHeadLine(Team homeTeam, Team awayTeam, @Nullable String matchLabel) {
         if (homeTeam.isEmpty() || awayTeam.isEmpty()) {
-            return matchLabel;
+            return String.valueOf(matchLabel);
         }
         return String.valueOf(homeTeam.getName()).toUpperCase() +
                 " - " +
@@ -103,11 +105,11 @@ public abstract class MatchViewModel implements Parcelable {
         return competition.getName();
     }
 
-    public static String parseMatchDay(String matchLabel, String matchDay) {
+    public static String parseMatchDay(@Nullable String matchLabel, @Nullable String matchDay) {
         if (matchLabel != null && !matchLabel.trim().isEmpty()) {
             return matchLabel;
         } else {
-            return "J. " + matchDay;
+            return "J. " + String.valueOf(matchDay);
         }
     }
 
@@ -142,13 +144,13 @@ public abstract class MatchViewModel implements Parcelable {
         return match.getPlace();
     }
 
-    public void onMatchClick(View ignored) {
+    public void onMatchClick(@SuppressWarnings("UnusedParameters") View ignored) {
         if (rxBus.hasObservers()) {
             rxBus.send(MatchClickEvent.create(this));
         }
     }
 
-    public void setRxBus(RxBus rxBus) {
+    private void setRxBus(RxBus rxBus) {
         this.rxBus = rxBus;
     }
 }
