@@ -29,8 +29,7 @@
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:context="io.oldering.tvfoot.red.view.MatchListActivity"
-            tools:listitem="@layout/match_item"
-            tools:showIn="@layout/activity_match_list" />
+            tools:listitem="@layout/match_item" />
 
         <ProgressBar
             android:id="@+id/progress_paging"
