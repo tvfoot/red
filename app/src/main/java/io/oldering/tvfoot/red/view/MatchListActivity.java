@@ -83,6 +83,8 @@ public class MatchListActivity extends AppCompatActivity {
         paginatorSubject.onNext(pageIndex);
     }
 
+    enum Irrelevant {INSTANCE}
+
     private void bind() {
         Disposable matchDisposable = paginatorSubject
                 .doOnNext(integer -> {
@@ -94,9 +96,9 @@ public class MatchListActivity extends AppCompatActivity {
                 .observeOn(schedulerProvider.ui())
                 .map(item -> {
                     MatchListActivity.this.addItem(item);
-                    return 69; // dummy because cannot return null
+                    return Irrelevant.INSTANCE;
                 })
-                .doOnNext(i -> {
+                .doOnNext(irrelevant -> {
                     requestUnderWay = false;
                     progressBar.setVisibility(View.INVISIBLE);
                 })
