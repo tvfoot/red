@@ -16,7 +16,7 @@ import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.oldering.tvfoot.red.view.item.DayHeaderItem;
 import io.oldering.tvfoot.red.view.item.MatchItem;
 import io.reactivex.Observable;
-import io.reactivex.functions.Function;
+import io.reactivex.observables.GroupedObservable;
 
 // TODO(benoit) delete and only use MatchViewModel / WHY ?
 public class MatchListViewModel {
@@ -36,27 +36,42 @@ public class MatchListViewModel {
 
     public Observable<Item> getMatches(int pageIndex) {
         // TODO(benoit) should pass the filter as a param?
-        // TODO(benoit) split into functions so gets easy to test
-        return matchService
-                .findFuture(getFilter(pageIndex * 30))
-                .toObservable()
-                .flatMap(Observable::fromIterable)
-                .groupBy(
-                        match -> simpleDateFormat.format(match.getStartAt()),
-                        (Function<Match, Item>) match -> new MatchItem(MatchViewModel.create(match, rxBus))
-                )
-                .map(stringItemGroupedObservable -> stringItemGroupedObservable
-                        .startWith(
-                                Observable.just(
-                                        new DayHeaderItem(
-                                                DayHeaderViewModel.create(
-                                                        stringItemGroupedObservable.getKey()
-                                                )
-                                        )
-                                )
-                        ))
+        Observable<Match> matches = findFuture(getFilter(pageIndex * 30));
+
+        Observable<GroupedObservable<String, Item>> groupedMatches = groupByDate(matches);
+
+        Observable<Observable<Item>> groupedMatchesWithHeader = insertDayHeader(groupedMatches);
+
+        return groupedMatchesWithHeader
                 .flatMap(itemObservable -> itemObservable)
                 .subscribeOn(schedulerProvider.io());
+    }
+
+    public Observable<Match> findFuture(String filter) {
+        return matchService
+                .findFuture(filter)
+                .toObservable()
+                .flatMap(Observable::fromIterable);
+    }
+
+    public Observable<GroupedObservable<String, Item>> groupByDate(Observable<Match> matches) {
+        return matches.groupBy(
+                match -> simpleDateFormat.format(match.getStartAt()),
+                match -> new MatchItem(MatchViewModel.create(match, rxBus))
+        );
+    }
+
+    public Observable<Observable<Item>> insertDayHeader(Observable<GroupedObservable<String, Item>> groupedMatches) {
+        return groupedMatches.map(stringItemGroupedObservable -> stringItemGroupedObservable
+                .startWith(
+                        Observable.just(
+                                new DayHeaderItem(
+                                        DayHeaderViewModel.create(
+                                                stringItemGroupedObservable.getKey()
+                                        )
+                                )
+                        )
+                ));
     }
 
     public String getFilter(int offset) {
