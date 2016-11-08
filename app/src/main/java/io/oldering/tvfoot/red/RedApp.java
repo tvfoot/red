@@ -4,15 +4,21 @@ import android.app.Application;
 
 import com.squareup.leakcanary.LeakCanary;
 
+import io.oldering.tvfoot.red.di.AppComponent;
+import io.oldering.tvfoot.red.di.ComponentFactory;
 import timber.log.Timber;
 
 public class RedApp extends Application {
+    AppComponent appComponent;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         setupTimber();
         setupLeakCanary();
+
+        appComponent = componentFactory().buildComponent();
     }
 
     private void setupTimber() {
@@ -29,5 +35,13 @@ public class RedApp extends Application {
         }
         LeakCanary.install(this);
         // Normal app init code...
+    }
+
+    public ComponentFactory componentFactory() {
+        return new ComponentFactory();
+    }
+
+    public AppComponent getComponent() {
+        return appComponent;
     }
 }

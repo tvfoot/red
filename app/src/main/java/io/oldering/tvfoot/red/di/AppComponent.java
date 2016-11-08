@@ -20,4 +20,6 @@ public interface AppComponent {
     void inject(MatchListActivity matchListActivity);
 
     MatchListViewModel matchListVM();
+
+    ActivityComponent plusActivityComponent(ActivityModule activityModule);
 }

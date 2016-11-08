@@ -18,8 +18,8 @@ import com.genius.groupie.Item;
 import javax.inject.Inject;
 
 import io.oldering.tvfoot.red.R;
+import io.oldering.tvfoot.red.RedApp;
 import io.oldering.tvfoot.red.databinding.ActivityMatchListBinding;
-import io.oldering.tvfoot.red.di.DaggerAppComponent;
 import io.oldering.tvfoot.red.flowcontroller.FlowController;
 import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.rxbus.event.MatchClickEvent;
@@ -48,7 +48,8 @@ public class MatchListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DaggerAppComponent.create().inject(this);
+        // TODO(benoit) why is this necessary this way? seems long long long
+        ((RedApp) getApplication()).componentFactory().buildComponent().inject(this);
 
         ActivityMatchListBinding dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_match_list);
         Toolbar toolbar = dataBinding.matchListFilterToolbar;
