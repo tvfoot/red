@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.di;
+package io.oldering.tvfoot.red.di.module;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

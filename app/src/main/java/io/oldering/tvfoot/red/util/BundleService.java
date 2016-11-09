@@ -1,16 +1,17 @@
 package io.oldering.tvfoot.red.util;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
 public class BundleService {
     private final Bundle data;
+    public Bundle savedState;
 
     public BundleService(@Nullable Bundle savedState, @Nullable Bundle intentExtras) {
         data = new Bundle();
 
-        if (savedState != null) {
+        this.savedState = savedState;
+        if (this.savedState != null) {
             data.putAll(savedState);
         }
         if (intentExtras != null) {
@@ -18,11 +19,15 @@ public class BundleService {
         }
     }
 
-    public Bundle getAll() {
-        return data;
+    public Object get(String key) {
+        return data.get(key);
     }
 
-    public Parcelable getParcelable(String bundleKey) {
-        return data.getParcelable(bundleKey);
+    public boolean contains(String key) {
+        return data.containsKey(key);
+    }
+
+    public Bundle getAll() {
+        return data;
     }
 }

@@ -1,11 +1,13 @@
 package io.oldering.tvfoot.red;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.squareup.leakcanary.LeakCanary;
 
-import io.oldering.tvfoot.red.di.AppComponent;
-import io.oldering.tvfoot.red.di.ComponentFactory;
+import io.oldering.tvfoot.red.di.component.AppComponent;
+import io.oldering.tvfoot.red.di.component.DaggerAppComponent;
+import io.oldering.tvfoot.red.di.module.AppModule;
 import timber.log.Timber;
 
 public class RedApp extends Application {
@@ -17,8 +19,6 @@ public class RedApp extends Application {
 
         setupTimber();
         setupLeakCanary();
-
-        appComponent = componentFactory().buildComponent();
     }
 
     private void setupTimber() {
@@ -37,11 +37,16 @@ public class RedApp extends Application {
         // Normal app init code...
     }
 
-    public ComponentFactory componentFactory() {
-        return new ComponentFactory();
+    public AppComponent getComponent() {
+        if (appComponent == null) {
+            appComponent = DaggerAppComponent.builder()
+                    .appModule(new AppModule(this))
+                    .build();
+        }
+        return appComponent;
     }
 
-    public AppComponent getComponent() {
-        return appComponent;
+    public static RedApp get(Context context) {
+        return (RedApp) context.getApplicationContext();
     }
 }

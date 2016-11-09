@@ -1,9 +1,10 @@
-package io.oldering.tvfoot.red.di;
+package io.oldering.tvfoot.red.di.module;
 
 import android.app.Activity;
 
 import dagger.Module;
 import dagger.Provides;
+import io.oldering.tvfoot.red.di.ScopeActivity;
 import io.oldering.tvfoot.red.util.SnackBarUtil;
 
 @Module
