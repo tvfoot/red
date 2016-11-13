@@ -5,9 +5,11 @@ import android.content.Context;
 
 import com.squareup.leakcanary.LeakCanary;
 
+import io.oldering.tvfoot.red.api.MatchService;
 import io.oldering.tvfoot.red.di.component.AppComponent;
 import io.oldering.tvfoot.red.di.component.DaggerAppComponent;
 import io.oldering.tvfoot.red.di.module.AppModule;
+import io.oldering.tvfoot.red.di.module.NetworkModule;
 import timber.log.Timber;
 
 public class RedApp extends Application {
@@ -41,6 +43,7 @@ public class RedApp extends Application {
         if (appComponent == null) {
             appComponent = DaggerAppComponent.builder()
                     .appModule(new AppModule(this))
+                    .networkModule(new NetworkModule(MatchService.BASE_URL))
                     .build();
         }
         return appComponent;

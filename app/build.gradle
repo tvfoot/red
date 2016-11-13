@@ -116,6 +116,8 @@ dependencies {
     testCompile 'org.powermock:powermock-api-mockito:1.6.5'
     testCompile 'org.powermock:powermock-api-mockito-common:1.6.5'
     testCompile 'com.squareup.okhttp3:mockwebserver:3.4.2'
+    testCompile 'com.google.dagger:dagger:2.7'
+    testApt 'com.google.dagger:dagger-compiler:2.7'
 
     // Android Tests
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

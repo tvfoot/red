@@ -1,29 +1,26 @@
 package io.oldering.tvfoot.red.di.component;
 
-
 import javax.inject.Singleton;
 
 import dagger.Component;
-import io.oldering.tvfoot.red.RedApp;
-import io.oldering.tvfoot.red.di.module.ActivityModule;
-import io.oldering.tvfoot.red.di.module.AppModule;
 import io.oldering.tvfoot.red.di.module.NetworkModule;
 import io.oldering.tvfoot.red.di.module.RxBusModule;
 import io.oldering.tvfoot.red.di.module.SchedulerModule;
 import io.oldering.tvfoot.red.di.module.ServiceModule;
+import io.oldering.tvfoot.red.util.Fixture;
+import io.oldering.tvfoot.red.viewmodel.MatchListViewModel;
 
 @Singleton
 @Component(
         modules = {
-                AppModule.class,
                 NetworkModule.class,
                 ServiceModule.class,
                 SchedulerModule.class,
                 RxBusModule.class
         }
 )
-public interface AppComponent {
-    void inject(RedApp boxBeeApplication);
+public interface TestComponent {
+    MatchListViewModel matchListViewModel();
 
-    ActivityComponent plus(ActivityModule activityModule);
+    Fixture fixture();
 }

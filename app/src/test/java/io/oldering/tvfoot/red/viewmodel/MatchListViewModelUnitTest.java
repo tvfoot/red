@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red;
+package io.oldering.tvfoot.red.viewmodel;
 
 import com.genius.groupie.Item;
 
@@ -7,20 +7,22 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import io.oldering.tvfoot.red.api.MatchService;
-import io.oldering.tvfoot.red.di.DaggerAppComponent;
-import io.oldering.tvfoot.red.di.component.AppComponent;
+import io.oldering.tvfoot.red.di.component.DaggerTestComponent;
+import io.oldering.tvfoot.red.di.component.TestComponent;
+import io.oldering.tvfoot.red.di.module.NetworkModule;
 import io.oldering.tvfoot.red.model.Competition;
 import io.oldering.tvfoot.red.model.Match;
 import io.oldering.tvfoot.red.model.Team;
+import io.oldering.tvfoot.red.util.Fixture;
 import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.oldering.tvfoot.red.util.schedulers.ImmediateSchedulerProvider;
-import io.oldering.tvfoot.red.viewmodel.MatchListViewModel;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
@@ -50,37 +52,34 @@ public class MatchListViewModelUnitTest {
 
     @Test
     public void findFuture() throws IOException {
-//        MockWebServer server = new MockWebServer();
-//
-//        // Schedule some responses.
-//        server.enqueue(new MockResponse().setBody("hello, world!"));
-//        server.enqueue(new MockResponse().setBody("sup, bra?"));
-//        server.enqueue(new MockResponse().setBody("yo dog"));
-//
-//        // Start the server.
-//        server.start();
-//
-//        // TODO(benoit) extend dagger so I can use it in my tests
-//        // e.g. provide a url for the server so I can use MockWebServer
-//        // e.g. provide schedulers
-//
-//        HttpUrl baseUrl = server.url("/");
-//
-//        // Exercise your application code, which should make those HTTP requests.
-//        // Responses are returned in the same order that they are enqueued.
-//
-//        AppComponent appComponent = DaggerAppComponent.create();
-//        MatchListViewModel matchlistVM = appComponent.matchListVM();
-//
-//        Observable<Match> matches = matchlistVM.findFuture(matchlistVM.getFilter(0));
-//
-//        TestObserver<Match> testObserver = new TestObserver<>();
-//        matches
-//                .subscribe(testObserver);
-//
-//        testObserver.assertComplete();
-//        testObserver.assertValueCount(8);
+        MockWebServer server = new MockWebServer();
 
+        // TODO(benoit) extend dagger so I can use it in my tests
+        // e.g. provide a url for the server so I can use MockWebServer
+        // e.g. provide schedulers
+        server.start();
+        HttpUrl baseUrl = server.url("/");
+
+        TestComponent component = DaggerTestComponent.builder().networkModule(new NetworkModule(baseUrl.toString())).build();
+//        TestComponent component = Dagger2Helper.buildComponent(TestComponent.class, new NetworkModule(baseUrl.toString()));
+
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("sample_data2.json");
+        Fixture fixture = component.fixture();
+        String matchesResponse = fixture.readInputStream(is);
+
+        // Schedule some responses.
+        server.enqueue(new MockResponse().setBody(matchesResponse));
+
+        MatchListViewModel matchListViewModel = component.matchListViewModel();
+
+        Observable<Match> matches = matchListViewModel.findFuture(matchListViewModel.getFilter(0));
+
+        TestObserver<Match> testObserver = new TestObserver<>();
+        matches.subscribe(testObserver);
+
+        testObserver.assertComplete();
+        testObserver.assertValueCount(30);
+        testObserver.assertValueAt(0, fixture.readJsonStream(is).get(0));
     }
 
     @Test

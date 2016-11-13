@@ -15,8 +15,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
-public class NetworkingModule {
-    private String BASE_URL = "https://tvfoot.net";
+public class NetworkModule {
+    private String baseUrl;
+
+    public NetworkModule(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
 
     @Provides
     @Singleton
@@ -49,7 +53,7 @@ public class NetworkingModule {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
-                .baseUrl(BASE_URL)
+                .baseUrl(baseUrl)
                 .build();
     }
 }
