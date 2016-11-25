@@ -94,6 +94,7 @@ public class MatchListActivity extends AppCompatActivity {
                     Timber.d("Loading page : %d", pageIndex);
                     progressBar.setVisibility(View.VISIBLE);
                 })
+                .map(matchListVM::getFilter)
                 .concatMap(matchListVM::getMatches)
                 .observeOn(schedulerProvider.ui())
                 .map(item -> {

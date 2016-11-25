@@ -3,177 +3,232 @@ package io.oldering.tvfoot.red.viewmodel;
 import com.genius.groupie.Item;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
 
 import io.oldering.tvfoot.red.api.MatchService;
 import io.oldering.tvfoot.red.di.component.DaggerTestComponent;
 import io.oldering.tvfoot.red.di.component.TestComponent;
 import io.oldering.tvfoot.red.di.module.NetworkModule;
-import io.oldering.tvfoot.red.model.Competition;
 import io.oldering.tvfoot.red.model.Match;
-import io.oldering.tvfoot.red.model.Team;
 import io.oldering.tvfoot.red.util.Fixture;
 import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
-import io.oldering.tvfoot.red.util.schedulers.ImmediateSchedulerProvider;
+import io.oldering.tvfoot.red.view.item.DayHeaderItem;
+import io.oldering.tvfoot.red.view.item.MatchItem;
 import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.observers.TestObserver;
+import io.reactivex.observables.GroupedObservable;
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 
-import static io.oldering.tvfoot.red.util.TimeConstants.ONE_DAY_IN_MILLIS;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class MatchListViewModelUnitTest {
-    private MatchListViewModel matchListVM;
-    private MatchService matchService;
-    private BaseSchedulerProvider schedulerProvider;
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
+    BaseSchedulerProvider schedulerProvider;
+
+    MockWebServer server;
+    TestComponent component;
 
     @Before
-    public void before() {
-//        matchService = mock(MatchService.class);
-//        schedulerProvider = new ImmediateSchedulerProvider();
-//
-//        RxBus rxBus = mock(RxBus.class);
-//        matchListVM = new MatchListViewModel(matchService, schedulerProvider, rxBus);
+    public void before() throws IOException {
+        simpleDateFormat.setTimeZone(TimeZone.getDefault());
+
+        server = new MockWebServer();
+        server.start();
+        HttpUrl baseUrl = server.url("/");
+        component = DaggerTestComponent.builder().networkModule(new NetworkModule(baseUrl.toString())).build();
+        schedulerProvider = component.schedulerProvider();
     }
 
     @Test
     public void findFuture() throws IOException {
-        MockWebServer server = new MockWebServer();
 
-        // TODO(benoit) extend dagger so I can use it in my tests
-        // e.g. provide a url for the server so I can use MockWebServer
-        // e.g. provide schedulers
-        server.start();
-        HttpUrl baseUrl = server.url("/");
-
-        TestComponent component = DaggerTestComponent.builder().networkModule(new NetworkModule(baseUrl.toString())).build();
-//        TestComponent component = Dagger2Helper.buildComponent(TestComponent.class, new NetworkModule(baseUrl.toString()));
-
+        // setup
         InputStream is = this.getClass().getClassLoader().getResourceAsStream("sample_data2.json");
         Fixture fixture = component.fixture();
         String matchesResponse = fixture.readInputStream(is);
+        server.enqueue(new MockResponse().setBody(matchesResponse));
+        MatchListViewModel matchListViewModel = component.matchListViewModel();
 
-        // Schedule some responses.
+        // execute
+        Observable<Match> matches = matchListViewModel.findFuture(matchListViewModel.getFilter(0));
+
+        // verifity
+        is = this.getClass().getClassLoader().getResourceAsStream("sample_data2.json");
+        matches.test()
+                .assertResult(fixture.readJsonStream(is).toArray(new Match[30]))
+                .assertValueCount(30)
+                .assertComplete();
+    }
+
+    @Test
+    public void groupByDate() throws IOException {
+        // setup
+        Fixture fixture = component.fixture();
+        MatchListViewModel matchListViewModel = component.matchListViewModel();
+
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("sample_data2.json");
+        List<Match> matchesAsList = fixture.readJsonStream(is);
+        Observable<Match> matches = Observable.fromIterable(matchesAsList);
+
+        // execute
+        Observable<GroupedObservable<String, Item>> groupedMatchesObservable = matchListViewModel.groupByDate(matches);
+
+        // verifty
+        List<List<Item>> expectedGroupedObservables = createGroupedObservableItems(component, matchesAsList);
+
+        // container
+        groupedMatchesObservable.test()
+                .assertComplete()
+                .assertValueCount(6);
+
+        // each groupedObservable
+        List<GroupedObservable<String, Item>> groupedObservables = groupedMatchesObservable.toList().blockingGet();
+        for (int i = 0; i < groupedObservables.size(); i++) {
+            List<Item> expectedItems = expectedGroupedObservables.get(i);
+            GroupedObservable<String, Item> groupedObservable = groupedObservables.get(i);
+
+            groupedObservable.test()
+                    .assertComplete()
+                    .assertResult(expectedItems.toArray(new Item[expectedItems.size()]));
+        }
+    }
+
+    @Test
+    public void insertDayHeader() throws IOException {
+        // setup
+        Fixture fixture = component.fixture();
+        MatchListViewModel matchListViewModel = component.matchListViewModel();
+
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("sample_data2.json");
+        List<Match> matchesAsList = fixture.readJsonStream(is);
+        Observable<Match> matches = Observable.fromIterable(matchesAsList);
+
+        Observable<GroupedObservable<String, Item>> groupedMatchesObservable = matchListViewModel.groupByDate(matches);
+
+        // execute
+        Observable<Observable<Item>> withDayHeadersGroupedMatches = matchListViewModel.insertDayHeader(groupedMatchesObservable);
+
+        // verify
+        List<List<Item>> expectedItemsObservables = createItemObservablesWithHeader(component, matchesAsList);
+
+        // container
+        withDayHeadersGroupedMatches.test()
+                .assertComplete()
+                .assertValueCount(6);
+
+        // each groupedObservable
+        List<Observable<Item>> itemObservables = withDayHeadersGroupedMatches.toList().blockingGet();
+        for (int i = 0; i < itemObservables.size(); i++) {
+            List<Item> expectedItems = expectedItemsObservables.get(i);
+            Observable<Item> itemObservable = itemObservables.get(i);
+
+            itemObservable.test()
+                    .assertComplete()
+                    .assertResult(expectedItems.toArray(new Item[expectedItems.size()]));
+        }
+    }
+
+    @Test
+    public void getMatches() throws IOException {
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("sample_data2.json");
+        Fixture fixture = component.fixture();
+        String matchesResponse = fixture.readInputStream(is);
         server.enqueue(new MockResponse().setBody(matchesResponse));
 
         MatchListViewModel matchListViewModel = component.matchListViewModel();
 
-        Observable<Match> matches = matchListViewModel.findFuture(matchListViewModel.getFilter(0));
+        is = this.getClass().getClassLoader().getResourceAsStream("sample_data2.json");
+        List<Match> matchesAsList = fixture.readJsonStream(is);
 
-        TestObserver<Match> testObserver = new TestObserver<>();
-        matches.subscribe(testObserver);
+        String filter = matchListViewModel.getFilter(1);
 
-        testObserver.assertComplete();
-        testObserver.assertValueCount(30);
-        testObserver.assertValueAt(0, fixture.readJsonStream(is).get(0));
+        // execute
+        Observable<Item> items = matchListViewModel.getMatches(filter);
+
+        // verify
+        List<Item> expectedItems = createFlattenedItemWithHeader(component, matchesAsList);
+
+        items
+                .observeOn(schedulerProvider.ui())
+                .test()
+                .assertComplete()
+                .assertValues(expectedItems.toArray(new Item[expectedItems.size()]));
     }
 
-    @Test
-    @Ignore
-    public void getMatches() {
+    @SuppressWarnings("Convert2MethodRef")
+    private List<Item> createFlattenedItemWithHeader(TestComponent component, List<Match> matchesAsList) {
+        List<List<Item>> itemLists = createItemObservablesWithHeader(component, matchesAsList);
 
-        matchService = mock(MatchService.class);
-        schedulerProvider = new ImmediateSchedulerProvider();
+        List<Item> items = new ArrayList<>(50);
+        for (int i = 0; i < itemLists.size(); i++) {
+            items.addAll(itemLists.get(i));
+        }
+        return items;
+    }
 
-        RxBus rxBus = mock(RxBus.class);
-        matchListVM = new MatchListViewModel(matchService, schedulerProvider, rxBus);
-        // TODO(benoit) fails because DayHeaderItem constructor depends on Android APIs
+    private List<List<Item>> createItemObservablesWithHeader(TestComponent component, List<Match> matchesAsList) {
+        List<List<Item>> matchItemsAsList = new ArrayList<>(6);
 
-        // TODO(benoit) need some cleaning up
-        // am I on the right track ?
+        HashMap<String, List<Item>> matchItemsHashMap = new LinkedHashMap<>();
+        for (Match match : matchesAsList) {
+            String key = simpleDateFormat.format(match.getStartAt());
+            List<Item> items = matchItemsHashMap.get(key);
+            if (items == null) {
+                items = new ArrayList<>();
+                items.add(new DayHeaderItem(DayHeaderViewModel.create(key)));
+                matchItemsHashMap.put(key, items);
+            }
+            items.add(new MatchItem(MatchViewModel.create(match, component.rxBus())));
+        }
+        for (Map.Entry<String, List<Item>> entry : matchItemsHashMap.entrySet()) {
+            matchItemsAsList.add(entry.getValue());
+        }
 
-        String filter = matchListVM.getFilter(0);
+        return matchItemsAsList;
+    }
 
-        when(matchService.findFuture(filter)).thenReturn(tasksSingle());
+    private List<List<Item>> createGroupedObservableItems(TestComponent component, List<Match> matchesAsList) {
+        List<List<Item>> matchItemsAsList = new ArrayList<>(6);
 
-        Observable<Item> tasks$ = matchListVM.getMatches(0);
+        HashMap<String, List<Item>> matchItemsHashMap = new LinkedHashMap<>();
+        for (Match match : matchesAsList) {
+            String key = simpleDateFormat.format(match.getStartAt());
+            List<Item> items = matchItemsHashMap.get(key);
+            if (items == null) {
+                items = new ArrayList<>();
+                matchItemsHashMap.put(key, items);
+            }
+            items.add(new MatchItem(MatchViewModel.create(match, component.rxBus())));
+        }
+        for (Map.Entry<String, List<Item>> entry : matchItemsHashMap.entrySet()) {
+            matchItemsAsList.add(entry.getValue());
+        }
 
-        TestObserver<Item> testObserver = new TestObserver<>();
-        tasks$
-                .observeOn(schedulerProvider.ui())
-                .subscribe(testObserver);
-
-        verify(matchService).findFuture(filter);
-        testObserver.assertComplete();
-        testObserver.assertValueCount(8);
-//        testObserver.assertValue()
+        return matchItemsAsList;
     }
 
     @Test
     public void getFilter() {
-        matchService = mock(MatchService.class);
-        schedulerProvider = new ImmediateSchedulerProvider();
+        MatchService matchService = mock(MatchService.class);
 
         RxBus rxBus = mock(RxBus.class);
-        matchListVM = new MatchListViewModel(matchService, schedulerProvider, rxBus);
+        MatchListViewModel matchListVM = new MatchListViewModel(matchService, schedulerProvider, rxBus);
 
-        int offset = 1;
-        String filter = "{\"where\":{\"deleted\":{\"neq\":1}},\"order\":\"start-at ASC, weight ASC\",\"limit\":30,\"offset\":" + offset + "}";
-        assertEquals(matchListVM.getFilter(offset), filter);
-    }
-
-    // TODO(benoit) create like 5 matchs on three different days
-    private Single<List<Match>> tasksSingle() {
-        List<Match> matches = new ArrayList<>(5);
-
-        matches.add(createMatch("A", 0));
-        matches.add(createMatch("B", 0));
-        matches.add(createMatch("C", 1));
-        matches.add(createMatch("D", 2));
-        matches.add(createMatch("E", 2));
-
-        return Single.just(matches);
-    }
-
-    private Match createMatch(String code, int delayInDays) {
-        return Match.create(
-                "id",
-                "label" + code,
-                new Date(System.currentTimeMillis() + (delayInDays * ONE_DAY_IN_MILLIS)),
-                "matchDay" + code,
-                Team.create(
-                        "homeCode" + code,
-                        "home" + code,
-                        "homeFull" + code,
-                        "homeCity" + code,
-                        "homeCountry" + code,
-                        "homeUrl" + code,
-                        "homeStadium" + code,
-                        null,
-                        "homeType" + code),
-                Team.create(
-                        "awayCode" + code,
-                        "away" + code,
-                        "awayFull" + code,
-                        "awayCity" + code,
-                        "awayCountry" + code,
-                        "awayUrl" + code,
-                        "awayStadium" + code,
-                        null,
-                        "awayType" + code),
-                new ArrayList<>(),
-                "place" + code,
-                Competition.create(
-                        "code" + code,
-                        "name" + code,
-                        null,
-                        null,
-                        null),
-                false
-        );
+        String filter = "{\"where\":{\"deleted\":{\"neq\":1}},\"order\":\"start-at ASC, weight ASC\",\"limit\":30,\"offset\":30}";
+        assertEquals(matchListVM.getFilter(1), filter);
     }
 }

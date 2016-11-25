@@ -24,6 +24,7 @@ public class MatchListViewModel {
     private final BaseSchedulerProvider schedulerProvider;
     public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
     private final RxBus rxBus;
+    private final int MATCH_PER_PAGE = 30;
 
     @Inject
     public MatchListViewModel(MatchService matchService, BaseSchedulerProvider schedulerProvider, RxBus rxBus) {
@@ -34,9 +35,8 @@ public class MatchListViewModel {
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
     }
 
-    public Observable<Item> getMatches(int pageIndex) {
-        // TODO(benoit) should pass the filter as a param?
-        Observable<Match> matches = findFuture(getFilter(pageIndex * 30));
+    public Observable<Item> getMatches(String filter) {
+        Observable<Match> matches = findFuture(filter);
 
         Observable<GroupedObservable<String, Item>> groupedMatches = groupByDate(matches);
 
@@ -74,7 +74,8 @@ public class MatchListViewModel {
                 ));
     }
 
-    public String getFilter(int offset) {
-        return "{\"where\":{\"deleted\":{\"neq\":1}},\"order\":\"start-at ASC, weight ASC\",\"limit\":30,\"offset\":" + offset + "}";
+    public String getFilter(int pageIndex) {
+        int offset = pageIndex * MATCH_PER_PAGE;
+        return "{\"where\":{\"deleted\":{\"neq\":1}},\"order\":\"start-at ASC, weight ASC\",\"limit\":" + MATCH_PER_PAGE + ",\"offset\":" + offset + "}";
     }
 }

@@ -22,4 +22,20 @@ public class DayHeaderItem extends Item<DayHeaderItemBinding> {
     public void bind(DayHeaderItemBinding viewBinding, int position) {
         viewBinding.setDayHeader(this.dayHeaderVM);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DayHeaderItem)) return false;
+
+        DayHeaderItem that = (DayHeaderItem) o;
+
+        return dayHeaderVM.equals(that.dayHeaderVM);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return dayHeaderVM.hashCode();
+    }
 }
