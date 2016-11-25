@@ -85,7 +85,7 @@ public class MatchListActivity extends AppCompatActivity {
         paginatorSubject.onNext(pageIndex);
     }
 
-    enum Irrelevant {INSTANCE}
+    private enum Irrelevant {INSTANCE}
 
     private void bind() {
         Disposable matchDisposable = paginatorSubject
