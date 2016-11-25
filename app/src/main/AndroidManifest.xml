@@ -9,7 +9,7 @@
     <application
         android:name=".RedApp"
         android:allowBackup="true"
-        android:icon="@drawable/app_icon_384"
+        android:icon="@drawable/app_icon_192"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
