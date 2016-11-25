@@ -1,11 +1,12 @@
 package io.oldering.tvfoot.red.viewmodel;
 
-import android.text.format.DateUtils;
 
 import com.google.auto.value.AutoValue;
 
 import java.text.ParseException;
 import java.util.Date;
+
+import io.oldering.tvfoot.red.util.DateUtils;
 
 import static io.oldering.tvfoot.red.util.TimeConstants.ONE_DAY_IN_MILLIS;
 
@@ -27,8 +28,6 @@ public abstract class DayHeaderViewModel {
             e.printStackTrace();
             throw new UnsupportedOperationException("What is this date anyway? " + headerKey);
         }
-        // TODO(benoit) refactor this so it does not depend on Android APIs so I can test it
-        // and DateUtils.isToday uses deprecated Time class
         if (DateUtils.isToday(date.getTime())) {
             danger = "AUJOURD'HUI";
         } else if (DateUtils.isToday(date.getTime() - ONE_DAY_IN_MILLIS)) {

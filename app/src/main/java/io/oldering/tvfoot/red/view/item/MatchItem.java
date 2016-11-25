@@ -38,4 +38,21 @@ public class MatchItem extends Item<MatchItemBinding> {
         }
         recyclerView.setAdapter(broadcastersAdapter);
     }
+
+    // for test
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MatchItem)) return false;
+
+        MatchItem matchItem = (MatchItem) o;
+
+        return matchVM.equals(matchItem.matchVM);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return matchVM.hashCode();
+    }
 }

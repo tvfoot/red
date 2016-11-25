@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red;
+package io.oldering.tvfoot.red.viewmodel;
 
 import org.junit.Test;
 

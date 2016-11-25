@@ -17,8 +17,7 @@ import io.oldering.tvfoot.red.viewmodel.MatchViewModel;
 
 
 public class MatchDetailActivity extends AppCompatActivity {
-
-
+    // TODO(benoit) inject the MatchViewModel via BundleModule
     private MatchViewModel matchVM;
     private ActivityMatchDetailBinding dataBinding;
 

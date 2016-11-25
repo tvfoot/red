@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.di;
+package io.oldering.tvfoot.red.di.module;
 
 import javax.inject.Singleton;
 

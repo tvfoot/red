@@ -1,12 +1,20 @@
 package io.oldering.tvfoot.red;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.squareup.leakcanary.LeakCanary;
 
+import io.oldering.tvfoot.red.api.MatchService;
+import io.oldering.tvfoot.red.di.component.AppComponent;
+import io.oldering.tvfoot.red.di.component.DaggerAppComponent;
+import io.oldering.tvfoot.red.di.module.AppModule;
+import io.oldering.tvfoot.red.di.module.NetworkModule;
 import timber.log.Timber;
 
 public class RedApp extends Application {
+    AppComponent appComponent;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -29,5 +37,19 @@ public class RedApp extends Application {
         }
         LeakCanary.install(this);
         // Normal app init code...
+    }
+
+    public AppComponent getComponent() {
+        if (appComponent == null) {
+            appComponent = DaggerAppComponent.builder()
+                    .appModule(new AppModule(this))
+                    .networkModule(new NetworkModule(MatchService.BASE_URL))
+                    .build();
+        }
+        return appComponent;
+    }
+
+    public static RedApp get(Context context) {
+        return (RedApp) context.getApplicationContext();
     }
 }
