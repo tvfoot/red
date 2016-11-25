@@ -93,7 +93,7 @@ public class MatchListViewModelUnitTest {
         // container
         groupedMatchesObservable.test()
                 .assertComplete()
-                .assertValueCount(6);
+                .assertValueCount(expectedGroupedObservables.size());
 
         // each groupedObservable
         List<GroupedObservable<String, Item>> groupedObservables = groupedMatchesObservable.toList().blockingGet();
@@ -128,7 +128,7 @@ public class MatchListViewModelUnitTest {
         // container
         withDayHeadersGroupedMatches.test()
                 .assertComplete()
-                .assertValueCount(6);
+                .assertValueCount(expectedItemsObservables.size());
 
         // each groupedObservable
         List<Observable<Item>> itemObservables = withDayHeadersGroupedMatches.toList().blockingGet();
@@ -181,7 +181,7 @@ public class MatchListViewModelUnitTest {
     }
 
     private List<List<Item>> createItemObservablesWithHeader(TestComponent component, List<Match> matchesAsList) {
-        List<List<Item>> matchItemsAsList = new ArrayList<>(6);
+        List<List<Item>> matchItemsAsList = new ArrayList<>();
 
         HashMap<String, List<Item>> matchItemsHashMap = new LinkedHashMap<>();
         for (Match match : matchesAsList) {
@@ -202,7 +202,7 @@ public class MatchListViewModelUnitTest {
     }
 
     private List<List<Item>> createGroupedObservableItems(TestComponent component, List<Match> matchesAsList) {
-        List<List<Item>> matchItemsAsList = new ArrayList<>(6);
+        List<List<Item>> matchItemsAsList = new ArrayList<>();
 
         HashMap<String, List<Item>> matchItemsHashMap = new LinkedHashMap<>();
         for (Match match : matchesAsList) {
