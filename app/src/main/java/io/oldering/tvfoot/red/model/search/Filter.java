@@ -5,24 +5,24 @@ import com.google.auto.value.AutoValue;
 // filter:{"where":{"deleted":{"neq":1}},"order":"start-at ASC, weight ASC","limit":30}
 @AutoValue
 public abstract class Filter {
+    abstract Where getWhere();
+
     abstract String getOrder();
 
     abstract int getLimit();
 
-    abstract Where getWhere();
-
     abstract int getOffset();
 
     public static Filter create(int limit, int offset) {
-        return new AutoValue_Filter("start-at ASC, weight ASC", limit, Where.create(), offset);
+        return new AutoValue_Filter(Where.create(), "start-at ASC, weight ASC", limit, offset);
     }
 
     @Override
     public String toString() {
         return "{"
-                + "\"order\":\"" + getOrder() + "\", "
-                + "\"limit\":" + getLimit() + ", "
-                + "\"where\":" + getWhere() + ", "
+                + "\"where\":" + getWhere() + ","
+                + "\"order\":\"" + getOrder() + "\","
+                + "\"limit\":" + getLimit() + ","
                 + "\"offset\":" + getOffset()
                 + "}";
     }

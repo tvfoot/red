@@ -230,6 +230,6 @@ public class MatchListViewModelUnitTest {
         MatchListViewModel matchListVM = new MatchListViewModel(matchService, schedulerProvider, rxBus);
 
         String filter = "{\"where\":{\"deleted\":{\"neq\":1}},\"order\":\"start-at ASC, weight ASC\",\"limit\":30,\"offset\":30}";
-        assertEquals(matchListVM.getFilter(1), filter);
+        assertEquals(matchListVM.getFilter(1).toString(), filter);
     }
 }
