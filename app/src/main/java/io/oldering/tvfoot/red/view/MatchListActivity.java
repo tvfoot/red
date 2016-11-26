@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,6 +57,11 @@ public class MatchListActivity extends AppCompatActivity {
         Toolbar toolbar = dataBinding.matchListFilterToolbar;
         setSupportActionBar(toolbar);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("");
+        }
+
         progressBar = dataBinding.progressPaging;
 
         RecyclerView recyclerView = dataBinding.matchListRecyclerView;
@@ -85,7 +91,7 @@ public class MatchListActivity extends AppCompatActivity {
         paginatorSubject.onNext(pageIndex);
     }
 
-    enum Irrelevant {INSTANCE}
+    private enum Irrelevant {INSTANCE}
 
     private void bind() {
         Disposable matchDisposable = paginatorSubject
