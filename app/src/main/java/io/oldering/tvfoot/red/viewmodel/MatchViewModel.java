@@ -18,9 +18,9 @@ import io.oldering.tvfoot.red.model.Broadcaster;
 import io.oldering.tvfoot.red.model.Competition;
 import io.oldering.tvfoot.red.model.Match;
 import io.oldering.tvfoot.red.model.Team;
+import io.oldering.tvfoot.red.util.StringUtils;
 import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.rxbus.event.MatchClickEvent;
-import io.oldering.tvfoot.red.util.StringUtils;
 
 import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS;
 
@@ -141,7 +141,7 @@ public abstract class MatchViewModel implements Parcelable {
     }
 
     private static String parseLocation(Match match) {
-        return match.getPlace();
+        return String.valueOf(match.getPlace());
     }
 
     public void onMatchClick(@SuppressWarnings("UnusedParameters") View ignored) {

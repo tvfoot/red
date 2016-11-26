@@ -42,7 +42,8 @@
         <activity
             android:name=".view.MatchDetailActivity"
             android:label="@string/match_detail_activity_label"
-            android:parentActivityName=".view.MatchListActivity">
+            android:parentActivityName=".view.MatchListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
