@@ -6,4 +6,5 @@
     <string name="broadcaster_icon">Broadcaster Icon</string>
     <string name="match_detail_home_team_icon_desc">Home team icon</string>
     <string name="match_detail_away_team_icon_desc">Away team icon</string>
+    <string name="is_live">EN COURS</string>
 </resources>

@@ -43,9 +43,9 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
             android:background="@color/colorWhite"
             android:fitsSystemWindows="true"
-            android:layout_marginTop="?attr/actionBarSize"
             tools:context="io.oldering.tvfoot.red.view.MatchListActivity">
 
             <TextView
@@ -100,15 +100,33 @@
                 tools:src="@drawable/tvfoot_team_cdf" />
 
             <TextView
-                android:id="@+id/match_detail_start_time"
+                android:id="@+id/match_detail_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
+                android:background="@color/colorDanger"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="@string/is_live"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                android:textColor="@color/colorWhite"
+                android:textSize="24sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/match_detail_home_team_icon"
+                app:visible="@{match.isLive()}" />
+
+            <TextView
+                android:id="@+id/match_detail_start_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="@{match.startTimeInText}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/match_detail_home_team_icon"
+                app:layout_constraintTop_toBottomOf="@+id/match_detail_status"
+                app:layout_goneMarginTop="32dp"
                 tools:text="Mardi 01 Novembre 2016 à 04h00" />
 
             <TextView
