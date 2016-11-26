@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import io.oldering.tvfoot.red.api.MatchService;
 import io.oldering.tvfoot.red.model.Match;
+import io.oldering.tvfoot.red.model.search.Filter;
 import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.oldering.tvfoot.red.view.item.DayHeaderItem;
@@ -35,7 +36,7 @@ public class MatchListViewModel {
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
     }
 
-    public Observable<Item> getMatches(String filter) {
+    public Observable<Item> getMatches(Filter filter) {
         Observable<Match> matches = findFuture(filter);
 
         Observable<GroupedObservable<String, Item>> groupedMatches = groupByDate(matches);
@@ -47,7 +48,7 @@ public class MatchListViewModel {
                 .subscribeOn(schedulerProvider.io());
     }
 
-    public Observable<Match> findFuture(String filter) {
+    public Observable<Match> findFuture(Filter filter) {
         return matchService
                 .findFuture(filter)
                 .toObservable()
@@ -74,8 +75,8 @@ public class MatchListViewModel {
                 ));
     }
 
-    public String getFilter(int pageIndex) {
+    public Filter getFilter(int pageIndex) {
         int offset = pageIndex * MATCH_PER_PAGE;
-        return "{\"where\":{\"deleted\":{\"neq\":1}},\"order\":\"start-at ASC, weight ASC\",\"limit\":" + MATCH_PER_PAGE + ",\"offset\":" + offset + "}";
+        return Filter.create(MATCH_PER_PAGE, offset);
     }
 }

@@ -21,6 +21,7 @@ import io.oldering.tvfoot.red.di.component.DaggerTestComponent;
 import io.oldering.tvfoot.red.di.component.TestComponent;
 import io.oldering.tvfoot.red.di.module.NetworkModule;
 import io.oldering.tvfoot.red.model.Match;
+import io.oldering.tvfoot.red.model.search.Filter;
 import io.oldering.tvfoot.red.util.Fixture;
 import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
@@ -154,7 +155,7 @@ public class MatchListViewModelUnitTest {
         is = this.getClass().getClassLoader().getResourceAsStream("sample_data2.json");
         List<Match> matchesAsList = fixture.readJsonStream(is);
 
-        String filter = matchListViewModel.getFilter(1);
+        Filter filter = matchListViewModel.getFilter(1);
 
         // execute
         Observable<Item> items = matchListViewModel.getMatches(filter);
@@ -229,6 +230,6 @@ public class MatchListViewModelUnitTest {
         MatchListViewModel matchListVM = new MatchListViewModel(matchService, schedulerProvider, rxBus);
 
         String filter = "{\"where\":{\"deleted\":{\"neq\":1}},\"order\":\"start-at ASC, weight ASC\",\"limit\":30,\"offset\":30}";
-        assertEquals(matchListVM.getFilter(1), filter);
+        assertEquals(matchListVM.getFilter(1).toString(), filter);
     }
 }

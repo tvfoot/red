@@ -145,6 +145,7 @@ public abstract class MatchViewModel implements Parcelable {
     }
 
     public void onMatchClick(@SuppressWarnings("UnusedParameters") View ignored) {
+        // Possible to do stuff here since view provides the context;
         if (rxBus.hasObservers()) {
             rxBus.send(MatchClickEvent.create(this));
         }
