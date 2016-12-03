@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,9 +18,7 @@ import com.genius.groupie.Item;
 import javax.inject.Inject;
 
 import io.oldering.tvfoot.red.R;
-import io.oldering.tvfoot.red.RedApp;
 import io.oldering.tvfoot.red.databinding.ActivityMatchListBinding;
-import io.oldering.tvfoot.red.di.module.ActivityModule;
 import io.oldering.tvfoot.red.flowcontroller.FlowController;
 import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.rxbus.event.MatchClickEvent;
@@ -33,7 +30,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
 import timber.log.Timber;
 
-public class MatchListActivity extends AppCompatActivity {
+public class MatchListActivity extends BaseActivity {
     private GroupAdapter matchListGroupAdapter;
     @Inject
     MatchListViewModel matchListVM;
@@ -50,8 +47,7 @@ public class MatchListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO(benoit) why is this necessary this way? seems long long long
-        ((RedApp) getApplication()).getComponent().plus(new ActivityModule(this)).inject(this);
+        getActivityComponent().inject(this);
 
         ActivityMatchListBinding dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_match_list);
         Toolbar toolbar = dataBinding.matchListFilterToolbar;

@@ -4,7 +4,6 @@ package io.oldering.tvfoot.red.di.component;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import io.oldering.tvfoot.red.RedApp;
 import io.oldering.tvfoot.red.di.module.ActivityModule;
 import io.oldering.tvfoot.red.di.module.AppModule;
 import io.oldering.tvfoot.red.di.module.NetworkModule;
@@ -23,7 +22,5 @@ import io.oldering.tvfoot.red.di.module.ServiceModule;
         }
 )
 public interface AppComponent {
-    void inject(RedApp boxBeeApplication);
-
     ActivityComponent plus(ActivityModule activityModule);
 }
