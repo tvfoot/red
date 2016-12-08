@@ -36,15 +36,9 @@ public class MatchListViewModel {
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
     }
 
-    public Observable<Item> getMatches(Filter filter) {
-        Observable<Match> matches = findFuture(filter);
-
-        Observable<GroupedObservable<String, Item>> groupedMatches = groupByDate(matches);
-
-        Observable<Observable<Item>> groupedMatchesWithHeader = insertDayHeader(groupedMatches);
-
-        return groupedMatchesWithHeader
-                .flatMap(itemObservable -> itemObservable)
+    public Observable<MatchItem> getMatches(Filter filter) {
+        return findFuture(filter)
+                .map(match -> new MatchItem(MatchViewModel.create(match, rxBus)))
                 .subscribeOn(schedulerProvider.io());
     }
 
