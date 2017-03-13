@@ -11,16 +11,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MINUTE_IN_MILLIS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(PowerMockRunner.class) @PrepareForTest(MatchViewModel.class)
 public class MatchViewModelUnitTest {
 
   // TODO(benoit) not sure how to test create here
