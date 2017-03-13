@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class Fixture {
   Gson gson;
@@ -42,7 +43,7 @@ public class Fixture {
       }
       return total.toString();
     } catch (IOException e) {
-      e.printStackTrace();
+      Timber.e(e);
       return null;
     }
   }

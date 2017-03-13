@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-apply from: 'google-play.gradle'
+apply from: '../config/quality/quality.gradle'
+apply from: '../config/deployment/google-play.gradle'
 
 android {
   compileSdkVersion rootProject.ext.config.compileSdkVersion

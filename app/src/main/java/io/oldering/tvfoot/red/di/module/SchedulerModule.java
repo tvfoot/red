@@ -9,6 +9,6 @@ import javax.inject.Singleton;
 @Module public class SchedulerModule {
 
   @Provides @Singleton BaseSchedulerProvider provideSchedulerProvider() {
-    return SchedulerProvider.getInstance();
+    return new SchedulerProvider();
   }
 }
