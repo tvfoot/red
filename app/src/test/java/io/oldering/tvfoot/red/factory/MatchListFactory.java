@@ -1,11 +1,10 @@
 package io.oldering.tvfoot.red.factory;
 
+import io.oldering.tvfoot.red.model.Match;
 import java.util.List;
 
-import io.oldering.tvfoot.red.model.Match;
-
 public class MatchListFactory {
-    public static List<Match> getCorrectMatchList() {
-        return null;
-    }
+  public static List<Match> getCorrectMatchList() {
+    return null;
+  }
 }

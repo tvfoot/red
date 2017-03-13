@@ -1,58 +1,43 @@
 package io.oldering.tvfoot.red.model;
 
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.Date;
 import java.util.List;
 
-@AutoValue
-public abstract class Match {
-    public abstract String getId();
+@AutoValue public abstract class Match {
+  public static TypeAdapter<Match> typeAdapter(Gson gson) {
+    return new AutoValue_Match.GsonTypeAdapter(gson);
+  }
 
-    @Nullable
-    public abstract String getLabel();
+  public static Match create(String id, @Nullable String label, Date startAt,
+      @Nullable String matchDay, Team homeTeam, Team awayTeam,
+      @Nullable List<Broadcaster> broadcasters, @Nullable String place, Competition competition,
+      boolean isPostponed) {
+    return new AutoValue_Match(id, label, startAt, matchDay, homeTeam, awayTeam, broadcasters,
+        place, competition, isPostponed);
+  }
 
-    @SerializedName("start-at")
-    public abstract Date getStartAt();
+  public abstract String getId();
 
-    @Nullable
-    public abstract String getMatchday();
+  @Nullable public abstract String getLabel();
 
-    @SerializedName("home-team")
-    public abstract Team getHomeTeam();
+  @SerializedName("start-at") public abstract Date getStartAt();
 
-    @SerializedName("away-team")
-    public abstract Team getAwayTeam();
+  @Nullable public abstract String getMatchday();
 
-    @Nullable
-    public abstract List<Broadcaster> getBroadcasters();
+  @SerializedName("home-team") public abstract Team getHomeTeam();
 
-    @Nullable
-    public abstract String getPlace();
+  @SerializedName("away-team") public abstract Team getAwayTeam();
 
-    public abstract Competition getCompetition();
+  @Nullable public abstract List<Broadcaster> getBroadcasters();
 
-    public abstract boolean isPostponed();
+  @Nullable public abstract String getPlace();
 
-    public static TypeAdapter<Match> typeAdapter(Gson gson) {
-        return new AutoValue_Match.GsonTypeAdapter(gson);
-    }
+  public abstract Competition getCompetition();
 
-    public static Match create(String id,
-                               @Nullable String label,
-                               Date startAt,
-                               @Nullable String matchDay,
-                               Team homeTeam,
-                               Team awayTeam,
-                               @Nullable List<Broadcaster> broadcasters,
-                               @Nullable String place,
-                               Competition competition,
-                               boolean isPostponed) {
-        return new AutoValue_Match(id, label, startAt, matchDay, homeTeam, awayTeam, broadcasters, place, competition, isPostponed);
-    }
+  public abstract boolean isPostponed();
 }
