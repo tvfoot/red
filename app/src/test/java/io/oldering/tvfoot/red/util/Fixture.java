@@ -2,7 +2,7 @@ package io.oldering.tvfoot.red.util;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import io.oldering.tvfoot.red.model.Match;
+import io.oldering.tvfoot.red.data.model.Match;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

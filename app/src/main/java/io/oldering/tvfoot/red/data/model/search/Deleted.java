@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.model.search;
+package io.oldering.tvfoot.red.data.model.search;
 
 import com.google.auto.value.AutoValue;
 

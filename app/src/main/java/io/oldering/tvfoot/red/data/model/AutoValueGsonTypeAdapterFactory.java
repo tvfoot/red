@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.model;
+package io.oldering.tvfoot.red.data.model;
 
 import com.google.gson.TypeAdapterFactory;
 import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;

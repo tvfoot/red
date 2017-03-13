@@ -6,17 +6,12 @@
 
   <data>
 
-    <variable
-        name="match"
-        type="io.oldering.tvfoot.red.viewmodel.MatchViewModel"
-        />
   </data>
 
   <android.support.constraint.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@drawable/ripple_white_background"
-      android:onClick="@{match::onMatchClick}"
       android:paddingBottom="8dp"
       android:paddingTop="8dp"
       tools:showIn="@layout/activity_match_list"
@@ -28,7 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:gravity="center"
-        android:text="@{match.startTime}"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintHorizontal_weight=".15"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -54,7 +48,7 @@
     <!--app:layout_constraintTop_toTopOf="@+id/match_broadcasters"-->
     <!--tools:visibility="visible" />-->
 
-    <io.oldering.tvfoot.red.customview.EmptiableRecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/match_broadcasters"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -74,7 +68,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="@{match.headline}"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintHorizontal_weight=".65"
         app:layout_constraintLeft_toRightOf="@+id/match_broadcasters"
@@ -96,7 +89,6 @@
         android:textColor="@color/colorWhite"
         app:layout_constraintLeft_toLeftOf="@+id/match_headline"
         app:layout_constraintTop_toBottomOf="@+id/match_headline"
-        app:visible="@{match.isLive()}"
         />
 
     <TextView
@@ -105,7 +97,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="4dp"
-        android:text="@{match.competition}"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintBottom_toBottomOf="@+id/match_status"
         app:layout_constraintLeft_toRightOf="@+id/match_status"
@@ -121,7 +112,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="4dp"
-        android:text="@{match.matchDay}"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintBottom_toBottomOf="@+id/match_competition"
         app:layout_constraintLeft_toRightOf="@+id/match_competition"

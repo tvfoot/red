@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package io.oldering.tvfoot.red.customview;
+package io.oldering.tvfoot.red.data.model.search;
 
 import javax.annotation.ParametersAreNonnullByDefault;

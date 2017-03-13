@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     bundle.putString(FirebaseAnalytics.Param.DESTINATION, "Mars");
     firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
 
-    FlowController.launchMatchListActivity(this);
+    FlowController.toMatchs(this);
     finish();
   }
 }
