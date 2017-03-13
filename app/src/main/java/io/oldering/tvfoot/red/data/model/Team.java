@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.model;
+package io.oldering.tvfoot.red.data.model;
 
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;

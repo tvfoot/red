@@ -3,7 +3,7 @@ package io.oldering.tvfoot.red;
 import android.app.Application;
 import android.content.Context;
 import com.squareup.leakcanary.LeakCanary;
-import io.oldering.tvfoot.red.api.MatchService;
+import io.oldering.tvfoot.red.data.api.MatchService;
 import io.oldering.tvfoot.red.di.component.AppComponent;
 import io.oldering.tvfoot.red.di.component.DaggerAppComponent;
 import io.oldering.tvfoot.red.di.module.AppModule;
