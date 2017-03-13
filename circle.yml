@@ -37,9 +37,9 @@ test:
   post:
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - cp -r app/build/test-results/* $CIRCLE_TEST_REPORTS
+    - find app/build/test-results/ -name \*.xml -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
     - find app/build/outputs/androidTest-results/ -name \*.xml -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
-    - find reports/ -name \*.xml -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - find app/build/reports/ -name \*.xml -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
     # screenshot debugging
     #- wget http://imgur.com/tools/imgurbash.sh
