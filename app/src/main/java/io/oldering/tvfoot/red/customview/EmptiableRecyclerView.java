@@ -11,49 +11,47 @@ import android.view.View;
  * see https://github.com/googlesamples/android-XYZTouristAttractions/blob/master/Application/src/main/java/com/example/android/xyztouristattractions/ui/AttractionsRecyclerView.java
  */
 public class EmptiableRecyclerView extends RecyclerView {
-    private View emptyView;
+  private View emptyView;
 
-    private AdapterDataObserver dataObserver = new AdapterDataObserver() {
-        @Override
-        public void onChanged() {
-            super.onChanged();
-            updateEmptyView();
-        }
-    };
-
-    public EmptiableRecyclerView(Context context) {
-        super(context);
+  private AdapterDataObserver dataObserver = new AdapterDataObserver() {
+    @Override public void onChanged() {
+      super.onChanged();
+      updateEmptyView();
     }
+  };
 
-    public EmptiableRecyclerView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+  public EmptiableRecyclerView(Context context) {
+    super(context);
+  }
 
-    public EmptiableRecyclerView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
+  public EmptiableRecyclerView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
 
-    public void setEmptyView(View emptyView) {
-        this.emptyView = emptyView;
-    }
+  public EmptiableRecyclerView(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+  }
 
-    @Override
-    public void setAdapter(@Nullable RecyclerView.Adapter adapter) {
-        if (getAdapter() != null) {
-            getAdapter().unregisterAdapterDataObserver(dataObserver);
-        }
-        if (adapter != null) {
-            adapter.registerAdapterDataObserver(dataObserver);
-        }
-        super.setAdapter(adapter);
-        updateEmptyView();
-    }
+  public void setEmptyView(View emptyView) {
+    this.emptyView = emptyView;
+  }
 
-    void updateEmptyView() {
-        if (emptyView != null && getAdapter() != null) {
-            boolean showEmptyView = getAdapter().getItemCount() == 0;
-            emptyView.setVisibility(showEmptyView ? VISIBLE : GONE);
-            setVisibility(showEmptyView ? GONE : VISIBLE);
-        }
+  @Override public void setAdapter(@Nullable RecyclerView.Adapter adapter) {
+    if (getAdapter() != null) {
+      getAdapter().unregisterAdapterDataObserver(dataObserver);
     }
+    if (adapter != null) {
+      adapter.registerAdapterDataObserver(dataObserver);
+    }
+    super.setAdapter(adapter);
+    updateEmptyView();
+  }
+
+  void updateEmptyView() {
+    if (emptyView != null && getAdapter() != null) {
+      boolean showEmptyView = getAdapter().getItemCount() == 0;
+      emptyView.setVisibility(showEmptyView ? VISIBLE : GONE);
+      setVisibility(showEmptyView ? GONE : VISIBLE);
+    }
+  }
 }

@@ -4,30 +4,30 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 public class BundleService {
-    private final Bundle data;
-    public Bundle savedState;
+  private final Bundle data;
+  public Bundle savedState;
 
-    public BundleService(@Nullable Bundle savedState, @Nullable Bundle intentExtras) {
-        data = new Bundle();
+  public BundleService(@Nullable Bundle savedState, @Nullable Bundle intentExtras) {
+    data = new Bundle();
 
-        this.savedState = savedState;
-        if (this.savedState != null) {
-            data.putAll(savedState);
-        }
-        if (intentExtras != null) {
-            data.putAll(intentExtras);
-        }
+    this.savedState = savedState;
+    if (this.savedState != null) {
+      data.putAll(savedState);
     }
-
-    public Object get(String key) {
-        return data.get(key);
+    if (intentExtras != null) {
+      data.putAll(intentExtras);
     }
+  }
 
-    public boolean contains(String key) {
-        return data.containsKey(key);
-    }
+  public Object get(String key) {
+    return data.get(key);
+  }
 
-    public Bundle getAll() {
-        return data;
-    }
+  public boolean contains(String key) {
+    return data.containsKey(key);
+  }
+
+  public Bundle getAll() {
+    return data;
+  }
 }

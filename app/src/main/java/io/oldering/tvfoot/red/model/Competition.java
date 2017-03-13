@@ -1,35 +1,27 @@
 package io.oldering.tvfoot.red.model;
 
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
-@AutoValue
-public abstract class Competition {
-    public abstract String getCode();
+@AutoValue public abstract class Competition {
+  public static TypeAdapter<Competition> typeAdapter(Gson gson) {
+    return new AutoValue_Competition.GsonTypeAdapter(gson);
+  }
 
-    public abstract String getName();
+  public static Competition create(String code, String name, @Nullable String country,
+      @Nullable String url, @Nullable String gender) {
+    return new AutoValue_Competition(code, name, country, url, gender);
+  }
 
-    @Nullable
-    public abstract String getCountry();
+  public abstract String getCode();
 
-    @Nullable
-    public abstract String getUrl();
+  public abstract String getName();
 
-    @Nullable
-    public abstract String getGender();
+  @Nullable public abstract String getCountry();
 
-    public static TypeAdapter<Competition> typeAdapter(Gson gson) {
-        return new AutoValue_Competition.GsonTypeAdapter(gson);
-    }
+  @Nullable public abstract String getUrl();
 
-    public static Competition create(String code,
-                                     String name,
-                                     @Nullable String country,
-                                     @Nullable String url,
-                                     @Nullable String gender) {
-        return new AutoValue_Competition(code, name, country, url, gender);
-    }
+  @Nullable public abstract String getGender();
 }
