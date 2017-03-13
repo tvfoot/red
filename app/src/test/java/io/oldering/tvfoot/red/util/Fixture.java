@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -20,7 +21,7 @@ public class Fixture {
   }
 
   public List<Match> readJsonStream(InputStream in) throws IOException {
-    JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+    JsonReader reader = new JsonReader(new InputStreamReader(in, StandardCharsets.UTF_8));
     List<Match> messages = new ArrayList<>();
     reader.beginArray();
     while (reader.hasNext()) {
@@ -33,7 +34,7 @@ public class Fixture {
   }
 
   public String readInputStream(InputStream is) {
-    BufferedReader r = new BufferedReader(new InputStreamReader(is));
+    BufferedReader r = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
     StringBuilder total;
     try {
       total = new StringBuilder(is.available());
