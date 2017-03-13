@@ -19,7 +19,7 @@ check.dependsOn 'findbugs', 'pmd'
 task findbugs(type: FindBugs,
     group: 'Verification',
     description: 'Inspect java bytecode for bugs',
-    dependsOn: ['compileDebugSources', 'compileReleaseSources']) {
+    dependsOn: ['compileProdDebugSources', 'compileMockDebugSources', 'compileProdReleaseSources']) {
 
   ignoreFailures = false
   effort = "max"

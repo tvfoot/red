@@ -29,6 +29,8 @@ test:
   override:
     - ./gradlew clean assemble -Dpre-dex=false --console=plain --stacktrace
     - ./gradlew test --console=plain
+    - ./gradlew pmd --console=plain
+    - ./gradlew findbugs --console=plain
     - ./gradlew connectedAndroidTest --console=plain
     - ./gradlew lint --console=plain
     - test "$CIRCLE_BRANCH" = develop && ./gradlew publishApkProdRelease || true
