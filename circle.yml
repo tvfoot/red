@@ -19,19 +19,19 @@ dependencies:
 
 test:
   pre:
-    - emulator -avd circleci-android22 -no-audio -no-window:
-        background: true
-        parallel: true
-    - circle-android wait-for-boot
-    - sleep 30
-    # Unlock the screen
-    - adb shell input keyevent 82
+    #    - emulator -avd circleci-android22 -no-audio -no-window:
+    #        background: true
+    #        parallel: true
+    #    - circle-android wait-for-boot
+    #    - sleep 30
+    #    # Unlock the screen
+    #    - adb shell input keyevent 82
   override:
     - ./gradlew clean assemble -Dpre-dex=false --console=plain --stacktrace
     - ./gradlew test --console=plain
     - ./gradlew pmd --console=plain
     - ./gradlew findbugs --console=plain
-    - ./gradlew connectedAndroidTest --console=plain
+    #    - ./gradlew connectedAndroidTest --console=plain
     - ./gradlew lint --console=plain
     - test "$CIRCLE_BRANCH" = develop && ./gradlew publishApkProdRelease || true
   post:
