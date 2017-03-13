@@ -31,11 +31,14 @@ public class DayHeaderItem extends Item<DayHeaderItemBinding> {
         DayHeaderItem that = (DayHeaderItem) o;
 
         return dayHeaderVM.equals(that.dayHeaderVM);
-
     }
 
     @Override
     public int hashCode() {
         return dayHeaderVM.hashCode();
+    }
+
+    public String getKey() {
+        return dayHeaderVM.getDisplayedDate();
     }
 }

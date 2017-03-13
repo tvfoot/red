@@ -32,9 +32,12 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
 public abstract class MatchViewModel implements Parcelable {
 
     private static SimpleDateFormat shortDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
     private static SimpleDateFormat fullTextDateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy à HH'h'mm", Locale.FRANCE);
 
     private RxBus rxBus;
+
+    public abstract String getHeaderKey();
 
     public abstract String getStartTime();
 
@@ -60,6 +63,7 @@ public abstract class MatchViewModel implements Parcelable {
 
     public static MatchViewModel create(Match match, RxBus rxBus) {
         MatchViewModel matchViewModel = new AutoValue_MatchViewModel(
+                parseHeaderKey(match.getStartAt()),
                 parseStartTime(match.getStartAt()),
                 parseBroadcasters(match.getBroadcasters()),
                 parseHeadLine(match.getHomeTeam(), match.getAwayTeam(), match.getLabel()),
@@ -73,6 +77,11 @@ public abstract class MatchViewModel implements Parcelable {
                 match.getId());
         matchViewModel.setRxBus(rxBus);
         return matchViewModel;
+    }
+
+    private static String parseHeaderKey(Date startAt) {
+        simpleDateFormat.setTimeZone(TimeZone.getDefault());
+        return simpleDateFormat.format(startAt);
     }
 
     public static String parseStartTime(Date startAt) {

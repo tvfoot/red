@@ -55,4 +55,8 @@ public class MatchItem extends Item<MatchItemBinding> {
     public int hashCode() {
         return matchVM.hashCode();
     }
+
+    public String getKey() {
+        return matchVM.getHeaderKey();
+    }
 }

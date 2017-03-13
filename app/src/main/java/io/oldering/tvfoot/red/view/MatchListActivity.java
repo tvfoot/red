@@ -13,7 +13,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.genius.groupie.GroupAdapter;
-import com.genius.groupie.Item;
+import com.genius.groupie.Section;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import javax.inject.Inject;
 
@@ -24,6 +27,8 @@ import io.oldering.tvfoot.red.util.rxbus.RxBus;
 import io.oldering.tvfoot.red.util.rxbus.event.MatchClickEvent;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.oldering.tvfoot.red.view.item.DayHeaderItem;
+import io.oldering.tvfoot.red.view.item.MatchItem;
+import io.oldering.tvfoot.red.viewmodel.DayHeaderViewModel;
 import io.oldering.tvfoot.red.viewmodel.MatchListViewModel;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -89,6 +94,8 @@ public class MatchListActivity extends BaseActivity {
 
     private enum Irrelevant {INSTANCE}
 
+    private HashMap<String, Section> sections = new LinkedHashMap<>();
+
     private void bind() {
         Disposable matchDisposable = paginatorSubject
                 .doOnNext(integer -> {
@@ -99,10 +106,7 @@ public class MatchListActivity extends BaseActivity {
                 .map(matchListVM::getFilter)
                 .concatMap(matchListVM::getMatches)
                 .observeOn(schedulerProvider.ui())
-                .map(item -> {
-                    MatchListActivity.this.addItem(item);
-                    return Irrelevant.INSTANCE;
-                })
+                .map(MatchListActivity.this::addItem)
                 .doOnNext(irrelevant -> {
                     requestUnderWay = false;
                     progressBar.setVisibility(View.INVISIBLE);
@@ -132,10 +136,17 @@ public class MatchListActivity extends BaseActivity {
         disposables.clear();
     }
 
-    private void addItem(Item item) {
-        if (item instanceof DayHeaderItem) {
-            Timber.d("addItem: is day header %s", ((DayHeaderItem) item).dayHeaderVM.getDisplayedDate());
+    private Irrelevant addItem(MatchItem matchItem) {
+        String key = matchItem.getKey();
+        Timber.d("the key is %s", key);
+        if (!sections.containsKey(key)) {
+            Section section = new Section(new DayHeaderItem(DayHeaderViewModel.create(key)));
+            sections.put(key, section);
+            matchListGroupAdapter.add(section);
         }
-        matchListGroupAdapter.add(item);
+
+        sections.get(key).add(matchItem);
+
+        return Irrelevant.INSTANCE;
     }
 }
