@@ -7,7 +7,7 @@ import dagger.Module;
 import dagger.Provides;
 import io.oldering.tvfoot.red.di.ScopeActivity;
 import io.oldering.tvfoot.red.util.BundleService;
-import io.oldering.tvfoot.red.view.BaseActivity;
+import io.oldering.tvfoot.red.util.BaseActivity;
 
 @Module public class BundleModule {
   @Provides @ScopeActivity BundleService provideBundleService(BaseActivity activity) {

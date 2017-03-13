@@ -33,7 +33,7 @@ task findbugs(type: FindBugs,
 
   reports {
     xml.enabled = true
-    html.enabled = false
+    html.enabled = true
     xml {
       destination "$reportsDir/findbugs/findbugs.xml"
     }

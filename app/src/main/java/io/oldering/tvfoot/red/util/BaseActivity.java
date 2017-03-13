@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.view;
+package io.oldering.tvfoot.red.util;
 
 import android.support.v7.app.AppCompatActivity;
 import io.oldering.tvfoot.red.di.ActivityComponentFactory;

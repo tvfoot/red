@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.view;
+package io.oldering.tvfoot.red.util;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
