@@ -24,7 +24,7 @@
       </intent-filter>
     </activity>
     <activity
-        android:name=".matchs.MatchsActivity"
+        android:name=".matches.MatchesActivity"
         android:label="@string/app_name"
         android:launchMode="singleTop"
         android:theme="@style/AppTheme.NoActionBar">
@@ -42,7 +42,7 @@
     <activity
         android:name=".match.MatchActivity"
         android:label="@string/match_detail_activity_label"
-        android:parentActivityName=".matchs.MatchsActivity"
+        android:parentActivityName=".matches.MatchesActivity"
         android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>

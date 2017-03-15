@@ -38,7 +38,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/match_list_recycler_view"
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
@@ -48,7 +48,7 @@
         />
 
     <ProgressBar
-        android:id="@+id/progress_paging"
+        android:id="@+id/loading_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true"
@@ -58,13 +58,18 @@
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/match_list_filter_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_filter_list_white_24px"
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Empty"
+        />
+
+    <TextView
+        android:id="@+id/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Error"
         />
   </android.support.design.widget.CoordinatorLayout>
 </layout>

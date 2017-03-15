@@ -108,6 +108,8 @@ dependencies {
   compile "com.google.code.gson:gson:$rootProject.ext.lib.gsonVersion"
   compile "com.google.dagger:dagger:$rootProject.ext.lib.daggerVersion"
   compile "com.google.firebase:firebase-core:$rootProject.ext.lib.firebaseVersion"
+  compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+  compile 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0'
   debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.lib.leakCanaryVersion"
   releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.lib.leakCanaryVersion"
   annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.lib.daggerVersion"
