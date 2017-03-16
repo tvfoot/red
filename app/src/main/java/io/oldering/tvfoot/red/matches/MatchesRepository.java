@@ -11,11 +11,11 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.NEXT_PAGE_E
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.NEXT_PAGE_LOADED;
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.NEXT_PAGE_LOADING;
 
-public class MatchesInteractor {
+public class MatchesRepository {
   final MatchService matchService;
   private int pageIndex = 0;
 
-  public MatchesInteractor(MatchService matchService) {
+  public MatchesRepository(MatchService matchService) {
     this.matchService = matchService;
   }
 

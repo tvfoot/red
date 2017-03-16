@@ -18,7 +18,7 @@ import timber.log.Timber;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class MatchesActivity extends BaseActivity implements MatchesView {
+public class MatchesActivity extends BaseActivity {
   private ActivityMatchesBinding binding;
   private MatchesAdapter adapter;
 
@@ -36,17 +36,17 @@ public class MatchesActivity extends BaseActivity implements MatchesView {
           }
         });
 
-    MatchesPresenter presenter =
-        new MatchesPresenter(this, new MatchesInteractor(getActivityComponent().matchService()));
-    presenter.bindIntents();
+    MatchesModel model =
+        new MatchesModel(this, new MatchesRepository(getActivityComponent().matchService()));
+    model.bindIntents();
   }
 
-  @Override public Observable<Boolean> loadFirstPageIntent() {
+  public Observable<Boolean> loadFirstPageIntent() {
     Timber.d("loadFirstPageIntent");
     return Observable.just(true).doOnComplete(() -> Timber.d("firstPage completed"));
   }
 
-  @Override public Observable<Boolean> loadNextPageIntent() {
+  public Observable<Boolean> loadNextPageIntent() {
     return RxRecyclerView.scrollStateChanges(binding.recyclerView)
         .filter(event -> event == RecyclerView.SCROLL_STATE_IDLE)
         .filter(

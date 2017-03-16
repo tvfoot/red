@@ -34,7 +34,79 @@ import java.util.List;
         .setPullToRefreshError(null);
   }
 
-  public abstract Builder toBuilder();
+  public abstract Builder buildWith();
+
+  public MatchesViewState reduce(MatchesViewState changes) {
+    switch (changes.status()) {
+      case FIRST_PAGE_LOADING:
+        return this.buildWith()
+            .setFirstPageLoading(true)
+            .setFirstPageError(null)
+            .setStatus(changes.status())
+            .build();
+      case FIRST_PAGE_ERROR:
+        return this.buildWith()
+            .setFirstPageLoading(false)
+            .setFirstPageError(changes.firstPageError())
+            .setStatus(changes.status())
+            .build();
+      case FIRST_PAGE_LOADED:
+        return this.buildWith()
+            .setFirstPageLoading(false)
+            .setFirstPageError(null)
+            .setMatches(changes.matches())
+            .setStatus(changes.status())
+            .build();
+      case NEXT_PAGE_LOADING:
+        return this.buildWith()
+            .setNextPageLoading(true)
+            .setNextPageError(null)
+            .setStatus(changes.status())
+            .build();
+      case NEXT_PAGE_ERROR:
+        return this.buildWith()
+            .setNextPageLoading(false)
+            .setNextPageError(changes.nextPageError())
+            .setStatus(changes.status())
+            .build();
+      case NEXT_PAGE_LOADED:
+        List<Match> matches = new ArrayList<>();
+        matches.addAll(this.matches());
+        matches.addAll(changes.matches());
+
+        return this.buildWith()
+            .setNextPageLoading(false)
+            .setNextPageError(null)
+            .setMatches(matches)
+            .setStatus(changes.status())
+            .build();
+      case PULL_TO_REFRESH_LOADING:
+        return this.buildWith()
+            .setPullToRefreshLoading(true)
+            .setPullToRefreshError(null)
+            .setStatus(changes.status())
+            .build();
+      case PULL_TO_REFRESH_ERROR:
+        return this.buildWith()
+            .setPullToRefreshLoading(false)
+            .setPullToRefreshError(changes.pullToRefreshError())
+            .setStatus(changes.status())
+            .build();
+      case PULL_TO_REFRESH_LOADED:
+        matches = new ArrayList<>();
+        matches.addAll(changes.matches());
+        matches.addAll(this.matches());
+
+        return this.buildWith()
+            .setPullToRefreshLoading(false)
+            .setPullToRefreshError(null)
+            .setMatches(matches)
+            .setStatus(changes.status())
+            .build();
+      default:
+        throw new IllegalArgumentException("Don't know this one " + changes);
+    }
+  }
 
   @AutoValue.Builder public static abstract class Builder {
     public abstract Builder setMatches(List<Match> matches);

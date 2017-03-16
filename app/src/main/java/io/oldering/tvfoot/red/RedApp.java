@@ -32,8 +32,8 @@ public class RedApp extends Application {
 
   private void setupLeakCanary() {
     if (LeakCanary.isInAnalyzerProcess(this)) {
-      // This process is dedicated to LeakCanary for heap analysis.
-      // You should not init your app in this process.
+      // This reduce is dedicated to LeakCanary for heap analysis.
+      // You should not init your app in this reduce.
       return;
     }
     LeakCanary.install(this);
