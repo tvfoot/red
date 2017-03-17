@@ -4,10 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView;
 import io.oldering.tvfoot.red.R;
-import io.oldering.tvfoot.red.data.model.Match;
 import io.oldering.tvfoot.red.databinding.ActivityMatchesBinding;
 import io.oldering.tvfoot.red.util.BaseActivity;
 import io.oldering.tvfoot.red.util.InfiniteScrollListener;
@@ -17,10 +14,13 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static io.oldering.tvfoot.red.matches.MatchesIntent.LOAD_FIRST_PAGE;
+import static io.oldering.tvfoot.red.matches.MatchesIntent.LOAD_NEXT_PAGE;
 
 public class MatchesActivity extends BaseActivity {
   private ActivityMatchesBinding binding;
   private MatchesAdapter adapter;
+  private LinearLayoutManager layoutManager;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -29,30 +29,28 @@ public class MatchesActivity extends BaseActivity {
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_matches);
     binding.recyclerView.setAdapter(adapter);
-    binding.recyclerView.addOnScrollListener(
-        new InfiniteScrollListener((LinearLayoutManager) binding.recyclerView.getLayoutManager()) {
-          @Override public void onLoadMore(int current_page) {
-            // TODO not needed anymore?
-          }
-        });
+    layoutManager = (LinearLayoutManager) binding.recyclerView.getLayoutManager();
+    binding.recyclerView.addOnScrollListener(new InfiniteScrollListener(layoutManager) {
+      @Override public void onLoadMore(int current_page) {
+        // TODO not needed anymore?
+      }
+    });
 
-    MatchesModel model =
-        new MatchesModel(this, new MatchesRepository(getActivityComponent().matchService()));
-    model.bindIntents();
+    new MatchesBinder(this, new MatchesRepository(getActivityComponent().matchService())).bind();
   }
 
-  public Observable<Boolean> loadFirstPageIntent() {
-    Timber.d("loadFirstPageIntent");
-    return Observable.just(true).doOnComplete(() -> Timber.d("firstPage completed"));
+  public Observable<MatchesIntent> loadFirstPageIntent() {
+    return Observable.just(LOAD_FIRST_PAGE);
   }
 
-  public Observable<Boolean> loadNextPageIntent() {
-    return RxRecyclerView.scrollStateChanges(binding.recyclerView)
-        .filter(event -> event == RecyclerView.SCROLL_STATE_IDLE)
-        .filter(
-            event -> ((LinearLayoutManager) binding.recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition()
-                == adapter.getItemCount() - 1)
-        .map(integer -> true);
+  public Observable<MatchesIntent> loadNextPageIntent() {
+    return new InfiniteScrollEventObservable(binding.recyclerView).doOnNext(
+        indexPage -> Timber.d("loading next page yo %s", indexPage)).map(ignored -> LOAD_NEXT_PAGE);
+    //return RxRecyclerView.scrollStateChanges(binding.recyclerView)
+    //    .filter(event -> event == RecyclerView.SCROLL_STATE_IDLE)
+    //    .filter(event -> layoutManager.findLastCompletelyVisibleItemPosition()
+    //        == adapter.getItemCount() - 1)
+    //    .map(integer -> LOAD_NEXT_PAGE);
   }
 
   public void render(MatchesViewState viewState) {
@@ -104,7 +102,7 @@ public class MatchesActivity extends BaseActivity {
     renderError();
   }
 
-  private void renderResult(List<Match> matches) {
+  private void renderResult(List<MatchRowDisplayable> matches) {
     binding.emptyView.setVisibility(GONE);
     binding.errorView.setVisibility(GONE);
     binding.recyclerView.setVisibility(VISIBLE);

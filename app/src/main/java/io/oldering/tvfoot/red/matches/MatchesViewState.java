@@ -2,13 +2,12 @@ package io.oldering.tvfoot.red.matches;
 
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
-import io.oldering.tvfoot.red.data.model.Match;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @AutoValue public abstract class MatchesViewState {
-  public abstract List<Match> matches();
+  public abstract List<MatchRowDisplayable> matches();
 
   public abstract boolean firstPageLoading();
 
@@ -70,7 +69,7 @@ import java.util.List;
             .setStatus(changes.status())
             .build();
       case NEXT_PAGE_LOADED:
-        List<Match> matches = new ArrayList<>();
+        List<MatchRowDisplayable> matches = new ArrayList<>();
         matches.addAll(this.matches());
         matches.addAll(changes.matches());
 
@@ -109,7 +108,7 @@ import java.util.List;
   }
 
   @AutoValue.Builder public static abstract class Builder {
-    public abstract Builder setMatches(List<Match> matches);
+    public abstract Builder setMatches(List<MatchRowDisplayable> matches);
 
     public abstract Builder setFirstPageLoading(boolean firstPageLoading);
 

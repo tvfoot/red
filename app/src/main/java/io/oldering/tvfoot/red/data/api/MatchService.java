@@ -1,7 +1,7 @@
 package io.oldering.tvfoot.red.data.api;
 
-import io.oldering.tvfoot.red.data.model.Match;
-import io.oldering.tvfoot.red.data.model.search.Filter;
+import io.oldering.tvfoot.red.data.entity.Match;
+import io.oldering.tvfoot.red.data.entity.search.Filter;
 import io.reactivex.Single;
 import java.util.List;
 import retrofit2.http.GET;

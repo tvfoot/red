@@ -60,7 +60,7 @@
         app:layout_constraintLeft_toRightOf="@+id/match_start_time"
         app:layout_constraintRight_toLeftOf="@+id/match_headline"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/broadcaster_item"
+        tools:listitem="@layout/broadcaster_row"
         />
 
     <TextView

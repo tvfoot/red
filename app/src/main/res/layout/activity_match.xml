@@ -12,7 +12,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:fitsSystemWindows="true"
-      tools:context="io.oldering.tvfoot.red.view.MatchListActivity"
+      tools:context="io.oldering.tvfoot.red.activity.MatchListActivity"
       >
 
     <android.support.design.widget.AppBarLayout
@@ -47,7 +47,7 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:background="@color/colorWhite"
         android:fitsSystemWindows="true"
-        tools:context="io.oldering.tvfoot.red.view.MatchListActivity"
+        tools:context="io.oldering.tvfoot.red.activity.MatchListActivity"
         >
 
       <TextView
@@ -159,7 +159,7 @@
           app:layout_constraintRight_toRightOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/match_detail_location"
           app:layout_constraintVertical_bias="0.3"
-          tools:listitem="@layout/broadcaster_item"
+          tools:listitem="@layout/broadcaster_row"
           />
     </android.support.constraint.ConstraintLayout>
   </android.support.design.widget.CoordinatorLayout>

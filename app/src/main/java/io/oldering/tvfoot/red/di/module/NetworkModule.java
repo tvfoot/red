@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import dagger.Module;
 import dagger.Provides;
-import io.oldering.tvfoot.red.data.model.AutoValueGsonTypeAdapterFactory;
+import io.oldering.tvfoot.red.data.entity.AutoValueGsonTypeAdapterFactory;
 import javax.inject.Singleton;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

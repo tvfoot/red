@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.data.model;
+package io.oldering.tvfoot.red.data.entity;
 
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
@@ -10,13 +10,9 @@ import com.google.gson.TypeAdapter;
     return new AutoValue_Broadcaster.GsonTypeAdapter(gson);
   }
 
-  public static Broadcaster create(String name, String code, @Nullable String url) {
-    return new AutoValue_Broadcaster(name, code, url);
-  }
+  public abstract String name();
 
-  public abstract String getName();
+  public abstract String code();
 
-  public abstract String getCode();
-
-  @Nullable public abstract String getUrl();
+  @Nullable public abstract String url();
 }
