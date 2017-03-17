@@ -1,5 +1,21 @@
 package io.oldering.tvfoot.red.matches;
 
-public enum MatchesIntent {
-  LOAD_FIRST_PAGE, LOAD_NEXT_PAGE,
+public interface MatchesIntent {
+  final class LoadFirstPage implements MatchesIntent {
+  }
+
+  final class LoadNextPage implements MatchesIntent {
+  }
+
+  final class MatchRowClick implements MatchesIntent {
+    private final MatchRowDisplayable match;
+
+    public MatchRowClick(MatchRowDisplayable match) {
+      this.match = match;
+    }
+
+    public MatchRowDisplayable getMatch() {
+      return match;
+    }
+  }
 }

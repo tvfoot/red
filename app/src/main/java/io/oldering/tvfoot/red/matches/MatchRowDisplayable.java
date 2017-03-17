@@ -24,29 +24,29 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
   private static SimpleDateFormat fullTextDateFormat =
       new SimpleDateFormat("EEEE dd MMMM yyyy à HH'h'mm", Locale.FRANCE);
 
-  public abstract String getHeaderKey();
+  public abstract String headerKey();
 
-  public abstract String getStartTime();
+  public abstract String startTime();
 
-  public abstract List<BroadcasterRowDisplayable> getBroadcasters();
+  public abstract List<BroadcasterRowDisplayable> broadcasters();
 
-  public abstract String getHeadline();
+  public abstract String headline();
 
-  public abstract String getCompetition();
+  public abstract String competition();
 
-  public abstract String getMatchDay();
+  public abstract String matchDay();
 
-  public abstract boolean isLive();
+  public abstract boolean live();
 
-  public abstract String getStartTimeInText();
+  public abstract String startTimeInText();
 
-  public abstract String getHomeTeamDrawableName();
+  public abstract String homeTeamDrawableName();
 
-  public abstract String getAwayTeamDrawableName();
+  public abstract String awayTeamDrawableName();
 
-  public abstract String getLocation();
+  public abstract String location();
 
-  public abstract String getMatchId();
+  public abstract String matchId();
 
   public static MatchRowDisplayable fromMatch(Match match) {
     return new AutoValue_MatchRowDisplayable( //
@@ -89,7 +89,7 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
 
     List<BroadcasterRowDisplayable> broadcastersVM = new ArrayList<>(broadcasters.size());
     for (Broadcaster broadcaster : broadcasters) {
-      broadcastersVM.add(BroadcasterRowDisplayable.builder().setCode(broadcaster.code()).build());
+      broadcastersVM.add(BroadcasterRowDisplayable.builder().code(broadcaster.code()).build());
     }
     return broadcastersVM;
   }

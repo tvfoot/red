@@ -8,12 +8,17 @@
         name="match"
         type="io.oldering.tvfoot.red.matches.MatchRowDisplayable"
         />
+    <variable
+        name="handler"
+        type="io.oldering.tvfoot.red.matches.MatchesAdapter"
+        />
   </data>
 
   <android.support.constraint.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@drawable/ripple_white_background"
+      android:onClick="@{() -> handler.onClick(match)}"
       android:paddingBottom="8dp"
       android:paddingTop="8dp"
       tools:showIn="@layout/activity_matches"
@@ -76,7 +81,7 @@
         android:textColor="@color/colorWhite"
         app:layout_constraintLeft_toLeftOf="@+id/match_headline"
         app:layout_constraintTop_toBottomOf="@+id/match_headline"
-        app:visible="@{match.isLive()}"
+        app:visible="@{match.live}"
         />
 
     <TextView

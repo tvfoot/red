@@ -14,17 +14,21 @@ public class MatchesBinder {
   }
 
   private Observable<MatchesIntent> intent() {
-    return Observable.merge(activity.loadFirstPageIntent(), activity.loadNextPageIntent())
-        .subscribeOn(AndroidSchedulers.mainThread());
+    return Observable.merge(activity.loadFirstPageIntent(), activity.loadNextPageIntent(),
+        activity.matchRowClickIntent()).subscribeOn(AndroidSchedulers.mainThread());
   }
 
   private Observable<MatchesViewState> model(Observable<MatchesIntent> intents) {
     return intents.flatMap(intent -> {
-      if (intent == MatchesIntent.LOAD_FIRST_PAGE) {
+      if (intent instanceof MatchesIntent.LoadFirstPage) {
         return repository.loadFirstPage().subscribeOn(Schedulers.io());
       }
-      if (intent == MatchesIntent.LOAD_NEXT_PAGE) {
+      if (intent instanceof MatchesIntent.LoadNextPage) {
         return repository.loadNextPage().subscribeOn(Schedulers.io());
+      }
+      if (intent instanceof MatchesIntent.MatchRowClick) {
+        return Observable.just(
+            MatchesViewState.matchRowClick(((MatchesIntent.MatchRowClick) intent).getMatch()));
       }
       throw new IllegalArgumentException("I don't know how to deal with this intent " + intent);
     }).scan(MatchesViewState::reduce).subscribeOn(Schedulers.io());

@@ -14,8 +14,6 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static io.oldering.tvfoot.red.matches.MatchesIntent.LOAD_FIRST_PAGE;
-import static io.oldering.tvfoot.red.matches.MatchesIntent.LOAD_NEXT_PAGE;
 
 public class MatchesActivity extends BaseActivity {
   private ActivityMatchesBinding binding;
@@ -39,18 +37,17 @@ public class MatchesActivity extends BaseActivity {
     new MatchesBinder(this, new MatchesRepository(getActivityComponent().matchService())).bind();
   }
 
+  public Observable<MatchesIntent> matchRowClickIntent() {
+    return adapter.getMatchRowClickObservable();
+  }
+
   public Observable<MatchesIntent> loadFirstPageIntent() {
-    return Observable.just(LOAD_FIRST_PAGE);
+    return Observable.just(new MatchesIntent.LoadFirstPage());
   }
 
   public Observable<MatchesIntent> loadNextPageIntent() {
-    return new InfiniteScrollEventObservable(binding.recyclerView).doOnNext(
-        indexPage -> Timber.d("loading next page yo %s", indexPage)).map(ignored -> LOAD_NEXT_PAGE);
-    //return RxRecyclerView.scrollStateChanges(binding.recyclerView)
-    //    .filter(event -> event == RecyclerView.SCROLL_STATE_IDLE)
-    //    .filter(event -> layoutManager.findLastCompletelyVisibleItemPosition()
-    //        == adapter.getItemCount() - 1)
-    //    .map(integer -> LOAD_NEXT_PAGE);
+    return new InfiniteScrollEventObservable(binding.recyclerView).map(
+        ignored -> new MatchesIntent.LoadNextPage());
   }
 
   public void render(MatchesViewState viewState) {
@@ -75,6 +72,15 @@ public class MatchesActivity extends BaseActivity {
           renderResult(viewState.matches());
         }
         break;
+      case PULL_TO_REFRESH_LOADING:
+        break;
+      case PULL_TO_REFRESH_ERROR:
+        break;
+      case PULL_TO_REFRESH_LOADED:
+        break;
+      case MATCH_ROW_CLICK:
+        Timber.d("match row click %s", viewState.match());
+        break;
     }
   }
 
@@ -93,7 +99,7 @@ public class MatchesActivity extends BaseActivity {
   private void renderNextPageLoading() {
     binding.emptyView.setVisibility(GONE);
     binding.errorView.setVisibility(GONE);
-    binding.recyclerView.setVisibility(GONE);
+    binding.recyclerView.setVisibility(VISIBLE);
     binding.loadingView.setVisibility(VISIBLE);
   }
 
@@ -108,7 +114,6 @@ public class MatchesActivity extends BaseActivity {
     binding.recyclerView.setVisibility(VISIBLE);
     binding.loadingView.setVisibility(GONE);
     adapter.setMatches(matches);
-    adapter.notifyDataSetChanged();
   }
 
   private void renderEmptyResult() {

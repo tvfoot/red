@@ -5,18 +5,18 @@ import com.google.auto.value.AutoValue;
 // filter:{"where":{"deleted":{"neq":1}},"order":"start-at ASC, weight ASC","limit":30}
 @AutoValue public abstract class Filter {
   public static Builder builder() {
-    return new AutoValue_Filter.Builder().setOrder("start-at ASC, weight ASC")
-        .setWhere(Where.builder().build());
+    return new AutoValue_Filter.Builder().order("start-at ASC, weight ASC")
+        .where(Where.builder().build());
   }
 
   @AutoValue.Builder public abstract static class Builder {
-    public abstract Builder setWhere(Where where);
+    public abstract Builder where(Where where);
 
-    public abstract Builder setOrder(String order);
+    public abstract Builder order(String order);
 
-    public abstract Builder setLimit(int limit);
+    public abstract Builder limit(int limit);
 
-    public abstract Builder setOffset(int offset);
+    public abstract Builder offset(int offset);
 
     public abstract Filter build();
   }

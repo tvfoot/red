@@ -20,33 +20,30 @@ public class MatchesRepository {
   }
 
   public Observable<MatchesViewState> loadFirstPage() {
-    return matchService.findFuture(Filter.builder().setLimit(30).setOffset(0).build())
+    return matchService.findFuture(Filter.builder().limit(30).offset(0).build())
         .toObservable()
         .map(MatchRowDisplayable::fromMatches)
         .map(matches -> MatchesViewState.builder()
-            .setMatches(matches)
-            .setStatus(FIRST_PAGE_LOADED)
+            .matches(matches)
+            .status(FIRST_PAGE_LOADED)
             .build())
-        .startWith(MatchesViewState.builder().setStatus(FIRST_PAGE_LOADING).build())
+        .startWith(MatchesViewState.builder().status(FIRST_PAGE_LOADING).build())
         .onErrorReturn(error -> MatchesViewState.builder()
-            .setFirstPageError(error)
-            .setStatus(FIRST_PAGE_ERROR)
+            .firstPageError(error)
+            .status(FIRST_PAGE_ERROR)
             .build());
   }
 
   public Observable<MatchesViewState> loadNextPage() {
-    return matchService.findFuture(
-        Filter.builder().setLimit(30).setOffset(30 * ++pageIndex).build())
+    return matchService.findFuture(Filter.builder().limit(30).offset(30 * ++pageIndex).build())
         .toObservable()
         .map(MatchRowDisplayable::fromMatches)
-        .map(matches -> MatchesViewState.builder()
-            .setMatches(matches)
-            .setStatus(NEXT_PAGE_LOADED)
-            .build())
-        .startWith(MatchesViewState.builder().setStatus(NEXT_PAGE_LOADING).build())
+        .map(
+            matches -> MatchesViewState.builder().matches(matches).status(NEXT_PAGE_LOADED).build())
+        .startWith(MatchesViewState.builder().status(NEXT_PAGE_LOADING).build())
         .onErrorReturn(error -> MatchesViewState.builder()
-            .setFirstPageError(error)
-            .setStatus(NEXT_PAGE_ERROR)
+            .firstPageError(error)
+            .status(NEXT_PAGE_ERROR)
             .build());
   }
 }
