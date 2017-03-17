@@ -1,7 +1,9 @@
-package io.oldering.tvfoot.red.matches;
+package io.oldering.tvfoot.red.data.repository;
 
 import io.oldering.tvfoot.red.data.api.MatchService;
 import io.oldering.tvfoot.red.data.entity.search.Filter;
+import io.oldering.tvfoot.red.matches.MatchRowDisplayable;
+import io.oldering.tvfoot.red.matches.MatchesViewState;
 import io.reactivex.Observable;
 
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.FIRST_PAGE_ERROR;
@@ -12,7 +14,7 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.NEXT_PAGE_L
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.NEXT_PAGE_LOADING;
 
 public class MatchesRepository {
-  final MatchService matchService;
+  private final MatchService matchService;
   private int pageIndex = 0;
 
   public MatchesRepository(MatchService matchService) {
@@ -35,6 +37,7 @@ public class MatchesRepository {
   }
 
   public Observable<MatchesViewState> loadNextPage() {
+    // TODO(benoit) don't want any state here, seriously
     return matchService.findFuture(Filter.builder().limit(30).offset(30 * ++pageIndex).build())
         .toObservable()
         .map(MatchRowDisplayable::fromMatches)

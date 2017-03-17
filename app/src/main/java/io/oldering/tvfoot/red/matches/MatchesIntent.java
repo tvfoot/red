@@ -1,6 +1,6 @@
 package io.oldering.tvfoot.red.matches;
 
-public interface MatchesIntent {
+interface MatchesIntent {
   final class LoadFirstPage implements MatchesIntent {
   }
 
@@ -10,7 +10,7 @@ public interface MatchesIntent {
   final class MatchRowClick implements MatchesIntent {
     private final MatchRowDisplayable match;
 
-    public MatchRowClick(MatchRowDisplayable match) {
+    MatchRowClick(MatchRowDisplayable match) {
       this.match = match;
     }
 

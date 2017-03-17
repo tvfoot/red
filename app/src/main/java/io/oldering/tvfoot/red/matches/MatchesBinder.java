@@ -1,14 +1,16 @@
 package io.oldering.tvfoot.red.matches;
 
+import io.oldering.tvfoot.red.data.repository.MatchesRepository;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MatchesBinder {
+
+class MatchesBinder {
   private final MatchesActivity activity;
   private final MatchesRepository repository;
 
-  public MatchesBinder(MatchesActivity activity, MatchesRepository repository) {
+  MatchesBinder(MatchesActivity activity, MatchesRepository repository) {
     this.activity = activity;
     this.repository = repository;
   }

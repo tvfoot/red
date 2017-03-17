@@ -40,81 +40,81 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
 
   public abstract Builder buildWith();
 
-  public MatchesViewState reduce(MatchesViewState changes) {
-    switch (changes.status()) {
+  static MatchesViewState reduce(MatchesViewState previousState, MatchesViewState partialState) {
+    switch (partialState.status()) {
       case FIRST_PAGE_LOADING:
-        return this.buildWith()
+        return previousState.buildWith()
             .firstPageLoading(true)
             .firstPageError(null)
-            .status(changes.status())
+            .status(partialState.status())
             .build();
       case FIRST_PAGE_ERROR:
-        return this.buildWith()
+        return previousState.buildWith()
             .firstPageLoading(false)
-            .firstPageError(changes.firstPageError())
-            .status(changes.status())
+            .firstPageError(partialState.firstPageError())
+            .status(partialState.status())
             .build();
       case FIRST_PAGE_LOADED:
-        return this.buildWith()
+        return previousState.buildWith()
             .firstPageLoading(false)
             .firstPageError(null)
-            .matches(changes.matches())
-            .status(changes.status())
+            .matches(partialState.matches())
+            .status(partialState.status())
             .build();
       case NEXT_PAGE_LOADING:
-        return this.buildWith()
+        return previousState.buildWith()
             .nextPageLoading(true)
             .nextPageError(null)
-            .status(changes.status())
+            .status(partialState.status())
             .build();
       case NEXT_PAGE_ERROR:
-        return this.buildWith()
+        return previousState.buildWith()
             .nextPageLoading(false)
-            .nextPageError(changes.nextPageError())
-            .status(changes.status())
+            .nextPageError(partialState.nextPageError())
+            .status(partialState.status())
             .build();
       case NEXT_PAGE_LOADED:
         List<MatchRowDisplayable> matches = new ArrayList<>();
-        matches.addAll(this.matches());
-        matches.addAll(changes.matches());
+        matches.addAll(previousState.matches());
+        matches.addAll(partialState.matches());
 
-        return this.buildWith()
+        return previousState.buildWith()
             .nextPageLoading(false)
             .nextPageError(null)
             .matches(matches)
-            .status(changes.status())
+            .status(partialState.status())
             .build();
       case PULL_TO_REFRESH_LOADING:
-        return this.buildWith()
+        return previousState.buildWith()
             .pullToRefreshLoading(true)
             .pullToRefreshError(null)
-            .status(changes.status())
+            .status(partialState.status())
             .build();
       case PULL_TO_REFRESH_ERROR:
-        return this.buildWith()
+        return previousState.buildWith()
             .pullToRefreshLoading(false)
-            .pullToRefreshError(changes.pullToRefreshError())
-            .status(changes.status())
+            .pullToRefreshError(partialState.pullToRefreshError())
+            .status(partialState.status())
             .build();
       case PULL_TO_REFRESH_LOADED:
         matches = new ArrayList<>();
-        matches.addAll(changes.matches());
-        matches.addAll(this.matches());
+        matches.addAll(partialState.matches());
+        matches.addAll(previousState.matches());
 
-        return this.buildWith()
+        return previousState.buildWith()
             .pullToRefreshLoading(false)
             .pullToRefreshError(null)
             .matches(matches)
-            .status(changes.status())
+            .status(partialState.status())
             .build();
       case MATCH_ROW_CLICK:
-        return changes;
+        return partialState;
       default:
-        throw new IllegalArgumentException("Don't know this one " + changes);
+        throw new IllegalArgumentException("Don't know this one " + partialState);
     }
   }
 
-  public static MatchesViewState matchRowClick(MatchRowDisplayable match) {
+  static MatchesViewState matchRowClick(MatchRowDisplayable match) {
     return MatchesViewState.builder().match(match).status(MATCH_ROW_CLICK).build();
   }
 
@@ -135,7 +135,7 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
 
     public abstract Builder status(Status status);
 
-    public abstract Builder match(MatchRowDisplayable match);
+    public abstract Builder match(@Nullable MatchRowDisplayable match);
 
     public abstract MatchesViewState build();
   }

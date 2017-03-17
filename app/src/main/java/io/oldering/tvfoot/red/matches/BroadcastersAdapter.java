@@ -9,8 +9,7 @@ import io.oldering.tvfoot.red.databinding.BroadcasterRowBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BroadcastersAdapter
-    extends RecyclerView.Adapter<BroadcastersAdapter.BroadcasterViewHolder> {
+class BroadcastersAdapter extends RecyclerView.Adapter<BroadcastersAdapter.BroadcasterViewHolder> {
   private List<BroadcasterRowDisplayable> broadcasters = new ArrayList<>();
 
   @Override public BroadcasterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -29,14 +28,14 @@ public class BroadcastersAdapter
     return broadcasters.size();
   }
 
-  public void add(BroadcasterRowDisplayable broadcaster) {
+  void add(BroadcasterRowDisplayable broadcaster) {
     broadcasters.add(broadcaster);
   }
 
   static class BroadcasterViewHolder extends RecyclerView.ViewHolder {
     private final BroadcasterRowBinding binding;
 
-    public BroadcasterViewHolder(BroadcasterRowBinding binding) {
+    BroadcasterViewHolder(BroadcasterRowBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }

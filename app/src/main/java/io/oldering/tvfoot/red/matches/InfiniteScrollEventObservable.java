@@ -8,7 +8,10 @@ import io.reactivex.android.MainThreadDisposable;
 
 import static io.oldering.tvfoot.red.util.Preconditions.checkMainThread;
 
-public final class InfiniteScrollEventObservable extends Observable<Integer> {
+/**
+ * Heavily based on {@link com.jakewharton.rxbinding2.support.v7.widget.RecyclerViewScrollEventObservable}
+ */
+final class InfiniteScrollEventObservable extends Observable<Integer> {
   private final RecyclerView view;
 
   InfiniteScrollEventObservable(RecyclerView view) {
@@ -24,7 +27,7 @@ public final class InfiniteScrollEventObservable extends Observable<Integer> {
     view.addOnScrollListener(listener.scrollListener);
   }
 
-  final class Listener extends MainThreadDisposable {
+  private final class Listener extends MainThreadDisposable {
     private final RecyclerView recyclerView;
     private final RecyclerView.OnScrollListener scrollListener;
 

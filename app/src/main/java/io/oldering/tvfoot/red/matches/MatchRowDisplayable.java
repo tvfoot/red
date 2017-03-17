@@ -48,7 +48,7 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
 
   public abstract String matchId();
 
-  public static MatchRowDisplayable fromMatch(Match match) {
+  private static MatchRowDisplayable fromMatch(Match match) {
     return new AutoValue_MatchRowDisplayable( //
         parseHeaderKey(match.startAt()), //
         parseStartTime(match.startAt()), //
@@ -76,12 +76,12 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
     return simpleDateFormat.format(startAt);
   }
 
-  public static String parseStartTime(Date startAt) {
+  private static String parseStartTime(Date startAt) {
     shortDateFormat.setTimeZone(TimeZone.getDefault());
     return shortDateFormat.format(startAt);
   }
 
-  public static List<BroadcasterRowDisplayable> parseBroadcasters(
+  private static List<BroadcasterRowDisplayable> parseBroadcasters(
       @Nullable List<Broadcaster> broadcasters) {
     if (broadcasters == null) {
       return new ArrayList<>();
@@ -94,7 +94,7 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
     return broadcastersVM;
   }
 
-  public static String parseHeadLine(Team homeTeam, Team awayTeam, @Nullable String matchLabel) {
+  private static String parseHeadLine(Team homeTeam, Team awayTeam, @Nullable String matchLabel) {
     if (homeTeam.isEmpty() || awayTeam.isEmpty()) {
       return String.valueOf(matchLabel);
     }
@@ -102,11 +102,11 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
         .toUpperCase();
   }
 
-  public static String parseCompetition(Competition competition) {
+  private static String parseCompetition(Competition competition) {
     return competition.name();
   }
 
-  public static String parseMatchDay(@Nullable String matchLabel, @Nullable String matchDay) {
+  private static String parseMatchDay(@Nullable String matchLabel, @Nullable String matchDay) {
     if (matchLabel != null && !matchLabel.trim().isEmpty()) {
       return matchLabel;
     } else {
@@ -114,7 +114,7 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
     }
   }
 
-  public static boolean isMatchLive(Date startAt) {
+  private static boolean isMatchLive(Date startAt) {
     long now = Calendar.getInstance().getTimeInMillis();
     long startTimeInMillis = startAt.getTime();
     return now >= startTimeInMillis && now <= startTimeInMillis + ONE_MATCH_TIME_IN_MILLIS;

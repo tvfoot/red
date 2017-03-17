@@ -2,7 +2,7 @@ package io.oldering.tvfoot.red.matches;
 
 import com.google.auto.value.AutoValue;
 
-@AutoValue public abstract class BroadcasterRowDisplayable {
+@AutoValue abstract class BroadcasterRowDisplayable {
   public abstract String code();
 
   public static Builder builder() {

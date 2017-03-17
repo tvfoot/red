@@ -3,11 +3,10 @@ package io.oldering.tvfoot.red.matches;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import io.oldering.tvfoot.red.R;
+import io.oldering.tvfoot.red.data.repository.MatchesRepository;
 import io.oldering.tvfoot.red.databinding.ActivityMatchesBinding;
 import io.oldering.tvfoot.red.util.BaseActivity;
-import io.oldering.tvfoot.red.util.InfiniteScrollListener;
 import io.reactivex.Observable;
 import java.util.List;
 import timber.log.Timber;
@@ -18,7 +17,6 @@ import static android.view.View.VISIBLE;
 public class MatchesActivity extends BaseActivity {
   private ActivityMatchesBinding binding;
   private MatchesAdapter adapter;
-  private LinearLayoutManager layoutManager;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -27,12 +25,6 @@ public class MatchesActivity extends BaseActivity {
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_matches);
     binding.recyclerView.setAdapter(adapter);
-    layoutManager = (LinearLayoutManager) binding.recyclerView.getLayoutManager();
-    binding.recyclerView.addOnScrollListener(new InfiniteScrollListener(layoutManager) {
-      @Override public void onLoadMore(int current_page) {
-        // TODO not needed anymore?
-      }
-    });
 
     new MatchesBinder(this, new MatchesRepository(getActivityComponent().matchService())).bind();
   }
@@ -109,11 +101,11 @@ public class MatchesActivity extends BaseActivity {
   }
 
   private void renderResult(List<MatchRowDisplayable> matches) {
+    adapter.setMatches(matches);
     binding.emptyView.setVisibility(GONE);
     binding.errorView.setVisibility(GONE);
     binding.recyclerView.setVisibility(VISIBLE);
     binding.loadingView.setVisibility(GONE);
-    adapter.setMatches(matches);
   }
 
   private void renderEmptyResult() {

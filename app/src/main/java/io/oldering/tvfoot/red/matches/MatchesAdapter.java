@@ -12,24 +12,24 @@ import io.reactivex.subjects.PublishSubject;
 import java.util.Collections;
 import java.util.List;
 
-public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchViewHolder> {
+public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchRowViewHolder> {
   private List<MatchRowDisplayable> matches = Collections.emptyList();
-  PublishSubject<MatchRowDisplayable> matchRowClickObservable = PublishSubject.create();
+  private PublishSubject<MatchRowDisplayable> matchRowClickObservable = PublishSubject.create();
 
-  @Override public MatchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override public MatchRowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
 
     MatchesRowBinding binding =
         DataBindingUtil.inflate(layoutInflater, R.layout.matches_row, parent, false);
 
-    return new MatchViewHolder(binding);
+    return new MatchRowViewHolder(binding);
   }
 
-  public Observable<MatchesIntent> getMatchRowClickObservable() {
+  Observable<MatchesIntent> getMatchRowClickObservable() {
     return matchRowClickObservable.map(MatchesIntent.MatchRowClick::new);
   }
 
-  @Override public void onBindViewHolder(MatchViewHolder holder, int position) {
+  @Override public void onBindViewHolder(MatchRowViewHolder holder, int position) {
     holder.bind(matches.get(position));
   }
 
@@ -41,44 +41,21 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
     matchRowClickObservable.onNext(match);
   }
 
+  private MatchRowDisplayableDiffUtilCallback diffUtilCallback =
+      new MatchRowDisplayableDiffUtilCallback();
+
   public void setMatches(List<MatchRowDisplayable> newItems) {
     List<MatchRowDisplayable> oldItems = this.matches;
     this.matches = newItems;
 
-    if (oldItems.isEmpty()) {
-      notifyDataSetChanged();
-      return;
-    }
-
-    DiffUtil.calculateDiff(new DiffUtil.Callback() {
-      @Override public int getOldListSize() {
-        return oldItems.size();
-      }
-
-      @Override public int getNewListSize() {
-        return newItems.size();
-      }
-
-      @Override public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        MatchRowDisplayable oldItem = oldItems.get(oldItemPosition);
-        MatchRowDisplayable newItem = newItems.get(newItemPosition);
-
-        return oldItem.matchId().equals(newItem.matchId());
-      }
-
-      @Override public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        MatchRowDisplayable oldItem = oldItems.get(oldItemPosition);
-        MatchRowDisplayable newItem = newItems.get(newItemPosition);
-
-        return oldItem.equals(newItem);
-      }
-    }, true).dispatchUpdatesTo(this);
+    diffUtilCallback.bindItems(oldItems, newItems);
+    DiffUtil.calculateDiff(diffUtilCallback, true).dispatchUpdatesTo(this);
   }
 
-  class MatchViewHolder extends RecyclerView.ViewHolder {
+  class MatchRowViewHolder extends RecyclerView.ViewHolder {
     private final MatchesRowBinding binding;
 
-    public MatchViewHolder(MatchesRowBinding binding) {
+    MatchRowViewHolder(MatchesRowBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
