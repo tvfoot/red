@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.data.entity.Broadcaster;
 import io.oldering.tvfoot.red.data.entity.Competition;
-import io.oldering.tvfoot.red.data.entity.Match;
 import io.oldering.tvfoot.red.data.entity.Team;
 import io.oldering.tvfoot.red.util.StringUtils;
 import java.text.SimpleDateFormat;
@@ -17,10 +16,9 @@ import java.util.TimeZone;
 
 import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS;
 
-@AutoValue public abstract class MatchRowDisplayable {
+@AutoValue public abstract class MatchRowDisplayable implements MatchesItemDisplayable {
   private static SimpleDateFormat shortDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
-  private static SimpleDateFormat simpleDateFormat =
-      new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
+  static SimpleDateFormat mediumDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
   private static SimpleDateFormat fullTextDateFormat =
       new SimpleDateFormat("EEEE dd MMMM yyyy à HH'h'mm", Locale.FRANCE);
 
@@ -48,7 +46,7 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
 
   public abstract String matchId();
 
-  private static MatchRowDisplayable fromMatch(Match match) {
+  private static MatchRowDisplayable fromMatch(io.oldering.tvfoot.red.data.entity.Match match) {
     return new AutoValue_MatchRowDisplayable( //
         parseHeaderKey(match.startAt()), //
         parseStartTime(match.startAt()), //
@@ -63,17 +61,18 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
         parseLocation(match), match.id());
   }
 
-  public static List<MatchRowDisplayable> fromMatches(List<Match> matches) {
+  public static List<MatchRowDisplayable> fromMatches(
+      List<io.oldering.tvfoot.red.data.entity.Match> matches) {
     List<MatchRowDisplayable> matchRowDisplayables = new ArrayList<>(matches.size());
-    for (Match match : matches) {
+    for (io.oldering.tvfoot.red.data.entity.Match match : matches) {
       matchRowDisplayables.add(fromMatch(match));
     }
     return matchRowDisplayables;
   }
 
   private static String parseHeaderKey(Date startAt) {
-    simpleDateFormat.setTimeZone(TimeZone.getDefault());
-    return simpleDateFormat.format(startAt);
+    mediumDateFormat.setTimeZone(TimeZone.getDefault());
+    return mediumDateFormat.format(startAt);
   }
 
   private static String parseStartTime(Date startAt) {
@@ -141,7 +140,12 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
     return Team.DEFAULT_CODE;
   }
 
-  private static String parseLocation(Match match) {
+  private static String parseLocation(io.oldering.tvfoot.red.data.entity.Match match) {
     return String.valueOf(match.place());
+  }
+
+  @Override public boolean isSameAs(MatchesItemDisplayable newItem) {
+    return newItem instanceof MatchRowDisplayable && this.matchId()
+        .equals(((MatchRowDisplayable) newItem).matchId());
   }
 }

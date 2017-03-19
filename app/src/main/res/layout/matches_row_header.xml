@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+  <data>
+
+    <variable
+        name="dayHeader"
+        type="io.oldering.tvfoot.red.matches.HeaderRowDisplayable"
+        />
+  </data>
+
+  <android.support.constraint.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/colorGrayLight"
+      android:padding="8dp"
+      >
+
+    <TextView
+        android:id="@+id/dangerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@{dayHeader.danger}"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+        android:textColor="@color/colorDanger"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:visible="@{!dayHeader.danger.isEmpty()}"
+        tools:text="AUJOURD'HUI"
+        />
+
+    <TextView
+        android:id="@+id/dayHeader_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@{dayHeader.displayedDate}"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+        android:textColor="@color/colorGrayDarker"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/dangerView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="SAMEDI, 15 OCTOBRE 2016"
+        />
+
+  </android.support.constraint.ConstraintLayout>
+</layout>

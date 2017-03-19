@@ -58,10 +58,10 @@ public class MatchesActivity extends BaseActivity {
         break;
       case FIRST_PAGE_LOADED:
       case NEXT_PAGE_LOADED:
-        if (viewState.matches().isEmpty()) {
+        if (viewState.matchesItems().isEmpty()) {
           renderEmptyResult();
         } else {
-          renderResult(viewState.matches());
+          renderResult(viewState.matchesItems());
         }
         break;
       case PULL_TO_REFRESH_LOADING:
@@ -100,8 +100,8 @@ public class MatchesActivity extends BaseActivity {
     renderError();
   }
 
-  private void renderResult(List<MatchRowDisplayable> matches) {
-    adapter.setMatches(matches);
+  private void renderResult(List<MatchesItemDisplayable> matchesItemDisplayables) {
+    adapter.setMatchesItems(matchesItemDisplayables);
     binding.emptyView.setVisibility(GONE);
     binding.errorView.setVisibility(GONE);
     binding.recyclerView.setVisibility(VISIBLE);

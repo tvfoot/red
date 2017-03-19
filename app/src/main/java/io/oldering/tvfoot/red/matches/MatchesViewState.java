@@ -1,6 +1,7 @@
 package io.oldering.tvfoot.red.matches;
 
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import com.google.auto.value.AutoValue;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +10,21 @@ import java.util.List;
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_CLICK;
 
 @AutoValue public abstract class MatchesViewState {
-  public abstract List<MatchRowDisplayable> matches();
+
+  public List<MatchesItemDisplayable> matchesItems() {
+    List<String> headers = new ArrayList<>();
+    List<MatchesItemDisplayable> items = new ArrayList<>();
+    for (MatchRowDisplayable match : matches()) {
+      if (!headers.contains(match.headerKey())) {
+        headers.add(match.headerKey());
+        items.add(HeaderRowDisplayable.create(match.headerKey()));
+      }
+      items.add(match);
+    }
+    return items;
+  }
+
+  @VisibleForTesting protected abstract List<MatchRowDisplayable> matches();
 
   public abstract boolean firstPageLoading();
 

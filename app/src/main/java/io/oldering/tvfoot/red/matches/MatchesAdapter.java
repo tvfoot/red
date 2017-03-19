@@ -1,66 +1,107 @@
 package io.oldering.tvfoot.red.matches;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import io.oldering.tvfoot.red.R;
-import io.oldering.tvfoot.red.databinding.MatchesRowBinding;
+import io.oldering.tvfoot.red.databinding.MatchesRowHeaderBinding;
+import io.oldering.tvfoot.red.databinding.MatchesRowMatchBinding;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import java.util.Collections;
 import java.util.List;
 
-public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchRowViewHolder> {
-  private List<MatchRowDisplayable> matches = Collections.emptyList();
+public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesItemViewHolder> {
+  private List<MatchesItemDisplayable> matchesItems = Collections.emptyList();
   private PublishSubject<MatchRowDisplayable> matchRowClickObservable = PublishSubject.create();
 
-  @Override public MatchRowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override public MatchesItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+    ViewDataBinding binding = DataBindingUtil.inflate(layoutInflater, viewType, parent, false);
 
-    MatchesRowBinding binding =
-        DataBindingUtil.inflate(layoutInflater, R.layout.matches_row, parent, false);
-
-    return new MatchRowViewHolder(binding);
+    switch (viewType) {
+      case R.layout.matches_row_header:
+        return new MatchHeaderViewHolder(binding);
+      case R.layout.matches_row_match:
+        return new MatchRowViewHolder(binding);
+      default:
+        throw new UnsupportedOperationException(
+            "don't know how to deal with this viewType: " + viewType);
+    }
   }
 
   Observable<MatchesIntent> getMatchRowClickObservable() {
     return matchRowClickObservable.map(MatchesIntent.MatchRowClick::new);
   }
 
-  @Override public void onBindViewHolder(MatchRowViewHolder holder, int position) {
-    holder.bind(matches.get(position));
+  @SuppressWarnings("unchecked") @Override
+  public void onBindViewHolder(MatchesItemViewHolder holder, int position) {
+    holder.bind(matchesItems.get(position));
   }
 
   @Override public int getItemCount() {
-    return matches.size();
+    return matchesItems.size();
+  }
+
+  @Override public int getItemViewType(int position) {
+    MatchesItemDisplayable item = matchesItems.get(position);
+    if (item instanceof MatchRowDisplayable) {
+      return R.layout.matches_row_match;
+    }
+    if (item instanceof HeaderRowDisplayable) {
+      return R.layout.matches_row_header;
+    }
+    throw new UnsupportedOperationException("Don't know how to deal with this item: " + item);
   }
 
   public void onClick(MatchRowDisplayable match) {
     matchRowClickObservable.onNext(match);
   }
 
-  private MatchRowDisplayableDiffUtilCallback diffUtilCallback =
-      new MatchRowDisplayableDiffUtilCallback();
+  private MatchesItemDisplayableDiffUtilCallback diffUtilCallback =
+      new MatchesItemDisplayableDiffUtilCallback();
 
-  public void setMatches(List<MatchRowDisplayable> newItems) {
-    List<MatchRowDisplayable> oldItems = this.matches;
-    this.matches = newItems;
+  void setMatchesItems(List<MatchesItemDisplayable> newItems) {
+    List<MatchesItemDisplayable> oldItems = this.matchesItems;
+    this.matchesItems = newItems;
 
     diffUtilCallback.bindItems(oldItems, newItems);
     DiffUtil.calculateDiff(diffUtilCallback, true).dispatchUpdatesTo(this);
   }
 
-  class MatchRowViewHolder extends RecyclerView.ViewHolder {
-    private final MatchesRowBinding binding;
+  abstract class MatchesItemViewHolder<T extends MatchesItemDisplayable>
+      extends RecyclerView.ViewHolder {
+    final ViewDataBinding binding;
 
-    MatchRowViewHolder(MatchesRowBinding binding) {
+    MatchesItemViewHolder(ViewDataBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
 
-    public void bind(MatchRowDisplayable match) {
+    abstract void bind(T item);
+  }
+
+  private class MatchHeaderViewHolder extends MatchesItemViewHolder<HeaderRowDisplayable> {
+    MatchHeaderViewHolder(ViewDataBinding binding) {
+      super(binding);
+    }
+
+    @Override void bind(HeaderRowDisplayable header) {
+      MatchesRowHeaderBinding binding = (MatchesRowHeaderBinding) this.binding;
+      binding.setDayHeader(header);
+    }
+  }
+
+  private class MatchRowViewHolder extends MatchesItemViewHolder<MatchRowDisplayable> {
+    MatchRowViewHolder(ViewDataBinding binding) {
+      super(binding);
+    }
+
+    @Override void bind(MatchRowDisplayable match) {
+      MatchesRowMatchBinding binding = (MatchesRowMatchBinding) this.binding;
       binding.setMatch(match);
       binding.setHandler(MatchesAdapter.this);
       binding.executePendingBindings();
