@@ -92,7 +92,7 @@ public class MatchesActivity extends BaseActivity {
     binding.emptyView.setVisibility(GONE);
     binding.errorView.setVisibility(GONE);
     binding.recyclerView.setVisibility(VISIBLE);
-    binding.loadingView.setVisibility(VISIBLE);
+    binding.loadingView.setVisibility(GONE);
   }
 
   private void renderNextPageError(@Nullable Throwable throwable) {
