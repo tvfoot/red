@@ -39,7 +39,7 @@ public class MatchesActivity extends BaseActivity {
 
   public Observable<MatchesIntent> loadNextPageIntent() {
     return new InfiniteScrollEventObservable(binding.recyclerView).map(
-        ignored -> new MatchesIntent.LoadNextPage());
+        MatchesIntent.LoadNextPage::new);
   }
 
   public void render(MatchesViewState viewState) {

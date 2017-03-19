@@ -5,7 +5,6 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-
 class MatchesBinder {
   private final MatchesActivity activity;
   private final MatchesRepository repository;
@@ -26,7 +25,8 @@ class MatchesBinder {
         return repository.loadFirstPage().subscribeOn(Schedulers.io());
       }
       if (intent instanceof MatchesIntent.LoadNextPage) {
-        return repository.loadNextPage().subscribeOn(Schedulers.io());
+        return repository.loadNextPage(((MatchesIntent.LoadNextPage) intent).currentPage())
+            .subscribeOn(Schedulers.io());
       }
       if (intent instanceof MatchesIntent.MatchRowClick) {
         return Observable.just(

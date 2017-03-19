@@ -5,6 +5,15 @@ interface MatchesIntent {
   }
 
   final class LoadNextPage implements MatchesIntent {
+    private final int currentPage;
+
+    public LoadNextPage(int currentPage) {
+      this.currentPage = currentPage;
+    }
+
+    public int currentPage() {
+      return currentPage;
+    }
   }
 
   final class MatchRowClick implements MatchesIntent {

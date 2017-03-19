@@ -5,6 +5,7 @@ import io.oldering.tvfoot.red.data.entity.search.Filter;
 import io.oldering.tvfoot.red.matches.MatchRowDisplayable;
 import io.oldering.tvfoot.red.matches.MatchesViewState;
 import io.reactivex.Observable;
+import timber.log.Timber;
 
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.FIRST_PAGE_ERROR;
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.FIRST_PAGE_LOADED;
@@ -15,14 +16,14 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.NEXT_PAGE_L
 
 public class MatchesRepository {
   private final MatchService matchService;
-  private int pageIndex = 0;
+  private int matchPerPage = 30;
 
   public MatchesRepository(MatchService matchService) {
     this.matchService = matchService;
   }
 
   public Observable<MatchesViewState> loadFirstPage() {
-    return matchService.findFuture(Filter.builder().limit(30).offset(0).build())
+    return matchService.findFuture(Filter.builder().limit(matchPerPage).offset(0).build())
         .toObservable()
         .map(MatchRowDisplayable::fromMatches)
         .map(matches -> MatchesViewState.builder()
@@ -36,9 +37,10 @@ public class MatchesRepository {
             .build());
   }
 
-  public Observable<MatchesViewState> loadNextPage() {
-    // TODO(benoit) don't want any state here, seriously
-    return matchService.findFuture(Filter.builder().limit(30).offset(30 * ++pageIndex).build())
+  public Observable<MatchesViewState> loadNextPage(int currentPage) {
+    Timber.d("load NExt Page %s", currentPage);
+    return matchService.findFuture(
+        Filter.builder().limit(matchPerPage).offset(matchPerPage * currentPage).build())
         .toObservable()
         .map(MatchRowDisplayable::fromMatches)
         .map(
