@@ -21,6 +21,9 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
       }
       items.add(match);
     }
+    if (!items.isEmpty()) {
+      items.add(LoadingRowDisplayable.create());
+    }
     return items;
   }
 

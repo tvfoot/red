@@ -27,6 +27,8 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesI
         return new MatchHeaderViewHolder(binding);
       case R.layout.matches_row_match:
         return new MatchRowViewHolder(binding);
+      case R.layout.row_loading:
+        return new LoadingRowViewHolder(binding);
       default:
         throw new UnsupportedOperationException(
             "don't know how to deal with this viewType: " + viewType);
@@ -53,6 +55,9 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesI
     }
     if (item instanceof HeaderRowDisplayable) {
       return R.layout.matches_row_header;
+    }
+    if (item instanceof LoadingRowDisplayable) {
+      return R.layout.row_loading;
     }
     throw new UnsupportedOperationException("Don't know how to deal with this item: " + item);
   }
@@ -115,6 +120,16 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesI
             BroadcasterRowDisplayable.builder().code("ic_tv_black_18px").build());
       }
       recyclerView.setAdapter(broadcastersAdapter);
+    }
+  }
+
+  private class LoadingRowViewHolder extends MatchesItemViewHolder<LoadingRowDisplayable> {
+    LoadingRowViewHolder(ViewDataBinding binding) {
+      super(binding);
+    }
+
+    @Override void bind(LoadingRowDisplayable item) {
+      // nothing to do
     }
   }
 }
