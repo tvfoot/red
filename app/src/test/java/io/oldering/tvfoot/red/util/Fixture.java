@@ -1,51 +1,49 @@
 package io.oldering.tvfoot.red.util;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import io.oldering.tvfoot.red.data.entity.Match;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
 public class Fixture {
-  Gson gson;
+  private Gson gson;
 
   @Inject public Fixture(Gson gson) {
     this.gson = gson;
   }
 
-  public List<Match> readJsonStream(InputStream in) throws IOException {
-    JsonReader reader = new JsonReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-    List<Match> messages = new ArrayList<>();
-    reader.beginArray();
-    while (reader.hasNext()) {
-      Match message = gson.fromJson(reader, Match.class);
-      messages.add(message);
-    }
-    reader.endArray();
-    reader.close();
-    return messages;
+  private Type listMatchType = new TypeToken<List<Match>>() {
+  }.getType();
+
+  public List<Match> anyMatches() {
+    return anyObject("matches_sample.json", listMatchType);
   }
 
-  public String readInputStream(InputStream is) {
-    BufferedReader r = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-    StringBuilder total;
+  public List<Match> anyNextMatches() {
+    return anyObject("matches_next_sample.json", listMatchType);
+  }
+
+  private <T> T anyObject(String filename, Type typeOfT) {
+    InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filename);
+
     try {
-      total = new StringBuilder(is.available());
-      String line;
-      while ((line = r.readLine()) != null) {
-        total.append(line);
-      }
-      return total.toString();
+      JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"));
+
+      T object = gson.fromJson(reader, typeOfT);
+
+      reader.close();
+
+      return object;
     } catch (IOException e) {
       Timber.e(e);
-      return null;
+      throw new RuntimeException("fixture " + filename + " failed");
     }
   }
 }

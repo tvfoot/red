@@ -1,0 +1,1025 @@
+[
+  {
+    "start-at": "2017-03-31T20:00:00.000Z",
+    "matchday": "27",
+    "home-team": {
+      "id": "55e58e2769f73ce846ad0953",
+      "code": "CDN",
+      "name": "Nacional Madeira",
+      "country": "portugal",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55e58e2769f73ce846ad0959",
+      "code": "VSC",
+      "name": "Vitoria Guimaraes",
+      "country": "portugal",
+      "type": "club"
+    },
+    "place": "Estádio da Madeira, Funchal",
+    "competition": {
+      "code": "PLP",
+      "name": "Primeira Liga"
+    },
+    "weight": 1,
+    "tags": [
+      "plp",
+      "m",
+      "portugal"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57ad01eae24d5306364d4205",
+    "sid": "57ad018beedd417f0e40af2b"
+  },
+  {
+    "start-at": "2017-04-01T11:00:00.000Z",
+    "matchday": "29",
+    "home-team": {
+      "id": "55b1404d31e20cc26bbeb3e2",
+      "code": "CVF",
+      "name": "Villarreal CF",
+      "country": "espagne",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55b1404d31e20cc26bbeb3d4",
+      "code": "EIBAR",
+      "name": "Eibar",
+      "country": "espagne",
+      "type": "club"
+    },
+    "place": "El Madrigal, Villarreal",
+    "competition": {
+      "code": "LIGA",
+      "name": "La Liga"
+    },
+    "weight": 1,
+    "tags": [
+      "liga",
+      "m",
+      "espagne"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57ad01b928c52302cf710310",
+    "sid": "57aa5cfee65fed3ef3048f65"
+  },
+  {
+    "start-at": "2017-04-01T11:30:00.000Z",
+    "matchday": "39",
+    "home-team": {
+      "id": "55dd87cb3de1459543e270ca",
+      "code": "BAFC",
+      "name": "Barnsley FC",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55fd58409f02dbbf0e949333",
+      "code": "SWFC",
+      "name": "Sheffield Wednesday",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "Oakwell Stadium, Barnsley",
+    "competition": {
+      "code": "SBC",
+      "name": "Championship"
+    },
+    "weight": 1,
+    "tags": [
+      "sbc",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4da7e771e1aeee2cd18",
+    "sid": "57a3c45a286aee14768b004c"
+  },
+  {
+    "start-at": "2017-04-01T11:30:00.000Z",
+    "matchday": "30",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcdab4",
+      "code": "LIV",
+      "name": "Liverpool",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcdab2",
+      "code": "EVE",
+      "name": "Everton",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "broadcasters": [
+      {
+        "code": "s1",
+        "name": "SFR Sport 1",
+        "type": "direct",
+        "weight": 0
+      }
+    ],
+    "place": "Anfield, Liverpool",
+    "competition": {
+      "code": "BPL",
+      "name": "Premier League"
+    },
+    "weight": 5,
+    "tags": [
+      "s1",
+      "direct",
+      "_s1direct",
+      "bpl",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4f5eccab01cdf0c2358",
+    "sid": "57a3c45a286aee14768b004b"
+  },
+  {
+    "start-at": "2017-04-01T13:00:00.000Z",
+    "matchday": "31",
+    "home-team": {
+      "id": "55a548fc5d02524c74bcda46",
+      "code": "RCL",
+      "name": "Lens",
+      "country": "france",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcda5a",
+      "code": "SB29",
+      "name": "Brest",
+      "country": "france",
+      "type": "club"
+    },
+    "broadcasters": [
+      {
+        "code": "b1",
+        "name": "beIN SPORTS 1HD",
+        "type": "direct",
+        "weight": 0
+      }
+    ],
+    "place": "Stade Bollaert-Delelis, Lens",
+    "competition": {
+      "code": "L2",
+      "name": "Ligue 2"
+    },
+    "weight": 5,
+    "tags": [
+      "b1",
+      "direct",
+      "_b1direct",
+      "l2",
+      "m",
+      "france"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "5777011dc311658b4828e038",
+    "sid": "57543f14be874adb70fb7118"
+  },
+  {
+    "start-at": "2017-04-01T13:30:00.000Z",
+    "matchday": "26",
+    "home-team": {
+      "id": "55b6ae452dfe211604634743",
+      "code": "S04",
+      "name": "Schalke 04",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55b6ae452dfe211604634738",
+      "code": "BVB",
+      "name": "Borussia Dortmund",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "place": "Veltins-Arena, Gelsenkirchen",
+    "competition": {
+      "code": "BUN",
+      "name": "Bundesliga"
+    },
+    "weight": 0,
+    "tags": [
+      "bun",
+      "m",
+      "allemagne"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57bcb9121c58b36d546053a1",
+    "sid": "57b05066d1fe794d9bd87533"
+  },
+  {
+    "start-at": "2017-04-01T13:30:00.000Z",
+    "matchday": "26",
+    "home-team": {
+      "id": "55b6ae452dfe21160463473d",
+      "code": "HSV",
+      "name": "Hambourg SV",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55b6ae452dfe21160463473b",
+      "code": "FCC",
+      "name": "FC Cologne",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "place": "Imtech Arena, Hambourg",
+    "competition": {
+      "code": "BUN",
+      "name": "Bundesliga"
+    },
+    "weight": 0,
+    "tags": [
+      "bun",
+      "m",
+      "allemagne"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57bcb9121c58b36d546053a6",
+    "sid": "57b05066d1fe794d9bd87533"
+  },
+  {
+    "start-at": "2017-04-01T13:30:00.000Z",
+    "matchday": "26",
+    "home-team": {
+      "id": "55b6ae452dfe211604634737",
+      "code": "FCBM",
+      "name": "Bayern Munich",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55b6ae452dfe211604634735",
+      "code": "FCA",
+      "name": "Augsburg",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "place": "Allianz Arena, Munich",
+    "competition": {
+      "code": "BUN",
+      "name": "Bundesliga"
+    },
+    "weight": 0,
+    "tags": [
+      "bun",
+      "m",
+      "allemagne"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57bcb9121c58b36d546053a7",
+    "sid": "57b05066d1fe794d9bd87533"
+  },
+  {
+    "start-at": "2017-04-01T13:30:00.000Z",
+    "matchday": "26",
+    "home-team": {
+      "id": "57bcb8e89be48d6b85602695",
+      "code": "FRI",
+      "name": "SC Fribourg",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55b6ae452dfe211604634746",
+      "code": "WERDER",
+      "name": "Werder Brême",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "place": "Mage Solar Stadion, Fribourg",
+    "competition": {
+      "code": "BUN",
+      "name": "Bundesliga"
+    },
+    "weight": 0,
+    "tags": [
+      "bun",
+      "m",
+      "allemagne"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57bcb9121c58b36d546053a8",
+    "sid": "57b05066d1fe794d9bd87533"
+  },
+  {
+    "start-at": "2017-04-01T13:30:00.000Z",
+    "matchday": "26",
+    "home-team": {
+      "id": "57bcb8e89be48d6b85602696",
+      "code": "RBL",
+      "name": "RB Leipzig",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55b6ae452dfe211604634742",
+      "code": "SV98",
+      "name": "SV Darmstadt 98",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "place": "Red Bull Arena, Leipzig",
+    "competition": {
+      "code": "BUN",
+      "name": "Bundesliga"
+    },
+    "weight": 0,
+    "tags": [
+      "bun",
+      "m",
+      "allemagne"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57bcb9121c58b36d546053a9",
+    "sid": "57b05066d1fe794d9bd87533"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "39",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcdaae",
+      "code": "AVL",
+      "name": "Aston Villa",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcdab8",
+      "code": "NCFC",
+      "name": "Norwich City",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "Villa Park, Birmingham",
+    "competition": {
+      "code": "SBC",
+      "name": "Championship"
+    },
+    "weight": 0,
+    "tags": [
+      "sbc",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4da7e771e1aeee2cd17",
+    "sid": "57a3c45a286aee14768b004c"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "30",
+    "home-team": {
+      "id": "55fd58409f02dbbf0e949323",
+      "code": "BUR",
+      "name": "Burnley",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcdabd",
+      "code": "TOT",
+      "name": "Tottenham",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "Turf Moor, Burnley",
+    "competition": {
+      "code": "BPL",
+      "name": "Premier League"
+    },
+    "weight": 1,
+    "tags": [
+      "bpl",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4f5eccab01cdf0c2359",
+    "sid": "57a3c45a286aee14768b004b"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "39",
+    "home-team": {
+      "id": "55fd58409f02dbbf0e949320",
+      "code": "BRE",
+      "name": "Brentford",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55fd58409f02dbbf0e949322",
+      "code": "BRI",
+      "name": "Bristol City",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "Griffin Park, Brentford",
+    "competition": {
+      "code": "SBC",
+      "name": "Championship"
+    },
+    "weight": 2,
+    "tags": [
+      "sbc",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4da7e771e1aeee2cd19",
+    "sid": "57a3c45a286aee14768b004c"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "30",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcdab0",
+      "code": "CHE",
+      "name": "Chelsea",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcdab1",
+      "code": "CRY",
+      "name": "Crystal Palace",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "Stamford Bridge, London",
+    "competition": {
+      "code": "BPL",
+      "name": "Premier League"
+    },
+    "weight": 2,
+    "tags": [
+      "bpl",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4f5eccab01cdf0c2355",
+    "sid": "57a3c45a286aee14768b004b"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "30",
+    "home-team": {
+      "id": "55fd58409f02dbbf0e949329",
+      "code": "HUL",
+      "name": "Hull City",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcdac0",
+      "code": "WHU",
+      "name": "West Ham",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "KCOM Stadium, Hull",
+    "competition": {
+      "code": "BPL",
+      "name": "Premier League"
+    },
+    "weight": 3,
+    "tags": [
+      "bpl",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4f5eccab01cdf0c2356",
+    "sid": "57a3c45a286aee14768b004b"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "39",
+    "home-team": {
+      "id": "55fd58409f02dbbf0e949321",
+      "code": "BHA",
+      "name": "Brighton & Hove Albion",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55fd58409f02dbbf0e94931e",
+      "code": "BRO",
+      "name": "Blackburn Rovers",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "AMEX Stadium, Falmer",
+    "competition": {
+      "code": "SBC",
+      "name": "Championship"
+    },
+    "weight": 3,
+    "tags": [
+      "sbc",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4da7e771e1aeee2cd1a",
+    "sid": "57a3c45a286aee14768b004c"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "30",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcdab3",
+      "code": "LEI",
+      "name": "Leicester City",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcdaba",
+      "code": "STK",
+      "name": "Stoke City",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "King Power Stadium, Leicester",
+    "competition": {
+      "code": "BPL",
+      "name": "Premier League"
+    },
+    "weight": 4,
+    "tags": [
+      "bpl",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4f5eccab01cdf0c2357",
+    "sid": "57a3c45a286aee14768b004b"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "39",
+    "home-team": {
+      "id": "55fd58409f02dbbf0e949328",
+      "code": "HUD",
+      "name": "Huddersfield Town",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "57a3c45a286aee14768b0051",
+      "code": "BAL",
+      "name": "Burton Albion",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "John Smith's Stadium, Huddersfield",
+    "competition": {
+      "code": "SBC",
+      "name": "Championship"
+    },
+    "weight": 5,
+    "tags": [
+      "sbc",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4da7e771e1aeee2cd1c",
+    "sid": "57a3c45a286aee14768b004c"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "30",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcdab6",
+      "code": "MUN",
+      "name": "Manchester United",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcdabf",
+      "code": "WBA",
+      "name": "West Brom",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "Old Trafford, Manchester",
+    "competition": {
+      "code": "BPL",
+      "name": "Premier League"
+    },
+    "weight": 6,
+    "tags": [
+      "bpl",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4f5eccab01cdf0c235a",
+    "sid": "57a3c45a286aee14768b004b"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "39",
+    "home-team": {
+      "id": "55fd58409f02dbbf0e94932a",
+      "code": "IPS",
+      "name": "Ipswich Town",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55fd58409f02dbbf0e94931d",
+      "code": "BIR",
+      "name": "Birmingham City",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "Portman Road, Ipswich",
+    "competition": {
+      "code": "SBC",
+      "name": "Championship"
+    },
+    "weight": 6,
+    "tags": [
+      "sbc",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4da7e771e1aeee2cd1d",
+    "sid": "57a3c45a286aee14768b004c"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "39",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcdab7",
+      "code": "NEW",
+      "name": "Newcastle",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "57a3c45a286aee14768b0052",
+      "code": "WIG",
+      "name": "Wigan Athletic",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "St James' Park, Newcastle",
+    "competition": {
+      "code": "SBC",
+      "name": "Championship"
+    },
+    "weight": 7,
+    "tags": [
+      "sbc",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4da7e771e1aeee2cd1e",
+    "sid": "57a3c45a286aee14768b004c"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "39",
+    "home-team": {
+      "id": "55fd58409f02dbbf0e94932f",
+      "code": "PNE",
+      "name": "Preston North End",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55fd58409f02dbbf0e94932e",
+      "code": "NFO",
+      "name": "Nottingham Forest",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "Deepdale, Preston",
+    "competition": {
+      "code": "SBC",
+      "name": "Championship"
+    },
+    "weight": 8,
+    "tags": [
+      "sbc",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4da7e771e1aeee2cd1f",
+    "sid": "57a3c45a286aee14768b004c"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "30",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcdabe",
+      "code": "WAT",
+      "name": "Watford",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcdabb",
+      "code": "SUN",
+      "name": "Sunderland",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "Vicarage Road, Watford",
+    "competition": {
+      "code": "BPL",
+      "name": "Premier League"
+    },
+    "weight": 9,
+    "tags": [
+      "bpl",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4f5eccab01cdf0c235d",
+    "sid": "57a3c45a286aee14768b004b"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "39",
+    "home-team": {
+      "id": "55fd58409f02dbbf0e949332",
+      "code": "RUN",
+      "name": "Rotherham United",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55fd58409f02dbbf0e949327",
+      "code": "FUL",
+      "name": "Fulham",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "New York Stadium, Rotherham",
+    "competition": {
+      "code": "SBC",
+      "name": "Championship"
+    },
+    "weight": 10,
+    "tags": [
+      "sbc",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4da7e771e1aeee2cd21",
+    "sid": "57a3c45a286aee14768b004c"
+  },
+  {
+    "start-at": "2017-04-01T14:00:00.000Z",
+    "matchday": "39",
+    "home-team": {
+      "id": "55fd58409f02dbbf0e949334",
+      "code": "WOL",
+      "name": "Wolverhampton Wanderers",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55fd58409f02dbbf0e949324",
+      "code": "CAR",
+      "name": "Cardiff City",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "Molineux Stadium, Wolverhampton",
+    "competition": {
+      "code": "SBC",
+      "name": "Championship"
+    },
+    "weight": 11,
+    "tags": [
+      "sbc",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4da7e771e1aeee2cd22",
+    "sid": "57a3c45a286aee14768b004c"
+  },
+  {
+    "start-at": "2017-04-01T14:15:00.000Z",
+    "matchday": "29",
+    "home-team": {
+      "id": "57ad018beedd417f0e40af21",
+      "code": "OSA",
+      "name": "Osasuna",
+      "country": "espagne",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55b1404d31e20cc26bbeb3cf",
+      "code": "AB",
+      "name": "Bilbao",
+      "country": "espagne",
+      "type": "club"
+    },
+    "place": "Stade El Sadar, Pampelune",
+    "competition": {
+      "code": "LIGA",
+      "name": "La Liga"
+    },
+    "weight": 3,
+    "tags": [
+      "liga",
+      "m",
+      "espagne"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57ad01b928c52302cf710315",
+    "sid": "57aa5cfee65fed3ef3048f65"
+  },
+  {
+    "start-at": "2017-04-01T15:00:00.000Z",
+    "matchday": "27",
+    "home-team": {
+      "id": "55e58e2769f73ce846ad0957",
+      "code": "CDT",
+      "name": "Tondela",
+      "country": "portugal",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55e58e2769f73ce846ad094f",
+      "code": "GDEP",
+      "name": "Estoril",
+      "country": "portugal",
+      "type": "club"
+    },
+    "place": "Estádio João Cardoso, Tondela",
+    "competition": {
+      "code": "PLP",
+      "name": "Primeira Liga"
+    },
+    "weight": 0,
+    "tags": [
+      "plp",
+      "m",
+      "portugal"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57ad01eae24d5306364d4209",
+    "sid": "57ad018beedd417f0e40af2b"
+  },
+  {
+    "start-at": "2017-04-01T15:00:00.000Z",
+    "matchday": "31",
+    "home-team": {
+      "id": "55a548fc5d02524c74bcda4a",
+      "code": "OM",
+      "name": "Marseille",
+      "country": "france",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcda5e",
+      "code": "DFCO",
+      "name": "Dijon",
+      "country": "france",
+      "type": "club"
+    },
+    "broadcasters": [
+      {
+        "code": "cs",
+        "name": "Canal+ Sport",
+        "type": "direct",
+        "weight": 0
+      }
+    ],
+    "place": "Stade Vélodrome, Marseille",
+    "competition": {
+      "code": "L1",
+      "name": "Ligue 1"
+    },
+    "weight": 6,
+    "tags": [
+      "cs",
+      "direct",
+      "_csdirect",
+      "l1",
+      "m",
+      "france"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "575441ec88355c39181e7d49",
+    "sid": "57543f14be874adb70fb7117"
+  },
+  {
+    "start-at": "2017-04-01T16:00:00.000Z",
+    "matchday": "30",
+    "home-team": {
+      "id": "55bb299e68d456ad5ee128c2",
+      "code": "USS",
+      "name": "Sassuolo",
+      "country": "italie",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55bb299e68d456ad5ee128be",
+      "code": "SSL",
+      "name": "Lazio Rome",
+      "country": "italie",
+      "type": "club"
+    },
+    "place": "Mapei Stadium, Reggio Emilia",
+    "competition": {
+      "code": "SA",
+      "name": "Serie A TIM"
+    },
+    "weight": 8,
+    "tags": [
+      "sa",
+      "m",
+      "italie"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57b4db0c44ad4c1adb03049e",
+    "sid": "57b05066d1fe794d9bd87537"
+  },
+  {
+    "start-at": "2017-04-01T16:30:00.000Z",
+    "matchday": "26",
+    "home-team": {
+      "id": "55b6ae452dfe21160463473a",
+      "code": "SGE",
+      "name": "Eintracht Francfort",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55b6ae452dfe211604634739",
+      "code": "BMG",
+      "name": "Borussia M'Gladbach",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "place": "Commerzbank-Arena, Francfort",
+    "competition": {
+      "code": "BUN",
+      "name": "Bundesliga"
+    },
+    "weight": 0,
+    "tags": [
+      "bun",
+      "m",
+      "allemagne"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57bcb9121c58b36d546053a3",
+    "sid": "57b05066d1fe794d9bd87533"
+  }
+]

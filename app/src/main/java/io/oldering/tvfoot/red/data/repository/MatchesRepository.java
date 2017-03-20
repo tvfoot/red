@@ -2,7 +2,6 @@ package io.oldering.tvfoot.red.data.repository;
 
 import io.oldering.tvfoot.red.data.api.MatchService;
 import io.oldering.tvfoot.red.data.entity.search.Filter;
-import io.oldering.tvfoot.red.di.ActivityScope;
 import io.oldering.tvfoot.red.matches.MatchesViewState;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import io.reactivex.Observable;
@@ -16,7 +15,7 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.NEXT_PAGE_E
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.NEXT_PAGE_LOADED;
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.NEXT_PAGE_LOADING;
 
-@ActivityScope public class MatchesRepository {
+public class MatchesRepository {
   private final MatchService matchService;
   private int matchPerPage = 30;
 

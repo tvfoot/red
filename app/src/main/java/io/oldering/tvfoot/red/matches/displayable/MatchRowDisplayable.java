@@ -1,8 +1,10 @@
 package io.oldering.tvfoot.red.matches.displayable;
 
+import android.support.annotation.VisibleForTesting;
 import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.data.entity.Broadcaster;
 import io.oldering.tvfoot.red.data.entity.Competition;
+import io.oldering.tvfoot.red.data.entity.Match;
 import io.oldering.tvfoot.red.data.entity.Team;
 import io.oldering.tvfoot.red.util.StringUtils;
 import java.text.SimpleDateFormat;
@@ -46,7 +48,7 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
 
   public abstract String matchId();
 
-  private static MatchRowDisplayable fromMatch(io.oldering.tvfoot.red.data.entity.Match match) {
+  @VisibleForTesting public static MatchRowDisplayable fromMatch(Match match) {
     return new AutoValue_MatchRowDisplayable( //
         parseHeaderKey(match.startAt()), //
         parseStartTime(match.startAt()), //
@@ -61,10 +63,9 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
         parseLocation(match), match.id());
   }
 
-  public static List<MatchRowDisplayable> fromMatches(
-      List<io.oldering.tvfoot.red.data.entity.Match> matches) {
+  public static List<MatchRowDisplayable> fromMatches(List<Match> matches) {
     List<MatchRowDisplayable> matchRowDisplayables = new ArrayList<>(matches.size());
-    for (io.oldering.tvfoot.red.data.entity.Match match : matches) {
+    for (Match match : matches) {
       matchRowDisplayables.add(fromMatch(match));
     }
     return matchRowDisplayables;
@@ -140,7 +141,7 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
     return Team.DEFAULT_CODE;
   }
 
-  private static String parseLocation(io.oldering.tvfoot.red.data.entity.Match match) {
+  private static String parseLocation(Match match) {
     return String.valueOf(match.place());
   }
 

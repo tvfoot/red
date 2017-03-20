@@ -11,7 +11,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class DataBindingAdaptersTest {
-
   @Test public void setVisibilityGone() {
     View view = mock(View.class);
     DataBindingAdapters.setVisibility(view, false);
@@ -24,7 +23,6 @@ public class DataBindingAdaptersTest {
     verify(view).setVisibility(View.VISIBLE);
   }
 
-  // Multie dex files define...
   @Test public void setImageResource() {
     String resourceName = "b1";
     String packageName = "packageName";
@@ -37,7 +35,6 @@ public class DataBindingAdaptersTest {
     when(context.getPackageName()).thenReturn(packageName);
 
     ImageView imageView = mock(ImageView.class);
-    // TODO getContext is final so cannot be overriden...
     when(imageView.getContext()).thenReturn(context);
 
     DataBindingAdapters.setImageResource(imageView, resourceName);

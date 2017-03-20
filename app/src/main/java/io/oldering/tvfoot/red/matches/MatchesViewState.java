@@ -14,8 +14,7 @@ import javax.annotation.Nullable;
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_CLICK;
 
 @AutoValue public abstract class MatchesViewState {
-
-  List<MatchesItemDisplayable> matchesItemDisplayables() {
+  public List<MatchesItemDisplayable> matchesItemDisplayables() {
     List<String> headers = new ArrayList<>();
     List<MatchesItemDisplayable> items = new ArrayList<>();
     for (MatchRowDisplayable match : matches()) {
@@ -31,7 +30,7 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
     return items;
   }
 
-  @VisibleForTesting protected abstract List<MatchRowDisplayable> matches();
+  @VisibleForTesting public abstract List<MatchRowDisplayable> matches();
 
   public abstract boolean firstPageLoading();
 
