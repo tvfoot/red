@@ -1,17 +1,17 @@
 package io.oldering.tvfoot.red.matches;
 
-import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import com.google.auto.value.AutoValue;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nullable;
 
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_CLICK;
 
 @AutoValue public abstract class MatchesViewState {
 
-  public List<MatchesItemDisplayable> matchesItems() {
+  List<MatchesItemDisplayable> matchesItems() {
     List<String> headers = new ArrayList<>();
     List<MatchesItemDisplayable> items = new ArrayList<>();
     for (MatchRowDisplayable match : matches()) {

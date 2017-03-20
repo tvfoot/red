@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.BroadcasterRowBinding;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 class BroadcastersAdapter extends RecyclerView.Adapter<BroadcastersAdapter.BroadcasterViewHolder> {
@@ -30,6 +31,10 @@ class BroadcastersAdapter extends RecyclerView.Adapter<BroadcastersAdapter.Broad
 
   void add(BroadcasterRowDisplayable broadcaster) {
     broadcasters.add(broadcaster);
+  }
+
+  void addAll(Collection<BroadcasterRowDisplayable> broadcasters) {
+    this.broadcasters.addAll(broadcasters);
   }
 
   static class BroadcasterViewHolder extends RecyclerView.ViewHolder {

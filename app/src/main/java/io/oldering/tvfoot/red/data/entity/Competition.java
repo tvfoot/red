@@ -1,9 +1,9 @@
 package io.oldering.tvfoot.red.data.entity;
 
-import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import javax.annotation.Nullable;
 
 @AutoValue public abstract class Competition {
   public static TypeAdapter<Competition> typeAdapter(Gson gson) {

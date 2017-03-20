@@ -2,13 +2,13 @@ package io.oldering.tvfoot.red.matches;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.data.repository.MatchesRepository;
 import io.oldering.tvfoot.red.databinding.ActivityMatchesBinding;
 import io.oldering.tvfoot.red.util.BaseActivity;
 import io.reactivex.Observable;
 import java.util.List;
+import javax.annotation.Nullable;
 import timber.log.Timber;
 
 import static android.view.View.GONE;

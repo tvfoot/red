@@ -4,6 +4,7 @@ import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.util.DateUtils;
 import java.text.ParseException;
 import java.util.Date;
+import timber.log.Timber;
 
 import static io.oldering.tvfoot.red.util.TimeConstants.ONE_DAY_IN_MILLIS;
 
@@ -20,7 +21,7 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_DAY_IN_MILLIS;
     try {
       date = MatchRowDisplayable.mediumDateFormat.parse(headerKey);
     } catch (ParseException e) {
-      e.printStackTrace();
+      Timber.e(e);
       throw new UnsupportedOperationException("What is this date anyway? " + headerKey);
     }
     if (DateUtils.isToday(date.getTime())) {

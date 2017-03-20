@@ -114,7 +114,8 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesI
       RecyclerView recyclerView = binding.matchBroadcasters;
 
       BroadcastersAdapter broadcastersAdapter = new BroadcastersAdapter();
-      match.broadcasters().forEach(broadcastersAdapter::add);
+      broadcastersAdapter.addAll(match.broadcasters());
+
       if (broadcastersAdapter.getItemCount() == 0) {
         broadcastersAdapter.add(
             BroadcasterRowDisplayable.builder().code("ic_tv_black_18px").build());

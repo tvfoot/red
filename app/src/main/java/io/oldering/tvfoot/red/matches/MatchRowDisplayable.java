@@ -1,6 +1,5 @@
 package io.oldering.tvfoot.red.matches;
 
-import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.data.entity.Broadcaster;
 import io.oldering.tvfoot.red.data.entity.Competition;
@@ -13,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import javax.annotation.Nullable;
 
 import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS;
 
@@ -109,7 +109,7 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
     if (matchLabel != null && !matchLabel.trim().isEmpty()) {
       return matchLabel;
     } else {
-      return "J. " + String.valueOf(matchDay);
+      return "J. " + matchDay;
     }
   }
 
