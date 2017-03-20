@@ -6,7 +6,7 @@
   <data>
     <variable
         name="match"
-        type="io.oldering.tvfoot.red.matches.MatchRowDisplayable"
+        type="io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable"
         />
     <variable
         name="handler"

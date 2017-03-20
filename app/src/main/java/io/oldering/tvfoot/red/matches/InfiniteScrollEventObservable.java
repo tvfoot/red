@@ -10,6 +10,7 @@ import static io.oldering.tvfoot.red.util.Preconditions.checkMainThread;
 
 /**
  * Heavily based on {@link com.jakewharton.rxbinding2.support.v7.widget.RecyclerViewScrollEventObservable}
+ * and {@link com.genius.groupie.example.InfiniteScrollListener}
  */
 final class InfiniteScrollEventObservable extends Observable<Integer> {
   private final RecyclerView view;

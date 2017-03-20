@@ -3,30 +3,32 @@ package io.oldering.tvfoot.red.matches;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import io.oldering.tvfoot.red.R;
-import io.oldering.tvfoot.red.data.repository.MatchesRepository;
 import io.oldering.tvfoot.red.databinding.ActivityMatchesBinding;
+import io.oldering.tvfoot.red.di.ActivityScope;
+import io.oldering.tvfoot.red.matches.displayable.MatchesItemDisplayable;
 import io.oldering.tvfoot.red.util.BaseActivity;
 import io.reactivex.Observable;
 import java.util.List;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class MatchesActivity extends BaseActivity {
+@ActivityScope public class MatchesActivity extends BaseActivity {
   private ActivityMatchesBinding binding;
-  private MatchesAdapter adapter;
+  @Inject MatchesAdapter adapter;
+  @Inject MatchesBinder intentBinder;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    adapter = new MatchesAdapter();
+    getActivityComponent().inject(this);
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_matches);
     binding.recyclerView.setAdapter(adapter);
 
-    new MatchesBinder(this, new MatchesRepository(getActivityComponent().matchService())).bind();
+    intentBinder.bind();
   }
 
   public Observable<MatchesIntent> matchRowClickIntent() {
@@ -58,10 +60,10 @@ public class MatchesActivity extends BaseActivity {
         break;
       case FIRST_PAGE_LOADED:
       case NEXT_PAGE_LOADED:
-        if (viewState.matchesItems().isEmpty()) {
+        if (viewState.matchesItemDisplayables().isEmpty()) {
           renderEmptyResult();
         } else {
-          renderResult(viewState.matchesItems());
+          renderResult(viewState.matchesItemDisplayables());
         }
         break;
       case PULL_TO_REFRESH_LOADING:

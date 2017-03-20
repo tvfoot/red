@@ -9,14 +9,26 @@ import android.view.ViewGroup;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.MatchesRowHeaderBinding;
 import io.oldering.tvfoot.red.databinding.MatchesRowMatchBinding;
+import io.oldering.tvfoot.red.di.ActivityScope;
+import io.oldering.tvfoot.red.matches.displayable.BroadcasterRowDisplayable;
+import io.oldering.tvfoot.red.matches.displayable.HeaderRowDisplayable;
+import io.oldering.tvfoot.red.matches.displayable.LoadingRowDisplayable;
+import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
+import io.oldering.tvfoot.red.matches.displayable.MatchesItemDisplayable;
+import io.oldering.tvfoot.red.matches.displayable.MatchesItemDisplayableDiffUtilCallback;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import java.util.Collections;
 import java.util.List;
+import javax.inject.Inject;
 
-public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesItemViewHolder> {
+@ActivityScope public class MatchesAdapter
+    extends RecyclerView.Adapter<MatchesAdapter.MatchesItemViewHolder> {
   private List<MatchesItemDisplayable> matchesItems = Collections.emptyList();
   private PublishSubject<MatchRowDisplayable> matchRowClickObservable = PublishSubject.create();
+
+  @Inject public MatchesAdapter() {
+  }
 
   @Override public MatchesItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());

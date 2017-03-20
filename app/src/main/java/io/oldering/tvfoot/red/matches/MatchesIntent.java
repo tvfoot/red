@@ -1,5 +1,7 @@
 package io.oldering.tvfoot.red.matches;
 
+import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
+
 interface MatchesIntent {
   final class LoadFirstPage implements MatchesIntent {
   }

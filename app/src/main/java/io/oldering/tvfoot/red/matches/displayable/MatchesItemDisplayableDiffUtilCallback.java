@@ -1,13 +1,13 @@
-package io.oldering.tvfoot.red.matches;
+package io.oldering.tvfoot.red.matches.displayable;
 
 import android.support.v7.util.DiffUtil;
 import java.util.List;
 
-class MatchesItemDisplayableDiffUtilCallback extends DiffUtil.Callback {
+public class MatchesItemDisplayableDiffUtilCallback extends DiffUtil.Callback {
   private List<MatchesItemDisplayable> oldItems;
   private List<MatchesItemDisplayable> newItems;
 
-  MatchesItemDisplayableDiffUtilCallback() {
+  public MatchesItemDisplayableDiffUtilCallback() {
   }
 
   @Override public int getOldListSize() {
@@ -32,7 +32,8 @@ class MatchesItemDisplayableDiffUtilCallback extends DiffUtil.Callback {
     return oldItem.equals(newItem);
   }
 
-  void bindItems(List<MatchesItemDisplayable> oldItems, List<MatchesItemDisplayable> newItems) {
+  public void bindItems(List<MatchesItemDisplayable> oldItems,
+      List<MatchesItemDisplayable> newItems) {
     this.oldItems = oldItems;
     this.newItems = newItems;
   }

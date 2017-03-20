@@ -1,8 +1,8 @@
-package io.oldering.tvfoot.red.matches;
+package io.oldering.tvfoot.red.matches.displayable;
 
 import com.google.auto.value.AutoValue;
 
-@AutoValue abstract class BroadcasterRowDisplayable {
+@AutoValue public abstract class BroadcasterRowDisplayable {
   public abstract String code();
 
   public static Builder builder() {

@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.matches;
+package io.oldering.tvfoot.red.matches.displayable;
 
 import com.google.auto.value.AutoValue;
 

@@ -2,6 +2,10 @@ package io.oldering.tvfoot.red.matches;
 
 import android.support.annotation.VisibleForTesting;
 import com.google.auto.value.AutoValue;
+import io.oldering.tvfoot.red.matches.displayable.HeaderRowDisplayable;
+import io.oldering.tvfoot.red.matches.displayable.LoadingRowDisplayable;
+import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
+import io.oldering.tvfoot.red.matches.displayable.MatchesItemDisplayable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +15,7 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
 
 @AutoValue public abstract class MatchesViewState {
 
-  List<MatchesItemDisplayable> matchesItems() {
+  List<MatchesItemDisplayable> matchesItemDisplayables() {
     List<String> headers = new ArrayList<>();
     List<MatchesItemDisplayable> items = new ArrayList<>();
     for (MatchRowDisplayable match : matches()) {

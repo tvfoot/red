@@ -8,7 +8,7 @@
 
     <variable
         name="dayHeader"
-        type="io.oldering.tvfoot.red.matches.HeaderRowDisplayable"
+        type="io.oldering.tvfoot.red.matches.displayable.HeaderRowDisplayable"
         />
   </data>
 
