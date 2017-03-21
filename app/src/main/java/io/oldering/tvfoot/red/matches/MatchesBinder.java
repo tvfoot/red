@@ -1,7 +1,6 @@
 package io.oldering.tvfoot.red.matches;
 
 import android.app.Activity;
-import io.oldering.tvfoot.red.data.repository.MatchesRepository;
 import io.oldering.tvfoot.red.di.ActivityScope;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -10,9 +9,9 @@ import javax.inject.Inject;
 
 @ActivityScope class MatchesBinder {
   private final MatchesActivity activity;
-  private final MatchesRepository repository;
+  private final MatchesInteractor repository;
 
-  @Inject MatchesBinder(Activity activity, MatchesRepository repository) {
+  @Inject MatchesBinder(Activity activity, MatchesInteractor repository) {
     this.activity = (MatchesActivity) activity;
     this.repository = repository;
   }

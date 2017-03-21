@@ -26,6 +26,14 @@ public class Fixture {
     return anyObject("matches_sample.json", listMatchType);
   }
 
+  public List<Match> anyMatchesShort() {
+    return anyObject("matches_sample_short.json", listMatchType);
+  }
+
+  public Match anyMatch() {
+    return anyObject("match_sample.json", Match.class);
+  }
+
   public List<Match> anyNextMatches() {
     return anyObject("matches_next_sample.json", listMatchType);
   }

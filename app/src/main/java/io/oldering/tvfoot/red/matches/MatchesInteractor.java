@@ -1,8 +1,7 @@
-package io.oldering.tvfoot.red.data.repository;
+package io.oldering.tvfoot.red.matches;
 
 import io.oldering.tvfoot.red.data.api.MatchService;
 import io.oldering.tvfoot.red.data.entity.search.Filter;
-import io.oldering.tvfoot.red.matches.MatchesViewState;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import io.reactivex.Observable;
 import javax.inject.Inject;
@@ -15,11 +14,11 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.NEXT_PAGE_E
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.NEXT_PAGE_LOADED;
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.NEXT_PAGE_LOADING;
 
-public class MatchesRepository {
+public class MatchesInteractor {
   private final MatchService matchService;
   private int matchPerPage = 30;
 
-  @Inject public MatchesRepository(MatchService matchService) {
+  @Inject public MatchesInteractor(MatchService matchService) {
     this.matchService = matchService;
   }
 
