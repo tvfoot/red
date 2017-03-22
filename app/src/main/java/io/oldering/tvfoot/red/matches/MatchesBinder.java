@@ -1,48 +1,51 @@
 package io.oldering.tvfoot.red.matches;
 
 import android.app.Activity;
+import android.support.annotation.VisibleForTesting;
 import io.oldering.tvfoot.red.di.ActivityScope;
+import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import javax.inject.Inject;
 
 @ActivityScope class MatchesBinder {
   private final MatchesActivity activity;
   private final MatchesInteractor repository;
+  private final BaseSchedulerProvider schedulerProvider;
 
-  @Inject MatchesBinder(Activity activity, MatchesInteractor repository) {
+  @Inject MatchesBinder(Activity activity, MatchesInteractor repository,
+      BaseSchedulerProvider schedulerProvider) {
     this.activity = (MatchesActivity) activity;
     this.repository = repository;
+    this.schedulerProvider = schedulerProvider;
   }
 
-  private Observable<MatchesIntent> intent() {
+  @VisibleForTesting Observable<MatchesIntent> intent() {
     return Observable.merge(activity.loadFirstPageIntent(), activity.loadNextPageIntent(),
-        activity.matchRowClickIntent()).subscribeOn(AndroidSchedulers.mainThread());
+        activity.matchRowClickIntent()).subscribeOn(schedulerProvider.ui());
   }
 
-  private Observable<MatchesViewState> model(Observable<MatchesIntent> intents) {
+  @VisibleForTesting Observable<MatchesViewState> model(Observable<MatchesIntent> intents) {
     return intents.flatMap(intent -> {
       if (intent instanceof MatchesIntent.LoadFirstPage) {
-        return repository.loadFirstPage().subscribeOn(Schedulers.io());
+        return repository.loadFirstPage().subscribeOn(schedulerProvider.io());
       }
       if (intent instanceof MatchesIntent.LoadNextPage) {
         return repository.loadNextPage(((MatchesIntent.LoadNextPage) intent).currentPage())
-            .subscribeOn(Schedulers.io());
+            .subscribeOn(schedulerProvider.io());
       }
       if (intent instanceof MatchesIntent.MatchRowClick) {
         return Observable.just(
             MatchesViewState.matchRowClick(((MatchesIntent.MatchRowClick) intent).getMatch()));
       }
       throw new IllegalArgumentException("I don't know how to deal with this intent " + intent);
-    }).scan(MatchesViewState::reduce).subscribeOn(Schedulers.io());
+    }).scan(MatchesViewState::reduce).subscribeOn(schedulerProvider.computation());
   }
 
-  private void view(Observable<MatchesViewState> states) {
-    states.observeOn(AndroidSchedulers.mainThread()).subscribe(activity::render);
+  @VisibleForTesting void view(Observable<MatchesViewState> states) {
+    states.observeOn(schedulerProvider.ui()).subscribe(activity::render);
   }
 
   void bind() {
-    view(model(intent()));
+    this.view(this.model(this.intent()));
   }
 }
