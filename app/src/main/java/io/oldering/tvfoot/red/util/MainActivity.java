@@ -1,10 +1,10 @@
 package io.oldering.tvfoot.red.util;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import io.oldering.tvfoot.red.flowcontroller.FlowController;
+import javax.annotation.Nullable;
 
 public class MainActivity extends AppCompatActivity {
 

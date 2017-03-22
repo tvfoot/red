@@ -1,7 +1,7 @@
 package io.oldering.tvfoot.red.util;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import javax.annotation.Nullable;
 
 public class BundleService {
   private final Bundle data;

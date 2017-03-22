@@ -1,6 +1,6 @@
 package io.oldering.tvfoot.red.factory;
 
-import io.oldering.tvfoot.red.data.model.Match;
+import io.oldering.tvfoot.red.data.entity.Match;
 import java.util.List;
 
 public class MatchListFactory {

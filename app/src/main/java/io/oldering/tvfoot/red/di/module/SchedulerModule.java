@@ -7,7 +7,6 @@ import io.oldering.tvfoot.red.util.schedulers.SchedulerProvider;
 import javax.inject.Singleton;
 
 @Module public class SchedulerModule {
-
   @Provides @Singleton BaseSchedulerProvider provideSchedulerProvider() {
     return new SchedulerProvider();
   }

@@ -64,26 +64,4 @@ public class Dagger2Helper {
       Dagger2Helper.methodsCache.put(componentClass, methods);
     }
   }
-
-  public static void inject(Class<?> componentClass, Object component, Object target) {
-
-    HashMap<Class<?>, Method> methods = methodsCache.get(componentClass);
-    if (methods == null) {
-      throw new RuntimeException(
-          "Component " + componentClass + " has not been built with " + Dagger2Helper.class);
-    }
-
-    Class targetClass = target.getClass();
-    Method method = methods.get(targetClass);
-    if (method == null) {
-      throw new RuntimeException(
-          "Method for " + targetClass + " injection does not exist in " + componentClass);
-    }
-
-    try {
-      method.invoke(component, target);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-  }
 }

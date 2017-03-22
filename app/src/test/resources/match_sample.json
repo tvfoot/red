@@ -1,0 +1,44 @@
+{
+  "label": "1e tour",
+  "start-at": "2016-11-13T19:45:00.000Z",
+  "matchday": "Europe",
+  "home-team": {
+    "id": "55b1404d31e20cc26bbeb3bf",
+    "code": "POR",
+    "name": "Portugal",
+    "country": "portugal",
+    "type": "nation"
+  },
+  "away-team": {
+    "id": "55e894eff0125aa60e252daf",
+    "code": "LVA",
+    "name": "Lettonie",
+    "country": "lettonie",
+    "type": "nation"
+  },
+  "broadcasters": [
+    {
+      "code": "cs",
+      "name": "Canal+ Sport",
+      "type": "direct",
+      "weight": 0
+    }
+  ],
+  "place": "Estádio Algarve, Faro",
+  "competition": {
+    "code": "CM",
+    "name": "Éliminatoires Coupe du Monde 2018"
+  },
+  "weight": 0,
+  "tags": [
+    "cs",
+    "direct",
+    "_csdirect",
+    "cm",
+    "m"
+  ],
+  "postponed": false,
+  "autoupdate": true,
+  "id": "581fa504ae556b624e78b2f0",
+  "sid": "56137e01a08d24401614b221"
+}

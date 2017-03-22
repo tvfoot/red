@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import dagger.Module;
 import dagger.Provides;
-import io.oldering.tvfoot.red.di.ScopeActivity;
+import io.oldering.tvfoot.red.di.ActivityScope;
 import io.oldering.tvfoot.red.util.BundleService;
 import io.oldering.tvfoot.red.util.BaseActivity;
 
 @Module public class BundleModule {
-  @Provides @ScopeActivity BundleService provideBundleService(BaseActivity activity) {
+  @Provides @ActivityScope BundleService provideBundleService(BaseActivity activity) {
     return activity.getBundleService();
   }
 
