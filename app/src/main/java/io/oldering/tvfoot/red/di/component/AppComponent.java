@@ -7,6 +7,7 @@ import io.oldering.tvfoot.red.di.module.NetworkModule;
 import io.oldering.tvfoot.red.di.module.SchedulerModule;
 import io.oldering.tvfoot.red.di.module.ServiceModule;
 import javax.inject.Singleton;
+import okhttp3.OkHttpClient;
 
 @Singleton @Component(modules = {
     AppModule.class, //
@@ -15,4 +16,6 @@ import javax.inject.Singleton;
     SchedulerModule.class, //
 }) public interface AppComponent {
   ActivityComponent plus(ActivityModule activityModule);
+
+  OkHttpClient okHttpClient();
 }

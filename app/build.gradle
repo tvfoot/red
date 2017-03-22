@@ -138,6 +138,7 @@ dependencies {
   androidTestCompile "com.squareup.okhttp3:mockwebserver:$rootProject.ext.lib.okHttpVersion"
   androidTestCompile "com.squareup.retrofit2:retrofit-mock:$rootProject.ext.lib.retrofitVersion"
   androidTestCompile "com.google.dagger:dagger:$rootProject.ext.lib.daggerVersion"
+  androidTestCompile 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
   androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.lib.daggerVersion"
 }
 
