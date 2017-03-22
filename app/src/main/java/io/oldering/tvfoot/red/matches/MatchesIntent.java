@@ -1,32 +1,28 @@
 package io.oldering.tvfoot.red.matches;
 
+import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 
 interface MatchesIntent {
-  final class LoadFirstPage implements MatchesIntent {
-  }
-
-  final class LoadNextPage implements MatchesIntent {
-    private final int currentPage;
-
-    public LoadNextPage(int currentPage) {
-      this.currentPage = currentPage;
-    }
-
-    public int currentPage() {
-      return currentPage;
+  @AutoValue abstract class LoadFirstPage implements MatchesIntent {
+    public static LoadFirstPage create() {
+      return new AutoValue_MatchesIntent_LoadFirstPage();
     }
   }
 
-  final class MatchRowClick implements MatchesIntent {
-    private final MatchRowDisplayable match;
+  @AutoValue abstract class LoadNextPage implements MatchesIntent {
+    public abstract int currentPage();
 
-    MatchRowClick(MatchRowDisplayable match) {
-      this.match = match;
+    public static LoadNextPage create(int currentPage) {
+      return new AutoValue_MatchesIntent_LoadNextPage(currentPage);
     }
+  }
 
-    public MatchRowDisplayable getMatch() {
-      return match;
+  @AutoValue abstract class MatchRowClick implements MatchesIntent {
+    public abstract MatchRowDisplayable getMatch();
+
+    public static MatchRowClick create(MatchRowDisplayable match) {
+      return new AutoValue_MatchesIntent_MatchRowClick(match);
     }
   }
 }

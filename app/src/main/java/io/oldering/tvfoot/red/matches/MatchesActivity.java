@@ -36,12 +36,12 @@ import static android.view.View.VISIBLE;
   }
 
   public Observable<MatchesIntent> loadFirstPageIntent() {
-    return Observable.just(new MatchesIntent.LoadFirstPage());
+    return Observable.just(MatchesIntent.LoadFirstPage.create());
   }
 
   public Observable<MatchesIntent> loadNextPageIntent() {
     return new InfiniteScrollEventObservable(binding.recyclerView).map(
-        MatchesIntent.LoadNextPage::new);
+        MatchesIntent.LoadNextPage::create);
   }
 
   public void render(MatchesViewState viewState) {

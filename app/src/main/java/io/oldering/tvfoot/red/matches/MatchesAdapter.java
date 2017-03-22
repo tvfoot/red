@@ -48,7 +48,7 @@ import javax.inject.Inject;
   }
 
   Observable<MatchesIntent> getMatchRowClickObservable() {
-    return matchRowClickObservable.map(MatchesIntent.MatchRowClick::new);
+    return matchRowClickObservable.map(MatchesIntent.MatchRowClick::create);
   }
 
   @SuppressWarnings("unchecked") @Override
