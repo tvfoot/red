@@ -26,6 +26,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MatchesViewStateTest {
   private Fixture fixture;
@@ -86,10 +87,10 @@ public class MatchesViewStateTest {
   }
 
   @Test public void reduce_firstPageLoading() {
-    MatchesViewState oldState = MatchesViewState.builder().status(FIRST_PAGE_LOADING).build();
+    MatchesViewState previousState = MatchesViewState.builder().status(FIRST_PAGE_LOADING).build();
     MatchesViewState partialState = MatchesViewState.builder().status(FIRST_PAGE_LOADING).build();
 
-    MatchesViewState newState = MatchesViewState.reduce(oldState, partialState);
+    MatchesViewState newState = MatchesViewState.reduce(previousState, partialState);
     assertTrue(newState.firstPageLoading());
     assertNull(newState.firstPageError());
     assertEquals(FIRST_PAGE_LOADING, newState.status());
@@ -98,11 +99,11 @@ public class MatchesViewStateTest {
   @Test public void reduce_firstPageLoaded() {
     List<MatchRowDisplayable> matches = MatchRowDisplayable.fromMatches(fixture.anyMatches());
 
-    MatchesViewState oldState = MatchesViewState.builder().status(FIRST_PAGE_LOADING).build();
+    MatchesViewState previousState = MatchesViewState.builder().status(FIRST_PAGE_LOADING).build();
     MatchesViewState partialState =
         MatchesViewState.builder().status(FIRST_PAGE_LOADED).matches(matches).build();
 
-    MatchesViewState newState = MatchesViewState.reduce(oldState, partialState);
+    MatchesViewState newState = MatchesViewState.reduce(previousState, partialState);
     assertFalse(newState.firstPageLoading());
     assertNull(newState.firstPageError());
     assertEquals(FIRST_PAGE_LOADED, newState.status());
@@ -112,11 +113,11 @@ public class MatchesViewStateTest {
   @Test public void reduce_firstPageError() {
     Throwable throwable = mock(Throwable.class);
 
-    MatchesViewState oldState = MatchesViewState.builder().status(FIRST_PAGE_LOADING).build();
+    MatchesViewState previousState = MatchesViewState.builder().status(FIRST_PAGE_LOADING).build();
     MatchesViewState partialState =
         MatchesViewState.builder().status(FIRST_PAGE_ERROR).firstPageError(throwable).build();
 
-    MatchesViewState newState = MatchesViewState.reduce(oldState, partialState);
+    MatchesViewState newState = MatchesViewState.reduce(previousState, partialState);
     assertFalse(newState.firstPageLoading());
     assertEquals(throwable, newState.firstPageError());
     assertEquals(FIRST_PAGE_ERROR, newState.status());
@@ -126,11 +127,11 @@ public class MatchesViewStateTest {
     List<MatchRowDisplayable> previousMatches =
         MatchRowDisplayable.fromMatches(fixture.anyMatches());
 
-    MatchesViewState oldState =
+    MatchesViewState previousState =
         MatchesViewState.builder().status(FIRST_PAGE_LOADED).matches(previousMatches).build();
     MatchesViewState partialState = MatchesViewState.builder().status(NEXT_PAGE_LOADING).build();
 
-    MatchesViewState newState = MatchesViewState.reduce(oldState, partialState);
+    MatchesViewState newState = MatchesViewState.reduce(previousState, partialState);
     assertTrue(newState.nextPageLoading());
     assertNull(newState.nextPageError());
     assertEquals(previousMatches, newState.matches());
@@ -143,12 +144,12 @@ public class MatchesViewStateTest {
     List<MatchRowDisplayable> nextMatches =
         MatchRowDisplayable.fromMatches(fixture.anyNextMatches());
 
-    MatchesViewState oldState =
+    MatchesViewState previousState =
         MatchesViewState.builder().status(NEXT_PAGE_LOADING).matches(previousMatches).build();
     MatchesViewState partialState =
         MatchesViewState.builder().status(NEXT_PAGE_LOADED).matches(nextMatches).build();
 
-    MatchesViewState newState = MatchesViewState.reduce(oldState, partialState);
+    MatchesViewState newState = MatchesViewState.reduce(previousState, partialState);
     assertFalse(newState.nextPageLoading());
     assertNull(newState.nextPageError());
     assertEquals(NEXT_PAGE_LOADED, newState.status());
@@ -164,12 +165,12 @@ public class MatchesViewStateTest {
         MatchRowDisplayable.fromMatches(fixture.anyMatches());
     Throwable throwable = mock(Throwable.class);
 
-    MatchesViewState oldState =
+    MatchesViewState previousState =
         MatchesViewState.builder().status(NEXT_PAGE_LOADING).matches(previousMatches).build();
     MatchesViewState partialState =
         MatchesViewState.builder().status(NEXT_PAGE_ERROR).nextPageError(throwable).build();
 
-    MatchesViewState newState = MatchesViewState.reduce(oldState, partialState);
+    MatchesViewState newState = MatchesViewState.reduce(previousState, partialState);
     assertFalse(newState.nextPageLoading());
     assertEquals(throwable, newState.nextPageError());
     assertEquals(NEXT_PAGE_ERROR, newState.status());
@@ -185,5 +186,11 @@ public class MatchesViewStateTest {
   }
 
   @Test public void reduce_matchRowClick() {
+    MatchesViewState previousState = mock(MatchesViewState.class);
+    MatchesViewState partialState = mock(MatchesViewState.class);
+    when(partialState.status()).thenReturn(MATCH_ROW_CLICK);
+    MatchesViewState newState = MatchesViewState.reduce(previousState, partialState);
+
+    assertEquals(partialState, newState);
   }
 }
