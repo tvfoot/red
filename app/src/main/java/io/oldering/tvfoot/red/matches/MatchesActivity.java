@@ -5,6 +5,8 @@ import android.os.Bundle;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.ActivityMatchesBinding;
 import io.oldering.tvfoot.red.di.ActivityScope;
+import io.oldering.tvfoot.red.flowcontroller.FlowController;
+import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.MatchesItemDisplayable;
 import io.oldering.tvfoot.red.util.BaseActivity;
 import io.reactivex.Observable;
@@ -15,11 +17,13 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
 
 @ActivityScope public class MatchesActivity extends BaseActivity {
   private ActivityMatchesBinding binding;
   @Inject MatchesAdapter adapter;
   @Inject MatchesBinder intentBinder;
+  @Inject FlowController flowController;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -73,7 +77,9 @@ import static android.view.View.VISIBLE;
       case PULL_TO_REFRESH_LOADED:
         break;
       case MATCH_ROW_CLICK:
-        Timber.d("match row click %s", viewState.match());
+        MatchRowDisplayable match =
+            checkNotNull(viewState.match(), "MatchRowClick's match == null");
+        flowController.toMatch(match.matchId());
         break;
     }
   }
