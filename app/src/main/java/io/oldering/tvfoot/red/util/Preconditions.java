@@ -1,6 +1,7 @@
 package io.oldering.tvfoot.red.util;
 
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import io.reactivex.Observer;
 
 public final class Preconditions {
@@ -11,6 +12,14 @@ public final class Preconditions {
       return false;
     }
     return true;
+  }
+
+  public static <T> T checkNotNull(@Nullable T value, String message) {
+    if (value == null) {
+      throw new NullPointerException(message);
+    }
+
+    return value;
   }
 
   private Preconditions() {

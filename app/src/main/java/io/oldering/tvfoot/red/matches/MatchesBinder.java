@@ -9,13 +9,13 @@ import javax.inject.Inject;
 
 @ActivityScope class MatchesBinder {
   private final MatchesActivity activity;
-  private final MatchesInteractor repository;
+  private final MatchesInteractor interactor;
   private final BaseSchedulerProvider schedulerProvider;
 
-  @Inject MatchesBinder(Activity activity, MatchesInteractor repository,
+  @Inject MatchesBinder(Activity activity, MatchesInteractor interactor,
       BaseSchedulerProvider schedulerProvider) {
     this.activity = (MatchesActivity) activity;
-    this.repository = repository;
+    this.interactor = interactor;
     this.schedulerProvider = schedulerProvider;
   }
 
@@ -27,10 +27,10 @@ import javax.inject.Inject;
   @VisibleForTesting Observable<MatchesViewState> model(Observable<MatchesIntent> intents) {
     return intents.flatMap(intent -> {
       if (intent instanceof MatchesIntent.LoadFirstPage) {
-        return repository.loadFirstPage().subscribeOn(schedulerProvider.io());
+        return interactor.loadFirstPage().subscribeOn(schedulerProvider.io());
       }
       if (intent instanceof MatchesIntent.LoadNextPage) {
-        return repository.loadNextPage(((MatchesIntent.LoadNextPage) intent).currentPage())
+        return interactor.loadNextPage(((MatchesIntent.LoadNextPage) intent).currentPage())
             .subscribeOn(schedulerProvider.io());
       }
       if (intent instanceof MatchesIntent.MatchRowClick) {

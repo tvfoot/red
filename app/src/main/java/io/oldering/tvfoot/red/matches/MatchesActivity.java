@@ -5,6 +5,8 @@ import android.os.Bundle;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.ActivityMatchesBinding;
 import io.oldering.tvfoot.red.di.ActivityScope;
+import io.oldering.tvfoot.red.flowcontroller.FlowController;
+import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.MatchesItemDisplayable;
 import io.oldering.tvfoot.red.util.BaseActivity;
 import io.reactivex.Observable;
@@ -15,11 +17,13 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
 
 @ActivityScope public class MatchesActivity extends BaseActivity {
   private ActivityMatchesBinding binding;
   @Inject MatchesAdapter adapter;
-  @Inject MatchesBinder intentBinder;
+  @Inject MatchesBinder binder;
+  @Inject FlowController flowController;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -28,7 +32,7 @@ import static android.view.View.VISIBLE;
     binding = DataBindingUtil.setContentView(this, R.layout.activity_matches);
     binding.recyclerView.setAdapter(adapter);
 
-    intentBinder.bind();
+    binder.bind();
   }
 
   public Observable<MatchesIntent> matchRowClickIntent() {
@@ -44,26 +48,26 @@ import static android.view.View.VISIBLE;
         MatchesIntent.LoadNextPage::create);
   }
 
-  public void render(MatchesViewState viewState) {
-    switch (viewState.status()) {
+  public void render(MatchesViewState state) {
+    switch (state.status()) {
       case FIRST_PAGE_LOADING:
         renderFirstPageLoading();
         break;
       case FIRST_PAGE_ERROR:
-        renderFirstPageError(viewState.firstPageError());
+        renderFirstPageError(state.firstPageError());
         break;
       case NEXT_PAGE_LOADING:
         renderNextPageLoading();
         break;
       case NEXT_PAGE_ERROR:
-        renderNextPageError(viewState.nextPageError());
+        renderNextPageError(state.nextPageError());
         break;
       case FIRST_PAGE_LOADED:
       case NEXT_PAGE_LOADED:
-        if (viewState.matchesItemDisplayables().isEmpty()) {
+        if (state.matchesItemDisplayables().isEmpty()) {
           renderEmptyResult();
         } else {
-          renderResult(viewState.matchesItemDisplayables());
+          renderResult(state.matchesItemDisplayables());
         }
         break;
       case PULL_TO_REFRESH_LOADING:
@@ -73,7 +77,8 @@ import static android.view.View.VISIBLE;
       case PULL_TO_REFRESH_LOADED:
         break;
       case MATCH_ROW_CLICK:
-        Timber.d("match row click %s", viewState.match());
+        MatchRowDisplayable match = checkNotNull(state.match(), "MatchRowClick's match == null");
+        flowController.toMatch(match.matchId());
         break;
     }
   }

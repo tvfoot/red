@@ -35,8 +35,9 @@
         <category android:name="android.intent.category.BROWSABLE"/>
 
         <data
-            android:host="matchsActivity"
-            android:scheme="tvfoot"/>
+            android:host="tvfoot"
+            android:scheme="https"/>
+        <data android:path="/"/>
       </intent-filter>
     </activity>
     <activity
@@ -51,8 +52,9 @@
         <category android:name="android.intent.category.BROWSABLE"/>
 
         <data
-            android:host="matchActivity"
-            android:scheme="tvfoot"/>
+            android:host="tvfoot"
+            android:scheme="https"/>
+        <data android:pathPrefix="/match/"/>
       </intent-filter>
     </activity>
   </application>

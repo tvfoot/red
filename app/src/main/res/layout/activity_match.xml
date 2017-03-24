@@ -5,6 +5,11 @@
     >
 
   <data>
+
+    <variable
+        name="match"
+        type="io.oldering.tvfoot.red.match.MatchDisplayable"
+        />
   </data>
 
 
@@ -12,7 +17,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:fitsSystemWindows="true"
-      tools:context="io.oldering.tvfoot.red.activity.MatchListActivity"
+      tools:context="io.oldering.tvfoot.red.view.MatchListActivity"
       >
 
     <android.support.design.widget.AppBarLayout
@@ -41,13 +46,28 @@
       </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="visible"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:visibility="visible"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+        />
+
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/match_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:background="@color/colorWhite"
         android:fitsSystemWindows="true"
-        tools:context="io.oldering.tvfoot.red.activity.MatchListActivity"
+        android:visibility="gone"
+        tools:context="io.oldering.tvfoot.red.view.MatchListActivity"
+        tools:visibility="gone"
         >
 
       <TextView
@@ -55,6 +75,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="24dp"
+          android:text="@{match.headline}"
           android:textAlignment="center"
           android:textAppearance="@style/TextAppearance.AppCompat.Headline"
           android:textStyle="bold"
@@ -70,6 +91,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="8dp"
+          android:text="@{match.competition}"
           android:textAppearance="@style/TextAppearance.AppCompat.Body1"
           app:layout_constraintLeft_toLeftOf="parent"
           app:layout_constraintRight_toRightOf="parent"
@@ -86,6 +108,7 @@
           app:layout_constraintLeft_toLeftOf="parent"
           app:layout_constraintRight_toLeftOf="@+id/match_detail_away_team_icon"
           app:layout_constraintTop_toBottomOf="@+id/match_detail_competition"
+          app:tvfootTeamImageResource="@{match.homeTeamDrawableName}"
           tools:src="@drawable/tvfoot_team_gdc"
           />
 
@@ -98,6 +121,7 @@
           app:layout_constraintLeft_toRightOf="@+id/match_detail_home_team_icon"
           app:layout_constraintRight_toRightOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/match_detail_competition"
+          app:tvfootTeamImageResource="@{match.awayTeamDrawableName}"
           tools:src="@drawable/tvfoot_team_cdf"
           />
 
@@ -116,6 +140,7 @@
           app:layout_constraintLeft_toLeftOf="parent"
           app:layout_constraintRight_toRightOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/match_detail_home_team_icon"
+          app:visible="@{match.live}"
           />
 
       <TextView
@@ -123,6 +148,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="8dp"
+          android:text="@{match.startTimeInText}"
           android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
           app:layout_constraintLeft_toLeftOf="parent"
           app:layout_constraintRight_toRightOf="parent"
@@ -140,6 +166,7 @@
           android:paddingLeft="12dp"
           android:paddingRight="12dp"
           android:paddingStart="12dp"
+          android:text="@{match.location}"
           android:textAppearance="@style/TextAppearance.AppCompat.Body1"
           app:layout_constraintLeft_toLeftOf="parent"
           app:layout_constraintRight_toRightOf="parent"
@@ -162,5 +189,12 @@
           tools:listitem="@layout/broadcaster_row"
           />
     </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Error"
+        />
   </android.support.design.widget.CoordinatorLayout>
 </layout>

@@ -24,12 +24,12 @@ public class MatchesBinderTest {
   @Mock Observable<MatchesViewState> modelObservable;
   @Mock Observable<MatchesViewState> modelObservableOnMainThread;
   @Mock MatchesActivity activity;
-  @Mock MatchesInteractor repository;
+  @Mock MatchesInteractor interactor;
   private MatchesBinder binder;
 
   @Before public void setup() {
     MockitoAnnotations.initMocks(this);
-    binder = spy(new MatchesBinder(activity, repository, new ImmediateSchedulerProvider()));
+    binder = spy(new MatchesBinder(activity, interactor, new ImmediateSchedulerProvider()));
   }
 
   // TODO(benoit) am I testing the right things ?
