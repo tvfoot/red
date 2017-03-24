@@ -4,8 +4,10 @@ import com.google.auto.value.AutoValue;
 
 interface MatchIntent {
   @AutoValue abstract class LoadMatch implements MatchIntent {
-    public static MatchIntent.LoadMatch create() {
-      return new AutoValue_MatchIntent_LoadMatch();
+    public abstract String matchId();
+
+    public static MatchIntent.LoadMatch create(String matchId) {
+      return new AutoValue_MatchIntent_LoadMatch(matchId);
     }
   }
 }

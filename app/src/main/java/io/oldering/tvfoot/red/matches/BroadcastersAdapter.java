@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@ActivityScope class BroadcastersAdapter
+@ActivityScope public class BroadcastersAdapter
     extends RecyclerView.Adapter<BroadcastersAdapter.BroadcasterViewHolder> {
   private List<BroadcasterRowDisplayable> broadcasters = new ArrayList<>();
 
@@ -36,7 +36,7 @@ import java.util.List;
     broadcasters.add(broadcaster);
   }
 
-  void addAll(Collection<BroadcasterRowDisplayable> broadcasters) {
+  public void addAll(Collection<BroadcasterRowDisplayable> broadcasters) {
     this.broadcasters.addAll(broadcasters);
   }
 

@@ -37,8 +37,7 @@
         <data
             android:host="tvfoot"
             android:scheme="https"/>
-        <data android:path="/matches"/>
-        <data android:pathPrefix="/matches/"/>
+        <data android:path="/"/>
       </intent-filter>
     </activity>
     <activity
@@ -55,7 +54,6 @@
         <data
             android:host="tvfoot"
             android:scheme="https"/>
-        <data android:path="/match"/>
         <data android:pathPrefix="/match/"/>
       </intent-filter>
     </activity>

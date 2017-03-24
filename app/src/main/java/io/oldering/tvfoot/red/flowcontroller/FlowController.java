@@ -17,15 +17,16 @@ import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
   }
 
   public void toMatches() {
-    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://tvfoot/matches"));
+    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://tvfoot/"));
     context.startActivity(intent);
   }
 
   public void toMatch(String matchId) {
     checkNotNull(matchId, "matchId == null");
 
+    // We don't need to set the in between 'league', 'home' and 'away' strings.
     Intent intent = new Intent(Intent.ACTION_VIEW,
-        Uri.parse(String.format("https://tvfoot/match/%s", matchId)));
+        Uri.parse(String.format("https://tvfoot/match/league/home/away/%s", matchId)));
     context.startActivity(intent);
   }
 }

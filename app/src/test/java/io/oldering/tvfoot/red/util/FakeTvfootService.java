@@ -5,6 +5,7 @@ import io.oldering.tvfoot.red.data.entity.Match;
 import io.oldering.tvfoot.red.data.entity.search.Filter;
 import io.reactivex.Single;
 import java.util.List;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public class FakeTvfootService implements TvfootService {
@@ -20,7 +21,11 @@ public class FakeTvfootService implements TvfootService {
     throw new IllegalStateException("negative offset are not supposed to be");
   }
 
-  @Override public Single<List<Match>> get(@Query("filter") Filter filter) {
+  @Override public Single<List<Match>> getMatches(@Query("filter") Filter filter) {
     throw new IllegalStateException("implement me");
+  }
+
+  @Override public Single<Match> getMatch(@Path("matchId") String matchId) {
+    return Single.just(fixture.anyMatch());
   }
 }

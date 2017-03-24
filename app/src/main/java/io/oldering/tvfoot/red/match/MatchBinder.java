@@ -26,7 +26,8 @@ import javax.inject.Inject;
   @VisibleForTesting Observable<MatchViewState> model(Observable<MatchIntent> intents) {
     return intents.flatMap(intent -> {
       if (intent instanceof MatchIntent.LoadMatch) {
-        return interactor.loadMatch().subscribeOn(schedulerProvider.io());
+        return interactor.loadMatch(((MatchIntent.LoadMatch) intent).matchId())
+            .subscribeOn(schedulerProvider.io());
       }
       throw new IllegalArgumentException("I don't know how to deal with this intent " + intent);
     }).subscribeOn(schedulerProvider.computation());

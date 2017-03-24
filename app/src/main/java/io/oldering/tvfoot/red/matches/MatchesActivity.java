@@ -48,26 +48,26 @@ import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
         MatchesIntent.LoadNextPage::create);
   }
 
-  public void render(MatchesViewState viewState) {
-    switch (viewState.status()) {
+  public void render(MatchesViewState state) {
+    switch (state.status()) {
       case FIRST_PAGE_LOADING:
         renderFirstPageLoading();
         break;
       case FIRST_PAGE_ERROR:
-        renderFirstPageError(viewState.firstPageError());
+        renderFirstPageError(state.firstPageError());
         break;
       case NEXT_PAGE_LOADING:
         renderNextPageLoading();
         break;
       case NEXT_PAGE_ERROR:
-        renderNextPageError(viewState.nextPageError());
+        renderNextPageError(state.nextPageError());
         break;
       case FIRST_PAGE_LOADED:
       case NEXT_PAGE_LOADED:
-        if (viewState.matchesItemDisplayables().isEmpty()) {
+        if (state.matchesItemDisplayables().isEmpty()) {
           renderEmptyResult();
         } else {
-          renderResult(viewState.matchesItemDisplayables());
+          renderResult(state.matchesItemDisplayables());
         }
         break;
       case PULL_TO_REFRESH_LOADING:
@@ -77,8 +77,7 @@ import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
       case PULL_TO_REFRESH_LOADED:
         break;
       case MATCH_ROW_CLICK:
-        MatchRowDisplayable match =
-            checkNotNull(viewState.match(), "MatchRowClick's match == null");
+        MatchRowDisplayable match = checkNotNull(state.match(), "MatchRowClick's match == null");
         flowController.toMatch(match.matchId());
         break;
     }
