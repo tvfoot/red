@@ -1,16 +1,16 @@
 package io.oldering.tvfoot.red.util;
 
-import io.oldering.tvfoot.red.data.api.MatchService;
+import io.oldering.tvfoot.red.data.api.TvfootService;
 import io.oldering.tvfoot.red.data.entity.Match;
 import io.oldering.tvfoot.red.data.entity.search.Filter;
 import io.reactivex.Single;
 import java.util.List;
 import retrofit2.http.Query;
 
-public class FakeMatchService implements MatchService {
+public class FakeTvfootService implements TvfootService {
   private final Fixture fixture;
 
-  public FakeMatchService(Fixture fixture) {
+  public FakeTvfootService(Fixture fixture) {
     this.fixture = fixture;
   }
 

@@ -3,7 +3,7 @@ package io.oldering.tvfoot.red;
 import android.app.Application;
 import android.content.Context;
 import com.squareup.leakcanary.LeakCanary;
-import io.oldering.tvfoot.red.data.api.MatchService;
+import io.oldering.tvfoot.red.data.api.TvfootService;
 import io.oldering.tvfoot.red.di.component.AppComponent;
 import io.oldering.tvfoot.red.di.component.DaggerAppComponent;
 import io.oldering.tvfoot.red.di.module.AppModule;
@@ -44,7 +44,7 @@ public class RedApp extends Application {
     if (appComponent == null) {
       appComponent = DaggerAppComponent.builder()
           .appModule(new AppModule(this))
-          .networkModule(new NetworkModule(MatchService.BASE_URL))
+          .networkModule(new NetworkModule(TvfootService.BASE_URL))
           .build();
     }
     return appComponent;

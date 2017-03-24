@@ -8,6 +8,7 @@ import io.oldering.tvfoot.red.RedAppConfig;
 import io.oldering.tvfoot.red.databinding.ActivityMatchBinding;
 import io.oldering.tvfoot.red.flowcontroller.FlowController;
 import io.oldering.tvfoot.red.util.BaseActivity;
+import io.reactivex.Observable;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -16,7 +17,7 @@ import timber.log.Timber;
 public class MatchActivity extends BaseActivity {
   private ActivityMatchBinding binding;
   @Inject FlowController flowController;
-  //@Inject MatchBinder intentBinder;
+  @Inject MatchBinder binder;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -44,6 +45,14 @@ public class MatchActivity extends BaseActivity {
     binding = DataBindingUtil.setContentView(this, R.layout.activity_match);
 
     Timber.d("match with load with id %s", matchId);
-    //intentBinder.bind();
+    binder.bind();
+  }
+
+  public Observable<MatchIntent> loadMatchIntent() {
+    return Observable.just(MatchIntent.LoadMatch.create());
+  }
+
+  public void render(MatchViewState state) {
+
   }
 }

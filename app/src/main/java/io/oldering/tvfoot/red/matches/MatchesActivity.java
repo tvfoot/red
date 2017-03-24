@@ -22,7 +22,7 @@ import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
 @ActivityScope public class MatchesActivity extends BaseActivity {
   private ActivityMatchesBinding binding;
   @Inject MatchesAdapter adapter;
-  @Inject MatchesBinder intentBinder;
+  @Inject MatchesBinder binder;
   @Inject FlowController flowController;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
     binding = DataBindingUtil.setContentView(this, R.layout.activity_matches);
     binding.recyclerView.setAdapter(adapter);
 
-    intentBinder.bind();
+    binder.bind();
   }
 
   public Observable<MatchesIntent> matchRowClickIntent() {
