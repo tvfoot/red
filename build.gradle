@@ -40,7 +40,7 @@ ext {
          picassoOkHttp3DownloaderVersion: '1.1.0',
          okHttpVersion                  : '3.6.0',
          retrofitVersion                : '2.2.0',
-         daggerVersion                  : '2.9',
+         daggerVersion                  : '2.10',
          gsonVersion                    : '2.8.0',
          lombokVersion                  : '1.16.14',
          timberVersion                  : '4.5.1',
