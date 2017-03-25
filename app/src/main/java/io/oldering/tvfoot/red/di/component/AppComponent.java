@@ -1,8 +1,12 @@
 package io.oldering.tvfoot.red.di.component;
 
 import dagger.Component;
-import io.oldering.tvfoot.red.di.module.ActivityModule;
+import dagger.android.AndroidInjectionModule;
+import io.oldering.tvfoot.red.RedApp;
 import io.oldering.tvfoot.red.di.module.AppModule;
+import io.oldering.tvfoot.red.di.module.MainActivityModule;
+import io.oldering.tvfoot.red.di.module.MatchActivityModule;
+import io.oldering.tvfoot.red.di.module.MatchesActivityModule;
 import io.oldering.tvfoot.red.di.module.NetworkModule;
 import io.oldering.tvfoot.red.di.module.SchedulerModule;
 import io.oldering.tvfoot.red.di.module.ServiceModule;
@@ -14,8 +18,12 @@ import okhttp3.OkHttpClient;
     NetworkModule.class, //
     ServiceModule.class, //
     SchedulerModule.class, //
+    AndroidInjectionModule.class, //
+    MainActivityModule.class, //
+    MatchActivityModule.class, //
+    MatchesActivityModule.class, //
 }) public interface AppComponent {
-  ActivityComponent plus(ActivityModule activityModule);
+  void inject(RedApp redApp);
 
   OkHttpClient okHttpClient();
 }

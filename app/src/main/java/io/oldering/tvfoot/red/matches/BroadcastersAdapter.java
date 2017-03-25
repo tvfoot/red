@@ -6,13 +6,12 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.BroadcasterRowBinding;
-import io.oldering.tvfoot.red.di.ActivityScope;
 import io.oldering.tvfoot.red.matches.displayable.BroadcasterRowDisplayable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@ActivityScope public class BroadcastersAdapter
+public class BroadcastersAdapter
     extends RecyclerView.Adapter<BroadcastersAdapter.BroadcasterViewHolder> {
   private List<BroadcasterRowDisplayable> broadcasters = new ArrayList<>();
 

@@ -34,9 +34,10 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
 
-        <data
-            android:host="tvfoot"
-            android:scheme="https"/>
+        <data android:host="tvfoot"/>
+        <data android:scheme="https"/>
+        <data android:scheme="http"/>
+        <data android:scheme="tvfoot"/>
         <data android:path="/"/>
       </intent-filter>
     </activity>
@@ -51,9 +52,10 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
 
-        <data
-            android:host="tvfoot"
-            android:scheme="https"/>
+        <data android:host="tvfoot"/>
+        <data android:scheme="https"/>
+        <data android:scheme="http"/>
+        <data android:scheme="tvfoot"/>
         <data android:pathPrefix="/match/"/>
       </intent-filter>
     </activity>

@@ -2,13 +2,13 @@ package io.oldering.tvfoot.red.matches;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import dagger.android.AndroidInjection;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.ActivityMatchesBinding;
-import io.oldering.tvfoot.red.di.ActivityScope;
 import io.oldering.tvfoot.red.flowcontroller.FlowController;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.MatchesItemDisplayable;
-import io.oldering.tvfoot.red.util.BaseActivity;
 import io.reactivex.Observable;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -19,15 +19,15 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
 
-@ActivityScope public class MatchesActivity extends BaseActivity {
+public class MatchesActivity extends AppCompatActivity {
   private ActivityMatchesBinding binding;
   @Inject MatchesAdapter adapter;
   @Inject MatchesBinder binder;
   @Inject FlowController flowController;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
+    AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
-    getActivityComponent().inject(this);
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_matches);
     binding.recyclerView.setAdapter(adapter);

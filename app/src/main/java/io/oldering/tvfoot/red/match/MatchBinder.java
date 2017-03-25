@@ -2,12 +2,12 @@ package io.oldering.tvfoot.red.match;
 
 import android.app.Activity;
 import android.support.annotation.VisibleForTesting;
-import io.oldering.tvfoot.red.di.ActivityScope;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.reactivex.Observable;
 import javax.inject.Inject;
+import timber.log.Timber;
 
-@ActivityScope class MatchBinder {
+class MatchBinder {
   private final MatchActivity activity;
   private final MatchInteractor interactor;
   private final BaseSchedulerProvider schedulerProvider;
@@ -20,7 +20,9 @@ import javax.inject.Inject;
   }
 
   @VisibleForTesting Observable<MatchIntent> intent() {
-    return activity.loadMatchIntent().subscribeOn(schedulerProvider.ui());
+    return activity.loadMatchIntent()
+        .subscribeOn(schedulerProvider.ui())
+        .doOnNext(intent -> Timber.d("Binder: Intent: %s", intent));
   }
 
   @VisibleForTesting Observable<MatchViewState> model(Observable<MatchIntent> intents) {
@@ -30,7 +32,9 @@ import javax.inject.Inject;
             .subscribeOn(schedulerProvider.io());
       }
       throw new IllegalArgumentException("I don't know how to deal with this intent " + intent);
-    }).subscribeOn(schedulerProvider.computation());
+    })
+        .subscribeOn(schedulerProvider.computation())
+        .doOnNext(state -> Timber.d("Binder: State: %s", state));
   }
 
   @VisibleForTesting void view(Observable<MatchViewState> states) {

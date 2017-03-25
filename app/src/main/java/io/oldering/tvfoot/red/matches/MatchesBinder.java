@@ -2,12 +2,12 @@ package io.oldering.tvfoot.red.matches;
 
 import android.app.Activity;
 import android.support.annotation.VisibleForTesting;
-import io.oldering.tvfoot.red.di.ActivityScope;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.reactivex.Observable;
 import javax.inject.Inject;
+import timber.log.Timber;
 
-@ActivityScope class MatchesBinder {
+class MatchesBinder {
   private final MatchesActivity activity;
   private final MatchesInteractor interactor;
   private final BaseSchedulerProvider schedulerProvider;
@@ -21,7 +21,9 @@ import javax.inject.Inject;
 
   @VisibleForTesting Observable<MatchesIntent> intent() {
     return Observable.merge(activity.loadFirstPageIntent(), activity.loadNextPageIntent(),
-        activity.matchRowClickIntent()).subscribeOn(schedulerProvider.ui());
+        activity.matchRowClickIntent())
+        .subscribeOn(schedulerProvider.ui())
+        .doOnNext(intent -> Timber.d("Binder: Intent: %s", intent));
   }
 
   @VisibleForTesting Observable<MatchesViewState> model(Observable<MatchesIntent> intents) {
@@ -38,7 +40,10 @@ import javax.inject.Inject;
             MatchesViewState.matchRowClick(((MatchesIntent.MatchRowClick) intent).getMatch()));
       }
       throw new IllegalArgumentException("I don't know how to deal with this intent " + intent);
-    }).scan(MatchesViewState::reduce).subscribeOn(schedulerProvider.computation());
+    })
+        .scan(MatchesViewState::reduce)
+        .subscribeOn(schedulerProvider.computation())
+        .doOnNext(state -> Timber.d("Binder: State: %s", state));
   }
 
   @VisibleForTesting void view(Observable<MatchesViewState> states) {

@@ -129,7 +129,10 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
             .status(partialState.status())
             .build();
       case MATCH_ROW_CLICK:
-        return partialState;
+        return previousState.buildWith()
+            .match(partialState.match())
+            .status(partialState.status())
+            .build();
       default:
         throw new IllegalArgumentException("Don't know this one " + partialState);
     }

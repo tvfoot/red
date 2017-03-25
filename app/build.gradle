@@ -107,6 +107,8 @@ dependencies {
   compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rootProject.ext.lib.retrofit2RxJava2Adapter"
   compile "com.google.code.gson:gson:$rootProject.ext.lib.gsonVersion"
   compile "com.google.dagger:dagger:$rootProject.ext.lib.daggerVersion"
+  compile "com.google.dagger:dagger-android:$rootProject.ext.lib.daggerVersion"
+  compile "com.google.dagger:dagger-android-support:$rootProject.ext.lib.daggerVersion"
   compile "com.google.firebase:firebase-core:$rootProject.ext.lib.firebaseVersion"
   compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
   compile 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0'
@@ -148,6 +150,7 @@ dependencies. This is required since Espresso internally has a dependency on sup
 */
 configurations.all {
   resolutionStrategy.force "com.android.support:support-annotations:$rootProject.ext.lib.supportLibraryVersion"
+  resolutionStrategy.force "com.google.code.findbugs:jsr305:$rootProject.ext.lib.jsr305Version"
 }
 
 /*
