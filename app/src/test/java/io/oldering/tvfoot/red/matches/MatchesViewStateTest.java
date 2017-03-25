@@ -26,7 +26,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class MatchesViewStateTest {
   private Fixture fixture;
@@ -186,11 +185,18 @@ public class MatchesViewStateTest {
   }
 
   @Test public void reduce_matchRowClick() {
-    MatchesViewState previousState = mock(MatchesViewState.class);
-    MatchesViewState partialState = mock(MatchesViewState.class);
-    when(partialState.status()).thenReturn(MATCH_ROW_CLICK);
+    MatchRowDisplayable match = mock(MatchRowDisplayable.class);
+    MatchesViewState partialState =
+        MatchesViewState.builder().status(MATCH_ROW_CLICK).match(match).build();
+
+    MatchesViewState previousState = MatchesViewState.builder()
+        .status(NEXT_PAGE_LOADED)
+        .matches(MatchRowDisplayable.fromMatches(fixture.anyMatches()))
+        .build();
+
     MatchesViewState newState = MatchesViewState.reduce(previousState, partialState);
 
-    assertEquals(partialState, newState);
+    assertEquals(MATCH_ROW_CLICK, newState.status());
+    assertEquals(match, newState.match());
   }
 }
