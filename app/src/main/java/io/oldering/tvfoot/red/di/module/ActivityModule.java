@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
-import io.oldering.tvfoot.red.di.ActivityScope;
 import io.oldering.tvfoot.red.util.SnackBarUtil;
 import javax.inject.Named;
 
@@ -15,15 +14,15 @@ import javax.inject.Named;
     this.activity = activity;
   }
 
-  @Provides @ActivityScope SnackBarUtil provideSnackBarUtilBundleService() {
+  @Provides SnackBarUtil provideSnackBarUtilBundleService() {
     return new SnackBarUtil(activity);
   }
 
-  @Provides @ActivityScope Activity provideActivity() {
+  @Provides Activity provideActivity() {
     return activity;
   }
 
-  @Provides @ActivityScope @Named("activity") Context provideContext() {
+  @Provides @Named("activity") Context provideContext() {
     return activity;
   }
 }

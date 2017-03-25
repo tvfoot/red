@@ -2,12 +2,11 @@ package io.oldering.tvfoot.red.match;
 
 import android.app.Activity;
 import android.support.annotation.VisibleForTesting;
-import io.oldering.tvfoot.red.di.ActivityScope;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.reactivex.Observable;
 import javax.inject.Inject;
 
-@ActivityScope class MatchBinder {
+class MatchBinder {
   private final MatchActivity activity;
   private final MatchInteractor interactor;
   private final BaseSchedulerProvider schedulerProvider;
