@@ -16,7 +16,7 @@ public class FlowController {
   }
 
   public void toMatches() {
-    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://tvfoot/"));
+    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tvfoot://tvfoot/"));
     context.startActivity(intent);
   }
 
@@ -25,7 +25,7 @@ public class FlowController {
 
     // We don't need to set the in between 'league', 'home' and 'away' strings.
     Intent intent = new Intent(Intent.ACTION_VIEW,
-        Uri.parse(String.format("https://tvfoot/match/league/home/away/%s", matchId)));
+        Uri.parse(String.format("tvfoot://tvfoot/match/league/home/away/%s", matchId)));
     context.startActivity(intent);
   }
 }

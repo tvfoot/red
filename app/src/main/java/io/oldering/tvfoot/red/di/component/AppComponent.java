@@ -25,7 +25,5 @@ import okhttp3.OkHttpClient;
 }) public interface AppComponent {
   void inject(RedApp redApp);
 
-  //ActivityComponent plus(ActivityModule activityModule);
-
   OkHttpClient okHttpClient();
 }

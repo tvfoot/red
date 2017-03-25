@@ -6,11 +6,9 @@ import android.content.Context;
 import com.squareup.leakcanary.LeakCanary;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasDispatchingActivityInjector;
-import io.oldering.tvfoot.red.data.api.TvfootService;
 import io.oldering.tvfoot.red.di.component.AppComponent;
 import io.oldering.tvfoot.red.di.component.DaggerAppComponent;
 import io.oldering.tvfoot.red.di.module.AppModule;
-import io.oldering.tvfoot.red.di.module.NetworkModule;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -48,10 +46,7 @@ public class RedApp extends Application implements HasDispatchingActivityInjecto
 
   public AppComponent getComponent() {
     if (appComponent == null) {
-      appComponent = DaggerAppComponent.builder()
-          .appModule(new AppModule(this))
-          .networkModule(new NetworkModule(TvfootService.BASE_URL))
-          .build();
+      appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
     }
     return appComponent;
   }
