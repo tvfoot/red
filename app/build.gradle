@@ -115,6 +115,7 @@ dependencies {
   debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.lib.leakCanaryVersion"
   releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.lib.leakCanaryVersion"
   annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.lib.daggerVersion"
+  annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.ext.lib.daggerVersion"
   annotationProcessor "com.google.auto.value:auto-value:$rootProject.ext.lib.autoValueVersion"
   annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$rootProject.ext.lib.autoValueGsonVersion"
   annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:$rootProject.ext.lib.autoValueParcelVersion"
