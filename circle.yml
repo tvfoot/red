@@ -7,6 +7,8 @@ machine:
     PACKAGE_NAME: 'io.oldering.tvfoot.red'
 
 dependencies:
+  cache_directories:
+    - "/opt/circleci/.rvm/gems"
   pre:
     - mkdir -p ${ANDROID_HOME}/licenses
     - echo $ANDROID_SDK_LICENSE > ${ANDROID_HOME}/licenses/android-sdk-license
@@ -14,12 +16,8 @@ dependencies:
     - bash ./misc/download_google-services.sh
     - bash ./misc/download_service-account.sh
   override:
-    # fastlane
-    - bundle install
-    # we are cheating because there is a problem with constraint layout ATM
-    # should be fixed in Android Studio 2.3 ?
-    # see: https://code.google.com/p/android/issues/detail?id=212128
-    - ./gradlew dependencies || true
+    - ./gradlew dependencies
+    - gem install fastlane
 
 test:
   pre:
@@ -38,7 +36,6 @@ test:
     #    - ./gradlew connectedAndroidTest --console=plain
     - ./gradlew lint --console=plain
   post:
-#    - test "$CIRCLE_BRANCH" = develop && ./gradlew publishApkProdRelease || true
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - find app/build/test-results/ -name \*.xml -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
