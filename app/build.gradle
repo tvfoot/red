@@ -10,7 +10,7 @@ android {
     applicationId rootProject.ext.config.applicationId
     minSdkVersion rootProject.ext.config.minSdkVersion
     targetSdkVersion rootProject.ext.config.targetSdkVersion
-    versionCode Integer.parseInt(System.getenv('CIRCLE_BUILD_NUM') ?: "69")
+    versionCode Integer.parseInt(System.getenv('CIRCLE_BUILD_NUM') ?: "153")
     versionName '1.0'
     testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     vectorDrawables {
