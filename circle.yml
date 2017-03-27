@@ -50,7 +50,7 @@ test:
 
 deployment:
   alpha:
-    branch: fastlane
+    branch: develop
     commands:
       - echo "deploying on track alpha"
       - fastlane supply run --json_key "$SERVICE_ACCOUNT" --package_name "$PACKAGE_NAME" --apk ./app/build/outputs/apk/app-prod-release.apk --track alpha
