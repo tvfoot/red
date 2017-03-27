@@ -51,7 +51,7 @@ test:
     #- adb shell screencap -p | sed 's/\r$//' > bootscreen.png
     #- ./imgurbash.sh bootscreen.png
 
-deployement:
+deployment:
   alpha:
     branch: fastlane
     commands:
