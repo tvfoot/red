@@ -3,8 +3,12 @@ machine:
     version: oraclejdk8
   environment:
     GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+    SERVICE_ACCOUNT: 'service-account.json'
+    PACKAGE_NAME: 'io.oldering.tvfoot.red'
 
 dependencies:
+  cache_directories:
+    - "/opt/circleci/.rvm/gems"
   pre:
     - mkdir -p ${ANDROID_HOME}/licenses
     - echo $ANDROID_SDK_LICENSE > ${ANDROID_HOME}/licenses/android-sdk-license
@@ -12,10 +16,8 @@ dependencies:
     - bash ./misc/download_google-services.sh
     - bash ./misc/download_service-account.sh
   override:
-    # we are cheating because there is a problem with constraint layout ATM
-    # should be fixed in Android Studio 2.3 ?
-    # see: https://code.google.com/p/android/issues/detail?id=212128
-    - ./gradlew dependencies || true
+    - ./gradlew dependencies
+    - gem install fastlane
 
 test:
   pre:
@@ -33,7 +35,6 @@ test:
     - ./gradlew findbugs --console=plain
     #    - ./gradlew connectedAndroidTest --console=plain
     - ./gradlew lint --console=plain
-    - test "$CIRCLE_BRANCH" = develop && ./gradlew publishApkProdRelease || true
   post:
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
@@ -46,3 +47,10 @@ test:
     #- chmod a+x imgurbash.sh
     #- adb shell screencap -p | sed 's/\r$//' > bootscreen.png
     #- ./imgurbash.sh bootscreen.png
+
+deployment:
+  alpha:
+    branch: develop
+    commands:
+      - echo "deploying on track alpha"
+      - fastlane supply run --json_key "$SERVICE_ACCOUNT" --package_name "$PACKAGE_NAME" --apk ./app/build/outputs/apk/app-prod-release.apk --track alpha

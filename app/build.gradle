@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply from: '../config/quality/quality.gradle'
-apply from: '../config/deployment/google-play.gradle'
 
 android {
   compileSdkVersion rootProject.ext.config.compileSdkVersion
@@ -10,7 +9,7 @@ android {
     applicationId rootProject.ext.config.applicationId
     minSdkVersion rootProject.ext.config.minSdkVersion
     targetSdkVersion rootProject.ext.config.targetSdkVersion
-    versionCode Integer.parseInt(System.getenv('CIRCLE_BUILD_NUM') ?: "69")
+    versionCode Integer.parseInt(System.getenv('CIRCLE_BUILD_NUM') ?: "153")
     versionName '1.0'
     testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     vectorDrawables {
