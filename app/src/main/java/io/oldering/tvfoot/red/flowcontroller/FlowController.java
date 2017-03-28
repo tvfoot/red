@@ -26,6 +26,9 @@ public class FlowController {
     // We don't need to set the in between 'league', 'home' and 'away' strings.
     Intent intent = new Intent(Intent.ACTION_VIEW,
         Uri.parse(String.format("tvfoot://tvfoot/match/league/home/away/%s", matchId)));
+    //ReflowText.addExtras(
+    //    intent,
+    //    new ReflowText.ReflowableTextView((TextView) view));
     context.startActivity(intent);
   }
 }

@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/match_detail_activity_label"
+            android:contentDescription="@string/match_activity_label"
             android:src="@drawable/logo"
             />
 
@@ -71,7 +71,7 @@
         >
 
       <TextView
-          android:id="@+id/match_detail_headline"
+          android:id="@+id/match_headline"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="24dp"
@@ -87,7 +87,7 @@
 
 
       <TextView
-          android:id="@+id/match_detail_competition"
+          android:id="@+id/match_competition"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="8dp"
@@ -95,38 +95,38 @@
           android:textAppearance="@style/TextAppearance.AppCompat.Body1"
           app:layout_constraintLeft_toLeftOf="parent"
           app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/match_detail_headline"
+          app:layout_constraintTop_toBottomOf="@+id/match_headline"
           tools:text="Ligue 2 - 11ème journée"
           />
 
       <ImageView
-          android:id="@+id/match_detail_home_team_icon"
+          android:id="@+id/match_home_team_icon"
           android:layout_width="120dp"
           android:layout_height="120dp"
           android:layout_marginTop="24dp"
-          android:contentDescription="@string/match_detail_home_team_icon_desc"
+          android:contentDescription="@string/match_home_team_icon_desc"
           app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toLeftOf="@+id/match_detail_away_team_icon"
-          app:layout_constraintTop_toBottomOf="@+id/match_detail_competition"
+          app:layout_constraintRight_toLeftOf="@+id/match_away_team_icon"
+          app:layout_constraintTop_toBottomOf="@+id/match_competition"
           app:tvfootTeamImageResource="@{match.homeTeamDrawableName}"
           tools:src="@drawable/tvfoot_team_gdc"
           />
 
       <ImageView
-          android:id="@+id/match_detail_away_team_icon"
+          android:id="@+id/match_away_team_icon"
           android:layout_width="120dp"
           android:layout_height="120dp"
           android:layout_marginTop="24dp"
-          android:contentDescription="@string/match_detail_away_team_icon_desc"
-          app:layout_constraintLeft_toRightOf="@+id/match_detail_home_team_icon"
+          android:contentDescription="@string/match_away_team_icon_desc"
+          app:layout_constraintLeft_toRightOf="@+id/match_home_team_icon"
           app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/match_detail_competition"
+          app:layout_constraintTop_toBottomOf="@+id/match_competition"
           app:tvfootTeamImageResource="@{match.awayTeamDrawableName}"
           tools:src="@drawable/tvfoot_team_cdf"
           />
 
       <TextView
-          android:id="@+id/match_detail_status"
+          android:id="@+id/match_status"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="32dp"
@@ -139,12 +139,12 @@
           android:textSize="24sp"
           app:layout_constraintLeft_toLeftOf="parent"
           app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/match_detail_home_team_icon"
+          app:layout_constraintTop_toBottomOf="@+id/match_home_team_icon"
           app:visible="@{match.live}"
           />
 
       <TextView
-          android:id="@+id/match_detail_start_time"
+          android:id="@+id/match_start_time"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="8dp"
@@ -152,13 +152,13 @@
           android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
           app:layout_constraintLeft_toLeftOf="parent"
           app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/match_detail_status"
+          app:layout_constraintTop_toBottomOf="@+id/match_status"
           app:layout_goneMarginTop="32dp"
           tools:text="Mardi 01 Novembre 2016 à 04h00"
           />
 
       <TextView
-          android:id="@+id/match_detail_location"
+          android:id="@+id/match_location"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="12dp"
@@ -170,12 +170,12 @@
           android:textAppearance="@style/TextAppearance.AppCompat.Body1"
           app:layout_constraintLeft_toLeftOf="parent"
           app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/match_detail_start_time"
+          app:layout_constraintTop_toBottomOf="@+id/match_start_time"
           tools:text="SKM Stadium, Bakou"
           />
 
       <android.support.v7.widget.RecyclerView
-          android:id="@+id/match_detail_broadcasters"
+          android:id="@+id/match_broadcasters"
           android:layout_width="90dp"
           android:layout_height="wrap_content"
           android:layout_marginTop="12dp"
@@ -184,7 +184,7 @@
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintLeft_toLeftOf="parent"
           app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/match_detail_location"
+          app:layout_constraintTop_toBottomOf="@+id/match_location"
           app:layout_constraintVertical_bias="0.3"
           tools:listitem="@layout/broadcaster_row"
           />

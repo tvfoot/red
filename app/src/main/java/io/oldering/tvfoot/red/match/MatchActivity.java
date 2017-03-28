@@ -99,6 +99,6 @@ public class MatchActivity extends AppCompatActivity {
   private void setupBroadcastersView(List<BroadcasterRowDisplayable> broadcasters) {
     BroadcastersAdapter broadcastersAdapter = new BroadcastersAdapter();
     broadcastersAdapter.addAll(broadcasters);
-    binding.matchDetailBroadcasters.setAdapter(broadcastersAdapter);
+    binding.matchBroadcasters.setAdapter(broadcastersAdapter);
   }
 }

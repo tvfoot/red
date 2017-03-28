@@ -43,7 +43,7 @@
     </activity>
     <activity
         android:name=".match.MatchActivity"
-        android:label="@string/match_detail_activity_label"
+        android:label="@string/match_activity_label"
         android:parentActivityName=".matches.MatchesActivity"
         android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
