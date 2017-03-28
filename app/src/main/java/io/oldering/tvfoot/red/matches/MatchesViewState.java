@@ -1,6 +1,7 @@
 package io.oldering.tvfoot.red.matches;
 
 import android.support.annotation.VisibleForTesting;
+import android.widget.TextView;
 import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.matches.displayable.HeaderRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.LoadingRowDisplayable;
@@ -46,6 +47,8 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
 
   @Nullable public abstract MatchRowDisplayable match();
 
+  @Nullable public abstract TextView headlineView();
+
   public abstract Status status();
 
   public static Builder builder() {
@@ -56,6 +59,7 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
         .nextPageError(null)
         .pullToRefreshLoading(false)
         .pullToRefreshError(null)
+        .headlineView(null)
         .match(null);
   }
 
@@ -132,14 +136,19 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
         return previousState.buildWith()
             .match(partialState.match())
             .status(partialState.status())
+            .headlineView(partialState.headlineView())
             .build();
       default:
         throw new IllegalArgumentException("Don't know this one " + partialState);
     }
   }
 
-  static MatchesViewState matchRowClick(MatchRowDisplayable match) {
-    return MatchesViewState.builder().match(match).status(MATCH_ROW_CLICK).build();
+  static MatchesViewState matchRowClick(MatchRowDisplayable match, TextView headlineView) {
+    return MatchesViewState.builder()
+        .match(match)
+        .status(MATCH_ROW_CLICK)
+        .headlineView(headlineView)
+        .build();
   }
 
   @AutoValue.Builder public static abstract class Builder {
@@ -160,6 +169,8 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
     public abstract Builder status(Status status);
 
     public abstract Builder match(@Nullable MatchRowDisplayable match);
+
+    public abstract Builder headlineView(@Nullable TextView headlineView);
 
     public abstract MatchesViewState build();
   }

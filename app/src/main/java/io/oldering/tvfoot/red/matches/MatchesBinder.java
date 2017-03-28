@@ -36,8 +36,9 @@ class MatchesBinder {
             .subscribeOn(schedulerProvider.io());
       }
       if (intent instanceof MatchesIntent.MatchRowClick) {
-        return Observable.just(
-            MatchesViewState.matchRowClick(((MatchesIntent.MatchRowClick) intent).getMatch()));
+        MatchesIntent.MatchRowClick matchRowClickIntent = (MatchesIntent.MatchRowClick) intent;
+        return Observable.just(MatchesViewState.matchRowClick(matchRowClickIntent.getMatch(),
+            matchRowClickIntent.getHeadlineView()));
       }
       throw new IllegalArgumentException("I don't know how to deal with this intent " + intent);
     })

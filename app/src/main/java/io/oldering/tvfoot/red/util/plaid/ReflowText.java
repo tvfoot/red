@@ -53,6 +53,7 @@ import android.widget.TextView;
 import io.oldering.tvfoot.red.R;
 import java.util.ArrayList;
 import java.util.List;
+import timber.log.Timber;
 
 /**
  * A transition for repositioning text. This will animate changes in text size and position,
@@ -113,10 +114,12 @@ public class ReflowText extends Transition {
   }
 
   @Override public void captureStartValues(TransitionValues transitionValues) {
+    Timber.d("CONNARD startValues %s", transitionValues);
     captureValues(transitionValues);
   }
 
   @Override public void captureEndValues(TransitionValues transitionValues) {
+    Timber.d("CONNARD endValues %s", transitionValues);
     captureValues(transitionValues);
   }
 
@@ -126,7 +129,7 @@ public class ReflowText extends Transition {
 
   @Override public Animator createAnimator(ViewGroup sceneRoot, TransitionValues startValues,
       TransitionValues endValues) {
-
+    Timber.d("CONNARD createAnimator %s\n%s\n%s", sceneRoot, startValues, endValues);
     if (startValues == null || endValues == null) return null;
 
     final View view = endValues.view;

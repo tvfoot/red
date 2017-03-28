@@ -2,7 +2,9 @@ package io.oldering.tvfoot.red.matches;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.transition.TransitionManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ViewGroup;
 import dagger.android.AndroidInjection;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.ActivityMatchesBinding;
@@ -30,6 +32,7 @@ public class MatchesActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_matches);
+    TransitionManager.beginDelayedTransition((ViewGroup) binding.getRoot());
     binding.recyclerView.setAdapter(adapter);
 
     binder.bind();
@@ -78,7 +81,8 @@ public class MatchesActivity extends AppCompatActivity {
         break;
       case MATCH_ROW_CLICK:
         MatchRowDisplayable match = checkNotNull(state.match(), "MatchRowClick's match == null");
-        flowController.toMatch(match.matchId());
+        flowController.toMatch(match.matchId(),
+            checkNotNull(state.headlineView(), "headline is null"));
         break;
     }
   }

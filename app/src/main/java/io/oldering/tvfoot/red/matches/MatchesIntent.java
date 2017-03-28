@@ -1,5 +1,7 @@
 package io.oldering.tvfoot.red.matches;
 
+import android.util.Pair;
+import android.widget.TextView;
 import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 
@@ -21,8 +23,10 @@ interface MatchesIntent {
   @AutoValue abstract class MatchRowClick implements MatchesIntent {
     public abstract MatchRowDisplayable getMatch();
 
-    public static MatchRowClick create(MatchRowDisplayable match) {
-      return new AutoValue_MatchesIntent_MatchRowClick(match);
+    public abstract TextView getHeadlineView();
+
+    public static MatchRowClick create(Pair<MatchRowDisplayable, TextView> pair) {
+      return new AutoValue_MatchesIntent_MatchRowClick(pair.first, pair.second);
     }
   }
 }
