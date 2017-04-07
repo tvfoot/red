@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 
   @SerializedName("start-at") public abstract Date startAt();
 
-  @Nullable public abstract String matchDay();
+  @SerializedName("matchday") @Nullable public abstract String matchDay();
 
   @SerializedName("home-team") public abstract Team homeTeam();
 

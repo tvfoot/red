@@ -1,6 +1,5 @@
 package io.oldering.tvfoot.red.match;
 
-import android.app.Activity;
 import android.support.annotation.VisibleForTesting;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.reactivex.Observable;
@@ -12,9 +11,9 @@ class MatchBinder {
   private final MatchInteractor interactor;
   private final BaseSchedulerProvider schedulerProvider;
 
-  @Inject MatchBinder(Activity activity, MatchInteractor interactor,
+  @Inject MatchBinder(MatchActivity activity, MatchInteractor interactor,
       BaseSchedulerProvider schedulerProvider) {
-    this.activity = (MatchActivity) activity;
+    this.activity = activity;
     this.interactor = interactor;
     this.schedulerProvider = schedulerProvider;
   }

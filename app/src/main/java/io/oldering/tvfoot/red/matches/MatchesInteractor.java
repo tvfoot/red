@@ -1,6 +1,7 @@
 package io.oldering.tvfoot.red.matches;
 
 import io.oldering.tvfoot.red.data.api.TvfootService;
+import io.oldering.tvfoot.red.data.entity.Match;
 import io.oldering.tvfoot.red.data.entity.search.Filter;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import io.reactivex.Observable;
@@ -24,6 +25,11 @@ public class MatchesInteractor {
 
   public Observable<MatchesViewState> loadFirstPage() {
     return tvfootService.findFuture(Filter.builder().limit(matchPerPage).offset(0).build())
+        .doOnEvent((matches, throwable) -> {
+          for (Match match : matches) {
+            Timber.d("CONNARD %s", match);
+          }
+        })
         .toObservable()
         .map(MatchRowDisplayable::fromMatches)
         .map(matches -> MatchesViewState.builder()
