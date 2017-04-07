@@ -10,7 +10,7 @@
         />
     <variable
         name="handler"
-        type="io.oldering.tvfoot.red.matches.MatchesAdapter"
+        type="io.oldering.tvfoot.red.matches.MatchesAdapter.MatchRowViewHolder"
         />
   </data>
 
@@ -59,8 +59,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="@{match.headline}"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:maxLines="2"
+        android:text="match.headline"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="14sp"
         app:layout_constraintHorizontal_weight=".65"
         app:layout_constraintLeft_toRightOf="@+id/match_broadcasters"
         app:layout_constraintRight_toRightOf="parent"

@@ -44,7 +44,7 @@
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="io.oldering.tvfoot.red.activity.MatchListActivity"
-        tools:listitem="@layout/match_item"
+        tools:listitem="@layout/matches_row_match"
         />
 
     <ProgressBar

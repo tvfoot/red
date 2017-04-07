@@ -16,7 +16,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:paddingBottom="4dp"
-      tools:showIn="@layout/match_item"
+      tools:showIn="@layout/matches_row_match"
       >
 
     <ImageView

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:interpolator="@android:interpolator/fast_out_slow_in">
+  <targets>
+    <target android:targetId="@id/match_headline"/>
+  </targets>
+  <transition
+      class="io.oldering.tvfoot.red.util.plaid.ReflowText"
+      app:freezeFrame="true"
+      app:maxDuration="230"
+      app:minDuration="230"
+      app:staggerDelay="10"
+      app:velocity="1000dp">
+    <arcMotion
+        android:maximumAngle="90"
+        android:minimumHorizontalAngle="90"
+        android:minimumVerticalAngle="0"/>
+  </transition>
+</transitionSet>

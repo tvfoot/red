@@ -37,6 +37,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
     OkHttpClient client = app.getComponent().okHttpClient();
     Espresso.registerIdlingResources(OkHttp3IdlingResource.create("OkHttp", client));
 
-    onView(withId(R.id.match_detail_headline)).check(matches(isDisplayed()));
+    onView(withId(R.id.match_headline)).check(matches(isDisplayed()));
   }
 }

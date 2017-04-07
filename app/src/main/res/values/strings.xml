@@ -2,9 +2,9 @@
   <string name="app_name">TVFoot</string>
   <string name="action_settings">Settings</string>
   <string name="title_activity_main">TVFoot</string>
-  <string name="match_detail_activity_label">TVFoot</string>
+  <string name="match_activity_label">TVFoot</string>
   <string name="broadcaster_icon">Broadcaster Icon</string>
-  <string name="match_detail_home_team_icon_desc">Home team icon</string>
-  <string name="match_detail_away_team_icon_desc">Away team icon</string>
+  <string name="match_home_team_icon_desc">Home team icon</string>
+  <string name="match_away_team_icon_desc">Away team icon</string>
   <string name="is_live">EN COURS</string>
 </resources>

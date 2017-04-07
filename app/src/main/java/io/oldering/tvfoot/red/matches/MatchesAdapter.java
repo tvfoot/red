@@ -4,8 +4,10 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.MatchesRowHeaderBinding;
 import io.oldering.tvfoot.red.databinding.MatchesRowMatchBinding;
@@ -23,7 +25,8 @@ import javax.inject.Inject;
 
 public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesItemViewHolder> {
   private List<MatchesItemDisplayable> matchesItems = Collections.emptyList();
-  private PublishSubject<MatchRowDisplayable> matchRowClickObservable = PublishSubject.create();
+  private PublishSubject<Pair<MatchRowDisplayable, TextView>> matchRowClickObservable =
+      PublishSubject.create();
 
   @Inject public MatchesAdapter() {
   }
@@ -72,10 +75,6 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesI
     throw new UnsupportedOperationException("Don't know how to deal with this item: " + item);
   }
 
-  public void onClick(MatchRowDisplayable match) {
-    matchRowClickObservable.onNext(match);
-  }
-
   private MatchesItemDisplayableDiffUtilCallback diffUtilCallback =
       new MatchesItemDisplayableDiffUtilCallback();
 
@@ -110,7 +109,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesI
     }
   }
 
-  private class MatchRowViewHolder extends MatchesItemViewHolder<MatchRowDisplayable> {
+  public class MatchRowViewHolder extends MatchesItemViewHolder<MatchRowDisplayable> {
     MatchRowViewHolder(ViewDataBinding binding) {
       super(binding);
     }
@@ -118,7 +117,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesI
     @Override void bind(MatchRowDisplayable match) {
       MatchesRowMatchBinding binding = (MatchesRowMatchBinding) this.binding;
       binding.setMatch(match);
-      binding.setHandler(MatchesAdapter.this);
+      binding.setHandler(this);
       binding.executePendingBindings();
 
       RecyclerView recyclerView = binding.matchBroadcasters;
@@ -131,6 +130,11 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesI
             BroadcasterRowDisplayable.builder().code("ic_tv_black_18px").build());
       }
       recyclerView.setAdapter(broadcastersAdapter);
+    }
+
+    public void onClick(MatchRowDisplayable match) {
+      MatchesRowMatchBinding binding = (MatchesRowMatchBinding) this.binding;
+      matchRowClickObservable.onNext(Pair.create(match, binding.matchHeadline));
     }
   }
 
