@@ -1,23 +1,22 @@
 package io.oldering.tvfoot.red.flowcontroller;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
 
 public class FlowController {
-  private final Context context;
+  private final Activity activity;
 
-  @Inject public FlowController(@Named("activity") Context context) {
-    this.context = context;
+  @Inject public FlowController(Activity activity) {
+    this.activity = activity;
   }
 
   public void toMatches() {
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tvfoot://tvfoot/"));
-    context.startActivity(intent);
+    activity.startActivity(intent);
   }
 
   public void toMatch(String matchId) {
@@ -26,6 +25,6 @@ public class FlowController {
     // We don't need to set the in between 'league', 'home' and 'away' strings.
     Intent intent = new Intent(Intent.ACTION_VIEW,
         Uri.parse(String.format("tvfoot://tvfoot/match/league/home/away/%s", matchId)));
-    context.startActivity(intent);
+    activity.startActivity(intent);
   }
 }

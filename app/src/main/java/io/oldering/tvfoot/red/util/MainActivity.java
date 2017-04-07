@@ -13,9 +13,9 @@ public class MainActivity extends AppCompatActivity {
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     AndroidInjection.inject(this);
-    //ThemeUtils.ensureRuntimeTheme(this);
+    ThemeUtils.ensureRuntimeTheme(this);
     super.onCreate(savedInstanceState);
-    
+
     FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
     Bundle bundle = new Bundle();
