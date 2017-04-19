@@ -1,6 +1,5 @@
 package io.oldering.tvfoot.red.matches;
 
-import android.support.annotation.VisibleForTesting;
 import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.matches.displayable.HeaderRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.LoadingRowDisplayable;
@@ -11,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
 
+import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.IDLE;
 import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_CLICK;
 
 @AutoValue public abstract class MatchesViewState {
@@ -30,7 +30,7 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
     return items;
   }
 
-  @VisibleForTesting public abstract List<MatchRowDisplayable> matches();
+  public abstract List<MatchRowDisplayable> matches();
 
   public abstract boolean firstPageLoading();
 
@@ -61,85 +61,12 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
 
   public abstract Builder buildWith();
 
-  static MatchesViewState reduce(MatchesViewState previousState, MatchesViewState partialState) {
-    switch (partialState.status()) {
-      case FIRST_PAGE_LOADING:
-        return previousState.buildWith()
-            .firstPageLoading(true)
-            .firstPageError(null)
-            .status(partialState.status())
-            .build();
-      case FIRST_PAGE_ERROR:
-        return previousState.buildWith()
-            .firstPageLoading(false)
-            .firstPageError(partialState.firstPageError())
-            .status(partialState.status())
-            .build();
-      case FIRST_PAGE_LOADED:
-        return previousState.buildWith()
-            .firstPageLoading(false)
-            .firstPageError(null)
-            .matches(partialState.matches())
-            .status(partialState.status())
-            .build();
-      case NEXT_PAGE_LOADING:
-        return previousState.buildWith()
-            .nextPageLoading(true)
-            .nextPageError(null)
-            .status(partialState.status())
-            .build();
-      case NEXT_PAGE_ERROR:
-        return previousState.buildWith()
-            .nextPageLoading(false)
-            .nextPageError(partialState.nextPageError())
-            .status(partialState.status())
-            .build();
-      case NEXT_PAGE_LOADED:
-        List<MatchRowDisplayable> matches = new ArrayList<>();
-        matches.addAll(previousState.matches());
-        matches.addAll(partialState.matches());
-
-        return previousState.buildWith()
-            .nextPageLoading(false)
-            .nextPageError(null)
-            .matches(matches)
-            .status(partialState.status())
-            .build();
-      case PULL_TO_REFRESH_LOADING:
-        return previousState.buildWith()
-            .pullToRefreshLoading(true)
-            .pullToRefreshError(null)
-            .status(partialState.status())
-            .build();
-      case PULL_TO_REFRESH_ERROR:
-        return previousState.buildWith()
-            .pullToRefreshLoading(false)
-            .pullToRefreshError(partialState.pullToRefreshError())
-            .status(partialState.status())
-            .build();
-      case PULL_TO_REFRESH_LOADED:
-        matches = new ArrayList<>();
-        matches.addAll(partialState.matches());
-        matches.addAll(previousState.matches());
-
-        return previousState.buildWith()
-            .pullToRefreshLoading(false)
-            .pullToRefreshError(null)
-            .matches(matches)
-            .status(partialState.status())
-            .build();
-      case MATCH_ROW_CLICK:
-        return previousState.buildWith()
-            .match(partialState.match())
-            .status(partialState.status())
-            .build();
-      default:
-        throw new IllegalArgumentException("Don't know this one " + partialState);
-    }
-  }
-
   static MatchesViewState matchRowClick(MatchRowDisplayable match) {
     return MatchesViewState.builder().match(match).status(MATCH_ROW_CLICK).build();
+  }
+
+  public static MatchesViewState idle() {
+    return MatchesViewState.builder().status(IDLE).build();
   }
 
   @AutoValue.Builder public static abstract class Builder {
@@ -165,9 +92,9 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
   }
 
   public enum Status {
-    FIRST_PAGE_LOADING, FIRST_PAGE_ERROR, FIRST_PAGE_LOADED, //
-    NEXT_PAGE_LOADING, NEXT_PAGE_ERROR, NEXT_PAGE_LOADED, //
-    PULL_TO_REFRESH_LOADING, PULL_TO_REFRESH_ERROR, PULL_TO_REFRESH_LOADED, //
-    MATCH_ROW_CLICK
+    FIRST_PAGE_IN_FLIGHT, FIRST_PAGE_FAILURE, FIRST_PAGE_SUCCESS, //
+    NEXT_PAGE_IN_FLIGHT, NEXT_PAGE_FAILURE, NEXT_PAGE_SUCCESS, //
+    MATCH_ROW_CLICK, //
+    IDLE
   }
 }

@@ -30,7 +30,7 @@ class MatchBinder {
         return interactor.loadMatch(((MatchIntent.LoadMatch) intent).matchId())
             .subscribeOn(schedulerProvider.io());
       }
-      throw new IllegalArgumentException("I don't know how to deal with this intent " + intent);
+      throw new IllegalArgumentException("I don't know how to deal with this intents " + intent);
     })
         .subscribeOn(schedulerProvider.computation())
         .doOnNext(state -> Timber.d("Binder: State: %s", state));

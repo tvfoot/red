@@ -5,7 +5,7 @@ import io.oldering.tvfoot.red.di.module.NetworkModule;
 import io.oldering.tvfoot.red.di.module.ServiceMockModule;
 import io.oldering.tvfoot.red.di.module.TestSchedulerModule;
 import io.oldering.tvfoot.red.match.MatchInteractor;
-import io.oldering.tvfoot.red.matches.MatchesInteractor;
+import io.oldering.tvfoot.red.matches.MatchesService;
 import io.oldering.tvfoot.red.util.Fixture;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import javax.inject.Singleton;
@@ -19,7 +19,7 @@ import javax.inject.Singleton;
 
   BaseSchedulerProvider schedulerProvider();
 
-  MatchesInteractor matchesInteractor();
+  MatchesService matchesInteractor();
 
   MatchInteractor matchInteractor();
 }

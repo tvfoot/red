@@ -4,25 +4,25 @@ import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 
 interface MatchesIntent {
-  @AutoValue abstract class LoadFirstPage implements MatchesIntent {
-    public static LoadFirstPage create() {
-      return new AutoValue_MatchesIntent_LoadFirstPage();
+  @AutoValue abstract class LoadFirstPageIntent implements MatchesIntent {
+    public static LoadFirstPageIntent create() {
+      return new AutoValue_MatchesIntent_LoadFirstPageIntent();
     }
   }
 
-  @AutoValue abstract class LoadNextPage implements MatchesIntent {
+  @AutoValue abstract class LoadNextPageIntent implements MatchesIntent {
     public abstract int currentPage();
 
-    public static LoadNextPage create(int currentPage) {
-      return new AutoValue_MatchesIntent_LoadNextPage(currentPage);
+    public static LoadNextPageIntent create(int currentPage) {
+      return new AutoValue_MatchesIntent_LoadNextPageIntent(currentPage);
     }
   }
 
-  @AutoValue abstract class MatchRowClick implements MatchesIntent {
+  @AutoValue abstract class MatchRowClickIntent implements MatchesIntent {
     public abstract MatchRowDisplayable getMatch();
 
-    public static MatchRowClick create(MatchRowDisplayable match) {
-      return new AutoValue_MatchesIntent_MatchRowClick(match);
+    public static MatchRowClickIntent create(MatchRowDisplayable match) {
+      return new AutoValue_MatchesIntent_MatchRowClickIntent(match);
     }
   }
 }

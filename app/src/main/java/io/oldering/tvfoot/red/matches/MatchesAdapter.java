@@ -45,8 +45,8 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesI
     }
   }
 
-  Observable<MatchesIntent> getMatchRowClickObservable() {
-    return matchRowClickObservable.map(MatchesIntent.MatchRowClick::create);
+  Observable<MatchesIntent.MatchRowClickIntent> getMatchRowClickObservable() {
+    return matchRowClickObservable.map(MatchesIntent.MatchRowClickIntent::create);
   }
 
   @SuppressWarnings("unchecked") @Override
