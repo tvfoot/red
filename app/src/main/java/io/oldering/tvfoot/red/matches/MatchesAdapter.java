@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.MatchesRowHeaderBinding;
 import io.oldering.tvfoot.red.databinding.MatchesRowMatchBinding;
+import io.oldering.tvfoot.red.databinding.RowLoadingBinding;
 import io.oldering.tvfoot.red.matches.displayable.BroadcasterRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.HeaderRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.LoadingRowDisplayable;
@@ -34,11 +35,11 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesI
 
     switch (viewType) {
       case R.layout.matches_row_header:
-        return new MatchHeaderViewHolder(binding);
+        return new MatchHeaderViewHolder((MatchesRowHeaderBinding) binding);
       case R.layout.matches_row_match:
-        return new MatchRowViewHolder(binding);
+        return new MatchRowViewHolder((MatchesRowMatchBinding) binding);
       case R.layout.row_loading:
-        return new LoadingRowViewHolder(binding);
+        return new LoadingRowViewHolder((RowLoadingBinding) binding);
       default:
         throw new UnsupportedOperationException(
             "don't know how to deal with this viewType: " + viewType);
@@ -87,11 +88,11 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesI
     DiffUtil.calculateDiff(diffUtilCallback, true).dispatchUpdatesTo(this);
   }
 
-  abstract class MatchesItemViewHolder<T extends MatchesItemDisplayable>
+  abstract class MatchesItemViewHolder<B extends ViewDataBinding, T extends MatchesItemDisplayable>
       extends RecyclerView.ViewHolder {
-    final ViewDataBinding binding;
+    final B binding;
 
-    MatchesItemViewHolder(ViewDataBinding binding) {
+    MatchesItemViewHolder(B binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
@@ -99,28 +100,32 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesI
     abstract void bind(T item);
   }
 
-  private class MatchHeaderViewHolder extends MatchesItemViewHolder<HeaderRowDisplayable> {
-    MatchHeaderViewHolder(ViewDataBinding binding) {
+  private class MatchHeaderViewHolder
+      extends MatchesItemViewHolder<MatchesRowHeaderBinding, HeaderRowDisplayable> {
+    MatchHeaderViewHolder(MatchesRowHeaderBinding binding) {
       super(binding);
     }
 
     @Override void bind(HeaderRowDisplayable header) {
-      MatchesRowHeaderBinding binding = (MatchesRowHeaderBinding) this.binding;
       binding.setDayHeader(header);
     }
   }
 
-  private class MatchRowViewHolder extends MatchesItemViewHolder<MatchRowDisplayable> {
-    MatchRowViewHolder(ViewDataBinding binding) {
+  private class MatchRowViewHolder
+      extends MatchesItemViewHolder<MatchesRowMatchBinding, MatchRowDisplayable> {
+    MatchRowViewHolder(MatchesRowMatchBinding binding) {
       super(binding);
     }
 
     @Override void bind(MatchRowDisplayable match) {
-      MatchesRowMatchBinding binding = (MatchesRowMatchBinding) this.binding;
       binding.setMatch(match);
       binding.setHandler(MatchesAdapter.this);
       binding.executePendingBindings();
 
+      setBroadcastsAdapter(match);
+    }
+
+    private void setBroadcastsAdapter(MatchRowDisplayable match) {
       RecyclerView recyclerView = binding.matchBroadcasters;
 
       BroadcastersAdapter broadcastersAdapter = new BroadcastersAdapter();
@@ -134,8 +139,9 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesI
     }
   }
 
-  private class LoadingRowViewHolder extends MatchesItemViewHolder<LoadingRowDisplayable> {
-    LoadingRowViewHolder(ViewDataBinding binding) {
+  private class LoadingRowViewHolder
+      extends MatchesItemViewHolder<RowLoadingBinding, LoadingRowDisplayable> {
+    LoadingRowViewHolder(RowLoadingBinding binding) {
       super(binding);
     }
 

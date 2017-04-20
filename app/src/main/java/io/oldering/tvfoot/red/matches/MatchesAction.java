@@ -19,7 +19,7 @@ interface MatchesAction {
   }
 
   @AutoValue abstract class MatchRowClickAction implements MatchesAction {
-    public abstract MatchRowDisplayable getMatch();
+    public abstract MatchRowDisplayable match();
 
     public static MatchRowClickAction create(MatchRowDisplayable match) {
       return new AutoValue_MatchesAction_MatchRowClickAction(match);

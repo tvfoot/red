@@ -41,7 +41,7 @@ import timber.log.Timber;
 
   private ObservableTransformer<MatchesAction.MatchRowClickAction, MatchesResult.MatchRowClickResult>
       matchRowClickTransformer = actions -> actions.flatMap(
-      action -> Observable.just(new MatchesResult.MatchRowClickResult(action.getMatch())));
+      action -> Observable.just(new MatchesResult.MatchRowClickResult(action.match())));
 
   private ObservableTransformer<MatchesAction, MatchesResult> actionToResultTransformer =
       actions -> actions.publish(shared -> Observable.merge(
@@ -83,7 +83,8 @@ import timber.log.Timber;
               break;
             case FIRST_PAGE_FAILURE:
               stateBuilder.firstPageLoading(false)
-                  .firstPageError(((MatchesResult.LoadFirstPageResult) matchesResult).getThrowable())
+                  .firstPageError(
+                      ((MatchesResult.LoadFirstPageResult) matchesResult).getThrowable())
                   .status(MatchesViewState.Status.FIRST_PAGE_FAILURE);
               break;
             case FIRST_PAGE_SUCCESS:
@@ -135,12 +136,12 @@ import timber.log.Timber;
       };
 
   Observable<MatchesViewState> compose(Observable<MatchesIntent> intents) {
-    return intents.doOnNext(intent -> Timber.d("Intent: %s", intent))
+    return intents.doOnNext(intent -> Timber.d("MatchesIntent: %s", intent))
         .map(this::actionFromIntent)
         .doOnNext(action -> Timber.d("MatchesAction: %s", action))
         .compose(actionToResultTransformer)
         .doOnNext(matchesResult -> Timber.d("MatchesResult: %s", matchesResult))
         .scan(MatchesViewState.idle(), reducer)
-        .doOnNext(state -> Timber.d("State: %s", state));
+        .doOnNext(state -> Timber.d("MatchesState: %s", state));
   }
 }

@@ -5,12 +5,6 @@ import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import java.util.List;
 
 interface MatchesResult {
-  class IdleResult implements MatchesResult {
-    public static IdleResult idle() {
-      return new IdleResult();
-    }
-  }
-
   class LoadFirstPageResult implements MatchesResult {
     private final Status status;
     private List<Match> matches;
