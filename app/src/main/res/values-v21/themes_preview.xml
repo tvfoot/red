@@ -6,7 +6,7 @@
     <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="android:colorAccent">@color/colorAccent</item>
     <item name="android:windowBackground">@color/colorWhite</item>
-    <item name="ltRuntimeTheme">@style/AppTheme</item>
+    <item name="ltRuntimeTheme">@style/Theme.TvFoot</item>
     <item name="android:actionBarStyle">@style/PreviewWidget.ActionBar</item>
   </style>
 </resources>
