@@ -19,7 +19,7 @@ interface MatchesIntent {
   }
 
   @AutoValue abstract class MatchRowClickIntent implements MatchesIntent {
-    public abstract MatchRowDisplayable getMatch();
+    public abstract MatchRowDisplayable match();
 
     public static MatchRowClickIntent create(MatchRowDisplayable match) {
       return new AutoValue_MatchesIntent_MatchRowClickIntent(match);

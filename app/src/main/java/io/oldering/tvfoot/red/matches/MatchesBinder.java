@@ -64,7 +64,7 @@ import timber.log.Timber;
     }
     if (intent instanceof MatchesIntent.MatchRowClickIntent) {
       return MatchesAction.MatchRowClickAction.create(
-          ((MatchesIntent.MatchRowClickIntent) intent).getMatch());
+          ((MatchesIntent.MatchRowClickIntent) intent).match());
     }
     throw new IllegalArgumentException("do not know how to treat this intents " + intent);
   }
@@ -126,7 +126,7 @@ import timber.log.Timber;
                   + ((MatchesResult.LoadNextPageResult) matchesResult).getStatus());
           }
         } else if (matchesResult instanceof MatchesResult.MatchRowClickResult) {
-          stateBuilder.match(((MatchesResult.MatchRowClickResult) matchesResult).getMatch())
+          stateBuilder.match(((MatchesResult.MatchRowClickResult) matchesResult).match())
               .status(MatchesViewState.Status.MATCH_ROW_CLICK);
         } else {
           throw new IllegalArgumentException("Don't know this matchesResult " + matchesResult);

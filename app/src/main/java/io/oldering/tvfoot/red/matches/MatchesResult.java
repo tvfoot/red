@@ -100,7 +100,7 @@ interface MatchesResult {
       this.match = match;
     }
 
-    public MatchRowDisplayable getMatch() {
+    public MatchRowDisplayable match() {
       return match;
     }
   }
