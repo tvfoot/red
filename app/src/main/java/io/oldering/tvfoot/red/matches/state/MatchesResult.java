@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.matches;
+package io.oldering.tvfoot.red.matches.state;
 
 import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.data.entity.Match;
@@ -6,12 +6,12 @@ import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import java.util.List;
 import javax.annotation.Nullable;
 
-import static io.oldering.tvfoot.red.matches.MatchesResult.Status.FIRST_PAGE_FAILURE;
-import static io.oldering.tvfoot.red.matches.MatchesResult.Status.FIRST_PAGE_IN_FLIGHT;
-import static io.oldering.tvfoot.red.matches.MatchesResult.Status.FIRST_PAGE_SUCCESS;
-import static io.oldering.tvfoot.red.matches.MatchesResult.Status.NEXT_PAGE_FAILURE;
-import static io.oldering.tvfoot.red.matches.MatchesResult.Status.NEXT_PAGE_IN_FLIGHT;
-import static io.oldering.tvfoot.red.matches.MatchesResult.Status.NEXT_PAGE_SUCCESS;
+import static io.oldering.tvfoot.red.matches.state.MatchesResult.Status.FIRST_PAGE_FAILURE;
+import static io.oldering.tvfoot.red.matches.state.MatchesResult.Status.FIRST_PAGE_IN_FLIGHT;
+import static io.oldering.tvfoot.red.matches.state.MatchesResult.Status.FIRST_PAGE_SUCCESS;
+import static io.oldering.tvfoot.red.matches.state.MatchesResult.Status.NEXT_PAGE_FAILURE;
+import static io.oldering.tvfoot.red.matches.state.MatchesResult.Status.NEXT_PAGE_IN_FLIGHT;
+import static io.oldering.tvfoot.red.matches.state.MatchesResult.Status.NEXT_PAGE_SUCCESS;
 
 interface MatchesResult {
   @AutoValue abstract class LoadFirstPageResult implements MatchesResult {

@@ -5,6 +5,7 @@ import io.oldering.tvfoot.red.matches.displayable.HeaderRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.LoadingRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.MatchesItemDisplayable;
+import io.oldering.tvfoot.red.matches.state.MatchesViewState;
 import io.oldering.tvfoot.red.util.Fixture;
 import io.oldering.tvfoot.red.util.InjectionContainer;
 import java.util.Collections;
@@ -12,8 +13,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.FIRST_PAGE_SUCCESS;
-import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_CLICK;
+import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.FIRST_PAGE_SUCCESS;
+import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.MATCH_ROW_CLICK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -66,14 +67,6 @@ public class MatchesViewStateTest {
     assertTrue(matchesItemDisplayables.get(6) instanceof MatchRowDisplayable);
     assertTrue(matchesItemDisplayables.get(7) instanceof MatchRowDisplayable);
     assertEquals(matchesItemDisplayables.get(8), LoadingRowDisplayable.create());
-  }
-
-  @Test public void matchRowClick() {
-    MatchRowDisplayable match = mock(MatchRowDisplayable.class);
-    MatchesViewState state = MatchesViewState.matchRowClick(match);
-
-    assertEquals(match, state.match());
-    assertEquals(MATCH_ROW_CLICK, state.status());
   }
   //
   //@Test public void reduce_firstPageLoading() {

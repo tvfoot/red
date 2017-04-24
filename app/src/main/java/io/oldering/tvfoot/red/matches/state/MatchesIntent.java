@@ -1,9 +1,9 @@
-package io.oldering.tvfoot.red.matches;
+package io.oldering.tvfoot.red.matches.state;
 
 import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 
-interface MatchesIntent {
+public interface MatchesIntent {
   @AutoValue abstract class InitialIntent implements MatchesIntent {
     public static InitialIntent create() {
       return new AutoValue_MatchesIntent_InitialIntent();

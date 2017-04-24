@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.matches;
+package io.oldering.tvfoot.red.matches.state;
 
 import io.oldering.tvfoot.red.data.entity.Match;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
@@ -17,7 +17,7 @@ import timber.log.Timber;
  * TODO(benoit) find a better scope, or how to
  * clear the instance once the activity ends?
  */
-@Singleton class MatchesStateManager {
+@Singleton public class MatchesStateManager {
   private PublishSubject<MatchesIntent> matchesIntentSubject = PublishSubject.create();
   private PublishSubject<MatchesViewState> statesSubject = PublishSubject.create();
   private MatchesService matchesService;
@@ -31,11 +31,11 @@ import timber.log.Timber;
     compose().subscribe(state -> statesSubject.onNext(state));
   }
 
-  void forwardIntents(Observable<MatchesIntent> intents) {
+  public void forwardIntents(Observable<MatchesIntent> intents) {
     intents.subscribe(intent -> matchesIntentSubject.onNext(intent));
   }
 
-  PublishSubject<MatchesViewState> getStatesAsObservable() {
+  public PublishSubject<MatchesViewState> getStatesAsObservable() {
     return statesSubject;
   }
 

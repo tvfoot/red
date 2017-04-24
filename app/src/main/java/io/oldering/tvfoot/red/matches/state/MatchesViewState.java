@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.matches;
+package io.oldering.tvfoot.red.matches.state;
 
 import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.matches.displayable.HeaderRowDisplayable;
@@ -10,8 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
 
-import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.IDLE;
-import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_CLICK;
+import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.IDLE;
 
 @AutoValue public abstract class MatchesViewState {
   public List<MatchesItemDisplayable> matchesItemDisplayables() {
@@ -57,10 +56,6 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
   }
 
   public abstract Builder buildWith();
-
-  static MatchesViewState matchRowClick(MatchRowDisplayable match) {
-    return MatchesViewState.builder().match(match).status(MATCH_ROW_CLICK).build();
-  }
 
   static MatchesViewState idle() {
     return MatchesViewState.builder().status(IDLE).build();

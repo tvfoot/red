@@ -1,4 +1,4 @@
-package io.oldering.tvfoot.red.matches;
+package io.oldering.tvfoot.red.matches.state;
 
 import io.oldering.tvfoot.red.data.api.TvfootService;
 import io.oldering.tvfoot.red.data.entity.Match;

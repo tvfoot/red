@@ -2,9 +2,8 @@ package io.oldering.tvfoot.red.matches;
 
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import io.oldering.tvfoot.red.matches.state.MatchesViewState;
 import javax.inject.Inject;
-
-import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.NEXT_PAGE_FAILURE;
 
 public class MatchesViewModel {
   private final MatchesAdapter adapter;
@@ -72,9 +71,6 @@ public class MatchesViewModel {
   }
 
   private void updateCurrentPage(MatchesViewState state) {
-    if (state.status() == NEXT_PAGE_FAILURE) {
-      currentPage--;
-    }
     if (state.currentPage() > 0) {
       currentPage = state.currentPage();
     }

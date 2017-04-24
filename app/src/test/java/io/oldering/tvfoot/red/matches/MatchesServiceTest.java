@@ -1,6 +1,7 @@
 package io.oldering.tvfoot.red.matches;
 
 import io.oldering.tvfoot.red.di.component.TestComponent;
+import io.oldering.tvfoot.red.matches.state.MatchesService;
 import io.oldering.tvfoot.red.util.Fixture;
 import io.oldering.tvfoot.red.util.InjectionContainer;
 import org.junit.Before;
