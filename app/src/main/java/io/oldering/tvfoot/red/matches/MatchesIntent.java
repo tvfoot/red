@@ -4,9 +4,15 @@ import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 
 interface MatchesIntent {
-  @AutoValue abstract class LoadFirstPageIntent implements MatchesIntent {
-    public static LoadFirstPageIntent create() {
-      return new AutoValue_MatchesIntent_LoadFirstPageIntent();
+  @AutoValue abstract class InitialIntent implements MatchesIntent {
+    public static InitialIntent create() {
+      return new AutoValue_MatchesIntent_InitialIntent();
+    }
+  }
+
+  @AutoValue abstract class GetLastState implements MatchesIntent {
+    public static GetLastState create() {
+      return new AutoValue_MatchesIntent_GetLastState();
     }
   }
 

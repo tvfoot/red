@@ -1,107 +1,73 @@
 package io.oldering.tvfoot.red.matches;
 
+import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.data.entity.Match;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import java.util.List;
+import javax.annotation.Nullable;
+
+import static io.oldering.tvfoot.red.matches.MatchesResult.Status.FIRST_PAGE_FAILURE;
+import static io.oldering.tvfoot.red.matches.MatchesResult.Status.FIRST_PAGE_IN_FLIGHT;
+import static io.oldering.tvfoot.red.matches.MatchesResult.Status.FIRST_PAGE_SUCCESS;
+import static io.oldering.tvfoot.red.matches.MatchesResult.Status.NEXT_PAGE_FAILURE;
+import static io.oldering.tvfoot.red.matches.MatchesResult.Status.NEXT_PAGE_IN_FLIGHT;
+import static io.oldering.tvfoot.red.matches.MatchesResult.Status.NEXT_PAGE_SUCCESS;
 
 interface MatchesResult {
-  class LoadFirstPageResult implements MatchesResult {
-    private final Status status;
-    private List<Match> matches;
-    private Throwable throwable;
+  @AutoValue abstract class LoadFirstPageResult implements MatchesResult {
+    abstract Status status();
 
-    public LoadFirstPageResult(List<Match> matches) {
-      this.matches = matches;
-      this.status = Status.FIRST_PAGE_SUCCESS;
+    @Nullable abstract List<Match> matches();
+
+    @Nullable abstract Throwable throwable();
+
+    static LoadFirstPageResult success(List<Match> matches) {
+      return new AutoValue_MatchesResult_LoadFirstPageResult(FIRST_PAGE_SUCCESS, matches, null);
     }
 
-    public LoadFirstPageResult(Throwable throwable) {
-      this.throwable = throwable;
-      this.status = Status.FIRST_PAGE_FAILURE;
+    static LoadFirstPageResult failure(Throwable throwable) {
+      return new AutoValue_MatchesResult_LoadFirstPageResult(FIRST_PAGE_FAILURE, null, throwable);
     }
 
-    public Status getStatus() {
-      return status;
-    }
-
-    public List<Match> getMatches() {
-      return matches;
-    }
-
-    public Throwable getThrowable() {
-      return throwable;
-    }
-
-    public LoadFirstPageResult() {
-      this.status = Status.FIRST_PAGE_IN_FLIGHT;
-    }
-
-    public static LoadFirstPageResult success(List<Match> matches) {
-      return new LoadFirstPageResult(matches);
-    }
-
-    public static LoadFirstPageResult failure(Throwable throwable) {
-      return new LoadFirstPageResult(throwable);
-    }
-
-    public static LoadFirstPageResult inFlight() {
-      return new LoadFirstPageResult();
+    static LoadFirstPageResult inFlight() {
+      return new AutoValue_MatchesResult_LoadFirstPageResult(FIRST_PAGE_IN_FLIGHT, null, null);
     }
   }
 
-  class LoadNextPageResult implements MatchesResult {
-    private final Status status;
-    private List<Match> matches;
-    private Throwable throwable;
-
-    public LoadNextPageResult(List<Match> matches) {
-      this.matches = matches;
-      this.status = Status.NEXT_PAGE_SUCCESS;
-    }
-
-    public LoadNextPageResult(Throwable throwable) {
-      this.throwable = throwable;
-      this.status = Status.NEXT_PAGE_FAILURE;
-    }
-
-    public Status getStatus() {
-      return status;
-    }
-
-    public List<Match> getMatches() {
-      return matches;
-    }
-
-    public Throwable getThrowable() {
-      return throwable;
-    }
-
-    public LoadNextPageResult() {
-      this.status = Status.NEXT_PAGE_IN_FLIGHT;
-    }
-
-    public static LoadNextPageResult success(List<Match> matches) {
-      return new LoadNextPageResult(matches);
-    }
-
-    public static LoadNextPageResult failure(Throwable throwable) {
-      return new LoadNextPageResult(throwable);
-    }
-
-    public static LoadNextPageResult inFlight() {
-      return new LoadNextPageResult();
+  @AutoValue abstract class GetLastStateResult implements MatchesResult {
+    static GetLastStateResult create() {
+      return new AutoValue_MatchesResult_GetLastStateResult();
     }
   }
 
-  class MatchRowClickResult implements MatchesResult {
-    private final MatchRowDisplayable match;
+  @AutoValue abstract class LoadNextPageResult implements MatchesResult {
+    abstract Status status();
 
-    public MatchRowClickResult(MatchRowDisplayable match) {
-      this.match = match;
+    @Nullable abstract List<Match> matches();
+
+    @Nullable abstract Throwable throwable();
+
+    abstract Integer currentPage();
+
+    static LoadNextPageResult success(List<Match> matches) {
+      return new AutoValue_MatchesResult_LoadNextPageResult(NEXT_PAGE_SUCCESS, matches, null, -1);
     }
 
-    public MatchRowDisplayable match() {
-      return match;
+    static LoadNextPageResult failure(Throwable throwable) {
+      return new AutoValue_MatchesResult_LoadNextPageResult(NEXT_PAGE_FAILURE, null, throwable, -1);
+    }
+
+    static LoadNextPageResult inFlight(int currentPage) {
+      return new AutoValue_MatchesResult_LoadNextPageResult(NEXT_PAGE_IN_FLIGHT, null, null,
+          currentPage);
+    }
+  }
+
+  @AutoValue abstract class MatchRowClickResult implements MatchesResult {
+    abstract MatchRowDisplayable match();
+
+    public static MatchRowClickResult create(MatchRowDisplayable match) {
+      return new AutoValue_MatchesResult_MatchRowClickResult(match);
     }
   }
 

@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
-
+  <data>
+    <variable
+        name="viewModel"
+        type="io.oldering.tvfoot.red.matches.MatchesViewModel"
+        />
+  </data>
   <android.support.design.widget.CoordinatorLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -43,6 +48,7 @@
         android:layout_height="match_parent"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:visible="@{viewModel.hasData}"
         tools:context="io.oldering.tvfoot.red.activity.MatchListActivity"
         tools:listitem="@layout/match_item"
         />
@@ -54,6 +60,7 @@
         android:indeterminate="true"
         android:visibility="visible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:visible="@{viewModel.isFirstLoading}"
         tools:visibility="visible"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         />
@@ -63,13 +70,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Empty"
+        app:visible="@{!viewModel.hasData}"
         />
 
     <TextView
         android:id="@+id/error_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Error"
+        android:text="@{viewModel.errorMessage}"
+        app:visible="@{viewModel.hasError}"
         />
   </android.support.design.widget.CoordinatorLayout>
 </layout>

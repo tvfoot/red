@@ -11,15 +11,15 @@ public class MatchesService {
   private final TvfootService tvfootService;
   private int MATCH_PER_PAGE = 30;
 
-  @Inject public MatchesService(TvfootService tvfootService) {
+  @Inject MatchesService(TvfootService tvfootService) {
     this.tvfootService = tvfootService;
   }
 
-  public Single<List<Match>> loadFirstPage() {
+  Single<List<Match>> loadFirstPage() {
     return tvfootService.findFuture(Filter.builder().limit(MATCH_PER_PAGE).offset(0).build());
   }
 
-  public Single<List<Match>> loadNextPage(int currentPage) {
+  Single<List<Match>> loadNextPage(int currentPage) {
     return tvfootService.findFuture(
         Filter.builder().limit(MATCH_PER_PAGE).offset(MATCH_PER_PAGE * currentPage).build());
   }

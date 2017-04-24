@@ -34,29 +34,26 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
 
   public abstract boolean firstPageLoading();
 
-  @Nullable public abstract Throwable firstPageError();
+  @Nullable public abstract Throwable throwable();
 
   public abstract boolean nextPageLoading();
 
-  @Nullable public abstract Throwable nextPageError();
-
   public abstract boolean pullToRefreshLoading();
-
-  @Nullable public abstract Throwable pullToRefreshError();
 
   @Nullable public abstract MatchRowDisplayable match();
 
   public abstract Status status();
 
+  public abstract Integer currentPage();
+
   public static Builder builder() {
     return new AutoValue_MatchesViewState.Builder().matches(Collections.emptyList())
         .firstPageLoading(false)
-        .firstPageError(null)
+        .throwable(null)
         .nextPageLoading(false)
-        .nextPageError(null)
         .pullToRefreshLoading(false)
-        .pullToRefreshError(null)
-        .match(null);
+        .match(null)
+        .currentPage(0);
   }
 
   public abstract Builder buildWith();
@@ -65,7 +62,7 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
     return MatchesViewState.builder().match(match).status(MATCH_ROW_CLICK).build();
   }
 
-  public static MatchesViewState idle() {
+  static MatchesViewState idle() {
     return MatchesViewState.builder().status(IDLE).build();
   }
 
@@ -74,19 +71,17 @@ import static io.oldering.tvfoot.red.matches.MatchesViewState.Status.MATCH_ROW_C
 
     public abstract Builder firstPageLoading(boolean firstPageLoading);
 
-    public abstract Builder firstPageError(@Nullable Throwable error);
+    public abstract Builder throwable(@Nullable Throwable error);
 
     public abstract Builder nextPageLoading(boolean nextPageLoading);
 
-    public abstract Builder nextPageError(@Nullable Throwable error);
-
     public abstract Builder pullToRefreshLoading(boolean pullToRefreshLoading);
-
-    public abstract Builder pullToRefreshError(@Nullable Throwable error);
 
     public abstract Builder status(Status status);
 
     public abstract Builder match(@Nullable MatchRowDisplayable match);
+
+    public abstract Builder currentPage(Integer CurrentPage);
 
     public abstract MatchesViewState build();
   }

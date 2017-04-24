@@ -21,12 +21,20 @@ import io.reactivex.subjects.PublishSubject;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
+import javax.inject.Singleton;
+import timber.log.Timber;
 
-public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchesItemViewHolder> {
+/**
+ * TODO(benoit) find a better scope, or how to
+ * clear the instance once the activity ends?
+ */
+@Singleton public class MatchesAdapter
+    extends RecyclerView.Adapter<MatchesAdapter.MatchesItemViewHolder> {
   private List<MatchesItemDisplayable> matchesItems = Collections.emptyList();
   private PublishSubject<MatchRowDisplayable> matchRowClickObservable = PublishSubject.create();
 
-  @Inject public MatchesAdapter() {
+  @Inject MatchesAdapter() {
+    Timber.d("CONNARD");
   }
 
   @Override public MatchesItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

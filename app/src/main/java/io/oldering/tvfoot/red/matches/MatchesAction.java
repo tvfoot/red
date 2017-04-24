@@ -4,6 +4,12 @@ import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 
 interface MatchesAction {
+  @AutoValue abstract class GetLastStateAction implements MatchesAction {
+    public static GetLastStateAction create() {
+      return new AutoValue_MatchesAction_GetLastStateAction();
+    }
+  }
+
   @AutoValue abstract class LoadFirstPageAction implements MatchesAction {
     public static LoadFirstPageAction create() {
       return new AutoValue_MatchesAction_LoadFirstPageAction();
