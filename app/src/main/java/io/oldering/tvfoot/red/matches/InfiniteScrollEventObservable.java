@@ -2,9 +2,11 @@ package io.oldering.tvfoot.red.matches;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import io.oldering.tvfoot.red.util.Notification;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.MainThreadDisposable;
+import java.lang.ref.WeakReference;
 
 import static io.oldering.tvfoot.red.util.Preconditions.checkMainThread;
 
@@ -12,20 +14,21 @@ import static io.oldering.tvfoot.red.util.Preconditions.checkMainThread;
  * Heavily based on {@link com.jakewharton.rxbinding2.support.v7.widget.RecyclerViewScrollEventObservable}
  * and {@link com.genius.groupie.example.InfiniteScrollListener}
  */
-final class InfiniteScrollEventObservable extends Observable<Integer> {
-  private final RecyclerView view;
+final class InfiniteScrollEventObservable extends Observable<Object> {
+  // TODO(benoit) is it useful to use a WeakReference here?
+  private final WeakReference<RecyclerView> view;
 
   InfiniteScrollEventObservable(RecyclerView view) {
-    this.view = view;
+    this.view = new WeakReference<>(view);
   }
 
-  @Override protected void subscribeActual(Observer<? super Integer> observer) {
+  @Override protected void subscribeActual(Observer<? super Object> observer) {
     if (!checkMainThread(observer)) {
       return;
     }
-    Listener listener = new Listener(view, observer);
+    Listener listener = new Listener(view.get(), observer);
     observer.onSubscribe(listener);
-    view.addOnScrollListener(listener.scrollListener);
+    view.get().addOnScrollListener(listener.scrollListener);
   }
 
   private final class Listener extends MainThreadDisposable {
@@ -38,9 +41,8 @@ final class InfiniteScrollEventObservable extends Observable<Integer> {
     private final int visibleThreshold = 5;
     // The minimum amount of items to have below your current scroll position before loading more.
     private int firstVisibleItem, visibleItemCount, totalItemCount;
-    private int current_page = 0;
 
-    Listener(RecyclerView recyclerView, final Observer<? super Integer> observer) {
+    Listener(RecyclerView recyclerView, final Observer<? super Object> observer) {
       this.recyclerView = recyclerView;
       this.scrollListener = new RecyclerView.OnScrollListener() {
         @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -60,8 +62,7 @@ final class InfiniteScrollEventObservable extends Observable<Integer> {
           // End has been reached
           if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem
               + visibleThreshold)) {
-            current_page++;
-            observer.onNext(current_page);
+            observer.onNext(Notification.INSTANCE);
             loading = true;
           }
         }

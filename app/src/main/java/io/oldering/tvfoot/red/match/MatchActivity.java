@@ -9,9 +9,13 @@ import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.RedAppConfig;
 import io.oldering.tvfoot.red.databinding.ActivityMatchBinding;
 import io.oldering.tvfoot.red.flowcontroller.FlowController;
+import io.oldering.tvfoot.red.match.state.MatchIntent;
+import io.oldering.tvfoot.red.match.state.MatchStateBinder;
+import io.oldering.tvfoot.red.match.state.MatchViewState;
 import io.oldering.tvfoot.red.matches.BroadcastersAdapter;
 import io.oldering.tvfoot.red.matches.displayable.BroadcasterRowDisplayable;
 import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -24,8 +28,9 @@ import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
 public class MatchActivity extends AppCompatActivity {
   private ActivityMatchBinding binding;
   @Inject FlowController flowController;
-  @Inject MatchBinder binder;
+  @Inject MatchStateBinder stateBinder;
   @Nullable private String matchId = null;
+  CompositeDisposable disposables;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     AndroidInjection.inject(this);
@@ -46,28 +51,54 @@ public class MatchActivity extends AppCompatActivity {
     if (matchId == null) {
       Timber.w("match id is null %s", uri);
       flowController.toMatches();
+      finish();
+      return;
     }
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_match);
 
     Timber.d("match with load with id %s", matchId);
-    binder.bind();
+    disposables = new CompositeDisposable();
+    bind();
   }
 
-  public Observable<MatchIntent> loadMatchIntent() {
-    assert matchId != null;
-    return Observable.just(MatchIntent.LoadMatch.create(matchId));
+  private void bind() {
+    disposables.add(stateBinder.getStatesAsObservable().subscribe(this::render));
+    stateBinder.forwardIntents(intents());
+  }
+
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    disposables.dispose();
+  }
+
+  //private void setStateBinder() {
+  //  Object lastCustomNonConfigInstance = getLastCustomNonConfigurationInstance();
+  //  if (lastCustomNonConfigInstance != null) {
+  //    stateBinder = (MatchStateBinder) lastCustomNonConfigInstance;
+  //  } else {
+  //    stateBinder = // TODO do I have to use old school Dagger Components?;
+  //  }
+  //}
+
+  public Observable<MatchIntent> intents() {
+    return initialIntent();
+  }
+
+  private Observable<MatchIntent> initialIntent() {
+    return Observable.just(
+        MatchIntent.InitialIntent.create(checkNotNull(matchId, "MatchId is null")));
   }
 
   public void render(MatchViewState state) {
     switch (state.status()) {
-      case MATCH_LOADING:
+      case LOAD_MATCH_IN_FLIGHT:
         renderMatchLoading();
         break;
-      case MATCH_ERROR:
+      case LOAD_MATCH_FAILURE:
         renderError();
         break;
-      case MATCH_LOADED:
+      case LOAD_MATCH_SUCCESS:
         renderMatchLoaded(state);
         break;
     }

@@ -1,6 +1,5 @@
 package io.oldering.tvfoot.red.match;
 
-import android.support.annotation.VisibleForTesting;
 import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.data.entity.Broadcaster;
 import io.oldering.tvfoot.red.data.entity.Competition;
@@ -51,7 +50,7 @@ import static io.oldering.tvfoot.red.util.TimeConstants.ONE_MATCH_TIME_IN_MILLIS
 
   public abstract String matchId();
 
-  @VisibleForTesting static MatchDisplayable fromMatch(Match match) {
+  public static MatchDisplayable fromMatch(Match match) {
     return new AutoValue_MatchDisplayable( //
         parseHeaderKey(match.startAt()), //
         parseStartTime(match.startAt()), //

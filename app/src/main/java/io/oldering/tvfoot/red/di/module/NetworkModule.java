@@ -29,9 +29,7 @@ import static okhttp3.logging.HttpLoggingInterceptor.Level.NONE;
 
   @Provides @Singleton
   static OkHttpClient provideOkHttpClient(HttpLoggingInterceptor httpLoggingInterceptor) {
-    return new OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor)
-        .addNetworkInterceptor(httpLoggingInterceptor)
-        .build();
+    return new OkHttpClient.Builder().addNetworkInterceptor(httpLoggingInterceptor).build();
   }
 
   @Provides @Singleton static Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
