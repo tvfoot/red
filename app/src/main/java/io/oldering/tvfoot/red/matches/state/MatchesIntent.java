@@ -17,10 +17,10 @@ public interface MatchesIntent {
   }
 
   @AutoValue abstract class LoadNextPageIntent implements MatchesIntent {
-    public abstract int currentPage();
+    public abstract int pageIndex();
 
-    public static LoadNextPageIntent create(int currentPage) {
-      return new AutoValue_MatchesIntent_LoadNextPageIntent(currentPage);
+    public static LoadNextPageIntent create(int pageIndex) {
+      return new AutoValue_MatchesIntent_LoadNextPageIntent(pageIndex);
     }
   }
 

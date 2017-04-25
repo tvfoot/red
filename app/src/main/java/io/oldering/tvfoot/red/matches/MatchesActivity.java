@@ -9,7 +9,7 @@ import io.oldering.tvfoot.red.databinding.ActivityMatchesBinding;
 import io.oldering.tvfoot.red.flowcontroller.FlowController;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import io.oldering.tvfoot.red.matches.state.MatchesIntent;
-import io.oldering.tvfoot.red.matches.state.MatchesStateManager;
+import io.oldering.tvfoot.red.matches.state.MatchesStateBinder;
 import io.oldering.tvfoot.red.matches.state.MatchesViewState;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
@@ -21,9 +21,9 @@ import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
 public class MatchesActivity extends AppCompatActivity {
   private ActivityMatchesBinding binding;
   @Inject MatchesAdapter adapter;
-  @Inject MatchesStateManager stateManager;
   @Inject FlowController flowController;
   @Inject MatchesViewModel viewModel;
+  @Inject MatchesStateBinder stateBinder;
   CompositeDisposable disposables;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,9 +38,18 @@ public class MatchesActivity extends AppCompatActivity {
     bind();
   }
 
+  //private void setStateBinder() {
+  //  Object lastCustomNonConfigInstance = getLastCustomNonConfigurationInstance();
+  //  if (lastCustomNonConfigInstance != null) {
+  //    stateBinder = (MatchesStateBinder) lastCustomNonConfigInstance;
+  //  } else {
+  //    stateBinder = // TODO do I have to use old school Dagger Components?;
+  //  }
+  //}
+
   private void bind() {
-    disposables.add(stateManager.getStatesAsObservable().subscribe(this::render));
-    stateManager.forwardIntents(intents());
+    disposables.add(stateBinder.getStatesAsObservable().subscribe(this::render));
+    stateBinder.forwardIntents(intents());
   }
 
   @Override protected void onDestroy() {
@@ -76,4 +85,8 @@ public class MatchesActivity extends AppCompatActivity {
         viewModel.updateFromState(state);
     }
   }
+
+  //@Override public Object onRetainCustomNonConfigurationInstance() {
+  //  return stateBinder;
+  //}
 }

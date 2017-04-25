@@ -2,6 +2,7 @@ package io.oldering.tvfoot.red.matches.state;
 
 import io.oldering.tvfoot.red.data.entity.Match;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
+import io.oldering.tvfoot.red.util.Preconditions;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
@@ -13,17 +14,13 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import timber.log.Timber;
 
-/**
- * TODO(benoit) find a better scope, or how to
- * clear the instance once the activity ends?
- */
-@Singleton public class MatchesStateManager {
-  private PublishSubject<MatchesIntent> matchesIntentSubject = PublishSubject.create();
+@Singleton public class MatchesStateBinder {
+  private PublishSubject<MatchesIntent> intentsSubject = PublishSubject.create();
   private PublishSubject<MatchesViewState> statesSubject = PublishSubject.create();
   private MatchesService matchesService;
   private BaseSchedulerProvider schedulerProvider;
 
-  @Inject MatchesStateManager(MatchesService matchesService,
+  @Inject MatchesStateBinder(MatchesService matchesService,
       BaseSchedulerProvider schedulerProvider) {
     this.matchesService = matchesService;
     this.schedulerProvider = schedulerProvider;
@@ -32,26 +29,16 @@ import timber.log.Timber;
   }
 
   public void forwardIntents(Observable<MatchesIntent> intents) {
-    intents.subscribe(intent -> matchesIntentSubject.onNext(intent));
+    intents.subscribe(intentsSubject::onNext);
   }
 
-  public PublishSubject<MatchesViewState> getStatesAsObservable() {
+  public Observable<MatchesViewState> getStatesAsObservable() {
     return statesSubject;
   }
 
   private Observable<MatchesViewState> compose() {
-    return matchesIntentSubject.doOnNext(intent -> Timber.d("MatchesIntent: %s", intent))
-        .scan((previousIntent, newIntent) -> {
-          // if isReConnection (e.g. after config change)
-          // i.e. we are inside the scan, meaning there has already
-          // been intent in the past, meaning the InitialIntent cannot
-          // be the first => it is a reconnection.
-          if (newIntent instanceof MatchesIntent.InitialIntent) {
-            return MatchesIntent.GetLastState.create();
-          } else {
-            return newIntent;
-          }
-        })
+    return intentsSubject.doOnNext(intent -> Timber.d("MatchesIntent: %s", intent))
+        .scan(initialIntentFilter)
         .map(this::actionFromIntent)
         .doOnNext(action -> Timber.d("MatchesAction: %s", action))
         .compose(actionToResultTransformer)
@@ -59,6 +46,19 @@ import timber.log.Timber;
         .scan(MatchesViewState.idle(), reducer)
         .doOnNext(state -> Timber.d("MatchesState: %s", state));
   }
+
+  private BiFunction<MatchesIntent, MatchesIntent, MatchesIntent> initialIntentFilter =
+      (previousIntent, newIntent) -> {
+        // if isReConnection (e.g. after config change)
+        // i.e. we are inside the scan, meaning there has already
+        // been intent in the past, meaning the InitialIntent cannot
+        // be the first => it is a reconnection.
+        if (newIntent instanceof MatchesIntent.InitialIntent) {
+          return MatchesIntent.GetLastState.create();
+        } else {
+          return newIntent;
+        }
+      };
 
   private MatchesAction actionFromIntent(MatchesIntent intent) {
     if (intent instanceof MatchesIntent.InitialIntent) {
@@ -70,7 +70,7 @@ import timber.log.Timber;
     }
     if (intent instanceof MatchesIntent.LoadNextPageIntent) {
       return MatchesAction.LoadNextPageAction.create(
-          ((MatchesIntent.LoadNextPageIntent) intent).currentPage());
+          ((MatchesIntent.LoadNextPageIntent) intent).pageIndex());
     }
     if (intent instanceof MatchesIntent.MatchRowClickIntent) {
       return MatchesAction.MatchRowClickAction.create(
@@ -90,13 +90,13 @@ import timber.log.Timber;
 
   private ObservableTransformer<MatchesAction.LoadNextPageAction, MatchesResult.LoadNextPageResult>
       loadNextPageTransformer = actions -> actions.flatMap(
-      action -> matchesService.loadNextPage(action.currentPage())
+      action -> matchesService.loadNextPage(action.pageIndex())
           .toObservable()
           .map(MatchesResult.LoadNextPageResult::success)
           .onErrorReturn(MatchesResult.LoadNextPageResult::failure)
           .subscribeOn(schedulerProvider.io())
           .observeOn(schedulerProvider.ui())
-          .startWith(MatchesResult.LoadNextPageResult.inFlight(action.currentPage())));
+          .startWith(MatchesResult.LoadNextPageResult.inFlight(action.pageIndex())));
 
   private ObservableTransformer<MatchesAction.MatchRowClickAction, MatchesResult.MatchRowClickResult>
       matchRowClickTransformer = actions -> actions.flatMap(
@@ -130,20 +130,21 @@ import timber.log.Timber;
           switch (((MatchesResult.LoadFirstPageResult) matchesResult).status()) {
             case FIRST_PAGE_IN_FLIGHT:
               stateBuilder.firstPageLoading(true)
-                  .throwable(null)
+                  .error(null)
                   .status(MatchesViewState.Status.FIRST_PAGE_IN_FLIGHT);
               break;
             case FIRST_PAGE_FAILURE:
               stateBuilder.firstPageLoading(false)
-                  .throwable(((MatchesResult.LoadFirstPageResult) matchesResult).throwable())
+                  .error(((MatchesResult.LoadFirstPageResult) matchesResult).throwable())
                   .status(MatchesViewState.Status.FIRST_PAGE_FAILURE);
               break;
             case FIRST_PAGE_SUCCESS:
-              List<Match> matches = ((MatchesResult.LoadFirstPageResult) matchesResult).matches();
-              assert matches != null;
+              List<Match> matches = Preconditions.checkNotNull(
+                  ((MatchesResult.LoadFirstPageResult) matchesResult).matches(),
+                  "Matches are null");
 
               stateBuilder.firstPageLoading(false)
-                  .throwable(null)
+                  .error(null)
                   .matches(MatchRowDisplayable.fromMatches(matches))
                   .status(MatchesViewState.Status.FIRST_PAGE_SUCCESS);
               break;
@@ -155,25 +156,25 @@ import timber.log.Timber;
           switch (((MatchesResult.LoadNextPageResult) matchesResult).status()) {
             case NEXT_PAGE_IN_FLIGHT:
               stateBuilder.nextPageLoading(true)
-                  .currentPage(((MatchesResult.LoadNextPageResult) matchesResult).currentPage())
-                  .throwable(null)
+                  .currentPage(((MatchesResult.LoadNextPageResult) matchesResult).pageIndex())
+                  .error(null)
                   .status(MatchesViewState.Status.NEXT_PAGE_IN_FLIGHT);
               break;
             case NEXT_PAGE_FAILURE:
               stateBuilder.nextPageLoading(false)
-                  .throwable(((MatchesResult.LoadNextPageResult) matchesResult).throwable())
+                  .error(((MatchesResult.LoadNextPageResult) matchesResult).throwable())
                   .status(MatchesViewState.Status.NEXT_PAGE_FAILURE);
               break;
             case NEXT_PAGE_SUCCESS:
-              List<Match> newMatches = ((MatchesResult.LoadNextPageResult) matchesResult).matches();
-              assert newMatches != null;
+              List<Match> newMatches = Preconditions.checkNotNull(
+                  ((MatchesResult.LoadNextPageResult) matchesResult).matches(), "Matches are null");
 
               List<MatchRowDisplayable> matches = new ArrayList<>();
               matches.addAll(previousState.matches());
               matches.addAll(MatchRowDisplayable.fromMatches(newMatches));
 
               stateBuilder.nextPageLoading(false)
-                  .throwable(null)
+                  .error(null)
                   .matches(matches)
                   .status(MatchesViewState.Status.NEXT_PAGE_SUCCESS);
               break;

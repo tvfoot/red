@@ -33,7 +33,7 @@ import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.IDLE;
 
   public abstract boolean firstPageLoading();
 
-  @Nullable public abstract Throwable throwable();
+  @Nullable public abstract Throwable error();
 
   public abstract boolean nextPageLoading();
 
@@ -48,7 +48,7 @@ import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.IDLE;
   public static Builder builder() {
     return new AutoValue_MatchesViewState.Builder().matches(Collections.emptyList())
         .firstPageLoading(false)
-        .throwable(null)
+        .error(null)
         .nextPageLoading(false)
         .pullToRefreshLoading(false)
         .match(null)
@@ -66,7 +66,7 @@ import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.IDLE;
 
     public abstract Builder firstPageLoading(boolean firstPageLoading);
 
-    public abstract Builder throwable(@Nullable Throwable error);
+    public abstract Builder error(@Nullable Throwable error);
 
     public abstract Builder nextPageLoading(boolean nextPageLoading);
 

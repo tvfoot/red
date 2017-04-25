@@ -17,10 +17,10 @@ interface MatchesAction {
   }
 
   @AutoValue abstract class LoadNextPageAction implements MatchesAction {
-    public abstract int currentPage();
+    public abstract int pageIndex();
 
-    public static LoadNextPageAction create(int currentPage) {
-      return new AutoValue_MatchesAction_LoadNextPageAction(currentPage);
+    public static LoadNextPageAction create(int pageIndex) {
+      return new AutoValue_MatchesAction_LoadNextPageAction(pageIndex);
     }
   }
 

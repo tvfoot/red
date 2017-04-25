@@ -47,7 +47,7 @@ interface MatchesResult {
 
     @Nullable abstract Throwable throwable();
 
-    abstract Integer currentPage();
+    abstract Integer pageIndex();
 
     static LoadNextPageResult success(List<Match> matches) {
       return new AutoValue_MatchesResult_LoadNextPageResult(NEXT_PAGE_SUCCESS, matches, null, -1);
@@ -57,9 +57,9 @@ interface MatchesResult {
       return new AutoValue_MatchesResult_LoadNextPageResult(NEXT_PAGE_FAILURE, null, throwable, -1);
     }
 
-    static LoadNextPageResult inFlight(int currentPage) {
+    static LoadNextPageResult inFlight(int pageIndex) {
       return new AutoValue_MatchesResult_LoadNextPageResult(NEXT_PAGE_IN_FLIGHT, null, null,
-          currentPage);
+          pageIndex);
     }
   }
 

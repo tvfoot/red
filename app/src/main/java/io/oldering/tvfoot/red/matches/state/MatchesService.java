@@ -19,8 +19,8 @@ public class MatchesService {
     return tvfootService.findFuture(Filter.builder().limit(MATCH_PER_PAGE).offset(0).build());
   }
 
-  Single<List<Match>> loadNextPage(int currentPage) {
+  Single<List<Match>> loadNextPage(int pageIndex) {
     return tvfootService.findFuture(
-        Filter.builder().limit(MATCH_PER_PAGE).offset(MATCH_PER_PAGE * currentPage).build());
+        Filter.builder().limit(MATCH_PER_PAGE).offset(MATCH_PER_PAGE * pageIndex).build());
   }
 }

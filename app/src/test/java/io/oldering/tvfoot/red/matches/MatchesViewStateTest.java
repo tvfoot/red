@@ -94,15 +94,15 @@ public class MatchesViewStateTest {
   //}
   //
   //@Test public void reduce_firstPageError() {
-  //  Throwable throwable = mock(Throwable.class);
+  //  Throwable error = mock(Throwable.class);
   //
   //  MatchesViewState previousState = MatchesViewState.builder().status(FIRST_PAGE_IN_FLIGHT).build();
   //  MatchesViewState partialState =
-  //      MatchesViewState.builder().status(FIRST_PAGE_FAILURE).firstPageError(throwable).build();
+  //      MatchesViewState.builder().status(FIRST_PAGE_FAILURE).firstPageError(error).build();
   //
   //  MatchesViewState newState = MatchesViewState.reduce(previousState, partialState);
   //  assertFalse(newState.firstPageLoading());
-  //  assertEquals(throwable, newState.firstPageError());
+  //  assertEquals(error, newState.firstPageError());
   //  assertEquals(FIRST_PAGE_FAILURE, newState.status());
   //}
   //
@@ -146,16 +146,16 @@ public class MatchesViewStateTest {
   //@Test public void reduce_nextPageError() {
   //  List<MatchRowDisplayable> previousMatches =
   //      MatchRowDisplayable.fromMatches(fixture.anyMatches());
-  //  Throwable throwable = mock(Throwable.class);
+  //  Throwable error = mock(Throwable.class);
   //
   //  MatchesViewState previousState =
   //      MatchesViewState.builder().status(NEXT_PAGE_IN_FLIGHT).matches(previousMatches).build();
   //  MatchesViewState partialState =
-  //      MatchesViewState.builder().status(NEXT_PAGE_FAILURE).nextPageError(throwable).build();
+  //      MatchesViewState.builder().status(NEXT_PAGE_FAILURE).nextPageError(error).build();
   //
   //  MatchesViewState newState = MatchesViewState.reduce(previousState, partialState);
   //  assertFalse(newState.nextPageLoading());
-  //  assertEquals(throwable, newState.nextPageError());
+  //  assertEquals(error, newState.nextPageError());
   //  assertEquals(NEXT_PAGE_FAILURE, newState.status());
   //}
   //

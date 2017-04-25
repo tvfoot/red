@@ -5,6 +5,8 @@ import android.databinding.ObservableField;
 import io.oldering.tvfoot.red.matches.state.MatchesViewState;
 import javax.inject.Inject;
 
+import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
+
 public class MatchesViewModel {
   private final MatchesAdapter adapter;
 
@@ -32,9 +34,9 @@ public class MatchesViewModel {
         hasError.set(true);
         hasData.set(false);
 
-        Throwable throwable = state.throwable();
-        assert throwable != null;
-        setErrorMessage(throwable);
+        //noinspection ThrowableResultOfMethodCallIgnored
+        Throwable error = checkNotNull(state.error(), "state error is null");
+        setErrorMessage(error.toString());
         break;
       case FIRST_PAGE_SUCCESS:
         isFirstLoading.set(false);
@@ -52,9 +54,9 @@ public class MatchesViewModel {
         hasError.set(true);
         hasData.set(false);
 
-        throwable = state.throwable();
-        assert throwable != null;
-        setErrorMessage(throwable);
+        //noinspection ThrowableResultOfMethodCallIgnored
+        error = checkNotNull(state.error(), "state error is null");
+        setErrorMessage(error.toString());
         break;
       case NEXT_PAGE_SUCCESS:
         isFirstLoading.set(false);
@@ -76,8 +78,8 @@ public class MatchesViewModel {
     }
   }
 
-  private void setErrorMessage(Throwable throwable) {
-    errorMessage.set(throwable.toString());
+  private void setErrorMessage(String message) {
+    errorMessage.set(message);
   }
 
   public int currentPage() {
