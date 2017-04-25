@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 public class MatchesService {
   private final TvfootService tvfootService;
-  private int MATCH_PER_PAGE = 30;
+  private static final int MATCH_PER_PAGE = 30;
 
   @Inject MatchesService(TvfootService tvfootService) {
     this.tvfootService = tvfootService;

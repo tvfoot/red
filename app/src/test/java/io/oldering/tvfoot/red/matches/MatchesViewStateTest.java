@@ -14,10 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.FIRST_PAGE_SUCCESS;
-import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.MATCH_ROW_CLICK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 
 public class MatchesViewStateTest {
   private Fixture fixture;

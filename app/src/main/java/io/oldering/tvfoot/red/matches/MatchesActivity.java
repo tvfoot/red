@@ -71,7 +71,7 @@ public class MatchesActivity extends AppCompatActivity {
 
   private Observable<MatchesIntent.LoadNextPageIntent> loadNextPageIntent() {
     return new InfiniteScrollEventObservable(binding.recyclerView).map(
-        ignored -> MatchesIntent.LoadNextPageIntent.create(viewModel.currentPage() + 1));
+        ignored -> MatchesIntent.LoadNextPageIntent.create(viewModel.getCurrentPage() + 1));
   }
 
   public void render(MatchesViewState state) {

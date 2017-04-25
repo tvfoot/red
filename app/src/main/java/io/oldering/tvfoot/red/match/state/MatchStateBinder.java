@@ -18,7 +18,7 @@ public class MatchStateBinder {
   private MatchService service;
   private BaseSchedulerProvider schedulerProvider;
 
-  @Inject MatchStateBinder(MatchService service, BaseSchedulerProvider schedulerProvider) {
+  @Inject public MatchStateBinder(MatchService service, BaseSchedulerProvider schedulerProvider) {
     this.service = service;
     this.schedulerProvider = schedulerProvider;
 

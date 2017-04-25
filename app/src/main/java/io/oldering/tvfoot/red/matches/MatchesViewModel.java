@@ -82,7 +82,7 @@ public class MatchesViewModel {
     errorMessage.set(message);
   }
 
-  public int currentPage() {
+  public int getCurrentPage() {
     return currentPage;
   }
 }

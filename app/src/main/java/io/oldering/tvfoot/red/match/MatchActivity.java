@@ -14,7 +14,6 @@ import io.oldering.tvfoot.red.match.state.MatchStateBinder;
 import io.oldering.tvfoot.red.match.state.MatchViewState;
 import io.oldering.tvfoot.red.matches.BroadcastersAdapter;
 import io.oldering.tvfoot.red.matches.displayable.BroadcasterRowDisplayable;
-import io.oldering.tvfoot.red.util.Preconditions;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import java.util.List;
@@ -88,7 +87,7 @@ public class MatchActivity extends AppCompatActivity {
 
   private Observable<MatchIntent> initialIntent() {
     return Observable.just(
-        MatchIntent.InitialIntent.create(Preconditions.checkNotNull(matchId, "MatchId is null")));
+        MatchIntent.InitialIntent.create(checkNotNull(matchId, "MatchId is null")));
   }
 
   public void render(MatchViewState state) {
