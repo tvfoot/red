@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import timber.log.Timber;
 
 /**
  * TODO(benoit) find a better scope, or how to
@@ -35,7 +34,6 @@ import timber.log.Timber;
   private PublishSubject<MatchRowDisplayable> matchRowClickObservable = PublishSubject.create();
 
   @Inject MatchesAdapter() {
-    Timber.d("CONNARD");
   }
 
   @Override public MatchesItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

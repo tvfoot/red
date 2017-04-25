@@ -61,15 +61,15 @@ public class MatchesActivity extends AppCompatActivity {
     return Observable.merge(InitialIntent(), loadNextPageIntent(), matchRowClickIntent());
   }
 
-  public Observable<MatchesIntent.MatchRowClickIntent> matchRowClickIntent() {
+  private Observable<MatchesIntent.MatchRowClickIntent> matchRowClickIntent() {
     return adapter.getMatchRowClickObservable();
   }
 
-  public Observable<MatchesIntent.InitialIntent> InitialIntent() {
+  private Observable<MatchesIntent.InitialIntent> InitialIntent() {
     return Observable.just(MatchesIntent.InitialIntent.create());
   }
 
-  public Observable<MatchesIntent.LoadNextPageIntent> loadNextPageIntent() {
+  private Observable<MatchesIntent.LoadNextPageIntent> loadNextPageIntent() {
     return new InfiniteScrollEventObservable(binding.recyclerView).map(
         ignored -> MatchesIntent.LoadNextPageIntent.create(viewModel.currentPage() + 1));
   }

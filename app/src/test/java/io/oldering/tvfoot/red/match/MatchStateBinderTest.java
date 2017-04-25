@@ -1,5 +1,9 @@
 package io.oldering.tvfoot.red.match;
 
+import io.oldering.tvfoot.red.match.state.MatchBinder;
+import io.oldering.tvfoot.red.match.state.MatchIntent;
+import io.oldering.tvfoot.red.match.state.MatchService;
+import io.oldering.tvfoot.red.match.state.MatchViewState;
 import io.oldering.tvfoot.red.util.schedulers.ImmediateSchedulerProvider;
 import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
@@ -10,7 +14,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.oldering.tvfoot.red.match.MatchViewState.Status.MATCH_LOADING;
+import static io.oldering.tvfoot.red.match.state.MatchViewState.Status.LOAD_MATCH_IN_FLIGHT;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -21,12 +25,12 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class MatchBinderTest {
+public class MatchStateBinderTest {
   @Mock Observable<MatchIntent> intentObservable;
   @Mock Observable<MatchViewState> modelObservable;
   @Mock Observable<MatchViewState> modelObservableOnMainThread;
   @Mock MatchActivity activity;
-  @Mock MatchInteractor interactor;
+  @Mock MatchService interactor;
   private MatchBinder binder;
 
   @Before public void setup() {
@@ -37,7 +41,7 @@ public class MatchBinderTest {
   // TODO(benoit) am I testing the right things ?
   @Test public void intent() {
     PublishSubject<MatchIntent> loadMatchSubject = PublishSubject.create();
-    when(activity.loadMatchIntent()).thenReturn(loadMatchSubject);
+    when(activity.initialIntent()).thenReturn(loadMatchSubject);
 
     TestObserver<MatchIntent> testObserver = binder.intent().test();
 
@@ -54,7 +58,7 @@ public class MatchBinderTest {
     when(interactor.loadMatch("1")).thenReturn(modelObservable);
 
     PublishSubject<MatchIntent> loadMatchSubject = PublishSubject.create();
-    when(activity.loadMatchIntent()).thenReturn(loadMatchSubject);
+    when(activity.initialIntent()).thenReturn(loadMatchSubject);
     TestObserver<MatchViewState> testObserver = binder.model(loadMatchSubject).test();
 
     verify(interactor, never()).loadMatch(anyString());
@@ -65,7 +69,7 @@ public class MatchBinderTest {
     // What is is waiting for ?
     testObserver.assertValueCount(2);
     testObserver.assertValueAt(0,
-        state -> state.equals(MatchViewState.builder().status(MATCH_LOADING).build()));
+        state -> state.equals(MatchViewState.builder().status(LOAD_MATCH_IN_FLIGHT).build()));
   }
 
   @Test public void view() {

@@ -45,7 +45,7 @@ interface MatchesResult {
 
     @Nullable abstract List<Match> matches();
 
-    @Nullable abstract Throwable throwable();
+    @Nullable abstract Throwable error();
 
     abstract Integer pageIndex();
 

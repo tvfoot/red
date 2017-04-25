@@ -17,12 +17,12 @@ import timber.log.Timber;
 @Singleton public class MatchesStateBinder {
   private PublishSubject<MatchesIntent> intentsSubject = PublishSubject.create();
   private PublishSubject<MatchesViewState> statesSubject = PublishSubject.create();
-  private MatchesService matchesService;
+  private MatchesService service;
   private BaseSchedulerProvider schedulerProvider;
 
-  @Inject MatchesStateBinder(MatchesService matchesService,
+  @Inject MatchesStateBinder(MatchesService service,
       BaseSchedulerProvider schedulerProvider) {
-    this.matchesService = matchesService;
+    this.service = service;
     this.schedulerProvider = schedulerProvider;
 
     compose().subscribe(state -> statesSubject.onNext(state));
@@ -80,7 +80,7 @@ import timber.log.Timber;
   }
 
   private ObservableTransformer<MatchesAction.LoadFirstPageAction, MatchesResult.LoadFirstPageResult>
-      loadFirstPageTransformer = actions -> actions.flatMap(action -> matchesService.loadFirstPage()
+      loadFirstPageTransformer = actions -> actions.flatMap(action -> service.loadFirstPage()
       .toObservable()
       .map(MatchesResult.LoadFirstPageResult::success)
       .onErrorReturn(MatchesResult.LoadFirstPageResult::failure)
@@ -90,7 +90,7 @@ import timber.log.Timber;
 
   private ObservableTransformer<MatchesAction.LoadNextPageAction, MatchesResult.LoadNextPageResult>
       loadNextPageTransformer = actions -> actions.flatMap(
-      action -> matchesService.loadNextPage(action.pageIndex())
+      action -> service.loadNextPage(action.pageIndex())
           .toObservable()
           .map(MatchesResult.LoadNextPageResult::success)
           .onErrorReturn(MatchesResult.LoadNextPageResult::failure)
@@ -162,7 +162,7 @@ import timber.log.Timber;
               break;
             case NEXT_PAGE_FAILURE:
               stateBuilder.nextPageLoading(false)
-                  .error(((MatchesResult.LoadNextPageResult) matchesResult).throwable())
+                  .error(((MatchesResult.LoadNextPageResult) matchesResult).error())
                   .status(MatchesViewState.Status.NEXT_PAGE_FAILURE);
               break;
             case NEXT_PAGE_SUCCESS:
