@@ -39,7 +39,7 @@ import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.IDLE;
 
   public abstract boolean pullToRefreshLoading();
 
-  @Nullable public abstract MatchRowDisplayable match();
+  @Nullable public abstract MatchRowDisplayable clickedMatch();
 
   public abstract Status status();
 
@@ -51,7 +51,7 @@ import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.IDLE;
         .error(null)
         .nextPageLoading(false)
         .pullToRefreshLoading(false)
-        .match(null)
+        .clickedMatch(null)
         .currentPage(0);
   }
 
@@ -74,7 +74,7 @@ import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.IDLE;
 
     public abstract Builder status(Status status);
 
-    public abstract Builder match(@Nullable MatchRowDisplayable match);
+    public abstract Builder clickedMatch(@Nullable MatchRowDisplayable clickedMatch);
 
     public abstract Builder currentPage(Integer CurrentPage);
 
@@ -85,6 +85,6 @@ import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.IDLE;
     FIRST_PAGE_IN_FLIGHT, FIRST_PAGE_FAILURE, FIRST_PAGE_SUCCESS, //
     NEXT_PAGE_IN_FLIGHT, NEXT_PAGE_FAILURE, NEXT_PAGE_SUCCESS, //
     MATCH_ROW_CLICK, //
-    IDLE
+    IDLE, LAST_STATE
   }
 }

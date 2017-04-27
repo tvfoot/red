@@ -10,6 +10,7 @@ import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.MatchesRowHeaderBinding;
 import io.oldering.tvfoot.red.databinding.MatchesRowMatchBinding;
 import io.oldering.tvfoot.red.databinding.RowLoadingBinding;
+import io.oldering.tvfoot.red.di.scope.ActivityScope;
 import io.oldering.tvfoot.red.matches.displayable.BroadcasterRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.HeaderRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.LoadingRowDisplayable;
@@ -22,13 +23,8 @@ import io.reactivex.subjects.PublishSubject;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-/**
- * TODO(benoit) find a better scope, or how to
- * clear the instance once the activity ends?
- */
-@Singleton public class MatchesAdapter
+@ActivityScope public class MatchesAdapter
     extends RecyclerView.Adapter<MatchesAdapter.MatchesItemViewHolder> {
   private List<MatchesItemDisplayable> matchesItems = Collections.emptyList();
   private PublishSubject<MatchRowDisplayable> matchRowClickObservable = PublishSubject.create();

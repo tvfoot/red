@@ -3,11 +3,12 @@ package io.oldering.tvfoot.red.flowcontroller;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import io.oldering.tvfoot.red.di.scope.ActivityScope;
 import javax.inject.Inject;
 
 import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
 
-public class FlowController {
+@ActivityScope public class FlowController {
   private final Activity activity;
 
   @Inject public FlowController(Activity activity) {

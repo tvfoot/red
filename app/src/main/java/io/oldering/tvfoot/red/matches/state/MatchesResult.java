@@ -64,10 +64,10 @@ interface MatchesResult {
   }
 
   @AutoValue abstract class MatchRowClickResult implements MatchesResult {
-    abstract MatchRowDisplayable match();
+    abstract MatchRowDisplayable clickedMatch();
 
-    public static MatchRowClickResult create(MatchRowDisplayable match) {
-      return new AutoValue_MatchesResult_MatchRowClickResult(match);
+    public static MatchRowClickResult create(MatchRowDisplayable clickedMatch) {
+      return new AutoValue_MatchesResult_MatchRowClickResult(clickedMatch);
     }
   }
 
