@@ -51,8 +51,7 @@ public class MatchActivity extends BaseActivity {
 
     if (matchId == null) {
       Timber.w("match id is null %s", uri);
-      Toast.makeText(this, "match id is null with uri " + String.valueOf(uri), Toast.LENGTH_LONG)
-          .show();
+      Toast.makeText(this, "match id is null with uri " + uri, Toast.LENGTH_LONG).show();
       flowController.toMatches();
       finish();
       return;
