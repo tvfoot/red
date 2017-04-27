@@ -1,6 +1,7 @@
 package io.oldering.tvfoot.red.matches.state;
 
 import io.oldering.tvfoot.red.data.entity.Match;
+import io.oldering.tvfoot.red.di.scope.ActivityScope;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import io.oldering.tvfoot.red.util.Preconditions;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
@@ -11,17 +12,15 @@ import io.reactivex.subjects.PublishSubject;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import timber.log.Timber;
 
-@Singleton public class MatchesStateBinder {
+@ActivityScope public class MatchesStateBinder {
   private PublishSubject<MatchesIntent> intentsSubject = PublishSubject.create();
   private PublishSubject<MatchesViewState> statesSubject = PublishSubject.create();
   private MatchesService service;
   private BaseSchedulerProvider schedulerProvider;
 
-  @Inject MatchesStateBinder(MatchesService service,
-      BaseSchedulerProvider schedulerProvider) {
+  @Inject MatchesStateBinder(MatchesService service, BaseSchedulerProvider schedulerProvider) {
     this.service = service;
     this.schedulerProvider = schedulerProvider;
 

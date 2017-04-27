@@ -1,6 +1,7 @@
 package io.oldering.tvfoot.red.match.state;
 
 import io.oldering.tvfoot.red.data.entity.Match;
+import io.oldering.tvfoot.red.di.scope.ActivityScope;
 import io.oldering.tvfoot.red.match.MatchDisplayable;
 import io.oldering.tvfoot.red.util.Preconditions;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
@@ -11,8 +12,7 @@ import io.reactivex.subjects.PublishSubject;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-// TODO(benoit) fix the scope quickly because it is recreating on config change.
-public class MatchStateBinder {
+@ActivityScope public class MatchStateBinder {
   private PublishSubject<MatchIntent> intentsSubject = PublishSubject.create();
   private PublishSubject<MatchViewState> statesSubject = PublishSubject.create();
   private MatchService service;

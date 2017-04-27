@@ -3,8 +3,6 @@ package io.oldering.tvfoot.red.match;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import dagger.android.AndroidInjection;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.RedAppConfig;
 import io.oldering.tvfoot.red.databinding.ActivityMatchBinding;
@@ -14,6 +12,7 @@ import io.oldering.tvfoot.red.match.state.MatchStateBinder;
 import io.oldering.tvfoot.red.match.state.MatchViewState;
 import io.oldering.tvfoot.red.matches.BroadcastersAdapter;
 import io.oldering.tvfoot.red.matches.displayable.BroadcasterRowDisplayable;
+import io.oldering.tvfoot.red.util.BaseActivity;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import java.util.List;
@@ -25,16 +24,17 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
 
-public class MatchActivity extends AppCompatActivity {
-  private ActivityMatchBinding binding;
+public class MatchActivity extends BaseActivity {
   @Inject FlowController flowController;
   @Inject MatchStateBinder stateBinder;
+  @Inject CompositeDisposable disposables;
+
+  private ActivityMatchBinding binding;
   @Nullable private String matchId = null;
-  CompositeDisposable disposables;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
-    AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
+    getActivityComponent().inject(this);
 
     final Uri uri = getIntent().getData();
     if (uri != null && //
