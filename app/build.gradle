@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'net.ltgt.errorprone'
 apply from: '../config/quality/quality.gradle'
 
 android {

@@ -96,7 +96,7 @@ import javax.inject.Inject;
     DiffUtil.calculateDiff(diffUtilCallback, true).dispatchUpdatesTo(this);
   }
 
-  abstract class MatchesItemViewHolder<B extends ViewDataBinding, T extends MatchesItemDisplayable>
+  static abstract class MatchesItemViewHolder<B extends ViewDataBinding, T extends MatchesItemDisplayable>
       extends RecyclerView.ViewHolder {
     final B binding;
 
@@ -110,7 +110,7 @@ import javax.inject.Inject;
     abstract void unbind();
   }
 
-  private class MatchHeaderViewHolder
+  static private class MatchHeaderViewHolder
       extends MatchesItemViewHolder<MatchesRowHeaderBinding, HeaderRowDisplayable> {
     MatchHeaderViewHolder(MatchesRowHeaderBinding binding) {
       super(binding);
@@ -162,7 +162,7 @@ import javax.inject.Inject;
     }
   }
 
-  private class LoadingRowViewHolder
+  static private class LoadingRowViewHolder
       extends MatchesItemViewHolder<RowLoadingBinding, LoadingRowDisplayable> {
     LoadingRowViewHolder(RowLoadingBinding binding) {
       super(binding);

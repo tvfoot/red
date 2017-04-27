@@ -3,6 +3,9 @@
 buildscript {
   repositories {
     jcenter()
+    maven {
+      url 'https://plugins.gradle.org/m2/'
+    }
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:2.3.1'
@@ -10,14 +13,11 @@ buildscript {
     classpath 'me.tatarka:gradle-retrolambda:3.3.0'
     classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
     classpath 'com.google.gms:google-services:3.0.0'
+    classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.10'
   }
 
   // Exclude the version that the android plugin depends on.
   configurations.classpath.exclude group: 'com.android.tools.external.lombok'
-}
-
-plugins {
-  id "net.ltgt.errorprone" version "0.0.10"
 }
 
 allprojects {
@@ -27,15 +27,6 @@ allprojects {
 }
 
 subprojects {
-  apply plugin: 'net.ltgt.errorprone'
-
-  tasks.withType(JavaCompile) {
-    options.compilerArgs += ['-Xlint:all',
-                             '-Xlint:-serial',
-                             '-Xlint:-deprecation',
-                             '-Werror']
-  }
-
   tasks.withType(Test) {
     testLogging {
       exceptionFormat 'FULL'
