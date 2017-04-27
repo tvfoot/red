@@ -49,6 +49,7 @@ public class BroadcastersAdapter
 
     public void bind(BroadcasterRowDisplayable broadcaster) {
       binding.setBroadcasterDrawableName(broadcaster.code());
+      binding.executePendingBindings();
     }
   }
 }

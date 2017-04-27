@@ -1,7 +1,7 @@
 package io.oldering.tvfoot.red.matches.state;
 
 import io.oldering.tvfoot.red.data.entity.Match;
-import io.oldering.tvfoot.red.di.scope.ActivityScope;
+import io.oldering.tvfoot.red.di.scope.ScreenScope;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import io.oldering.tvfoot.red.util.Preconditions;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
@@ -14,7 +14,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-@ActivityScope public class MatchesStateBinder {
+@ScreenScope public class MatchesStateBinder {
   private PublishSubject<MatchesIntent> intentsSubject = PublishSubject.create();
   private PublishSubject<MatchesViewState> statesSubject = PublishSubject.create();
   private MatchesService service;
@@ -182,7 +182,8 @@ import timber.log.Timber;
                   + ((MatchesResult.LoadNextPageResult) matchesResult).status());
           }
         } else if (matchesResult instanceof MatchesResult.MatchRowClickResult) {
-          stateBuilder.clickedMatch(((MatchesResult.MatchRowClickResult) matchesResult).clickedMatch())
+          stateBuilder.clickedMatch(
+              ((MatchesResult.MatchRowClickResult) matchesResult).clickedMatch())
               .status(MatchesViewState.Status.MATCH_ROW_CLICK);
         } else if (matchesResult instanceof MatchesResult.GetLastStateResult) {
           return stateBuilder.status(MatchesViewState.Status.LAST_STATE).build();

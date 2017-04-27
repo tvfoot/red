@@ -58,6 +58,11 @@ import javax.inject.Inject;
     holder.bind(matchesItems.get(position));
   }
 
+  @Override public void onViewRecycled(MatchesItemViewHolder holder) {
+    super.onViewRecycled(holder);
+    holder.unbind();
+  }
+
   @Override public int getItemCount() {
     return matchesItems.size();
   }
@@ -101,6 +106,8 @@ import javax.inject.Inject;
     }
 
     abstract void bind(T item);
+
+    abstract void unbind();
   }
 
   private class MatchHeaderViewHolder
@@ -111,6 +118,12 @@ import javax.inject.Inject;
 
     @Override void bind(HeaderRowDisplayable header) {
       binding.setDayHeader(header);
+      binding.executePendingBindings();
+    }
+
+    @Override void unbind() {
+      binding.setDayHeader(null);
+      binding.executePendingBindings();
     }
   }
 
@@ -126,6 +139,13 @@ import javax.inject.Inject;
       binding.executePendingBindings();
 
       setBroadcastsAdapter(match);
+    }
+
+    @Override void unbind() {
+      binding.setMatch(null);
+      binding.setHandler(null);
+      binding.matchBroadcasters.setAdapter(null);
+      binding.executePendingBindings();
     }
 
     private void setBroadcastsAdapter(MatchRowDisplayable match) {
@@ -149,6 +169,10 @@ import javax.inject.Inject;
     }
 
     @Override void bind(LoadingRowDisplayable item) {
+      // nothing to do
+    }
+
+    @Override void unbind() {
       // nothing to do
     }
   }
