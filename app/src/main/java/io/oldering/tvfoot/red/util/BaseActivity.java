@@ -13,6 +13,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
   @CallSuper @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    Object lastCustomNonConfigInstance = getLastCustomNonConfigurationInstance();
+    if (lastCustomNonConfigInstance != null) {
+      activityComponent = (ActivityComponent) lastCustomNonConfigInstance;
+    }
   }
 
   public ActivityComponent getActivityComponent() {
@@ -24,5 +29,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
   public BundleService getBundleService() {
     return bundleService;
+  }
+
+  @Override public Object onRetainCustomNonConfigurationInstance() {
+    return getActivityComponent();
   }
 }
