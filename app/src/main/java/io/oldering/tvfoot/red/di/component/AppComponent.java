@@ -2,7 +2,6 @@ package io.oldering.tvfoot.red.di.component;
 
 import dagger.Component;
 import io.oldering.tvfoot.red.RedApp;
-import io.oldering.tvfoot.red.di.module.ActivityModule;
 import io.oldering.tvfoot.red.di.module.AppModule;
 import io.oldering.tvfoot.red.di.module.NetworkModule;
 import io.oldering.tvfoot.red.di.module.SchedulerModule;
@@ -16,7 +15,7 @@ import okhttp3.OkHttpClient;
     ServiceModule.class, //
     SchedulerModule.class, //
 }) public interface AppComponent {
-  ActivityComponent plus(ActivityModule activityModule);
+  ScreenComponent screenComponent();
 
   void inject(RedApp redApp);
 
