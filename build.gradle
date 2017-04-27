@@ -16,9 +16,33 @@ buildscript {
   configurations.classpath.exclude group: 'com.android.tools.external.lombok'
 }
 
+plugins {
+  id "net.ltgt.errorprone" version "0.0.10"
+}
+
 allprojects {
   repositories {
     jcenter()
+  }
+}
+
+subprojects {
+  apply plugin: 'net.ltgt.errorprone'
+
+  tasks.withType(JavaCompile) {
+    options.compilerArgs += ['-Xlint:all',
+                             '-Xlint:-serial',
+                             '-Xlint:-deprecation',
+                             '-Werror']
+  }
+
+  tasks.withType(Test) {
+    testLogging {
+      exceptionFormat 'FULL'
+      showCauses true
+      showExceptions true
+      showStackTraces true
+    }
   }
 }
 
@@ -33,7 +57,7 @@ ext {
             compileSdkVersion: 25,
             buildToolsVersion: '25.0.2',]
 
-  lib = [supportLibraryVersion          : '25.2.0',
+  lib = [supportLibraryVersion          : '25.3.1',
          constraintLayoutVersion        : '1.0.2',
          picassoVersion                 : '2.5.2',
          picassoOkHttp3DownloaderVersion: '1.1.0',
