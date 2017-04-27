@@ -3,6 +3,7 @@ package io.oldering.tvfoot.red.match;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.RedAppConfig;
 import io.oldering.tvfoot.red.databinding.ActivityMatchBinding;
@@ -50,6 +51,8 @@ public class MatchActivity extends BaseActivity {
 
     if (matchId == null) {
       Timber.w("match id is null %s", uri);
+      Toast.makeText(this, "match id is null with uri " + String.valueOf(uri), Toast.LENGTH_LONG)
+          .show();
       flowController.toMatches();
       finish();
       return;
@@ -71,15 +74,6 @@ public class MatchActivity extends BaseActivity {
     super.onDestroy();
     disposables.dispose();
   }
-
-  //private void setStateBinder() {
-  //  Object lastCustomNonConfigInstance = getLastCustomNonConfigurationInstance();
-  //  if (lastCustomNonConfigInstance != null) {
-  //    stateBinder = (MatchStateBinder) lastCustomNonConfigInstance;
-  //  } else {
-  //    stateBinder = // TODO do I have to use old school Dagger Components?;
-  //  }
-  //}
 
   public Observable<MatchIntent> intents() {
     return initialIntent();

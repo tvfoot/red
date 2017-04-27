@@ -78,7 +78,7 @@ public class MatchesActivity extends BaseActivity {
     switch (state.status()) {
       case MATCH_ROW_CLICK:
         MatchRowDisplayable match =
-            checkNotNull(state.match(), "MatchRowClickIntent's match == null");
+            checkNotNull(state.clickedMatch(), "MatchRowClickIntent's clickedMatch == null");
         flowController.toMatch(match.matchId());
         break;
       default:

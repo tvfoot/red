@@ -182,10 +182,10 @@ import timber.log.Timber;
                   + ((MatchesResult.LoadNextPageResult) matchesResult).status());
           }
         } else if (matchesResult instanceof MatchesResult.MatchRowClickResult) {
-          stateBuilder.match(((MatchesResult.MatchRowClickResult) matchesResult).match())
+          stateBuilder.clickedMatch(((MatchesResult.MatchRowClickResult) matchesResult).clickedMatch())
               .status(MatchesViewState.Status.MATCH_ROW_CLICK);
         } else if (matchesResult instanceof MatchesResult.GetLastStateResult) {
-          return stateBuilder.build();
+          return stateBuilder.status(MatchesViewState.Status.LAST_STATE).build();
         } else {
           throw new IllegalArgumentException("Don't know this matchesResult " + matchesResult);
         }

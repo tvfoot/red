@@ -20,55 +20,20 @@ public class MatchesViewModel {
     this.adapter = adapter;
   }
 
-  void updateFromState(MatchesViewState state) {
+  @SuppressWarnings("ThrowableResultOfMethodCallIgnored") void updateFromState(
+      MatchesViewState state) {
     updateCurrentPage(state);
 
-    switch (state.status()) {
-      case FIRST_PAGE_IN_FLIGHT:
-        isFirstLoading.set(true);
-        hasError.set(false);
-        hasData.set(false);
-        break;
-      case FIRST_PAGE_FAILURE:
-        isFirstLoading.set(false);
-        hasError.set(true);
-        hasData.set(false);
+    isFirstLoading.set(state.firstPageLoading());
+    hasError.set(state.error() != null);
+    hasData.set(!state.matches().isEmpty());
 
-        //noinspection ThrowableResultOfMethodCallIgnored
-        Throwable error = checkNotNull(state.error(), "state error is null");
-        setErrorMessage(error.toString());
-        break;
-      case FIRST_PAGE_SUCCESS:
-        isFirstLoading.set(false);
-        hasError.set(false);
-        hasData.set(true);
-        adapter.setMatchesItems(state.matchesItemDisplayables());
-        break;
-      case NEXT_PAGE_IN_FLIGHT:
-        isFirstLoading.set(false);
-        hasError.set(false);
-        hasData.set(true);
-        break;
-      case NEXT_PAGE_FAILURE:
-        isFirstLoading.set(false);
-        hasError.set(true);
-        hasData.set(false);
-
-        //noinspection ThrowableResultOfMethodCallIgnored
-        error = checkNotNull(state.error(), "state error is null");
-        setErrorMessage(error.toString());
-        break;
-      case NEXT_PAGE_SUCCESS:
-        isFirstLoading.set(false);
-        hasError.set(false);
-        hasData.set(true);
-        adapter.setMatchesItems(state.matchesItemDisplayables());
-        break;
-      case MATCH_ROW_CLICK:
-      case IDLE:
-        break;
-      default:
-        throw new IllegalStateException("Don't know how to deal with this State " + state);
+    if (hasError.get()) {
+      Throwable error = checkNotNull(state.error(), "state error is null");
+      setErrorMessage(error.toString());
+    }
+    if (hasData.get()) {
+      adapter.setMatchesItems(state.matchesItemDisplayables());
     }
   }
 
