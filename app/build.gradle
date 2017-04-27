@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'net.ltgt.errorprone'
 apply from: '../config/quality/quality.gradle'
 
 android {
@@ -63,9 +64,8 @@ android {
 
   // Remove mockRelease as it's not needed.
   android.variantFilter { variant ->
-    if (variant.buildType.name.equals('release') && variant.getFlavors().
-        get(0).name.
-        equals('mock')) {
+    if (variant.buildType.name == 'release' && variant.getFlavors().
+        get(0).name == 'mock') {
       variant.setIgnore(true);
     }
   }

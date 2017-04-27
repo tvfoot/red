@@ -15,18 +15,24 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 @ScreenScope public class MatchesStateBinder {
-  private PublishSubject<MatchesIntent> intentsSubject = PublishSubject.create();
-  private PublishSubject<MatchesViewState> statesSubject = PublishSubject.create();
+  private PublishSubject<MatchesIntent> intentsSubject;
+  private PublishSubject<MatchesViewState> statesSubject;
   private MatchesService service;
   private BaseSchedulerProvider schedulerProvider;
 
-  @Inject MatchesStateBinder(MatchesService service, BaseSchedulerProvider schedulerProvider) {
+  @SuppressWarnings("CheckReturnValue") //
+  @Inject MatchesStateBinder(PublishSubject<MatchesIntent> intentsSubject,
+      PublishSubject<MatchesViewState> statesSubject, MatchesService service,
+      BaseSchedulerProvider schedulerProvider) {
+    this.intentsSubject = intentsSubject;
+    this.statesSubject = statesSubject;
     this.service = service;
     this.schedulerProvider = schedulerProvider;
 
-    compose().subscribe(state -> statesSubject.onNext(state));
+    compose().subscribe(state -> this.statesSubject.onNext(state));
   }
 
+  @SuppressWarnings("CheckReturnValue")
   public void forwardIntents(Observable<MatchesIntent> intents) {
     intents.subscribe(intentsSubject::onNext);
   }

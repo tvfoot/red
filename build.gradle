@@ -3,6 +3,9 @@
 buildscript {
   repositories {
     jcenter()
+    maven {
+      url 'https://plugins.gradle.org/m2/'
+    }
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:2.3.1'
@@ -10,6 +13,7 @@ buildscript {
     classpath 'me.tatarka:gradle-retrolambda:3.3.0'
     classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
     classpath 'com.google.gms:google-services:3.0.0'
+    classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.10'
   }
 
   // Exclude the version that the android plugin depends on.
@@ -19,6 +23,17 @@ buildscript {
 allprojects {
   repositories {
     jcenter()
+  }
+}
+
+subprojects {
+  tasks.withType(Test) {
+    testLogging {
+      exceptionFormat 'FULL'
+      showCauses true
+      showExceptions true
+      showStackTraces true
+    }
   }
 }
 
@@ -33,7 +48,7 @@ ext {
             compileSdkVersion: 25,
             buildToolsVersion: '25.0.2',]
 
-  lib = [supportLibraryVersion          : '25.2.0',
+  lib = [supportLibraryVersion          : '25.3.1',
          constraintLayoutVersion        : '1.0.2',
          picassoVersion                 : '2.5.2',
          picassoOkHttp3DownloaderVersion: '1.1.0',

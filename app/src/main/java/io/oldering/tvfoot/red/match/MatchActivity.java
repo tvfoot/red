@@ -94,6 +94,9 @@ public class MatchActivity extends BaseActivity {
       case LOAD_MATCH_SUCCESS:
         renderMatchLoaded(state);
         break;
+      case IDLE:
+        // do nothing
+        break;
     }
   }
 
