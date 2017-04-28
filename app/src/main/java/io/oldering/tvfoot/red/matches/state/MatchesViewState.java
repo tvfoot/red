@@ -10,8 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
 
-import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.IDLE;
-
 @AutoValue public abstract class MatchesViewState {
   public List<MatchesItemDisplayable> matchesItemDisplayables() {
     List<String> headers = new ArrayList<>();
@@ -41,8 +39,6 @@ import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.IDLE;
 
   @Nullable public abstract MatchRowDisplayable clickedMatch();
 
-  public abstract Status status();
-
   public abstract Integer currentPage();
 
   public static Builder builder() {
@@ -58,7 +54,7 @@ import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.IDLE;
   public abstract Builder buildWith();
 
   static MatchesViewState idle() {
-    return MatchesViewState.builder().status(IDLE).build();
+    return MatchesViewState.builder().build();
   }
 
   @AutoValue.Builder public static abstract class Builder {
@@ -72,19 +68,10 @@ import static io.oldering.tvfoot.red.matches.state.MatchesViewState.Status.IDLE;
 
     public abstract Builder pullToRefreshLoading(boolean pullToRefreshLoading);
 
-    public abstract Builder status(Status status);
-
     public abstract Builder clickedMatch(@Nullable MatchRowDisplayable clickedMatch);
 
     public abstract Builder currentPage(Integer CurrentPage);
 
     public abstract MatchesViewState build();
-  }
-
-  public enum Status {
-    FIRST_PAGE_IN_FLIGHT, FIRST_PAGE_FAILURE, FIRST_PAGE_SUCCESS, //
-    NEXT_PAGE_IN_FLIGHT, NEXT_PAGE_FAILURE, NEXT_PAGE_SUCCESS, //
-    MATCH_ROW_CLICK, //
-    IDLE, LAST_STATE
   }
 }

@@ -2,7 +2,6 @@ package io.oldering.tvfoot.red.matches.state;
 
 import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.data.entity.Match;
-import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import java.util.List;
 import javax.annotation.Nullable;
 
@@ -63,18 +62,9 @@ interface MatchesResult {
     }
   }
 
-  @AutoValue abstract class MatchRowClickResult implements MatchesResult {
-    abstract MatchRowDisplayable clickedMatch();
-
-    public static MatchRowClickResult create(MatchRowDisplayable clickedMatch) {
-      return new AutoValue_MatchesResult_MatchRowClickResult(clickedMatch);
-    }
-  }
-
   enum Status {
     FIRST_PAGE_IN_FLIGHT, FIRST_PAGE_FAILURE, FIRST_PAGE_SUCCESS, //
     NEXT_PAGE_IN_FLIGHT, NEXT_PAGE_FAILURE, NEXT_PAGE_SUCCESS, //
     PULL_TO_REFRESH_IN_FLIGHT, PULL_TO_REFRESH_FAILURE, PULL_TO_REFRESH_SUCCESS, //
-    MATCH_ROW_CLICK
   }
 }
