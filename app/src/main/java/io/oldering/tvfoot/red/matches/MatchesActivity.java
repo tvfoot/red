@@ -5,7 +5,6 @@ import android.os.Bundle;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.ActivityMatchesBinding;
 import io.oldering.tvfoot.red.flowcontroller.FlowController;
-import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import io.oldering.tvfoot.red.matches.state.MatchesIntent;
 import io.oldering.tvfoot.red.matches.state.MatchesStateBinder;
 import io.oldering.tvfoot.red.matches.state.MatchesViewState;
@@ -14,8 +13,6 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-
-import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
 
 public class MatchesActivity extends BaseActivity {
   @Inject MatchesAdapter adapter;
@@ -50,6 +47,9 @@ public class MatchesActivity extends BaseActivity {
   private void bind() {
     disposables.add(stateBinder.getStatesAsObservable().subscribe(this::render));
     stateBinder.forwardIntents(intents());
+
+    disposables.add(adapter.getMatchRowClickObservable()
+        .subscribe(match -> flowController.toMatch(match.matchId())));
   }
 
   @Override protected void onDestroy() {
@@ -58,11 +58,7 @@ public class MatchesActivity extends BaseActivity {
   }
 
   public Observable<MatchesIntent> intents() {
-    return Observable.merge(InitialIntent(), loadNextPageIntent(), matchRowClickIntent());
-  }
-
-  private Observable<MatchesIntent.MatchRowClickIntent> matchRowClickIntent() {
-    return adapter.getMatchRowClickObservable();
+    return Observable.merge(InitialIntent(), loadNextPageIntent());
   }
 
   private Observable<MatchesIntent.InitialIntent> InitialIntent() {
@@ -75,15 +71,7 @@ public class MatchesActivity extends BaseActivity {
   }
 
   public void render(MatchesViewState state) {
-    switch (state.status()) {
-      case MATCH_ROW_CLICK:
-        MatchRowDisplayable match =
-            checkNotNull(state.clickedMatch(), "MatchRowClickIntent's clickedMatch == null");
-        flowController.toMatch(match.matchId());
-        break;
-      default:
-        viewModel.updateFromState(state);
-    }
+    viewModel.updateFromState(state);
   }
 
   //@Override public Object onRetainCustomNonConfigurationInstance() {

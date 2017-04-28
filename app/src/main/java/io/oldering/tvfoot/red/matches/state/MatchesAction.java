@@ -1,7 +1,6 @@
 package io.oldering.tvfoot.red.matches.state;
 
 import com.google.auto.value.AutoValue;
-import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 
 interface MatchesAction {
   @AutoValue abstract class GetLastStateAction implements MatchesAction {
@@ -21,14 +20,6 @@ interface MatchesAction {
 
     public static LoadNextPageAction create(int pageIndex) {
       return new AutoValue_MatchesAction_LoadNextPageAction(pageIndex);
-    }
-  }
-
-  @AutoValue abstract class MatchRowClickAction implements MatchesAction {
-    public abstract MatchRowDisplayable match();
-
-    public static MatchRowClickAction create(MatchRowDisplayable match) {
-      return new AutoValue_MatchesAction_MatchRowClickAction(match);
     }
   }
 }

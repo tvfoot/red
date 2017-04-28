@@ -77,10 +77,6 @@ import timber.log.Timber;
       return MatchesAction.LoadNextPageAction.create(
           ((MatchesIntent.LoadNextPageIntent) intent).pageIndex());
     }
-    if (intent instanceof MatchesIntent.MatchRowClickIntent) {
-      return MatchesAction.MatchRowClickAction.create(
-          ((MatchesIntent.MatchRowClickIntent) intent).match());
-    }
     throw new IllegalArgumentException("do not know how to treat this intents " + intent);
   }
 
@@ -103,10 +99,6 @@ import timber.log.Timber;
           .observeOn(schedulerProvider.ui())
           .startWith(MatchesResult.LoadNextPageResult.inFlight(action.pageIndex())));
 
-  private ObservableTransformer<MatchesAction.MatchRowClickAction, MatchesResult.MatchRowClickResult>
-      matchRowClickTransformer = actions -> actions.flatMap(
-      action -> Observable.just(MatchesResult.MatchRowClickResult.create(action.match())));
-
   private ObservableTransformer<MatchesAction.GetLastStateAction, MatchesResult.GetLastStateResult>
       getLastStateTransformer =
       actions -> actions.map(ignored -> MatchesResult.GetLastStateResult.create());
@@ -115,13 +107,11 @@ import timber.log.Timber;
       actions -> actions.publish(shared -> Observable.merge(
           shared.ofType(MatchesAction.LoadFirstPageAction.class).compose(loadFirstPageTransformer),
           shared.ofType(MatchesAction.LoadNextPageAction.class).compose(loadNextPageTransformer),
-          shared.ofType(MatchesAction.MatchRowClickAction.class).compose(matchRowClickTransformer),
           shared.ofType(MatchesAction.GetLastStateAction.class).compose(getLastStateTransformer))
           .mergeWith(
               // Error for not implemented actions
               shared.filter(v -> !(v instanceof MatchesAction.LoadFirstPageAction)
                   && !(v instanceof MatchesAction.LoadNextPageAction)
-                  && !(v instanceof MatchesAction.MatchRowClickAction)
                   && !(v instanceof MatchesAction.GetLastStateAction))
                   .flatMap(w -> Observable.error(
                       new IllegalArgumentException("Unknown Action type: " + w)))));
@@ -134,14 +124,11 @@ import timber.log.Timber;
         if (matchesResult instanceof MatchesResult.LoadFirstPageResult) {
           switch (((MatchesResult.LoadFirstPageResult) matchesResult).status()) {
             case FIRST_PAGE_IN_FLIGHT:
-              stateBuilder.firstPageLoading(true)
-                  .error(null)
-                  .status(MatchesViewState.Status.FIRST_PAGE_IN_FLIGHT);
+              stateBuilder.firstPageLoading(true).error(null);
               break;
             case FIRST_PAGE_FAILURE:
               stateBuilder.firstPageLoading(false)
-                  .error(((MatchesResult.LoadFirstPageResult) matchesResult).throwable())
-                  .status(MatchesViewState.Status.FIRST_PAGE_FAILURE);
+                  .error(((MatchesResult.LoadFirstPageResult) matchesResult).throwable());
               break;
             case FIRST_PAGE_SUCCESS:
               List<Match> matches = Preconditions.checkNotNull(
@@ -150,8 +137,7 @@ import timber.log.Timber;
 
               stateBuilder.firstPageLoading(false)
                   .error(null)
-                  .matches(MatchRowDisplayable.fromMatches(matches))
-                  .status(MatchesViewState.Status.FIRST_PAGE_SUCCESS);
+                  .matches(MatchRowDisplayable.fromMatches(matches));
               break;
             default:
               throw new IllegalArgumentException("Wrong status for LoadFirstPageResult: "
@@ -162,13 +148,11 @@ import timber.log.Timber;
             case NEXT_PAGE_IN_FLIGHT:
               stateBuilder.nextPageLoading(true)
                   .currentPage(((MatchesResult.LoadNextPageResult) matchesResult).pageIndex())
-                  .error(null)
-                  .status(MatchesViewState.Status.NEXT_PAGE_IN_FLIGHT);
+                  .error(null);
               break;
             case NEXT_PAGE_FAILURE:
               stateBuilder.nextPageLoading(false)
-                  .error(((MatchesResult.LoadNextPageResult) matchesResult).error())
-                  .status(MatchesViewState.Status.NEXT_PAGE_FAILURE);
+                  .error(((MatchesResult.LoadNextPageResult) matchesResult).error());
               break;
             case NEXT_PAGE_SUCCESS:
               List<Match> newMatches = Preconditions.checkNotNull(
@@ -178,21 +162,14 @@ import timber.log.Timber;
               matches.addAll(previousState.matches());
               matches.addAll(MatchRowDisplayable.fromMatches(newMatches));
 
-              stateBuilder.nextPageLoading(false)
-                  .error(null)
-                  .matches(matches)
-                  .status(MatchesViewState.Status.NEXT_PAGE_SUCCESS);
+              stateBuilder.nextPageLoading(false).error(null).matches(matches);
               break;
             default:
               throw new IllegalArgumentException("Wrong status for LoadNextPageResult: "
                   + ((MatchesResult.LoadNextPageResult) matchesResult).status());
           }
-        } else if (matchesResult instanceof MatchesResult.MatchRowClickResult) {
-          stateBuilder.clickedMatch(
-              ((MatchesResult.MatchRowClickResult) matchesResult).clickedMatch())
-              .status(MatchesViewState.Status.MATCH_ROW_CLICK);
         } else if (matchesResult instanceof MatchesResult.GetLastStateResult) {
-          return stateBuilder.status(MatchesViewState.Status.LAST_STATE).build();
+          return stateBuilder.build();
         } else {
           throw new IllegalArgumentException("Don't know this matchesResult " + matchesResult);
         }

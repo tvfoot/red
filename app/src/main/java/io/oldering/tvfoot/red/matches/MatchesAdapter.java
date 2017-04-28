@@ -17,7 +17,6 @@ import io.oldering.tvfoot.red.matches.displayable.LoadingRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.MatchesItemDisplayable;
 import io.oldering.tvfoot.red.matches.displayable.MatchesItemDisplayableDiffUtilCallback;
-import io.oldering.tvfoot.red.matches.state.MatchesIntent;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import java.util.Collections;
@@ -49,8 +48,8 @@ import javax.inject.Inject;
     }
   }
 
-  Observable<MatchesIntent.MatchRowClickIntent> getMatchRowClickObservable() {
-    return matchRowClickObservable.map(MatchesIntent.MatchRowClickIntent::create);
+  Observable<MatchRowDisplayable> getMatchRowClickObservable() {
+    return matchRowClickObservable;
   }
 
   @SuppressWarnings("unchecked") @Override
