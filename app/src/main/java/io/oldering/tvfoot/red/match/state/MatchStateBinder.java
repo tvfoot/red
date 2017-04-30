@@ -3,7 +3,6 @@ package io.oldering.tvfoot.red.match.state;
 import io.oldering.tvfoot.red.data.entity.Match;
 import io.oldering.tvfoot.red.di.scope.ScreenScope;
 import io.oldering.tvfoot.red.match.MatchDisplayable;
-import io.oldering.tvfoot.red.util.Preconditions;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
@@ -11,6 +10,8 @@ import io.reactivex.functions.BiFunction;
 import io.reactivex.subjects.PublishSubject;
 import javax.inject.Inject;
 import timber.log.Timber;
+
+import static io.oldering.tvfoot.red.util.PreConditions.checkNotNull;
 
 @ScreenScope public class MatchStateBinder {
   private PublishSubject<MatchIntent> intentsSubject;
@@ -116,9 +117,8 @@ import timber.log.Timber;
                   .status(MatchViewState.Status.LOAD_MATCH_FAILURE);
               break;
             case LOAD_MATCH_SUCCESS:
-              Match match =
-                  Preconditions.checkNotNull(((MatchResult.LoadMatchResult) matchResult).match(),
-                      "Match are null");
+              Match match = checkNotNull(((MatchResult.LoadMatchResult) matchResult).match(),
+                  "Match are null");
 
               stateBuilder.loading(false)
                   .error(null)

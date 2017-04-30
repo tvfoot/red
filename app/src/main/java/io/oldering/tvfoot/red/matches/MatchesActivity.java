@@ -17,7 +17,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
-import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
+import static io.oldering.tvfoot.red.util.PreConditions.checkNotNull;
 
 public class MatchesActivity extends BaseActivity {
   @Inject MatchesAdapter adapter;

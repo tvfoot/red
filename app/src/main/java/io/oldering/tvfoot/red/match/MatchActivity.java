@@ -23,7 +23,7 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
+import static io.oldering.tvfoot.red.util.PreConditions.checkNotNull;
 
 public class MatchActivity extends BaseActivity {
   @Inject FlowController flowController;

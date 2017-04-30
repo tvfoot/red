@@ -6,7 +6,7 @@ import android.net.Uri;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
+import static io.oldering.tvfoot.red.util.PreConditions.checkNotNull;
 
 public class FlowController {
   private final Activity activity;

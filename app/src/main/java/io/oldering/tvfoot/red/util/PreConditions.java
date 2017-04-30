@@ -4,7 +4,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import io.reactivex.Observer;
 
-public final class Preconditions {
+public final class PreConditions {
   public static boolean checkMainThread(Observer<?> observer) {
     if (Looper.myLooper() != Looper.getMainLooper()) {
       observer.onError(new IllegalStateException(
@@ -22,7 +22,7 @@ public final class Preconditions {
     return value;
   }
 
-  private Preconditions() {
+  private PreConditions() {
     throw new AssertionError("No instances.");
   }
 }

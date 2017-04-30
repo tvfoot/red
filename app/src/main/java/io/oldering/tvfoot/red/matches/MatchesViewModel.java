@@ -5,7 +5,7 @@ import android.databinding.ObservableField;
 import io.oldering.tvfoot.red.matches.state.MatchesViewState;
 import javax.inject.Inject;
 
-import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
+import static io.oldering.tvfoot.red.util.PreConditions.checkNotNull;
 
 public class MatchesViewModel {
   private final MatchesAdapter adapter;

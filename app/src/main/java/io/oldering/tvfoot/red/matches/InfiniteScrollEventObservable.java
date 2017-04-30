@@ -8,7 +8,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.MainThreadDisposable;
 import java.lang.ref.WeakReference;
 
-import static io.oldering.tvfoot.red.util.Preconditions.checkMainThread;
+import static io.oldering.tvfoot.red.util.PreConditions.checkMainThread;
 
 /**
  * Heavily based on {@link com.jakewharton.rxbinding2.support.v7.widget.RecyclerViewScrollEventObservable}

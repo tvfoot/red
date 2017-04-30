@@ -3,7 +3,6 @@ package io.oldering.tvfoot.red.matches.state;
 import io.oldering.tvfoot.red.data.entity.Match;
 import io.oldering.tvfoot.red.di.scope.ScreenScope;
 import io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable;
-import io.oldering.tvfoot.red.util.Preconditions;
 import io.oldering.tvfoot.red.util.schedulers.BaseSchedulerProvider;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
@@ -13,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
+
+import static io.oldering.tvfoot.red.util.PreConditions.checkNotNull;
 
 @ScreenScope public class MatchesStateBinder {
   private PublishSubject<MatchesIntent> intentsSubject;
@@ -131,9 +132,9 @@ import timber.log.Timber;
                   .error(((MatchesResult.LoadFirstPageResult) matchesResult).throwable());
               break;
             case FIRST_PAGE_SUCCESS:
-              List<Match> matches = Preconditions.checkNotNull(
-                  ((MatchesResult.LoadFirstPageResult) matchesResult).matches(),
-                  "Matches are null");
+              List<Match> matches =
+                  checkNotNull(((MatchesResult.LoadFirstPageResult) matchesResult).matches(),
+                      "Matches are null");
 
               stateBuilder.firstPageLoading(false)
                   .error(null)
@@ -155,8 +156,9 @@ import timber.log.Timber;
                   .error(((MatchesResult.LoadNextPageResult) matchesResult).error());
               break;
             case NEXT_PAGE_SUCCESS:
-              List<Match> newMatches = Preconditions.checkNotNull(
-                  ((MatchesResult.LoadNextPageResult) matchesResult).matches(), "Matches are null");
+              List<Match> newMatches =
+                  checkNotNull(((MatchesResult.LoadNextPageResult) matchesResult).matches(),
+                      "Matches are null");
 
               List<MatchRowDisplayable> matches = new ArrayList<>();
               matches.addAll(previousState.matches());
