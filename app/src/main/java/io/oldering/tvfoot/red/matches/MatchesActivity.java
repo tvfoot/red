@@ -2,6 +2,9 @@ package io.oldering.tvfoot.red.matches;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuItem;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.databinding.ActivityMatchesBinding;
 import io.oldering.tvfoot.red.flowcontroller.FlowController;
@@ -13,6 +16,8 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+
+import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
 
 public class MatchesActivity extends BaseActivity {
   @Inject MatchesAdapter adapter;
@@ -27,12 +32,35 @@ public class MatchesActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
     getActivityComponent().inject(this);
 
+    setupView();
+
+    disposables = new CompositeDisposable();
+    bind();
+  }
+
+  private void setupView() {
     binding = DataBindingUtil.setContentView(this, R.layout.activity_matches);
     binding.recyclerView.setAdapter(adapter);
     binding.setViewModel(viewModel);
 
-    disposables = new CompositeDisposable();
-    bind();
+    setSupportActionBar(binding.matchesToolbar);
+    ActionBar actionBar =
+        checkNotNull(getSupportActionBar(), "support action bar should not be null");
+    actionBar.setDisplayShowTitleEnabled(false);
+  }
+
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.matches_settings_menu, menu);
+    return true;
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId() == R.id.matches_settings_about) {
+      flowController.toAbout();
+      return true;
+    }
+
+    return super.onOptionsItemSelected(item);
   }
 
   private void bind() {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 import static io.oldering.tvfoot.red.util.Preconditions.checkNotNull;
 
@@ -26,5 +27,10 @@ public class FlowController {
     Intent intent = new Intent(Intent.ACTION_VIEW,
         Uri.parse(String.format("tvfoot://tvfoot/match/league/home/away/%s", matchId)));
     activity.startActivity(intent);
+  }
+
+  public void toAbout() {
+    // TODO(benoit)
+    Timber.d("To About");
   }
 }
