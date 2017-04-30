@@ -35,15 +35,6 @@ public class MatchesActivity extends BaseActivity {
     bind();
   }
 
-  //private void setStateBinder() {
-  //  Object lastCustomNonConfigInstance = getLastCustomNonConfigurationInstance();
-  //  if (lastCustomNonConfigInstance != null) {
-  //    stateBinder = (MatchesStateBinder) lastCustomNonConfigInstance;
-  //  } else {
-  //    stateBinder = // TODO do I have to use old school Dagger Components?;
-  //  }
-  //}
-
   private void bind() {
     disposables.add(stateBinder.getStatesAsObservable().subscribe(this::render));
     stateBinder.forwardIntents(intents());
