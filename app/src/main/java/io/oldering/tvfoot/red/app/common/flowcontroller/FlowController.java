@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
 
@@ -30,7 +29,7 @@ public class FlowController {
   }
 
   public void toSettings() {
-    // TODO(benoit)
-    Timber.d("To Settings");
+    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tvfoot://tvfoot/settings"));
+    activity.startActivity(intent);
   }
 }

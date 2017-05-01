@@ -14,7 +14,7 @@
       android:supportsRtl="true"
       android:theme="@style/Theme.TvFoot">
     <activity
-        android:name=".main.MainActivity"
+        android:name=".app.domain.main.MainActivity"
         android:noHistory="true"
         android:theme="@android:style/Theme.NoDisplay">
       <intent-filter>
@@ -24,7 +24,7 @@
       </intent-filter>
     </activity>
     <activity
-        android:name=".matches.MatchesActivity"
+        android:name=".app.domain.matches.MatchesActivity"
         android:label="@string/app_name"
         android:launchMode="singleTop"
         android:theme="@style/Theme.TvFoot.NoActionBar">
@@ -42,9 +42,9 @@
       </intent-filter>
     </activity>
     <activity
-        android:name=".match.MatchActivity"
+        android:name=".app.domain.match.MatchActivity"
         android:label="@string/match_detail_activity_label"
-        android:parentActivityName=".matches.MatchesActivity"
+        android:parentActivityName=".app.domain.matches.MatchesActivity"
         android:theme="@style/Theme.TvFoot.NoActionBar">
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
@@ -58,6 +58,30 @@
         <data android:scheme="tvfoot"/>
         <data android:pathPrefix="/match/"/>
       </intent-filter>
+      <meta-data
+          android:name="android.support.PARENT_ACTIVITY"
+          android:value="io.oldering.tvfoot.red.app.domain.matches.MatchesActivity"/>
+    </activity>
+    <activity
+        android:name=".app.domain.settings.SettingsActivity"
+        android:label="@string/title_activity_settings"
+        android:parentActivityName=".app.domain.matches.MatchesActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+
+        <data android:host="tvfoot"/>
+        <data android:scheme="https"/>
+        <data android:scheme="http"/>
+        <data android:scheme="tvfoot"/>
+        <data android:path="/settings"/>
+        <data android:pathPrefix="/settings/"/>
+      </intent-filter>
+      <meta-data
+          android:name="android.support.PARENT_ACTIVITY"
+          android:value="io.oldering.tvfoot.red.app.domain.matches.MatchesActivity"/>
     </activity>
   </application>
 
