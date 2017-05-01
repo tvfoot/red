@@ -1,6 +1,7 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
   <header
       android:fragment="io.oldering.tvfoot.red.app.domain.settings.SettingsActivity$SettingsPreferenceFragment"
+      android:icon="@drawable/ic_info_black_24dp"
       android:title="@string/pref_header_about"/>
   <header/>
 </preference-headers>

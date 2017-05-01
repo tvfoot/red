@@ -3,11 +3,29 @@
       android:key="pref_key_about_settings"
       android:title="@string/pref_category_about">
     <Preference
+        android:persistent="false"
+        android:summary="@string/pref_about_service_desc"
+        android:title="@string/pref_about_service">
+      <intent
+          android:action="android.intent.action.VIEW"
+          android:data="https://tvfoot.net/apropos"/>
+    </Preference>
+    <Preference
+        android:persistent="false"
+        android:summary="@string/pref_about_contact_desc"
+        android:title="@string/pref_about_contact">
+      <intent
+          android:action="android.intent.action.VIEW"
+          android:data="mailto:site@tvfoot.net">
+        <extra
+            android:name="android.intent.extra.SUBJECT"
+            android:value="Feedback about TVFoot"/>
+      </intent>
+    </Preference>
+    <Preference
         android:key="pref_key_app_version"
         android:persistent="false"
-        android:selectable="false"
-        android:summary="3 (yoyo yo)"
-        android:title="Version"
+        android:title="@string/pref_about_version"
         />
   </PreferenceCategory>
 </PreferenceScreen>

@@ -107,6 +107,8 @@ dependencies {
   compile "com.google.code.gson:gson:$rootProject.ext.lib.gsonVersion"
   compile "com.google.dagger:dagger:$rootProject.ext.lib.daggerVersion"
   compile "com.google.firebase:firebase-core:$rootProject.ext.lib.firebaseVersion"
+  compile "com.jakewharton.rxbinding2:rxbinding:$rootProject.ext.lib.rxBindingVersion"
+  compile "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$rootProject.ext.lib.rxBindingVersion"
   debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.lib.leakCanaryVersion"
   releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.lib.leakCanaryVersion"
   annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.lib.daggerVersion"
@@ -134,12 +136,9 @@ dependencies {
   androidTestCompile "com.crittercism.dexmaker:dexmaker-dx:$rootProject.ext.lib.dexmakerVersion"
   androidTestCompile "com.squareup.okhttp3:mockwebserver:$rootProject.ext.lib.okHttpVersion"
   androidTestCompile "com.squareup.retrofit2:retrofit-mock:$rootProject.ext.lib.retrofitVersion"
+  androidTestCompile 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
   androidTestCompile "com.google.dagger:dagger:$rootProject.ext.lib.daggerVersion"
   androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.lib.daggerVersion"
-  compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
-  compile 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0'
-  compile 'com.android.support:support-v4:25.3.1'
-  androidTestCompile 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
 }
 
 /*
