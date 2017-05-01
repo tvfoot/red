@@ -31,7 +31,7 @@ final class InfiniteScrollEventObservable extends Observable<Object> {
     view.get().addOnScrollListener(listener.scrollListener);
   }
 
-  private final class Listener extends MainThreadDisposable {
+  private static final class Listener extends MainThreadDisposable {
     private final RecyclerView recyclerView;
     private final RecyclerView.OnScrollListener scrollListener;
 
