@@ -1,6 +1,6 @@
 package io.oldering.tvfoot.red.util;
 
-import io.oldering.tvfoot.red.di.component.TestComponent;
+import io.oldering.tvfoot.red.app.injection.component.TestComponent;
 
 public final class InjectionContainer {
   private TestComponent testComponentInstance;

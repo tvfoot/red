@@ -6,11 +6,11 @@
   <data>
     <variable
         name="match"
-        type="io.oldering.tvfoot.red.matches.displayable.MatchRowDisplayable"
+        type="io.oldering.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable"
         />
     <variable
         name="handler"
-        type="io.oldering.tvfoot.red.matches.MatchesAdapter"
+        type="io.oldering.tvfoot.red.app.domain.matches.MatchesAdapter"
         />
   </data>
 

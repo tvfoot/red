@@ -1,8 +1,8 @@
 package io.oldering.tvfoot.red.util;
 
-import io.oldering.tvfoot.red.data.api.TvfootService;
-import io.oldering.tvfoot.red.data.entity.Match;
-import io.oldering.tvfoot.red.data.entity.search.Filter;
+import io.oldering.tvfoot.red.api.TvfootService;
+import io.oldering.tvfoot.red.app.data.entity.Match;
+import io.oldering.tvfoot.red.app.data.entity.search.Filter;
 import io.reactivex.Single;
 import java.util.List;
 import retrofit2.http.Path;

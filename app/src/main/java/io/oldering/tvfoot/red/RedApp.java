@@ -3,9 +3,9 @@ package io.oldering.tvfoot.red;
 import android.app.Application;
 import android.content.Context;
 import com.squareup.leakcanary.LeakCanary;
-import io.oldering.tvfoot.red.di.component.AppComponent;
-import io.oldering.tvfoot.red.di.component.DaggerAppComponent;
-import io.oldering.tvfoot.red.di.module.AppModule;
+import io.oldering.tvfoot.red.app.injection.component.AppComponent;
+import io.oldering.tvfoot.red.app.injection.component.DaggerAppComponent;
+import io.oldering.tvfoot.red.app.injection.module.AppModule;
 import timber.log.Timber;
 
 public class RedApp extends Application {
