@@ -8,7 +8,7 @@
 
     <variable
         name="match"
-        type="io.oldering.tvfoot.red.match.MatchDisplayable"
+        type="io.oldering.tvfoot.red.app.domain.match.MatchDisplayable"
         />
   </data>
 

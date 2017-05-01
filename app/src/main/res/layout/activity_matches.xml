@@ -6,7 +6,7 @@
   <data>
     <variable
         name="viewModel"
-        type="io.oldering.tvfoot.red.matches.MatchesViewModel"
+        type="io.oldering.tvfoot.red.app.domain.matches.MatchesViewModel"
         />
   </data>
   <android.support.design.widget.CoordinatorLayout

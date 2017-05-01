@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.view.View;
 import android.widget.ImageView;
+import io.oldering.tvfoot.red.app.common.DataBindingAdapters;
 import org.junit.Test;
 
 import static org.mockito.Mockito.mock;
