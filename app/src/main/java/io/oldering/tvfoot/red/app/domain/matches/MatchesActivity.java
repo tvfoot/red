@@ -55,8 +55,8 @@ public class MatchesActivity extends BaseActivity {
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == R.id.matches_settings_about) {
-      flowController.toAbout();
+    if (item.getItemId() == R.id.matches_settings_item) {
+      flowController.toSettings();
       return true;
     }
 

@@ -29,8 +29,8 @@ public class FlowController {
     activity.startActivity(intent);
   }
 
-  public void toAbout() {
+  public void toSettings() {
     // TODO(benoit)
-    Timber.d("To About");
+    Timber.d("To Settings");
   }
 }

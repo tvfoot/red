@@ -6,5 +6,5 @@
   <string name="match_detail_home_team_icon_desc">Home team icon</string>
   <string name="match_detail_away_team_icon_desc">Away team icon</string>
   <string name="is_live">EN COURS</string>
-  <string name="matches_settings_about">À propos</string>
+  <string name="matches_settings">Settings</string>
 </resources>
