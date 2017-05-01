@@ -16,10 +16,10 @@
         android:title="@string/pref_about_contact">
       <intent
           android:action="android.intent.action.VIEW"
-          android:data="mailto:site@tvfoot.net">
+          android:data="mailto:contact@tvfoot.net">
         <extra
             android:name="android.intent.extra.SUBJECT"
-            android:value="Feedback about TVFoot"/>
+            android:value="Retour sur TVFoot"/>
       </intent>
     </Preference>
     <Preference
