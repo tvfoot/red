@@ -9,9 +9,9 @@ interface MatchesAction {
     }
   }
 
-  @AutoValue abstract class LoadFirstPageAction implements MatchesAction {
-    public static LoadFirstPageAction create() {
-      return new AutoValue_MatchesAction_LoadFirstPageAction();
+  @AutoValue abstract class RefreshAction implements MatchesAction {
+    public static RefreshAction create() {
+      return new AutoValue_MatchesAction_RefreshAction();
     }
   }
 

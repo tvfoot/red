@@ -68,8 +68,10 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
 
   private MatchesAction actionFromIntent(MatchesIntent intent) {
     if (intent instanceof MatchesIntent.InitialIntent) {
-      // TODO(benoit) remove LoadFirst* and use LoadNext(0)
-      return MatchesAction.LoadFirstPageAction.create();
+      return MatchesAction.RefreshAction.create();
+    }
+    if (intent instanceof MatchesIntent.RefreshIntent) {
+      return MatchesAction.RefreshAction.create();
     }
     if (intent instanceof MatchesIntent.GetLastState) {
       return MatchesAction.GetLastStateAction.create();
@@ -81,18 +83,18 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
     throw new IllegalArgumentException("do not know how to treat this intents " + intent);
   }
 
-  private ObservableTransformer<MatchesAction.LoadFirstPageAction, MatchesResult.LoadFirstPageResult>
-      loadFirstPageTransformer = actions -> actions.flatMap(action -> service.loadFirstPage()
+  private ObservableTransformer<MatchesAction.RefreshAction, MatchesResult.RefreshResult>
+      refreshTransformer = actions -> actions.flatMap(action -> service.loadPage(0)
       .toObservable()
-      .map(MatchesResult.LoadFirstPageResult::success)
-      .onErrorReturn(MatchesResult.LoadFirstPageResult::failure)
+      .map(MatchesResult.RefreshResult::success)
+      .onErrorReturn(MatchesResult.RefreshResult::failure)
       .subscribeOn(schedulerProvider.io())
       .observeOn(schedulerProvider.ui())
-      .startWith(MatchesResult.LoadFirstPageResult.inFlight()));
+      .startWith(MatchesResult.RefreshResult.inFlight()));
 
   private ObservableTransformer<MatchesAction.LoadNextPageAction, MatchesResult.LoadNextPageResult>
       loadNextPageTransformer = actions -> actions.flatMap(
-      action -> service.loadNextPage(action.pageIndex())
+      action -> service.loadPage(action.pageIndex())
           .toObservable()
           .map(MatchesResult.LoadNextPageResult::success)
           .onErrorReturn(MatchesResult.LoadNextPageResult::failure)
@@ -106,12 +108,12 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
 
   private ObservableTransformer<MatchesAction, MatchesResult> actionToResultTransformer =
       actions -> actions.publish(shared -> Observable.merge(
-          shared.ofType(MatchesAction.LoadFirstPageAction.class).compose(loadFirstPageTransformer),
+          shared.ofType(MatchesAction.RefreshAction.class).compose(refreshTransformer),
           shared.ofType(MatchesAction.LoadNextPageAction.class).compose(loadNextPageTransformer),
           shared.ofType(MatchesAction.GetLastStateAction.class).compose(getLastStateTransformer))
           .mergeWith(
               // Error for not implemented actions
-              shared.filter(v -> !(v instanceof MatchesAction.LoadFirstPageAction)
+              shared.filter(v -> !(v instanceof MatchesAction.RefreshAction)
                   && !(v instanceof MatchesAction.LoadNextPageAction)
                   && !(v instanceof MatchesAction.GetLastStateAction))
                   .flatMap(w -> Observable.error(
@@ -122,27 +124,29 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
         MatchesViewState.Builder stateBuilder = previousState.buildWith();
 
         // check matchesResult and update state accordingly
-        if (matchesResult instanceof MatchesResult.LoadFirstPageResult) {
-          switch (((MatchesResult.LoadFirstPageResult) matchesResult).status()) {
-            case FIRST_PAGE_IN_FLIGHT:
-              stateBuilder.firstPageLoading(true).error(null);
+        if (matchesResult instanceof MatchesResult.RefreshResult) {
+          switch (((MatchesResult.RefreshResult) matchesResult).status()) {
+            case REFRESH_IN_FLIGHT:
+              stateBuilder.refreshLoading(true).error(null);
               break;
-            case FIRST_PAGE_FAILURE:
-              stateBuilder.firstPageLoading(false)
-                  .error(((MatchesResult.LoadFirstPageResult) matchesResult).throwable());
+            case REFRESH_FAILURE:
+              stateBuilder.refreshLoading(false)
+                  .error(((MatchesResult.RefreshResult) matchesResult).throwable());
               break;
-            case FIRST_PAGE_SUCCESS:
+            case REFRESH_SUCCESS:
               List<Match> matches =
-                  checkNotNull(((MatchesResult.LoadFirstPageResult) matchesResult).matches(),
+                  checkNotNull(((MatchesResult.RefreshResult) matchesResult).matches(),
                       "Matches are null");
 
-              stateBuilder.firstPageLoading(false)
+              stateBuilder.refreshLoading(false)
                   .error(null)
+                  .currentPage(0)
                   .matches(MatchRowDisplayable.fromMatches(matches));
               break;
             default:
-              throw new IllegalArgumentException("Wrong status for LoadFirstPageResult: "
-                  + ((MatchesResult.LoadFirstPageResult) matchesResult).status());
+              throw new IllegalArgumentException(
+                  "Wrong status for RefreshResult: " + ((MatchesResult.RefreshResult) matchesResult)
+                      .status());
           }
         } else if (matchesResult instanceof MatchesResult.LoadNextPageResult) {
           switch (((MatchesResult.LoadNextPageResult) matchesResult).status()) {

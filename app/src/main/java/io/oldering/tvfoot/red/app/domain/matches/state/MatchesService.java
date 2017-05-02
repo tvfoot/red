@@ -15,11 +15,7 @@ public class MatchesService {
     this.tvfootService = tvfootService;
   }
 
-  Single<List<Match>> loadFirstPage() {
-    return tvfootService.findFuture(Filter.builder().limit(MATCH_PER_PAGE).offset(0).build());
-  }
-
-  Single<List<Match>> loadNextPage(int pageIndex) {
+  Single<List<Match>> loadPage(int pageIndex) {
     return tvfootService.findFuture(
         Filter.builder().limit(MATCH_PER_PAGE).offset(MATCH_PER_PAGE * pageIndex).build());
   }

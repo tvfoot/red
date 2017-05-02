@@ -5,31 +5,31 @@ import io.oldering.tvfoot.red.app.data.entity.Match;
 import java.util.List;
 import javax.annotation.Nullable;
 
-import static io.oldering.tvfoot.red.app.domain.matches.state.MatchesResult.Status.FIRST_PAGE_FAILURE;
-import static io.oldering.tvfoot.red.app.domain.matches.state.MatchesResult.Status.FIRST_PAGE_IN_FLIGHT;
-import static io.oldering.tvfoot.red.app.domain.matches.state.MatchesResult.Status.FIRST_PAGE_SUCCESS;
 import static io.oldering.tvfoot.red.app.domain.matches.state.MatchesResult.Status.NEXT_PAGE_FAILURE;
 import static io.oldering.tvfoot.red.app.domain.matches.state.MatchesResult.Status.NEXT_PAGE_IN_FLIGHT;
 import static io.oldering.tvfoot.red.app.domain.matches.state.MatchesResult.Status.NEXT_PAGE_SUCCESS;
+import static io.oldering.tvfoot.red.app.domain.matches.state.MatchesResult.Status.REFRESH_FAILURE;
+import static io.oldering.tvfoot.red.app.domain.matches.state.MatchesResult.Status.REFRESH_IN_FLIGHT;
+import static io.oldering.tvfoot.red.app.domain.matches.state.MatchesResult.Status.REFRESH_SUCCESS;
 
 interface MatchesResult {
-  @AutoValue abstract class LoadFirstPageResult implements MatchesResult {
+  @AutoValue abstract class RefreshResult implements MatchesResult {
     abstract Status status();
 
     @Nullable abstract List<Match> matches();
 
     @Nullable abstract Throwable throwable();
 
-    static LoadFirstPageResult success(List<Match> matches) {
-      return new AutoValue_MatchesResult_LoadFirstPageResult(FIRST_PAGE_SUCCESS, matches, null);
+    static RefreshResult success(List<Match> matches) {
+      return new AutoValue_MatchesResult_RefreshResult(REFRESH_SUCCESS, matches, null);
     }
 
-    static LoadFirstPageResult failure(Throwable throwable) {
-      return new AutoValue_MatchesResult_LoadFirstPageResult(FIRST_PAGE_FAILURE, null, throwable);
+    static RefreshResult failure(Throwable throwable) {
+      return new AutoValue_MatchesResult_RefreshResult(REFRESH_FAILURE, null, throwable);
     }
 
-    static LoadFirstPageResult inFlight() {
-      return new AutoValue_MatchesResult_LoadFirstPageResult(FIRST_PAGE_IN_FLIGHT, null, null);
+    static RefreshResult inFlight() {
+      return new AutoValue_MatchesResult_RefreshResult(REFRESH_IN_FLIGHT, null, null);
     }
   }
 
@@ -63,7 +63,7 @@ interface MatchesResult {
   }
 
   enum Status {
-    FIRST_PAGE_IN_FLIGHT, FIRST_PAGE_FAILURE, FIRST_PAGE_SUCCESS, //
+    REFRESH_IN_FLIGHT, REFRESH_FAILURE, REFRESH_SUCCESS, //
     NEXT_PAGE_IN_FLIGHT, NEXT_PAGE_FAILURE, NEXT_PAGE_SUCCESS, //
     PULL_TO_REFRESH_IN_FLIGHT, PULL_TO_REFRESH_FAILURE, PULL_TO_REFRESH_SUCCESS, //
   }

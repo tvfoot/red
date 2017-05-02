@@ -10,7 +10,7 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
 public class MatchesViewModel {
   private final MatchesAdapter adapter;
 
-  public ObservableBoolean isFirstLoading = new ObservableBoolean(false);
+  public ObservableBoolean refreshLoading = new ObservableBoolean(false);
   public ObservableBoolean hasError = new ObservableBoolean(false);
   public ObservableBoolean hasData = new ObservableBoolean(false);
   public ObservableField<String> errorMessage = new ObservableField<>();
@@ -24,7 +24,7 @@ public class MatchesViewModel {
       MatchesViewState state) {
     updateCurrentPage(state);
 
-    isFirstLoading.set(state.firstPageLoading());
+    refreshLoading.set(state.refreshLoading());
     hasError.set(state.error() != null);
     hasData.set(!state.matches().isEmpty());
 
@@ -38,9 +38,11 @@ public class MatchesViewModel {
   }
 
   private void updateCurrentPage(MatchesViewState state) {
-    if (state.currentPage() > 0) {
-      currentPage = state.currentPage();
-    }
+    //if (state.currentPage() > 0) {
+    currentPage = state.currentPage();
+    //} else {
+    //  Timber.d("CONNARD currentPage is 0 and %s", state);
+    //}
   }
 
   private void setErrorMessage(String message) {

@@ -29,13 +29,11 @@ import javax.annotation.Nullable;
 
   public abstract List<MatchRowDisplayable> matches();
 
-  public abstract boolean firstPageLoading();
-
   @Nullable public abstract Throwable error();
 
   public abstract boolean nextPageLoading();
 
-  public abstract boolean pullToRefreshLoading();
+  public abstract boolean refreshLoading();
 
   @Nullable public abstract MatchRowDisplayable clickedMatch();
 
@@ -43,10 +41,9 @@ import javax.annotation.Nullable;
 
   public static Builder builder() {
     return new AutoValue_MatchesViewState.Builder().matches(Collections.emptyList())
-        .firstPageLoading(false)
         .error(null)
         .nextPageLoading(false)
-        .pullToRefreshLoading(false)
+        .refreshLoading(false)
         .clickedMatch(null)
         .currentPage(0);
   }
@@ -60,13 +57,11 @@ import javax.annotation.Nullable;
   @AutoValue.Builder public static abstract class Builder {
     public abstract Builder matches(List<MatchRowDisplayable> matches);
 
-    public abstract Builder firstPageLoading(boolean firstPageLoading);
-
     public abstract Builder error(@Nullable Throwable error);
 
     public abstract Builder nextPageLoading(boolean nextPageLoading);
 
-    public abstract Builder pullToRefreshLoading(boolean pullToRefreshLoading);
+    public abstract Builder refreshLoading(boolean pullToRefreshLoading);
 
     public abstract Builder clickedMatch(@Nullable MatchRowDisplayable clickedMatch);
 

@@ -126,7 +126,7 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
                   .status(MatchViewState.Status.LOAD_MATCH_SUCCESS);
               break;
             default:
-              throw new IllegalArgumentException("Wrong status for LoadFirstPageResult: "
+              throw new IllegalArgumentException("Wrong status for LoadMatchResult: "
                   + ((MatchResult.LoadMatchResult) matchResult).status());
           }
         } else if (matchResult instanceof MatchResult.GetLastStateResult) {
