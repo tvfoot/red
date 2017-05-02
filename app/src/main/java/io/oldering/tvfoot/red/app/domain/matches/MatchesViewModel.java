@@ -38,11 +38,7 @@ public class MatchesViewModel {
   }
 
   private void updateCurrentPage(MatchesViewState state) {
-    //if (state.currentPage() > 0) {
     currentPage = state.currentPage();
-    //} else {
-    //  Timber.d("CONNARD currentPage is 0 and %s", state);
-    //}
   }
 
   private void setErrorMessage(String message) {
