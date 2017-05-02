@@ -9,6 +9,12 @@ public interface MatchesIntent {
     }
   }
 
+  @AutoValue abstract class RefreshIntent implements MatchesIntent {
+    public static RefreshIntent create() {
+      return new AutoValue_MatchesIntent_RefreshIntent();
+    }
+  }
+
   @AutoValue abstract class GetLastState implements MatchesIntent {
     public static GetLastState create() {
       return new AutoValue_MatchesIntent_GetLastState();

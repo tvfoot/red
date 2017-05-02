@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.app.common.BaseActivity;
 import io.oldering.tvfoot.red.app.common.flowcontroller.FlowController;
@@ -77,11 +78,16 @@ public class MatchesActivity extends BaseActivity {
   }
 
   public Observable<MatchesIntent> intents() {
-    return Observable.merge(InitialIntent(), loadNextPageIntent());
+    return Observable.merge(InitialIntent(), refreshIntent(), loadNextPageIntent());
   }
 
   private Observable<MatchesIntent.InitialIntent> InitialIntent() {
     return Observable.just(MatchesIntent.InitialIntent.create());
+  }
+
+  private Observable<MatchesIntent.RefreshIntent> refreshIntent() {
+    return RxSwipeRefreshLayout.refreshes(binding.swipeRefreshLayout)
+        .map(ignored -> MatchesIntent.RefreshIntent.create());
   }
 
   private Observable<MatchesIntent.LoadNextPageIntent> loadNextPageIntent() {
@@ -92,8 +98,4 @@ public class MatchesActivity extends BaseActivity {
   public void render(MatchesViewState state) {
     viewModel.updateFromState(state);
   }
-
-  //@Override public Object onRetainCustomNonConfigurationInstance() {
-  //  return stateBinder;
-  //}
 }

@@ -31,8 +31,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
     OkHttpClient client = app.getComponent().okHttpClient();
     Espresso.registerIdlingResources(OkHttp3IdlingResource.create("OkHttp", client));
 
-    onView(withId(R.id.loading_view)).check(matches(isDisplayed()));
-
     onView(withId(R.id.recycler_view)).check(matches(isDisplayed()))
         .perform(scrollTo(withId(R.id.progress_paging)));
 

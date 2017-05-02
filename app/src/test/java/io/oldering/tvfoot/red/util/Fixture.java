@@ -38,6 +38,7 @@ public class Fixture {
     return anyObject("matches_next_sample.json", listMatchType);
   }
 
+  @SuppressWarnings("TypeParameterUnusedInFormals")
   private <T> T anyObject(String filename, Type typeOfT) {
     InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filename);
 

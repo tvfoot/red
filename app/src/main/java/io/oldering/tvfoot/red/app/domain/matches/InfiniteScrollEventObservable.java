@@ -54,14 +54,18 @@ final class InfiniteScrollEventObservable extends Observable<Object> {
           totalItemCount = linearLayoutManager.getItemCount();
           firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
 
+          if (totalItemCount < previousTotal) {
+            previousTotal = totalItemCount;
+          }
+
           if (loading && (totalItemCount > previousTotal || totalItemCount == 0)) {
             loading = false;
             previousTotal = totalItemCount;
           }
 
           // End has been reached
-          if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem
-              + visibleThreshold)) {
+          if (!loading && //
+              (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
             observer.onNext(Notification.INSTANCE);
             loading = true;
           }

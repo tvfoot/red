@@ -42,28 +42,24 @@
       </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:visible="@{viewModel.hasData}"
-        tools:context="io.oldering.tvfoot.red.activity.MatchListActivity"
-        tools:listitem="@layout/match_item"
-        />
-
-    <ProgressBar
-        android:id="@+id/loading_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="visible"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:visible="@{viewModel.isFirstLoading}"
-        tools:visibility="visible"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        />
+        app:refreshing="@{viewModel.refreshLoading}"
+        >
+      <android.support.v7.widget.RecyclerView
+          android:id="@+id/recycler_view"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+          app:visible="@{viewModel.hasData}"
+          tools:context="io.oldering.tvfoot.red.activity.MatchListActivity"
+          tools:listitem="@layout/match_item"
+          />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/empty_view"
