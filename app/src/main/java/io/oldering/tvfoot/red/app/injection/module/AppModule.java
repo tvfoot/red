@@ -14,8 +14,4 @@ import dagger.Provides;
   @Provides Application provideApplication() {
     return application;
   }
-
-  //@Provides @Singleton @Named("application") Context provideContext() {
-  //  return application;
-  //}
 }

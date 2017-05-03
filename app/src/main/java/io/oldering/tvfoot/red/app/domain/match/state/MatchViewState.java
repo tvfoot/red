@@ -1,8 +1,8 @@
 package io.oldering.tvfoot.red.app.domain.match.state;
 
-import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.app.domain.match.MatchDisplayable;
+import javax.annotation.Nullable;
 
 import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Status.IDLE;
 
@@ -30,7 +30,7 @@ import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Statu
 
     public abstract Builder status(Status status);
 
-    public abstract Builder error(Throwable error);
+    public abstract Builder error(@Nullable Throwable error);
 
     public abstract Builder loading(boolean loading);
 
