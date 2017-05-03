@@ -1,5 +1,6 @@
 package io.oldering.tvfoot.red.app.injection.component;
 
+import com.squareup.picasso.Picasso;
 import dagger.Component;
 import io.oldering.tvfoot.red.RedApp;
 import io.oldering.tvfoot.red.app.injection.module.AppModule;
@@ -24,4 +25,6 @@ import okhttp3.OkHttpClient;
   void inject(RedApp redApp);
 
   OkHttpClient okHttpClient();
+
+  Picasso picasso();
 }

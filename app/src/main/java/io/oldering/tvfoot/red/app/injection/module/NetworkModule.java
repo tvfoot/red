@@ -1,8 +1,11 @@
 package io.oldering.tvfoot.red.app.injection.module;
 
+import android.app.Application;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
 import io.oldering.tvfoot.red.BuildConfig;
@@ -38,5 +41,15 @@ import static okhttp3.logging.HttpLoggingInterceptor.Level.NONE;
         .client(okHttpClient)
         .baseUrl(TvfootService.BASE_URL)
         .build();
+  }
+
+  @Provides @Singleton
+  static OkHttp3Downloader provideOkHttp3Downloader(OkHttpClient okHttpClient) {
+    return new OkHttp3Downloader(okHttpClient);
+  }
+
+  @Provides @Singleton
+  static Picasso providePicasso(Application context, OkHttp3Downloader okHttp3Downloader) {
+    return new Picasso.Builder(context).downloader(okHttp3Downloader).build();
   }
 }

@@ -47,7 +47,6 @@ android {
   sourceSets {
     main {
       res.srcDir 'src/main/res_broadcasters'
-      res.srcDir 'src/main/res_teams'
     }
   }
 
