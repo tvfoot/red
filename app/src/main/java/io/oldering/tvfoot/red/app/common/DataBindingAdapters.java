@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.RedApp;
 import javax.annotation.Nullable;
-import timber.log.Timber;
 
 import static io.oldering.tvfoot.red.api.TvfootService.BASE_URL;
 
@@ -24,12 +23,11 @@ public class DataBindingAdapters {
 
   @BindingAdapter("tvfootTeamImageResource")
   public static void setTvFootTeamImageResource(ImageView imageView, @Nullable String logoPath) {
-    //if (team == null) {
-    //  // in_flight, errors etc.
-    //  return;
-    //}
+    if (logoPath == null) {
+      // in_flight, errors etc.
+      return;
+    }
 
-    Timber.d("connard loading %s", logoPath);
     RedApp.get(imageView.getContext())
         .getComponent()
         .picasso()
