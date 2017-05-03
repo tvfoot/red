@@ -17,10 +17,9 @@ public class RedApp extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
-    getComponent().inject(this);
 
-    setupTimber();
     setupLeakCanary();
+    setupTimber();
   }
 
   private void setupTimber() {
@@ -36,7 +35,6 @@ public class RedApp extends Application {
       return;
     }
     LeakCanary.install(this);
-    // Normal app init code...
   }
 
   public AppComponent getComponent() {

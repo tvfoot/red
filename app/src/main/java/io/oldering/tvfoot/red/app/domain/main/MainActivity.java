@@ -14,12 +14,6 @@ public class MainActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
     getActivityComponent().inject(this);
 
-    FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-    Bundle bundle = new Bundle();
-    bundle.putString(FirebaseAnalytics.Param.DESTINATION, "Mars");
-    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
-
     flowController.toMatches();
     finish();
   }

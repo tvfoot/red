@@ -1,5 +1,7 @@
 package io.oldering.tvfoot.red.app.domain.match.state;
 
+import android.os.Bundle;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import io.oldering.tvfoot.red.app.common.schedulers.BaseSchedulerProvider;
 import io.oldering.tvfoot.red.app.data.entity.Match;
 import io.oldering.tvfoot.red.app.domain.match.MatchDisplayable;
@@ -9,7 +11,6 @@ import io.reactivex.ObservableTransformer;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.subjects.PublishSubject;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
 
@@ -18,15 +19,17 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
   private PublishSubject<MatchViewState> statesSubject;
   private MatchService service;
   private BaseSchedulerProvider schedulerProvider;
+  private FirebaseAnalytics firebaseAnalytics;
 
   @SuppressWarnings("CheckReturnValue") //
-  @Inject public MatchStateBinder(PublishSubject<MatchIntent> intentsSubject,
+  @Inject MatchStateBinder(PublishSubject<MatchIntent> intentsSubject,
       PublishSubject<MatchViewState> statesSubject, MatchService service,
-      BaseSchedulerProvider schedulerProvider) {
+      BaseSchedulerProvider schedulerProvider, FirebaseAnalytics firebaseAnalytics) {
     this.intentsSubject = intentsSubject;
     this.statesSubject = statesSubject;
     this.service = service;
     this.schedulerProvider = schedulerProvider;
+    this.firebaseAnalytics = firebaseAnalytics;
 
     compose().subscribe(state -> this.statesSubject.onNext(state));
   }
@@ -41,14 +44,14 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
   }
 
   private Observable<MatchViewState> compose() {
-    return intentsSubject.doOnNext(intent -> Timber.d("MatchIntent: %s", intent))
+    return intentsSubject.doOnNext(this::logIntent)
         .scan(initialIntentFilter)
         .map(this::actionFromIntent)
-        .doOnNext(action -> Timber.d("MatchAction: %s", action))
+        .doOnNext(this::logAction)
         .compose(actionToResultTransformer)
-        .doOnNext(matchResult -> Timber.d("MatchResult: %s", matchResult))
+        .doOnNext(this::logResult)
         .scan(MatchViewState.idle(), reducer)
-        .doOnNext(state -> Timber.d("MatchState: %s", state));
+        .doOnNext(this::logState);
   }
 
   private BiFunction<MatchIntent, MatchIntent, MatchIntent> initialIntentFilter =
@@ -126,8 +129,9 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
                   .status(MatchViewState.Status.LOAD_MATCH_SUCCESS);
               break;
             default:
-              throw new IllegalArgumentException("Wrong status for LoadMatchResult: "
-                  + ((MatchResult.LoadMatchResult) matchResult).status());
+              throw new IllegalArgumentException(
+                  "Wrong status for LoadMatchResult: " + ((MatchResult.LoadMatchResult) matchResult)
+                      .status());
           }
         } else if (matchResult instanceof MatchResult.GetLastStateResult) {
           return stateBuilder.build();
@@ -137,4 +141,28 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
 
         return stateBuilder.build();
       };
+
+  private void logIntent(MatchIntent intent) {
+    Bundle params = new Bundle();
+    params.putString("intent", intent.toString());
+    firebaseAnalytics.logEvent("intent", params);
+  }
+
+  private void logAction(MatchAction action) {
+    Bundle params = new Bundle();
+    params.putString("action", action.toString());
+    firebaseAnalytics.logEvent("action", params);
+  }
+
+  private void logResult(MatchResult result) {
+    Bundle params = new Bundle();
+    params.putString("result", result.toString());
+    firebaseAnalytics.logEvent("result", params);
+  }
+
+  private void logState(MatchViewState state) {
+    Bundle params = new Bundle();
+    params.putString("state", state.toString());
+    firebaseAnalytics.logEvent("state", params);
+  }
 }
