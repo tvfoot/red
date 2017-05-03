@@ -11,6 +11,7 @@ import io.reactivex.ObservableTransformer;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.subjects.PublishSubject;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
 
@@ -143,24 +144,28 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
       };
 
   private void logIntent(MatchIntent intent) {
+    Timber.d("Intent: %s", intent);
     Bundle params = new Bundle();
     params.putString("intent", intent.toString());
     firebaseAnalytics.logEvent("intent", params);
   }
 
   private void logAction(MatchAction action) {
+    Timber.d("Action: %s", action);
     Bundle params = new Bundle();
     params.putString("action", action.toString());
     firebaseAnalytics.logEvent("action", params);
   }
 
   private void logResult(MatchResult result) {
+    Timber.d("Result: %s", result);
     Bundle params = new Bundle();
     params.putString("result", result.toString());
     firebaseAnalytics.logEvent("result", params);
   }
 
   private void logState(MatchViewState state) {
+    Timber.d("State: %s", state);
     Bundle params = new Bundle();
     params.putString("state", state.toString());
     firebaseAnalytics.logEvent("state", params);
