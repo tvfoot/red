@@ -20,8 +20,8 @@ public class MatchesViewModel {
     this.adapter = adapter;
   }
 
-  @SuppressWarnings("ThrowableResultOfMethodCallIgnored") void updateFromState(
-      MatchesViewState state) {
+  @SuppressWarnings("ThrowableResultOfMethodCallIgnored") //
+  void updateFromState(MatchesViewState state) {
     updateCurrentPage(state);
 
     refreshLoading.set(state.refreshLoading());
