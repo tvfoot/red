@@ -13,6 +13,7 @@ import io.reactivex.subjects.PublishSubject;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
 
@@ -187,24 +188,28 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
       };
 
   private void logIntent(MatchesIntent intent) {
+    Timber.d("Intent: %s", intent);
     Bundle params = new Bundle();
     params.putString("intent", intent.toString());
     firebaseAnalytics.logEvent("intent", params);
   }
 
   private void logAction(MatchesAction action) {
+    Timber.d("Action: %s", action);
     Bundle params = new Bundle();
     params.putString("action", action.toString());
     firebaseAnalytics.logEvent("action", params);
   }
 
   private void logResult(MatchesResult result) {
+    Timber.d("Rntent: %s", result);
     Bundle params = new Bundle();
     params.putString("result", result.toString());
     firebaseAnalytics.logEvent("result", params);
   }
 
   private void logState(MatchesViewState state) {
+    Timber.d("Sntent: %s", state);
     Bundle params = new Bundle();
     params.putString("state", state.toString());
     firebaseAnalytics.logEvent("state", params);

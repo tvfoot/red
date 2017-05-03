@@ -17,6 +17,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import javax.annotation.Nullable;
 
+import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
 import static io.oldering.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_MILLIS;
 
 @AutoValue public abstract class MatchDisplayable implements MatchesItemDisplayable {
@@ -42,9 +43,9 @@ import static io.oldering.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_
 
   public abstract String startTimeInText();
 
-  public abstract String homeTeamDrawableName();
+  public abstract String homeTeamLogoPath();
 
-  public abstract String awayTeamDrawableName();
+  public abstract String awayTeamLogoPath();
 
   public abstract String location();
 
@@ -60,8 +61,8 @@ import static io.oldering.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_
         parseMatchDay(match.label(), match.matchDay()), //
         isMatchLive(match.startAt()), //
         parseStartTimeInText(match.startAt()), //
-        parseHomeTeamDrawableName(match.homeTeam()), //
-        parseAwayTeamDrawableName(match.awayTeam()), //
+        parseTeamLogoPath(match.homeTeam()), //
+        parseTeamLogoPath(match.awayTeam()), //
         parseLocation(match), match.id());
   }
 
@@ -119,20 +120,26 @@ import static io.oldering.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_
     return StringUtils.capitalize(fullTextDateFormat.format(startAt));
   }
 
-  private static String parseHomeTeamDrawableName(Team homeTeam) {
-    String code = homeTeam.code();
-    if (code != null) {
-      return code.toLowerCase();
+  private static String parseTeamLogoPath(Team team) {
+    String path;
+    if (team.code() == null || team.type() == null) {
+      path = "/images/teams/default/large/default.png";
+    } else {
+      String type = checkNotNull(team.type(), "team's type should not be null");
+      String code = checkNotNull(team.code(), "team's code should not be null");
+      switch (type) {
+        case "nation":
+          path = String.format("/images/teams/nations/large/%s.png", code.toLowerCase());
+          break;
+        case "club":
+          String country = checkNotNull(team.country(), "team's country should not be null");
+          path = String.format("/images/teams/%s/large/%s.png", country, code.toLowerCase());
+          break;
+        default:
+          throw new IllegalStateException("Unkown type " + type);
+      }
     }
-    return Team.DEFAULT_CODE;
-  }
-
-  private static String parseAwayTeamDrawableName(Team awayTeam) {
-    String code = awayTeam.code();
-    if (code != null) {
-      return code.toLowerCase();
-    }
-    return Team.DEFAULT_CODE;
+    return path;
   }
 
   private static String parseLocation(Match match) {
