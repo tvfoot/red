@@ -44,12 +44,6 @@ android {
     sourceCompatibility 1.8
   }
 
-  sourceSets {
-    main {
-      res.srcDir 'src/main/res_broadcasters'
-    }
-  }
-
   dexOptions {
     preDexLibraries = Boolean.valueOf(System.getProperty('pre-dex', 'true'))
   }
