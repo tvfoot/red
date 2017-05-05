@@ -7,28 +7,28 @@
   <data>
 
     <variable
-        name="broadcasterDrawableName"
+        name="broadcasterLogoPath"
         type="String"
         />
   </data>
 
   <FrameLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:paddingBottom="4dp"
       tools:showIn="@layout/match_item"
       >
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:adjustViewBounds="true"
         android:contentDescription="@string/broadcaster_icon"
         android:paddingBottom="4dp"
         android:scaleType="fitStart"
-        app:imageResource="@{broadcasterDrawableName}"
-        tools:src="@drawable/b0"
+        app:tvfootBroadcasterLogoPath="@{broadcasterLogoPath}"
+        tools:src="@drawable/ic_tv_black_18px"
         />
   </FrameLayout>
 </layout>
