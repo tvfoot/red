@@ -3,15 +3,10 @@ package io.oldering.tvfoot.red.app.domain.matches.displayable;
 import com.google.auto.value.AutoValue;
 
 @AutoValue public abstract class BroadcasterRowDisplayable {
-  public abstract String code();
+  public abstract String logoPath();
 
-  public static Builder builder() {
-    return new AutoValue_BroadcasterRowDisplayable.Builder();
-  }
-
-  @AutoValue.Builder public static abstract class Builder {
-    public abstract Builder code(String code);
-
-    public abstract BroadcasterRowDisplayable build();
+  public static BroadcasterRowDisplayable create(String broadcasterCode) {
+    return new AutoValue_BroadcasterRowDisplayable(
+        String.format("/images/broadcasters/%s_120.png", broadcasterCode));
   }
 }

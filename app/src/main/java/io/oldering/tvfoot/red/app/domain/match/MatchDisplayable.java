@@ -84,7 +84,7 @@ import static io.oldering.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_
 
     List<BroadcasterRowDisplayable> broadcastersVM = new ArrayList<>(broadcasters.size());
     for (Broadcaster broadcaster : broadcasters) {
-      broadcastersVM.add(BroadcasterRowDisplayable.builder().code(broadcaster.code()).build());
+      broadcastersVM.add(BroadcasterRowDisplayable.create(broadcaster.code()));
     }
     return broadcastersVM;
   }

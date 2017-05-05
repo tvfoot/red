@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import io.oldering.tvfoot.red.R;
-import io.oldering.tvfoot.red.app.domain.matches.displayable.BroadcasterRowDisplayable;
 import io.oldering.tvfoot.red.app.domain.matches.displayable.HeaderRowDisplayable;
 import io.oldering.tvfoot.red.app.domain.matches.displayable.LoadingRowDisplayable;
 import io.oldering.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable;
@@ -153,10 +152,10 @@ import javax.inject.Inject;
       BroadcastersAdapter broadcastersAdapter = new BroadcastersAdapter();
       broadcastersAdapter.addAll(match.broadcasters());
 
-      if (broadcastersAdapter.getItemCount() == 0) {
-        broadcastersAdapter.add(
-            BroadcasterRowDisplayable.builder().code("ic_tv_black_18px").build());
-      }
+      //if (broadcastersAdapter.getItemCount() == 0) {
+      //  broadcastersAdapter.add(
+      //      BroadcasterRowDisplayable.builder().code("ic_tv_black_18px").build());
+      //}
       recyclerView.setAdapter(broadcastersAdapter);
     }
   }

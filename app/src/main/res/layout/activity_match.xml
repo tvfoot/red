@@ -113,7 +113,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/match_detail_away_team_icon"
             app:layout_constraintTop_toBottomOf="@+id/match_detail_competition"
-            app:tvfootTeamImageResource="@{match.homeTeamLogoPath}"
+            app:tvfootTeamLogoPath="@{match.homeTeamLogoPath}"
             />
 
         <ImageView
@@ -125,7 +125,7 @@
             app:layout_constraintLeft_toRightOf="@+id/match_detail_home_team_icon"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/match_detail_competition"
-            app:tvfootTeamImageResource="@{match.awayTeamLogoPath}"
+            app:tvfootTeamLogoPath="@{match.awayTeamLogoPath}"
             />
 
         <TextView
