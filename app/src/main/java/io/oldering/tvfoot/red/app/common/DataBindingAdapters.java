@@ -37,6 +37,7 @@ public class DataBindingAdapters {
         .getComponent()
         .picasso()
         .load(Uri.parse(BASE_URL + path))
+        .fit().centerInside()
         .placeholder(placeholderResId)
         .into(imageView);
   }
