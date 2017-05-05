@@ -6,7 +6,6 @@ import io.oldering.tvfoot.red.app.data.entity.Broadcaster;
 import io.oldering.tvfoot.red.app.data.entity.Competition;
 import io.oldering.tvfoot.red.app.data.entity.Match;
 import io.oldering.tvfoot.red.app.data.entity.Team;
-import io.oldering.tvfoot.red.util.StringUtils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,10 +18,10 @@ import javax.annotation.Nullable;
 import static io.oldering.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_MILLIS;
 
 @AutoValue public abstract class MatchRowDisplayable implements MatchesItemDisplayable {
-  private static SimpleDateFormat shortDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
-  static SimpleDateFormat mediumDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
-  private static SimpleDateFormat fullTextDateFormat =
-      new SimpleDateFormat("EEEE dd MMMM yyyy à HH'h'mm", Locale.FRANCE);
+  private static SimpleDateFormat shortDateFormat =
+      new SimpleDateFormat("HH:mm", Locale.getDefault());
+  static SimpleDateFormat mediumDateFormat =
+      new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
   public abstract String headerKey();
 
@@ -37,8 +36,6 @@ import static io.oldering.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_
   public abstract String matchDay();
 
   public abstract boolean live();
-
-  public abstract String startTimeInText();
 
   public abstract String homeTeamDrawableName();
 
@@ -57,7 +54,6 @@ import static io.oldering.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_
         parseCompetition(match.competition()), //
         parseMatchDay(match.label(), match.matchDay()), //
         isMatchLive(match.startAt()), //
-        parseStartTimeInText(match.startAt()), //
         parseHomeTeamDrawableName(match.homeTeam()), //
         parseAwayTeamDrawableName(match.awayTeam()), //
         parseLocation(match), //
@@ -119,11 +115,6 @@ import static io.oldering.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_
     long now = Calendar.getInstance().getTimeInMillis();
     long startTimeInMillis = startAt.getTime();
     return now >= startTimeInMillis && now <= startTimeInMillis + ONE_MATCH_TIME_IN_MILLIS;
-  }
-
-  private static String parseStartTimeInText(Date startAt) {
-    fullTextDateFormat.setTimeZone(TimeZone.getDefault());
-    return StringUtils.capitalize(fullTextDateFormat.format(startAt));
   }
 
   private static String parseHomeTeamDrawableName(Team homeTeam) {

@@ -21,11 +21,12 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
 import static io.oldering.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_MILLIS;
 
 @AutoValue public abstract class MatchDisplayable implements MatchesItemDisplayable {
-  private static SimpleDateFormat shortDateFormat = new SimpleDateFormat("HH:mm", Locale.FRANCE);
+  private static SimpleDateFormat shortDateFormat =
+      new SimpleDateFormat("HH:mm", Locale.getDefault());
   private static SimpleDateFormat mediumDateFormat =
-      new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
+      new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
   private static SimpleDateFormat fullTextDateFormat =
-      new SimpleDateFormat("EEEE dd MMMM yyyy à HH'h'mm", Locale.FRANCE);
+      new SimpleDateFormat("EEEE dd MMMM yyyy HH'h'mm", Locale.getDefault());
 
   public abstract String headerKey();
 
