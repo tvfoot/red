@@ -4,6 +4,7 @@ import android.databinding.BindingAdapter;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.RedApp;
 import javax.annotation.Nullable;
@@ -42,5 +43,11 @@ public class DataBindingAdapters {
 
   @BindingAdapter("visible") public static void setVisibility(View view, boolean isVisible) {
     view.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+  }
+
+  @BindingAdapter("dangerText") public static void setDangerText(TextView textView, int textResId) {
+    if (textResId < 1) return;
+
+    textView.setText(textResId);
   }
 }
