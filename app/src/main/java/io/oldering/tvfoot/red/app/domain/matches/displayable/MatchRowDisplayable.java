@@ -60,7 +60,8 @@ import static io.oldering.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_
         parseStartTimeInText(match.startAt()), //
         parseHomeTeamDrawableName(match.homeTeam()), //
         parseAwayTeamDrawableName(match.awayTeam()), //
-        parseLocation(match), match.id());
+        parseLocation(match), //
+        match.id());
   }
 
   public static List<MatchRowDisplayable> fromMatches(List<Match> matches) {

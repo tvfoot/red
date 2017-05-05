@@ -15,4 +15,6 @@
   <string name="pref_about_contact">Nous contacter</string>
   <string name="pref_about_contact_desc">Partagez avec nous vos retours, attentes et autres</string>
   <string name="pref_about_version">Version</string>
+  <string name="matches_row_header_danger_today">AUJOURD\'HUI</string>
+  <string name="matches_row_header_danger_tomorrow">DEMAIN</string>
 </resources>
