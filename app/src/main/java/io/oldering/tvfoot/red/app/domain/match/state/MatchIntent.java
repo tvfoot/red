@@ -11,11 +11,11 @@ public interface MatchIntent {
     }
   }
 
-  @AutoValue abstract class FabClickIntent implements MatchIntent {
+  @AutoValue abstract class NotifyMatchStartIntent implements MatchIntent {
     public abstract String matchId();
 
-    public static FabClickIntent create(String matchId) {
-      return new AutoValue_MatchIntent_FabClickIntent(matchId);
+    public static NotifyMatchStartIntent create(String matchId) {
+      return new AutoValue_MatchIntent_NotifyMatchStartIntent(matchId);
     }
   }
 

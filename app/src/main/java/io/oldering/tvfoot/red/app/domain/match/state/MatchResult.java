@@ -29,6 +29,12 @@ interface MatchResult {
     }
   }
 
+  @AutoValue abstract class NotifyMatchStartResult implements MatchResult {
+    static NotifyMatchStartResult create() {
+      return new AutoValue_MatchResult_NotifyMatchStartResult();
+    }
+  }
+
   @AutoValue abstract class GetLastStateResult implements MatchResult {
     static GetLastStateResult create() {
       return new AutoValue_MatchResult_GetLastStateResult();

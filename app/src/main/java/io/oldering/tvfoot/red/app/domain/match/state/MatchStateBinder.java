@@ -76,6 +76,10 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
     if (intent instanceof MatchIntent.GetLastState) {
       return MatchAction.GetLastStateAction.create();
     }
+    if (intent instanceof MatchIntent.NotifyMatchStartIntent) {
+      return MatchAction.NotifyMatchStartAction.create(
+          ((MatchIntent.NotifyMatchStartIntent) intent).matchId());
+    }
     throw new IllegalArgumentException("do not know how to treat this intents " + intent);
   }
 
@@ -89,6 +93,11 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
           .observeOn(schedulerProvider.ui())
           .startWith(MatchResult.LoadMatchResult.inFlight()));
 
+  // TODO(benoit) logic
+  private ObservableTransformer<MatchAction.NotifyMatchStartAction, MatchResult.NotifyMatchStartResult>
+      notifyMatchStartTransformer = actions -> actions.flatMap(
+      action -> Observable.just(MatchResult.NotifyMatchStartResult.create()));
+
   private ObservableTransformer<MatchAction.GetLastStateAction, MatchResult.GetLastStateResult>
       getLastStateTransformer =
       actions -> actions.map(ignored -> MatchResult.GetLastStateResult.create());
@@ -96,13 +105,15 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
   private ObservableTransformer<MatchAction, MatchResult> actionToResultTransformer =
       actions -> actions.publish(shared -> Observable.merge(
           shared.ofType(MatchAction.LoadMatchAction.class).compose(loadMatchTransformer),
-          shared.ofType(MatchAction.GetLastStateAction.class).compose(getLastStateTransformer))
-          .mergeWith(
-              // Error for not implemented actions
-              shared.filter(v -> !(v instanceof MatchAction.LoadMatchAction)
-                  && !(v instanceof MatchAction.GetLastStateAction))
-                  .flatMap(w -> Observable.error(
-                      new IllegalArgumentException("Unknown Action type: " + w)))));
+          shared.ofType(MatchAction.GetLastStateAction.class).compose(getLastStateTransformer),
+          shared.ofType(MatchAction.NotifyMatchStartAction.class)
+              .compose(notifyMatchStartTransformer)).mergeWith(
+          // Error for not implemented actions
+          shared.filter(v -> !(v instanceof MatchAction.LoadMatchAction)
+              && !(v instanceof MatchAction.GetLastStateAction)
+              && !(v instanceof MatchAction.NotifyMatchStartAction))
+              .flatMap(w -> Observable.error(
+                  new IllegalArgumentException("Unknown Action type: " + w)))));
 
   private static BiFunction<MatchViewState, MatchResult, MatchViewState> reducer =
       (previousState, matchResult) -> {
@@ -135,6 +146,9 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
                       .status());
           }
         } else if (matchResult instanceof MatchResult.GetLastStateResult) {
+          return stateBuilder.build();
+        } else if (matchResult instanceof MatchResult.NotifyMatchStartResult) {
+          // TODO(benoit) reduce
           return stateBuilder.build();
         } else {
           throw new IllegalArgumentException("Don't know this matchResult " + matchResult);

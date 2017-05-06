@@ -84,10 +84,10 @@ public class MatchActivity extends BaseActivity {
         MatchIntent.InitialIntent.create(checkNotNull(matchId, "MatchId is null")));
   }
 
-  private Observable<MatchIntent.FabClickIntent> fabClickIntent() {
+  private Observable<MatchIntent.NotifyMatchStartIntent> fabClickIntent() {
     return RxView.clicks(binding.matchNotificationFab)
-        .map(
-            ignored -> MatchIntent.FabClickIntent.create(checkNotNull(matchId, "MatchId is null")));
+        .map(ignored -> MatchIntent.NotifyMatchStartIntent.create(
+            checkNotNull(matchId, "MatchId is null")));
   }
 
   public void render(MatchViewState state) {

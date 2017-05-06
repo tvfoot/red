@@ -11,6 +11,14 @@ interface MatchAction {
     }
   }
 
+  @AutoValue abstract class NotifyMatchStartAction implements MatchAction {
+    public abstract String matchId();
+
+    public static NotifyMatchStartAction create(String matchId) {
+      return new AutoValue_MatchAction_NotifyMatchStartAction(matchId);
+    }
+  }
+
   @AutoValue abstract class GetLastStateAction implements MatchAction {
     public static GetLastStateAction create() {
       return new AutoValue_MatchAction_GetLastStateAction();
