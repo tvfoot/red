@@ -171,7 +171,7 @@
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingStart="12dp"
-            android:text="@{match.location}"
+            android:text="@{match.location ?? @string/location_unknown}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textIsSelectable="true"
             app:layout_constraintLeft_toLeftOf="parent"

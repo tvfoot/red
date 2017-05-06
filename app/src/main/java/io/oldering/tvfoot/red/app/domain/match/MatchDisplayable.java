@@ -48,7 +48,7 @@ import static io.oldering.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_
 
   public abstract String awayTeamLogoPath();
 
-  public abstract String location();
+  @Nullable public abstract String location();
 
   public abstract String matchId();
 
@@ -143,8 +143,8 @@ import static io.oldering.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_
     return path;
   }
 
-  private static String parseLocation(Match match) {
-    return String.valueOf(match.place());
+  @Nullable private static String parseLocation(Match match) {
+    return match.place();
   }
 
   @Override public boolean isSameAs(MatchesItemDisplayable newItem) {

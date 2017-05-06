@@ -17,4 +17,5 @@
   <string name="pref_about_version">Version</string>
   <string name="matches_row_header_danger_today">AUJOURD\'HUI</string>
   <string name="matches_row_header_danger_tomorrow">DEMAIN</string>
+  <string name="location_unknown">Lieu inconnu</string>
 </resources>
