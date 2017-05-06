@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
+import com.jakewharton.rxbinding2.view.RxView;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.RedAppConfig;
 import io.oldering.tvfoot.red.app.common.BaseActivity;
@@ -75,12 +76,18 @@ public class MatchActivity extends BaseActivity {
   }
 
   public Observable<MatchIntent> intents() {
-    return initialIntent();
+    return Observable.merge(initialIntent(), fabClickIntent());
   }
 
-  private Observable<MatchIntent> initialIntent() {
+  private Observable<MatchIntent.InitialIntent> initialIntent() {
     return Observable.just(
         MatchIntent.InitialIntent.create(checkNotNull(matchId, "MatchId is null")));
+  }
+
+  private Observable<MatchIntent.FabClickIntent> fabClickIntent() {
+    return RxView.clicks(binding.matchNotificationFab)
+        .map(
+            ignored -> MatchIntent.FabClickIntent.create(checkNotNull(matchId, "MatchId is null")));
   }
 
   public void render(MatchViewState state) {

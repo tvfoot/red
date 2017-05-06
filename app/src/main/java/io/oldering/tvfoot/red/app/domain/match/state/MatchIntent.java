@@ -11,6 +11,14 @@ public interface MatchIntent {
     }
   }
 
+  @AutoValue abstract class FabClickIntent implements MatchIntent {
+    public abstract String matchId();
+
+    public static FabClickIntent create(String matchId) {
+      return new AutoValue_MatchIntent_FabClickIntent(matchId);
+    }
+  }
+
   @AutoValue abstract class GetLastState implements MatchIntent {
     public static GetLastState create() {
       return new AutoValue_MatchIntent_GetLastState();
