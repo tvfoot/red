@@ -78,7 +78,8 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
     }
     if (intent instanceof MatchIntent.NotifyMatchStartIntent) {
       return MatchAction.NotifyMatchStartAction.create(
-          ((MatchIntent.NotifyMatchStartIntent) intent).matchId());
+          ((MatchIntent.NotifyMatchStartIntent) intent).matchId(),
+          ((MatchIntent.NotifyMatchStartIntent) intent).notifyMatchStart());
     }
     throw new IllegalArgumentException("do not know how to treat this intents " + intent);
   }

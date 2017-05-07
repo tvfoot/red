@@ -85,9 +85,13 @@ public class MatchActivity extends BaseActivity {
   }
 
   private Observable<MatchIntent.NotifyMatchStartIntent> fabClickIntent() {
-    return RxView.clicks(binding.matchNotificationFab)
+    return RxView.clicks(binding.notifyMatchStartFab)
         .map(ignored -> MatchIntent.NotifyMatchStartIntent.create(
-            checkNotNull(matchId, "MatchId is null")));
+            checkNotNull(matchId, "MatchId is null"), !isMatchNotificationActivated()));
+  }
+
+  private boolean isMatchNotificationActivated() {
+    return binding.notifyMatchStartFab.isActivated();
   }
 
   public void render(MatchViewState state) {
