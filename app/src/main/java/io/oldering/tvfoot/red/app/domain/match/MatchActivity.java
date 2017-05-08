@@ -85,9 +85,13 @@ public class MatchActivity extends BaseActivity {
   }
 
   private Observable<MatchIntent.NotifyMatchStartIntent> fabClickIntent() {
-    return RxView.clicks(binding.matchNotificationFab)
+    return RxView.clicks(binding.notifyMatchStartFab)
         .map(ignored -> MatchIntent.NotifyMatchStartIntent.create(
-            checkNotNull(matchId, "MatchId is null")));
+            checkNotNull(matchId, "MatchId is null"), !isMatchNotificationActivated()));
+  }
+
+  private boolean isMatchNotificationActivated() {
+    return binding.notifyMatchStartFab.isActivated();
   }
 
   public void render(MatchViewState state) {
@@ -101,9 +105,14 @@ public class MatchActivity extends BaseActivity {
       case LOAD_MATCH_SUCCESS:
         renderMatchLoaded(state);
         break;
+      case UPDATED_NOTIFY_MATCH_START:
+        renderNotifyMatchStartUpdated(state.shouldNotifyMatchStart());
+        break;
       case IDLE:
         // do nothing
         break;
+      default:
+        throw new IllegalStateException("Don't know how to render this state: " + state);
     }
   }
 
@@ -111,12 +120,14 @@ public class MatchActivity extends BaseActivity {
     binding.matchContainer.setVisibility(GONE);
     binding.errorView.setVisibility(GONE);
     binding.progressBar.setVisibility(VISIBLE);
+    binding.notifyMatchStartFab.setVisibility(GONE);
   }
 
   private void renderError() {
     binding.matchContainer.setVisibility(GONE);
     binding.errorView.setVisibility(VISIBLE);
     binding.progressBar.setVisibility(GONE);
+    binding.notifyMatchStartFab.setVisibility(GONE);
   }
 
   private void renderMatchLoaded(MatchViewState state) {
@@ -128,6 +139,12 @@ public class MatchActivity extends BaseActivity {
     binding.matchContainer.setVisibility(VISIBLE);
     binding.errorView.setVisibility(GONE);
     binding.progressBar.setVisibility(GONE);
+    binding.notifyMatchStartFab.setVisibility(VISIBLE);
+    binding.notifyMatchStartFab.setActivated(state.shouldNotifyMatchStart());
+  }
+
+  private void renderNotifyMatchStartUpdated(boolean shouldNotifyMatchStart) {
+    binding.notifyMatchStartFab.setActivated(shouldNotifyMatchStart);
   }
 
   private void setupBroadcastersView(List<BroadcasterRowDisplayable> broadcasters) {

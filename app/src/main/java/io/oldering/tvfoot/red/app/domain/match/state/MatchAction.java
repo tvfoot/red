@@ -14,8 +14,10 @@ interface MatchAction {
   @AutoValue abstract class NotifyMatchStartAction implements MatchAction {
     public abstract String matchId();
 
-    public static NotifyMatchStartAction create(String matchId) {
-      return new AutoValue_MatchAction_NotifyMatchStartAction(matchId);
+    public abstract boolean notifyMatchStart();
+
+    public static NotifyMatchStartAction create(String matchId, boolean notifyMatchStart) {
+      return new AutoValue_MatchAction_NotifyMatchStartAction(matchId, notifyMatchStart);
     }
   }
 

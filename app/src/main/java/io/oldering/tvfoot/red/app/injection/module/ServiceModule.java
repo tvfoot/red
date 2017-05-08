@@ -7,7 +7,7 @@ import javax.inject.Singleton;
 import retrofit2.Retrofit;
 
 @Module public class ServiceModule {
-  @Provides @Singleton TvfootService provideTvfootService(Retrofit retrofit) {
+  @Provides @Singleton static TvfootService provideTvfootService(Retrofit retrofit) {
     return retrofit.create(TvfootService.class);
   }
 }

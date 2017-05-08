@@ -57,7 +57,7 @@
           app:layoutManager="android.support.v7.widget.LinearLayoutManager"
           app:visible="@{viewModel.hasData}"
           tools:context="io.oldering.tvfoot.red.activity.MatchListActivity"
-          tools:listitem="@layout/match_item"
+          tools:listitem="@layout/matches_row_match"
           />
     </android.support.v4.widget.SwipeRefreshLayout>
 
