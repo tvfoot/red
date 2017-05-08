@@ -2,33 +2,42 @@ package io.oldering.tvfoot.red.app.domain.match.state;
 
 import android.os.Bundle;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import io.oldering.tvfoot.red.app.common.PreferenceService;
 import io.oldering.tvfoot.red.app.common.schedulers.BaseSchedulerProvider;
 import io.oldering.tvfoot.red.app.data.entity.Match;
 import io.oldering.tvfoot.red.app.domain.match.MatchDisplayable;
 import io.oldering.tvfoot.red.app.injection.scope.ScreenScope;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
+import io.reactivex.Single;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.subjects.PublishSubject;
 import javax.inject.Inject;
 import timber.log.Timber;
 
 import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
+import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Status.LOAD_MATCH_FAILURE;
+import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Status.LOAD_MATCH_IN_FLIGHT;
+import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Status.LOAD_MATCH_SUCCESS;
+import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Status.UPDATED_NOTIFY_MATCH_START;
 
 @ScreenScope public class MatchStateBinder {
   private PublishSubject<MatchIntent> intentsSubject;
   private PublishSubject<MatchViewState> statesSubject;
-  private MatchService service;
+  private MatchService matchService;
+  private PreferenceService preferenceService;
   private BaseSchedulerProvider schedulerProvider;
   private FirebaseAnalytics firebaseAnalytics;
 
   @SuppressWarnings("CheckReturnValue") //
   @Inject MatchStateBinder(PublishSubject<MatchIntent> intentsSubject,
-      PublishSubject<MatchViewState> statesSubject, MatchService service,
-      BaseSchedulerProvider schedulerProvider, FirebaseAnalytics firebaseAnalytics) {
+      PublishSubject<MatchViewState> statesSubject, MatchService matchService,
+      PreferenceService preferenceService, BaseSchedulerProvider schedulerProvider,
+      FirebaseAnalytics firebaseAnalytics) {
     this.intentsSubject = intentsSubject;
     this.statesSubject = statesSubject;
-    this.service = service;
+    this.matchService = matchService;
+    this.preferenceService = preferenceService;
     this.schedulerProvider = schedulerProvider;
     this.firebaseAnalytics = firebaseAnalytics;
 
@@ -86,18 +95,20 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
 
   private ObservableTransformer<MatchAction.LoadMatchAction, MatchResult.LoadMatchResult>
       loadMatchTransformer = actions -> actions.flatMap(
-      action -> service.loadMatch(action.matchId())
+      action -> Single.zip(matchService.loadMatch(action.matchId()),
+          preferenceService.loadNotifyMatchStart(action.matchId()),
+          MatchResult.LoadMatchResult::success)
           .toObservable()
-          .map(MatchResult.LoadMatchResult::success)
           .onErrorReturn(MatchResult.LoadMatchResult::failure)
           .subscribeOn(schedulerProvider.io())
           .observeOn(schedulerProvider.ui())
           .startWith(MatchResult.LoadMatchResult.inFlight()));
 
-  // TODO(benoit) logic
   private ObservableTransformer<MatchAction.NotifyMatchStartAction, MatchResult.NotifyMatchStartResult>
       notifyMatchStartTransformer = actions -> actions.flatMap(
-      action -> Observable.just(MatchResult.NotifyMatchStartResult.create()));
+      action -> preferenceService.saveNotifyMatchStart(action.matchId(), action.notifyMatchStart())
+          .toObservable()
+          .map(MatchResult.NotifyMatchStartResult::create));
 
   private ObservableTransformer<MatchAction.GetLastStateAction, MatchResult.GetLastStateResult>
       getLastStateTransformer =
@@ -123,14 +134,12 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
         if (matchResult instanceof MatchResult.LoadMatchResult) {
           switch (((MatchResult.LoadMatchResult) matchResult).status()) {
             case LOAD_MATCH_IN_FLIGHT:
-              stateBuilder.loading(true)
-                  .error(null)
-                  .status(MatchViewState.Status.LOAD_MATCH_IN_FLIGHT);
+              stateBuilder.loading(true).error(null).status(LOAD_MATCH_IN_FLIGHT);
               break;
             case LOAD_MATCH_FAILURE:
               stateBuilder.loading(false)
                   .error(((MatchResult.LoadMatchResult) matchResult).error())
-                  .status(MatchViewState.Status.LOAD_MATCH_FAILURE);
+                  .status(LOAD_MATCH_FAILURE);
               break;
             case LOAD_MATCH_SUCCESS:
               Match match = checkNotNull(((MatchResult.LoadMatchResult) matchResult).match(),
@@ -138,8 +147,10 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
 
               stateBuilder.loading(false)
                   .error(null)
+                  .shouldNotifyMatchStart(
+                      ((MatchResult.LoadMatchResult) matchResult).shouldNotifyMatchStart())
                   .match(MatchDisplayable.fromMatch(match))
-                  .status(MatchViewState.Status.LOAD_MATCH_SUCCESS);
+                  .status(LOAD_MATCH_SUCCESS);
               break;
             default:
               throw new IllegalArgumentException(
@@ -149,8 +160,9 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
         } else if (matchResult instanceof MatchResult.GetLastStateResult) {
           return stateBuilder.build();
         } else if (matchResult instanceof MatchResult.NotifyMatchStartResult) {
-          // TODO(benoit) reduce
-          return stateBuilder.build();
+          return stateBuilder.shouldNotifyMatchStart(
+              ((MatchResult.NotifyMatchStartResult) matchResult).shouldNotifyMatchStart()).
+              status(UPDATED_NOTIFY_MATCH_START).build();
         } else {
           throw new IllegalArgumentException("Don't know this matchResult " + matchResult);
         }

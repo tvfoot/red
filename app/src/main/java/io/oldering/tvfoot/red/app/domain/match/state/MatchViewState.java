@@ -15,6 +15,8 @@ import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Statu
 
   public abstract boolean loading();
 
+  public abstract boolean shouldNotifyMatchStart();
+
   public static Builder builder() {
     return new AutoValue_MatchViewState.Builder();
   }
@@ -22,7 +24,11 @@ import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Statu
   public abstract Builder buildWith();
 
   static MatchViewState idle() {
-    return MatchViewState.builder().status(IDLE).loading(false).build();
+    return MatchViewState.builder()
+        .status(IDLE)
+        .shouldNotifyMatchStart(false)
+        .loading(false)
+        .build();
   }
 
   @AutoValue.Builder public static abstract class Builder {
@@ -34,11 +40,13 @@ import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Statu
 
     public abstract Builder loading(boolean loading);
 
+    public abstract Builder shouldNotifyMatchStart(boolean should);
+
     public abstract MatchViewState build();
   }
 
   public enum Status {
     LOAD_MATCH_IN_FLIGHT, LOAD_MATCH_FAILURE, LOAD_MATCH_SUCCESS, //
-    IDLE
+    UPDATED_NOTIFY_MATCH_START, IDLE
   }
 }

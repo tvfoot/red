@@ -16,22 +16,27 @@ interface MatchResult {
 
     @Nullable abstract Throwable error();
 
-    static LoadMatchResult success(Match match) {
-      return new AutoValue_MatchResult_LoadMatchResult(LOAD_MATCH_SUCCESS, match, null);
+    abstract boolean shouldNotifyMatchStart();
+
+    static LoadMatchResult success(Match match, boolean shouldNotifyMatchStart) {
+      return new AutoValue_MatchResult_LoadMatchResult(LOAD_MATCH_SUCCESS, match, null,
+          shouldNotifyMatchStart);
     }
 
     static LoadMatchResult failure(Throwable throwable) {
-      return new AutoValue_MatchResult_LoadMatchResult(LOAD_MATCH_FAILURE, null, throwable);
+      return new AutoValue_MatchResult_LoadMatchResult(LOAD_MATCH_FAILURE, null, throwable, false);
     }
 
     static LoadMatchResult inFlight() {
-      return new AutoValue_MatchResult_LoadMatchResult(LOAD_MATCH_IN_FLIGHT, null, null);
+      return new AutoValue_MatchResult_LoadMatchResult(LOAD_MATCH_IN_FLIGHT, null, null, false);
     }
   }
 
   @AutoValue abstract class NotifyMatchStartResult implements MatchResult {
-    static NotifyMatchStartResult create() {
-      return new AutoValue_MatchResult_NotifyMatchStartResult();
+    public abstract boolean shouldNotifyMatchStart();
+
+    static NotifyMatchStartResult create(boolean shouldNotifyMatchStart) {
+      return new AutoValue_MatchResult_NotifyMatchStartResult(shouldNotifyMatchStart);
     }
   }
 

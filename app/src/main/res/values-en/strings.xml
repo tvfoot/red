@@ -11,7 +11,7 @@
   <string name="pref_header_about">About</string>
   <string name="pref_category_about">About</string>
   <string name="pref_about_service">About</string>
-  <string name="pref_about_service_desc">About the TVFoot service</string>
+  <string name="pref_about_service_desc">About the TVFoot matchService</string>
   <string name="pref_about_contact">Contact us</string>
   <string name="pref_about_contact_desc">Send us your feedback</string>
   <string name="pref_about_version">Version</string>
