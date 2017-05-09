@@ -7,10 +7,10 @@ import io.reactivex.android.MainThreadDisposable;
 
 import static io.oldering.tvfoot.red.app.common.PreConditions.checkMainThread;
 
-public class ObservableBooleanObservable extends Observable<ObservableBooleanPropertyChangedEvent> {
+final class ObservableBooleanObservable extends Observable<ObservableBooleanPropertyChangedEvent> {
   private final ObservableBoolean field;
 
-  public ObservableBooleanObservable(ObservableBoolean observableField) {
+  ObservableBooleanObservable(ObservableBoolean observableField) {
     this.field = observableField;
   }
 
@@ -26,8 +26,7 @@ public class ObservableBooleanObservable extends Observable<ObservableBooleanPro
 
   private final class Listener extends MainThreadDisposable {
     private final ObservableBoolean observableField;
-    private final android.databinding.Observable.OnPropertyChangedCallback
-        onPropertyChangedCallback;
+    final android.databinding.Observable.OnPropertyChangedCallback onPropertyChangedCallback;
 
     Listener(ObservableBoolean observableField,
         final Observer<? super ObservableBooleanPropertyChangedEvent> observer) {
