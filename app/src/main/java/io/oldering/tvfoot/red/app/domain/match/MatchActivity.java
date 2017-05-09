@@ -3,12 +3,15 @@ package io.oldering.tvfoot.red.app.domain.match;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 import com.jakewharton.rxbinding2.view.RxView;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.RedAppConfig;
 import io.oldering.tvfoot.red.app.common.BaseActivity;
 import io.oldering.tvfoot.red.app.common.flowcontroller.FlowController;
+import io.oldering.tvfoot.red.app.common.rxdatabinding.ObservableBooleanPropertyChangedEvent;
+import io.oldering.tvfoot.red.app.common.rxdatabinding.RxObservableBoolean;
 import io.oldering.tvfoot.red.app.domain.match.state.MatchIntent;
 import io.oldering.tvfoot.red.app.domain.match.state.MatchStateBinder;
 import io.oldering.tvfoot.red.app.domain.match.state.MatchViewState;
@@ -69,6 +72,12 @@ public class MatchActivity extends BaseActivity {
   private void bind() {
     disposables.add(stateBinder.getStatesAsObservable().subscribe(this::render));
     stateBinder.forwardIntents(intents());
+
+    disposables.add(RxObservableBoolean.propertyChangedEvents(viewModel.shouldNotifyMatchStart)
+        .map(ObservableBooleanPropertyChangedEvent::value)
+        .subscribe(shouldNotifyMatchStart -> Snackbar.make(binding.getRoot(),
+            shouldNotifyMatchStart ? "You will be notified" : "Noop", Snackbar.LENGTH_LONG)
+            .show()));
   }
 
   @Override protected void onDestroy() {
