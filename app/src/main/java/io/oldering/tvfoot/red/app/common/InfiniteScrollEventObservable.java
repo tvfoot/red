@@ -1,8 +1,7 @@
-package io.oldering.tvfoot.red.app.domain.matches;
+package io.oldering.tvfoot.red.app.common;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import io.oldering.tvfoot.red.app.common.Notification;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.MainThreadDisposable;
@@ -14,11 +13,11 @@ import static io.oldering.tvfoot.red.app.common.PreConditions.checkMainThread;
  * Heavily based on {@link com.jakewharton.rxbinding2.support.v7.widget.RecyclerViewScrollEventObservable}
  * and {@link com.genius.groupie.example.InfiniteScrollListener}
  */
-final class InfiniteScrollEventObservable extends Observable<Object> {
+public final class InfiniteScrollEventObservable extends Observable<Object> {
   // TODO(benoit) is it useful to use a WeakReference here?
   private final WeakReference<RecyclerView> view;
 
-  InfiniteScrollEventObservable(RecyclerView view) {
+  public InfiniteScrollEventObservable(RecyclerView view) {
     this.view = new WeakReference<>(view);
   }
 

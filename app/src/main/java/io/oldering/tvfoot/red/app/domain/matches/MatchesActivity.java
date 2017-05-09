@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.app.common.BaseActivity;
+import io.oldering.tvfoot.red.app.common.InfiniteScrollEventObservable;
 import io.oldering.tvfoot.red.app.common.flowcontroller.FlowController;
 import io.oldering.tvfoot.red.app.domain.matches.state.MatchesIntent;
 import io.oldering.tvfoot.red.app.domain.matches.state.MatchesStateBinder;
