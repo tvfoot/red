@@ -33,10 +33,9 @@ public class MatchViewModel {
       errorMessage.set(error.toString());
     }
     if (hasData.get() && //
-        match.get() == null || !match.get().equals(state.match())) {
+        (match.get() == null || !match.get().equals(state.match()))) {
       match.set(state.match());
       broadcastersAdapter.addAll(match.get().broadcasters());
     }
   }
-}
 }
