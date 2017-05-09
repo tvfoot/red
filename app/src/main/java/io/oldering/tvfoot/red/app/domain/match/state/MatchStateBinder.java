@@ -16,10 +16,6 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static io.oldering.tvfoot.red.app.common.PreConditions.checkNotNull;
-import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Status.LOAD_MATCH_FAILURE;
-import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Status.LOAD_MATCH_IN_FLIGHT;
-import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Status.LOAD_MATCH_SUCCESS;
-import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Status.UPDATED_NOTIFY_MATCH_START;
 
 @ScreenScope public class MatchStateBinder {
   private PublishSubject<MatchIntent> intentsSubject;
@@ -134,12 +130,11 @@ import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Statu
         if (matchResult instanceof MatchResult.LoadMatchResult) {
           switch (((MatchResult.LoadMatchResult) matchResult).status()) {
             case LOAD_MATCH_IN_FLIGHT:
-              stateBuilder.loading(true).error(null).status(LOAD_MATCH_IN_FLIGHT);
+              stateBuilder.loading(true).error(null);
               break;
             case LOAD_MATCH_FAILURE:
               stateBuilder.loading(false)
-                  .error(((MatchResult.LoadMatchResult) matchResult).error())
-                  .status(LOAD_MATCH_FAILURE);
+                  .error(((MatchResult.LoadMatchResult) matchResult).error());
               break;
             case LOAD_MATCH_SUCCESS:
               Match match = checkNotNull(((MatchResult.LoadMatchResult) matchResult).match(),
@@ -149,8 +144,7 @@ import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Statu
                   .error(null)
                   .shouldNotifyMatchStart(
                       ((MatchResult.LoadMatchResult) matchResult).shouldNotifyMatchStart())
-                  .match(MatchDisplayable.fromMatch(match))
-                  .status(LOAD_MATCH_SUCCESS);
+                  .match(MatchDisplayable.fromMatch(match));
               break;
             default:
               throw new IllegalArgumentException(
@@ -161,8 +155,7 @@ import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Statu
           return stateBuilder.build();
         } else if (matchResult instanceof MatchResult.NotifyMatchStartResult) {
           return stateBuilder.shouldNotifyMatchStart(
-              ((MatchResult.NotifyMatchStartResult) matchResult).shouldNotifyMatchStart()).
-              status(UPDATED_NOTIFY_MATCH_START).build();
+              ((MatchResult.NotifyMatchStartResult) matchResult).shouldNotifyMatchStart()).build();
         } else {
           throw new IllegalArgumentException("Don't know this matchResult " + matchResult);
         }

@@ -6,14 +6,19 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import io.oldering.tvfoot.red.R;
 import io.oldering.tvfoot.red.app.domain.matches.displayable.BroadcasterRowDisplayable;
+import io.oldering.tvfoot.red.app.injection.scope.ActivityScope;
 import io.oldering.tvfoot.red.databinding.BroadcasterRowBinding;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.inject.Inject;
 
-public class BroadcastersAdapter
+@ActivityScope public class BroadcastersAdapter
     extends RecyclerView.Adapter<BroadcastersAdapter.BroadcasterViewHolder> {
   private List<BroadcasterRowDisplayable> broadcasters = new ArrayList<>();
+
+  @Inject public BroadcastersAdapter() {
+  }
 
   @Override public BroadcasterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());

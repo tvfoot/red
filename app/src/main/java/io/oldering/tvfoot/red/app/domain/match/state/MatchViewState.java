@@ -4,12 +4,8 @@ import com.google.auto.value.AutoValue;
 import io.oldering.tvfoot.red.app.domain.match.MatchDisplayable;
 import javax.annotation.Nullable;
 
-import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Status.IDLE;
-
 @AutoValue public abstract class MatchViewState {
   @Nullable public abstract MatchDisplayable match();
-
-  public abstract Status status();
 
   @Nullable public abstract Throwable error();
 
@@ -24,17 +20,11 @@ import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Statu
   public abstract Builder buildWith();
 
   static MatchViewState idle() {
-    return MatchViewState.builder()
-        .status(IDLE)
-        .shouldNotifyMatchStart(false)
-        .loading(false)
-        .build();
+    return MatchViewState.builder().shouldNotifyMatchStart(false).loading(false).build();
   }
 
   @AutoValue.Builder public static abstract class Builder {
     public abstract Builder match(MatchDisplayable match);
-
-    public abstract Builder status(Status status);
 
     public abstract Builder error(@Nullable Throwable error);
 
@@ -43,10 +33,5 @@ import static io.oldering.tvfoot.red.app.domain.match.state.MatchViewState.Statu
     public abstract Builder shouldNotifyMatchStart(boolean should);
 
     public abstract MatchViewState build();
-  }
-
-  public enum Status {
-    LOAD_MATCH_IN_FLIGHT, LOAD_MATCH_FAILURE, LOAD_MATCH_SUCCESS, //
-    UPDATED_NOTIFY_MATCH_START, IDLE
   }
 }
