@@ -75,9 +75,15 @@ public class MatchActivity extends BaseActivity {
 
     disposables.add(RxObservableBoolean.propertyChangedEvents(viewModel.shouldNotifyMatchStart)
         .map(ObservableBooleanPropertyChangedEvent::value)
-        .subscribe(shouldNotifyMatchStart -> Snackbar.make(binding.getRoot(),
-            shouldNotifyMatchStart ? "You will be notified" : "Noop", Snackbar.LENGTH_LONG)
-            .show()));
+        .subscribe(shouldNotifyMatchStart -> {
+          if (shouldNotifyMatchStart) {
+            Snackbar.make(binding.getRoot(),
+                "You will be notified 5 minutes before the game starts", Snackbar.LENGTH_LONG)
+                .show();
+          } else {
+            // TODO(benoit) hide if one is displayed. Would happen on sequential taps
+          }
+        }));
   }
 
   @Override protected void onDestroy() {
