@@ -17,7 +17,7 @@ public final class InfiniteScrollEventObservable extends Observable<Object> {
   // TODO(benoit) is it useful to use a WeakReference here?
   private final WeakReference<RecyclerView> view;
 
-  InfiniteScrollEventObservable(RecyclerView view) {
+  public InfiniteScrollEventObservable(RecyclerView view) {
     this.view = new WeakReference<>(view);
   }
 
