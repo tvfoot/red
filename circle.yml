@@ -4,7 +4,7 @@ machine:
   environment:
     GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
     SERVICE_ACCOUNT: 'service-account.json'
-    PACKAGE_NAME: 'io.oldering.tvfoot.red'
+    PACKAGE_NAME: 'com.benoitquenaudon.tvfoot.red'
 
 dependencies:
   cache_directories:

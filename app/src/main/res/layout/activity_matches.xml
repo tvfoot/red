@@ -6,14 +6,14 @@
   <data>
     <variable
         name="viewModel"
-        type="io.oldering.tvfoot.red.app.domain.matches.MatchesViewModel"
+        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewModel"
         />
   </data>
   <android.support.design.widget.CoordinatorLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:fitsSystemWindows="true"
-      tools:context="io.oldering.tvfoot.red.activity.MatchListActivity"
+      tools:context="com.benoitquenaudon.tvfoot.red.activity.MatchListActivity"
       >
 
     <android.support.design.widget.AppBarLayout
@@ -56,7 +56,7 @@
           android:layout_height="match_parent"
           app:layoutManager="android.support.v7.widget.LinearLayoutManager"
           app:visible="@{viewModel.hasData}"
-          tools:context="io.oldering.tvfoot.red.activity.MatchListActivity"
+          tools:context="com.benoitquenaudon.tvfoot.red.activity.MatchListActivity"
           tools:listitem="@layout/matches_row_match"
           />
     </android.support.v4.widget.SwipeRefreshLayout>
