@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:transitionOrdering="together">
+  <transitionSet android:interpolator="@android:interpolator/fast_out_slow_in">
+    <targets>
+      <target android:targetId="@id/match_headline"/>
+    </targets>
+    <transition
+        class="com.benoitquenaudon.tvfoot.red.util.plaid.ReflowText"
+        app:maxDuration="3000"
+        app:minDuration="200"
+        app:staggerDelay="30"
+        app:velocity="700dp">
+      <arcMotion
+          android:maximumAngle="90"
+          android:minimumHorizontalAngle="90"
+          android:minimumVerticalAngle="0"/>
+    </transition>
+  </transitionSet>
+</transitionSet>
