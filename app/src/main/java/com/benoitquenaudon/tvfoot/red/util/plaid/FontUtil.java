@@ -32,22 +32,22 @@ public class FontUtil {
   private FontUtil() {
   }
 
-  private static final Map<String, Typeface> sTypefaceCache = new HashMap<>();
+  private static final Map<String, Typeface> typefaceCache = new HashMap<>();
 
   public static Typeface get(Context context, String font) {
-    synchronized (sTypefaceCache) {
-      if (!sTypefaceCache.containsKey(font)) {
+    synchronized (typefaceCache) {
+      if (!typefaceCache.containsKey(font)) {
         Typeface tf = Typeface.createFromAsset(context.getApplicationContext().getAssets(),
             "fonts/" + font + ".ttf");
-        sTypefaceCache.put(font, tf);
+        typefaceCache.put(font, tf);
       }
-      return sTypefaceCache.get(font);
+      return typefaceCache.get(font);
     }
   }
 
   public static String getName(@NonNull Typeface typeface) {
-    for (Map.Entry<String, Typeface> entry : sTypefaceCache.entrySet()) {
-      if (entry.getValue() == typeface) {
+    for (Map.Entry<String, Typeface> entry : typefaceCache.entrySet()) {
+      if (entry.getValue().equals(typeface)) {
         return entry.getKey();
       }
     }

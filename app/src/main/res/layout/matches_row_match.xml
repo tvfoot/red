@@ -6,11 +6,11 @@
   <data>
     <variable
         name="match"
-        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable"
+        type="com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable"
         />
     <variable
         name="handler"
-        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAdapter"
+        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAdapter.MatchRowViewHolder"
         />
   </data>
 

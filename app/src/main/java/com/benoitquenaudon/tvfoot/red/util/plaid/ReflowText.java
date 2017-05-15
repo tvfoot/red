@@ -364,7 +364,7 @@ public class ReflowText extends Transition {
         // increase the start delay (by a decreasing amount) for the next run
         // (if it's visible throughout) to stagger the movement and try to minimize overlaps
         startDelay += staggerDelay;
-        staggerDelay *= STAGGER_DECAY;
+        staggerDelay = (long) (startDelay * STAGGER_DECAY);
       }
       lastRightward = rightward;
       first = false;
@@ -406,7 +406,7 @@ public class ReflowText extends Transition {
     paint.setColor(data.textColor);
     paint.setLetterSpacing(data.letterSpacing);
     if (data.fontName != null) {
-      paint.setTypeface(FontUtiltr.get(context, data.fontName));
+      paint.setTypeface(FontUtil.get(context, data.fontName));
     }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

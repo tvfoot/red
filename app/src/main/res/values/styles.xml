@@ -17,4 +17,14 @@
 
   <style name="Theme.TvFoot.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+  <style name="Theme.TvFoot.MatchesActivity" parent="Theme.TvFoot.NoActionBar">
+    <item name="android:windowContentTransitions">true</item>
+  </style>
+
+  <style name="Theme.TvFoot.MatchActivity" parent="Theme.TvFoot.NoActionBar">
+    <item name="android:windowContentTransitions">true</item>
+    <item name="android:windowSharedElementEnterTransition">@transition/reflow_enter</item>
+    <item name="android:windowSharedElementReturnTransition">@transition/reflow_exit</item>
+  </style>
+
 </resources>

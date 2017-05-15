@@ -1,12 +1,15 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.SharedElementCallback;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.benoitquenaudon.tvfoot.red.R;
 import com.benoitquenaudon.tvfoot.red.RedAppConfig;
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity;
@@ -16,6 +19,8 @@ import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchStateBinder;
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewState;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.BroadcastersAdapter;
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchBinding;
+import com.benoitquenaudon.tvfoot.red.util.plaid.ReflowText;
+import com.jakewharton.rxbinding2.view.RxView;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import java.util.List;
@@ -33,39 +38,82 @@ public class MatchActivity extends BaseActivity {
   @Inject MatchViewModel viewModel;
 
   private ActivityMatchBinding binding;
+  @Nullable private MatchDisplayable match = null;
   @Nullable private String matchId = null;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getActivityComponent().inject(this);
 
-    final Uri uri = getIntent().getData();
-    if (uri != null && //
-        RedAppConfig.AUTHORITIES.contains(uri.getAuthority()) && //
+    Intent intent = getIntent();
+    match = intent.getParcelableExtra("MATCH");
+    if (match != null) {
+      Timber.d("match %s", match);
+      initViewModel(match);
+      matchId = match.matchId();
+    } else {
+      Uri uri = intent.getData();
+      matchId = extractMatchId(uri);
+
+      if (matchId == null) {
+        Timber.w("match id is null %s", uri);
+        Toast.makeText(this, "match id is null with uri " + uri, Toast.LENGTH_LONG).show();
+        flowController.toMatches();
+        finish();
+        return;
+      } else {
+        Timber.d("matchId %s", matchId);
+      }
+    }
+
+    setupView();
+
+    disposables = new CompositeDisposable();
+    bind();
+  }
+
+  private void setupView() {
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_match);
+    binding.matchDetailBroadcasters.setAdapter(broadcastersAdapter);
+    binding.setViewModel(viewModel);
+
+    setupTransition();
+  }
+
+  @Nullable private String extractMatchId(Uri uri) {
+    if (RedAppConfig.AUTHORITIES.contains(uri.getAuthority()) && //
         RedAppConfig.SCHEMES.contains(uri.getScheme())) {
       final List<String> segments = uri.getPathSegments();
       if (segments != null && //
           segments.size() == 5 && //
           RedAppConfig.PATH_MATCH.equals(segments.get(0))) {
-        matchId = segments.get(4);
+        return segments.get(4);
       }
     }
+    return null;
+  }
 
-    if (matchId == null) {
-      Timber.w("match id is null %s", uri);
-      Toast.makeText(this, "match id is null with uri " + uri, Toast.LENGTH_LONG).show();
-      flowController.toMatches();
-      finish();
-      return;
-    }
+  private void initViewModel(MatchDisplayable match) {
+    viewModel.match.set(match);
+  }
 
-    binding = DataBindingUtil.setContentView(this, R.layout.activity_match);
-    binding.matchDetailBroadcasters.setAdapter(broadcastersAdapter);
-    binding.setViewModel(viewModel);
+  private void setupTransition() {
+    final TextView textView = binding.matchHeadline;
+    textView.setTransitionName("reflowing");
 
-    Timber.d("match with load with id %s", matchId);
-    disposables = new CompositeDisposable();
-    bind();
+    setEnterSharedElementCallback(new SharedElementCallback() {
+      @Override
+      public void onSharedElementStart(List<String> sharedElementNames, List<View> sharedElements,
+          List<View> sharedElementSnapshots) {
+        ReflowText.setupReflow(getIntent(), textView);
+      }
+
+      @Override
+      public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements,
+          List<View> sharedElementSnapshots) {
+        ReflowText.setupReflow(new ReflowText.ReflowableTextView(textView));
+      }
+    });
   }
 
   private void bind() {
@@ -94,8 +142,14 @@ public class MatchActivity extends BaseActivity {
   }
 
   private Observable<MatchIntent.InitialIntent> initialIntent() {
-    return Observable.just(
-        MatchIntent.InitialIntent.create(checkNotNull(matchId, "MatchId is null")));
+    MatchIntent.InitialIntent matchIntent;
+    if (match != null) {
+      matchIntent = MatchIntent.InitialIntent.withMatch(match);
+    } else {
+      assert matchId != null;
+      matchIntent = MatchIntent.InitialIntent.withMatchId(matchId);
+    }
+    return Observable.just(matchIntent);
   }
 
   private Observable<MatchIntent.NotifyMatchStartIntent> fabClickIntent() {
