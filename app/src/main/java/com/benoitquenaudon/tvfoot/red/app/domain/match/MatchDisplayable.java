@@ -23,11 +23,11 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
 import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_MILLIS;
 
 @AutoValue public abstract class MatchDisplayable implements Parcelable, MatchesItemDisplayable {
-  private static SimpleDateFormat shortDateFormat =
+  private final static SimpleDateFormat shortDateFormat =
       new SimpleDateFormat("HH:mm", Locale.getDefault());
-  public static SimpleDateFormat mediumDateFormat =
+  public final static SimpleDateFormat mediumDateFormat =
       new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-  private static SimpleDateFormat fullTextDateFormat =
+  private final static SimpleDateFormat fullTextDateFormat =
       new SimpleDateFormat("EEEE dd MMMM yyyy HH'h'mm", Locale.getDefault());
 
   public abstract String headerKey();
