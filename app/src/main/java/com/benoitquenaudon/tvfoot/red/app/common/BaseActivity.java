@@ -2,7 +2,7 @@ package com.benoitquenaudon.tvfoot.red.app.common;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.Nullable;
+import javax.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import com.benoitquenaudon.tvfoot.red.app.injection.ComponentFactory;
 import com.benoitquenaudon.tvfoot.red.app.injection.component.ActivityComponent;

@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.common;
 
 import android.os.Looper;
-import android.support.annotation.Nullable;
+import javax.annotation.Nullable;
 import io.reactivex.Observer;
 
 public final class PreConditions {

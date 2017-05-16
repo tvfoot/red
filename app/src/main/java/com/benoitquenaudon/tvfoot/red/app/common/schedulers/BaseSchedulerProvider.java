@@ -1,16 +1,16 @@
 package com.benoitquenaudon.tvfoot.red.app.common.schedulers;
 
-import android.support.annotation.NonNull;
+import com.benoitquenaudon.tvfoot.red.util.MethodsAreNonnullByDefault;
 import io.reactivex.Scheduler;
 
 /**
  * Allow providing different types of {@link Scheduler}s.
  */
-public interface BaseSchedulerProvider {
+@MethodsAreNonnullByDefault public interface BaseSchedulerProvider {
 
-  @NonNull Scheduler computation();
+  Scheduler computation();
 
-  @NonNull Scheduler io();
+  Scheduler io();
 
-  @NonNull Scheduler ui();
+  Scheduler ui();
 }
