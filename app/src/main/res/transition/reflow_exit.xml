@@ -14,8 +14,8 @@
         app:staggerDelay="10"
         app:velocity="1000dp">
       <arcMotion
-          android:maximumAngle="90"
-          android:minimumHorizontalAngle="90"
+          android:maximumAngle="30"
+          android:minimumHorizontalAngle="30"
           android:minimumVerticalAngle="0"/>
     </transition>
   </transitionSet>
