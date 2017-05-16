@@ -1,5 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match.state;
 
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable;
 import com.google.auto.value.AutoValue;
 
 interface MatchAction {
@@ -8,6 +9,14 @@ interface MatchAction {
 
     public static LoadMatchAction create(String matchId) {
       return new AutoValue_MatchAction_LoadMatchAction(matchId);
+    }
+  }
+
+  @AutoValue abstract class LoadMatchDetailsAction implements MatchAction {
+    public abstract MatchDisplayable match();
+
+    public static LoadMatchDetailsAction create(MatchDisplayable match) {
+      return new AutoValue_MatchAction_LoadMatchDetailsAction(match);
     }
   }
 

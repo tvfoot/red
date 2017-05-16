@@ -2,14 +2,16 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.support.v4.util.Pair;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import com.benoitquenaudon.tvfoot.red.R;
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.HeaderRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.LoadingRowDisplayable;
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayableDiffUtilCallback;
 import com.benoitquenaudon.tvfoot.red.app.injection.scope.ActivityScope;
@@ -25,7 +27,8 @@ import javax.inject.Inject;
 @ActivityScope public class MatchesAdapter
     extends RecyclerView.Adapter<MatchesAdapter.MatchesItemViewHolder> {
   private List<MatchesItemDisplayable> matchesItems = Collections.emptyList();
-  private PublishSubject<MatchRowDisplayable> matchRowClickObservable = PublishSubject.create();
+  @SuppressWarnings("WeakerAccess") PublishSubject<Pair<MatchDisplayable, TextView>>
+      matchRowClickObservable = PublishSubject.create();
 
   @Inject MatchesAdapter() {
   }
@@ -47,7 +50,7 @@ import javax.inject.Inject;
     }
   }
 
-  Observable<MatchRowDisplayable> getMatchRowClickObservable() {
+  Observable<Pair<MatchDisplayable, TextView>> getMatchRowClickObservable() {
     return matchRowClickObservable;
   }
 
@@ -67,7 +70,7 @@ import javax.inject.Inject;
 
   @Override public int getItemViewType(int position) {
     MatchesItemDisplayable item = matchesItems.get(position);
-    if (item instanceof MatchRowDisplayable) {
+    if (item instanceof MatchDisplayable) {
       return R.layout.matches_row_match;
     }
     if (item instanceof HeaderRowDisplayable) {
@@ -77,10 +80,6 @@ import javax.inject.Inject;
       return R.layout.row_loading;
     }
     throw new UnsupportedOperationException("Don't know how to deal with this item: " + item);
-  }
-
-  public void onClick(MatchRowDisplayable match) {
-    matchRowClickObservable.onNext(match);
   }
 
   private MatchesItemDisplayableDiffUtilCallback diffUtilCallback =
@@ -125,15 +124,15 @@ import javax.inject.Inject;
     }
   }
 
-  private class MatchRowViewHolder
-      extends MatchesItemViewHolder<MatchesRowMatchBinding, MatchRowDisplayable> {
+  public class MatchRowViewHolder
+      extends MatchesItemViewHolder<MatchesRowMatchBinding, MatchDisplayable> {
     MatchRowViewHolder(MatchesRowMatchBinding binding) {
       super(binding);
     }
 
-    @Override void bind(MatchRowDisplayable match) {
+    @Override void bind(MatchDisplayable match) {
       binding.setMatch(match);
-      binding.setHandler(MatchesAdapter.this);
+      binding.setHandler(this);
       binding.executePendingBindings();
 
       setBroadcastsAdapter(match);
@@ -146,7 +145,7 @@ import javax.inject.Inject;
       binding.executePendingBindings();
     }
 
-    private void setBroadcastsAdapter(MatchRowDisplayable match) {
+    private void setBroadcastsAdapter(MatchDisplayable match) {
       RecyclerView recyclerView = binding.matchBroadcasters;
 
       BroadcastersAdapter broadcastersAdapter = new BroadcastersAdapter();
@@ -157,6 +156,11 @@ import javax.inject.Inject;
       //      BroadcasterRowDisplayable.builder().code("ic_tv_black_18px").build());
       //}
       recyclerView.setAdapter(broadcastersAdapter);
+    }
+
+    public void onClick(MatchDisplayable match) {
+      MatchesRowMatchBinding binding = this.binding;
+      matchRowClickObservable.onNext(Pair.create(match, binding.matchHeadline));
     }
   }
 

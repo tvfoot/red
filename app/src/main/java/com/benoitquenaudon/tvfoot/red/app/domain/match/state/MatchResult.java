@@ -1,7 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match.state;
 
-import com.google.auto.value.AutoValue;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable;
+import com.google.auto.value.AutoValue;
 import javax.annotation.Nullable;
 
 import static com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_FAILURE;
@@ -29,6 +30,16 @@ interface MatchResult {
 
     static LoadMatchResult inFlight() {
       return new AutoValue_MatchResult_LoadMatchResult(LOAD_MATCH_IN_FLIGHT, null, null, false);
+    }
+  }
+
+  @AutoValue abstract class LoadMatchDetailsResult implements MatchResult {
+    abstract MatchDisplayable match();
+
+    abstract boolean shouldNotifyMatchStart();
+
+    static LoadMatchDetailsResult success(MatchDisplayable match, boolean shouldNotifyMatchStart) {
+      return new AutoValue_MatchResult_LoadMatchDetailsResult(match, shouldNotifyMatchStart);
     }
   }
 

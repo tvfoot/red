@@ -1,10 +1,10 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.state;
 
-import com.google.auto.value.AutoValue;
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.HeaderRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.LoadingRowDisplayable;
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable;
+import com.google.auto.value.AutoValue;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
   public List<MatchesItemDisplayable> matchesItemDisplayables() {
     List<String> headers = new ArrayList<>();
     List<MatchesItemDisplayable> items = new ArrayList<>();
-    for (MatchRowDisplayable match : matches()) {
+    for (MatchDisplayable match : matches()) {
       if (!headers.contains(match.headerKey())) {
         headers.add(match.headerKey());
         items.add(HeaderRowDisplayable.create(match.headerKey()));
@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
     return items;
   }
 
-  public abstract List<MatchRowDisplayable> matches();
+  public abstract List<MatchDisplayable> matches();
 
   @Nullable public abstract Throwable error();
 
@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 
   public abstract boolean refreshLoading();
 
-  @Nullable public abstract MatchRowDisplayable clickedMatch();
+  @Nullable public abstract MatchDisplayable clickedMatch();
 
   public abstract Integer currentPage();
 
@@ -55,7 +55,7 @@ import javax.annotation.Nullable;
   }
 
   @AutoValue.Builder public static abstract class Builder {
-    public abstract Builder matches(List<MatchRowDisplayable> matches);
+    public abstract Builder matches(List<MatchDisplayable> matches);
 
     public abstract Builder error(@Nullable Throwable error);
 
@@ -63,7 +63,7 @@ import javax.annotation.Nullable;
 
     public abstract Builder refreshLoading(boolean pullToRefreshLoading);
 
-    public abstract Builder clickedMatch(@Nullable MatchRowDisplayable clickedMatch);
+    public abstract Builder clickedMatch(@Nullable MatchDisplayable clickedMatch);
 
     public abstract Builder currentPage(Integer CurrentPage);
 

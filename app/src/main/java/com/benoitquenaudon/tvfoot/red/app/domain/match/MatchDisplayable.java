@@ -1,6 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match;
 
-import com.google.auto.value.AutoValue;
+import android.os.Parcelable;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Broadcaster;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Competition;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
@@ -8,9 +8,11 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Team;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.BroadcasterRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable;
 import com.benoitquenaudon.tvfoot.red.util.StringUtils;
+import com.google.auto.value.AutoValue;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -20,12 +22,12 @@ import javax.annotation.Nullable;
 import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNull;
 import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_MILLIS;
 
-@AutoValue public abstract class MatchDisplayable implements MatchesItemDisplayable {
-  private static SimpleDateFormat shortDateFormat =
+@AutoValue public abstract class MatchDisplayable implements Parcelable, MatchesItemDisplayable {
+  private final static SimpleDateFormat shortDateFormat =
       new SimpleDateFormat("HH:mm", Locale.getDefault());
-  private static SimpleDateFormat mediumDateFormat =
+  public final static SimpleDateFormat mediumDateFormat =
       new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-  private static SimpleDateFormat fullTextDateFormat =
+  private final static SimpleDateFormat fullTextDateFormat =
       new SimpleDateFormat("EEEE dd MMMM yyyy HH'h'mm", Locale.getDefault());
 
   public abstract String headerKey();
@@ -64,7 +66,16 @@ import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_
         parseStartTimeInText(match.startAt()), //
         parseTeamLogoPath(match.homeTeam()), //
         parseTeamLogoPath(match.awayTeam()), //
-        parseLocation(match), match.id());
+        parseLocation(match), //
+        match.id());
+  }
+
+  public static List<MatchDisplayable> fromMatches(List<Match> matches) {
+    List<MatchDisplayable> matchDisplayables = new ArrayList<>(matches.size());
+    for (Match match : matches) {
+      matchDisplayables.add(fromMatch(match));
+    }
+    return matchDisplayables;
   }
 
   private static String parseHeaderKey(Date startAt) {
@@ -80,7 +91,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_
   private static List<BroadcasterRowDisplayable> parseBroadcasters(
       @Nullable List<Broadcaster> broadcasters) {
     if (broadcasters == null) {
-      return new ArrayList<>();
+      return Collections.emptyList();
     }
 
     List<BroadcasterRowDisplayable> broadcastersVM = new ArrayList<>(broadcasters.size());
@@ -144,7 +155,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_
   }
 
   @Nullable private static String parseLocation(Match match) {
-    return match.place();
+    return String.valueOf(match.place());
   }
 
   @Override public boolean isSameAs(MatchesItemDisplayable newItem) {

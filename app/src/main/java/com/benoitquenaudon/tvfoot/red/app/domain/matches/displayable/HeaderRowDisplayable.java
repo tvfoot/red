@@ -1,8 +1,9 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable;
 
-import com.google.auto.value.AutoValue;
 import com.benoitquenaudon.tvfoot.red.R;
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable;
 import com.benoitquenaudon.tvfoot.red.util.DateUtils;
+import com.google.auto.value.AutoValue;
 import java.text.ParseException;
 import java.util.Date;
 import timber.log.Timber;
@@ -22,7 +23,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_DAY_IN
 
     Date date;
     try {
-      date = MatchRowDisplayable.mediumDateFormat.parse(headerKey);
+      date = MatchDisplayable.mediumDateFormat.parse(headerKey);
     } catch (ParseException e) {
       Timber.e(e);
       throw new UnsupportedOperationException("What is this date anyway? " + headerKey);

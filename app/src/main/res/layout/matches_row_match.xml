@@ -6,11 +6,11 @@
   <data>
     <variable
         name="match"
-        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable"
+        type="com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable"
         />
     <variable
         name="handler"
-        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAdapter"
+        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAdapter.MatchRowViewHolder"
         />
   </data>
 
@@ -62,6 +62,7 @@
         android:text="@{match.headline}"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintHorizontal_weight=".65"
+        android:fontFamily="sans-serif"
         app:layout_constraintLeft_toRightOf="@+id/match_broadcasters"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

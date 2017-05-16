@@ -1,11 +1,11 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.state;
 
 import android.os.Bundle;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable;
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.injection.scope.ScreenScope;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.functions.BiFunction;
@@ -145,7 +145,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
               stateBuilder.refreshLoading(false)
                   .error(null)
                   .currentPage(0)
-                  .matches(MatchRowDisplayable.fromMatches(matches));
+                  .matches(MatchDisplayable.fromMatches(matches));
               break;
             default:
               throw new IllegalArgumentException(
@@ -168,9 +168,9 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
                   checkNotNull(((MatchesResult.LoadNextPageResult) matchesResult).matches(),
                       "Matches are null");
 
-              List<MatchRowDisplayable> matches = new ArrayList<>();
+              List<MatchDisplayable> matches = new ArrayList<>();
               matches.addAll(previousState.matches());
-              matches.addAll(MatchRowDisplayable.fromMatches(newMatches));
+              matches.addAll(MatchDisplayable.fromMatches(newMatches));
 
               stateBuilder.nextPageLoading(false).error(null).matches(matches);
               break;

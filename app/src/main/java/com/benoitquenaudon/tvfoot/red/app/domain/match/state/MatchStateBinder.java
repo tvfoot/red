@@ -1,12 +1,12 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match.state;
 
 import android.os.Bundle;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.benoitquenaudon.tvfoot.red.app.common.PreferenceService;
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.injection.scope.ScreenScope;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.Single;
@@ -75,8 +75,17 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
 
   private MatchAction actionFromIntent(MatchIntent intent) {
     if (intent instanceof MatchIntent.InitialIntent) {
-      // TODO(benoit) what should I do here?
-      return MatchAction.LoadMatchAction.create(((MatchIntent.InitialIntent) intent).matchId());
+      if (((MatchIntent.InitialIntent) intent).match() != null) {
+        // TODO(benoit) do something for better readability
+        // the code does not deserve this...
+        MatchDisplayable match =
+            checkNotNull(((MatchIntent.InitialIntent) intent).match(), "match == null");
+        return MatchAction.LoadMatchDetailsAction.create(match);
+      } else {
+        String matchId =
+            checkNotNull(((MatchIntent.InitialIntent) intent).matchId(), "matchId == null");
+        return MatchAction.LoadMatchAction.create(matchId);
+      }
     }
     if (intent instanceof MatchIntent.GetLastState) {
       return MatchAction.GetLastStateAction.create();
@@ -88,6 +97,14 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
     }
     throw new IllegalArgumentException("do not know how to treat this intents " + intent);
   }
+
+  private ObservableTransformer<MatchAction.LoadMatchDetailsAction, MatchResult.LoadMatchDetailsResult>
+      loadMatchDetailsTransformer = actions -> actions.flatMap(
+      action -> Single.zip(Single.just(action.match()),
+          preferenceService.loadNotifyMatchStart(action.match().matchId()),
+          MatchResult.LoadMatchDetailsResult::success)
+          .toObservable()
+          .observeOn(schedulerProvider.ui()));
 
   private ObservableTransformer<MatchAction.LoadMatchAction, MatchResult.LoadMatchResult>
       loadMatchTransformer = actions -> actions.flatMap(
@@ -113,11 +130,14 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
   private ObservableTransformer<MatchAction, MatchResult> actionToResultTransformer =
       actions -> actions.publish(shared -> Observable.merge(
           shared.ofType(MatchAction.LoadMatchAction.class).compose(loadMatchTransformer),
+          shared.ofType(MatchAction.LoadMatchDetailsAction.class)
+              .compose(loadMatchDetailsTransformer),
           shared.ofType(MatchAction.GetLastStateAction.class).compose(getLastStateTransformer),
           shared.ofType(MatchAction.NotifyMatchStartAction.class)
               .compose(notifyMatchStartTransformer)).mergeWith(
           // Error for not implemented actions
           shared.filter(v -> !(v instanceof MatchAction.LoadMatchAction)
+              && !(v instanceof MatchAction.LoadMatchDetailsAction)
               && !(v instanceof MatchAction.GetLastStateAction)
               && !(v instanceof MatchAction.NotifyMatchStartAction))
               .flatMap(w -> Observable.error(
@@ -151,6 +171,11 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
                   "Wrong status for LoadMatchResult: " + ((MatchResult.LoadMatchResult) matchResult)
                       .status());
           }
+        } else if (matchResult instanceof MatchResult.LoadMatchDetailsResult) {
+          return stateBuilder.match(((MatchResult.LoadMatchDetailsResult) matchResult).match())
+              .shouldNotifyMatchStart(
+                  ((MatchResult.LoadMatchDetailsResult) matchResult).shouldNotifyMatchStart())
+              .build();
         } else if (matchResult instanceof MatchResult.GetLastStateResult) {
           return stateBuilder.build();
         } else if (matchResult instanceof MatchResult.NotifyMatchStartResult) {

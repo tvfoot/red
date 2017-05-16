@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout;
 import com.benoitquenaudon.tvfoot.red.R;
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity;
 import com.benoitquenaudon.tvfoot.red.app.common.InfiniteScrollEventObservable;
@@ -14,6 +13,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesStateBinder;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState;
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchesBinding;
+import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import javax.annotation.Nullable;
@@ -70,7 +70,7 @@ public class MatchesActivity extends BaseActivity {
     stateBinder.forwardIntents(intents());
 
     disposables.add(adapter.getMatchRowClickObservable()
-        .subscribe(match -> flowController.toMatch(match.matchId())));
+        .subscribe(pair -> flowController.toMatchWithTransition(pair.first, pair.second)));
   }
 
   @Override protected void onDestroy() {
