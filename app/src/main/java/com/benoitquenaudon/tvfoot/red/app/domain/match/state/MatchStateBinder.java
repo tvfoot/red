@@ -1,12 +1,14 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match.state;
 
 import android.os.Bundle;
-import com.google.firebase.analytics.FirebaseAnalytics;
+import com.benoitquenaudon.tvfoot.red.app.common.NotificationService;
 import com.benoitquenaudon.tvfoot.red.app.common.PreferenceService;
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.injection.scope.ScreenScope;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.Single;
@@ -24,16 +26,18 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
   private PreferenceService preferenceService;
   private BaseSchedulerProvider schedulerProvider;
   private FirebaseAnalytics firebaseAnalytics;
+  private NotificationService notificationService;
 
   @SuppressWarnings("CheckReturnValue") //
   @Inject MatchStateBinder(PublishSubject<MatchIntent> intentsSubject,
       PublishSubject<MatchViewState> statesSubject, MatchService matchService,
-      PreferenceService preferenceService, BaseSchedulerProvider schedulerProvider,
-      FirebaseAnalytics firebaseAnalytics) {
+      PreferenceService preferenceService, NotificationService notificationService,
+      BaseSchedulerProvider schedulerProvider, FirebaseAnalytics firebaseAnalytics) {
     this.intentsSubject = intentsSubject;
     this.statesSubject = statesSubject;
     this.matchService = matchService;
     this.preferenceService = preferenceService;
+    this.notificationService = notificationService;
     this.schedulerProvider = schedulerProvider;
     this.firebaseAnalytics = firebaseAnalytics;
 
@@ -84,6 +88,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
     if (intent instanceof MatchIntent.NotifyMatchStartIntent) {
       return MatchAction.NotifyMatchStartAction.create(
           ((MatchIntent.NotifyMatchStartIntent) intent).matchId(),
+          ((MatchIntent.NotifyMatchStartIntent) intent).startAt(),
           ((MatchIntent.NotifyMatchStartIntent) intent).notifyMatchStart());
     }
     throw new IllegalArgumentException("do not know how to treat this intents " + intent);
@@ -103,8 +108,11 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
   private ObservableTransformer<MatchAction.NotifyMatchStartAction, MatchResult.NotifyMatchStartResult>
       notifyMatchStartTransformer = actions -> actions.flatMap(
       action -> preferenceService.saveNotifyMatchStart(action.matchId(), action.notifyMatchStart())
+          .andThen( // not sure about this...
+              (CompletableSource) shouldNotify -> notificationService.manageNotification(
+                  action.matchId(), action.startAt(), action.notifyMatchStart()))
           .toObservable()
-          .map(MatchResult.NotifyMatchStartResult::create));
+          .map(ignored -> MatchResult.NotifyMatchStartResult.create(action.notifyMatchStart())));
 
   private ObservableTransformer<MatchAction.GetLastStateAction, MatchResult.GetLastStateResult>
       getLastStateTransformer =
@@ -115,13 +123,14 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
           shared.ofType(MatchAction.LoadMatchAction.class).compose(loadMatchTransformer),
           shared.ofType(MatchAction.GetLastStateAction.class).compose(getLastStateTransformer),
           shared.ofType(MatchAction.NotifyMatchStartAction.class)
-              .compose(notifyMatchStartTransformer)).mergeWith(
-          // Error for not implemented actions
-          shared.filter(v -> !(v instanceof MatchAction.LoadMatchAction)
-              && !(v instanceof MatchAction.GetLastStateAction)
-              && !(v instanceof MatchAction.NotifyMatchStartAction))
-              .flatMap(w -> Observable.error(
-                  new IllegalArgumentException("Unknown Action type: " + w)))));
+              .compose(notifyMatchStartTransformer)) //
+          .mergeWith(
+              // Error for not implemented actions
+              shared.filter(v -> !(v instanceof MatchAction.LoadMatchAction)
+                  && !(v instanceof MatchAction.GetLastStateAction)
+                  && !(v instanceof MatchAction.NotifyMatchStartAction))
+                  .flatMap(w -> Observable.error(
+                      new IllegalArgumentException("Unknown Action type: " + w)))));
 
   private static BiFunction<MatchViewState, MatchResult, MatchViewState> reducer =
       (previousState, matchResult) -> {

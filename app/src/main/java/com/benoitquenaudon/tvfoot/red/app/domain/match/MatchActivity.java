@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.benoitquenaudon.tvfoot.red.R;
 import com.benoitquenaudon.tvfoot.red.RedAppConfig;
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity;
@@ -16,6 +15,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchStateBinder;
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewState;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.BroadcastersAdapter;
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchBinding;
+import com.jakewharton.rxbinding2.view.RxView;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import java.util.List;
@@ -52,8 +52,8 @@ public class MatchActivity extends BaseActivity {
     }
 
     if (matchId == null) {
-      Timber.w("match id is null %s", uri);
-      Toast.makeText(this, "match id is null with uri " + uri, Toast.LENGTH_LONG).show();
+      Timber.w("matchDisplayable id is null %s", uri);
+      Toast.makeText(this, "matchDisplayable id is null with uri " + uri, Toast.LENGTH_LONG).show();
       flowController.toMatches();
       finish();
       return;
@@ -63,7 +63,7 @@ public class MatchActivity extends BaseActivity {
     binding.matchDetailBroadcasters.setAdapter(broadcastersAdapter);
     binding.setViewModel(viewModel);
 
-    Timber.d("match with load with id %s", matchId);
+    Timber.d("matchDisplayable with load with id %s", matchId);
     disposables = new CompositeDisposable();
     bind();
   }
@@ -100,8 +100,8 @@ public class MatchActivity extends BaseActivity {
 
   private Observable<MatchIntent.NotifyMatchStartIntent> fabClickIntent() {
     return RxView.clicks(binding.notifyMatchStartFab)
-        .map(ignored -> MatchIntent.NotifyMatchStartIntent.create(
-            checkNotNull(matchId, "MatchId is null"), !isMatchNotificationActivated()));
+        .map(ignored -> MatchIntent.NotifyMatchStartIntent.create(viewModel.match.get().matchId(),
+            viewModel.match.get().startAt(), !isMatchNotificationActivated()));
   }
 
   private boolean isMatchNotificationActivated() {

@@ -14,11 +14,13 @@ public interface MatchIntent {
   @AutoValue abstract class NotifyMatchStartIntent implements MatchIntent {
     public abstract String matchId();
 
+    public abstract long startAt();
+
     public abstract boolean notifyMatchStart();
 
-    public static MatchIntent.NotifyMatchStartIntent create(String matchId,
+    public static MatchIntent.NotifyMatchStartIntent create(String matchId, long startAt,
         boolean notifyMatchStart) {
-      return new AutoValue_MatchIntent_NotifyMatchStartIntent(matchId, notifyMatchStart);
+      return new AutoValue_MatchIntent_NotifyMatchStartIntent(matchId, startAt, notifyMatchStart);
     }
   }
 

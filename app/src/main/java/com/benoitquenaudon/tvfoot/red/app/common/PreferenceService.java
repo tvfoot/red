@@ -1,6 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.common;
 
 import android.content.SharedPreferences;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import javax.inject.Inject;
 
@@ -11,9 +12,9 @@ public class PreferenceService {
     this.preferences = preferences;
   }
 
-  public Single<Boolean> saveNotifyMatchStart(String matchId, boolean notifyMatchStart) {
+  public Completable saveNotifyMatchStart(String matchId, boolean notifyMatchStart) {
     preferences.edit().putBoolean(notifyMatchStartPrefKey(matchId), notifyMatchStart).apply();
-    return Single.just(notifyMatchStart);
+    return Completable.complete();
   }
 
   public Single<Boolean> loadNotifyMatchStart(String matchId) {

@@ -45,6 +45,9 @@
         <data android:path="/"/>
       </intent-filter>
     </activity>
+
+    <receiver android:name=".app.domain.match.receiver.MatchReminderReceiver"/>
+
     <activity
         android:name=".app.domain.match.MatchActivity"
         android:label="@string/match_detail_activity_label"

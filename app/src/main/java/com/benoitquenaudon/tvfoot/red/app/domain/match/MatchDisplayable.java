@@ -1,6 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match;
 
-import com.google.auto.value.AutoValue;
+import android.os.Parcelable;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Broadcaster;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Competition;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
@@ -8,6 +8,7 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Team;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.BroadcasterRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable;
 import com.benoitquenaudon.tvfoot.red.util.StringUtils;
+import com.google.auto.value.AutoValue;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,7 +21,7 @@ import javax.annotation.Nullable;
 import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNull;
 import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_MILLIS;
 
-@AutoValue public abstract class MatchDisplayable implements MatchesItemDisplayable {
+@AutoValue public abstract class MatchDisplayable implements Parcelable, MatchesItemDisplayable {
   private static SimpleDateFormat shortDateFormat =
       new SimpleDateFormat("HH:mm", Locale.getDefault());
   private static SimpleDateFormat mediumDateFormat =
@@ -29,6 +30,8 @@ import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_
       new SimpleDateFormat("EEEE dd MMMM yyyy HH'h'mm", Locale.getDefault());
 
   public abstract String headerKey();
+
+  public abstract long startAt();
 
   public abstract String startTime();
 
@@ -55,6 +58,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_
   public static MatchDisplayable fromMatch(Match match) {
     return new AutoValue_MatchDisplayable( //
         parseHeaderKey(match.startAt()), //
+        match.startAt().getTime(), //
         parseStartTime(match.startAt()), //
         parseBroadcasters(match.broadcasters()), //
         parseHeadLine(match.homeTeam(), match.awayTeam(), match.label()), //
@@ -150,5 +154,9 @@ import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_
   @Override public boolean isSameAs(MatchesItemDisplayable newItem) {
     return newItem instanceof MatchDisplayable && this.matchId()
         .equals(((MatchDisplayable) newItem).matchId());
+  }
+
+  @SuppressWarnings("unchecked") public static Creator<MatchDisplayable> creator() {
+    return (Creator) AutoValue_MatchDisplayable.CREATOR;
   }
 }
