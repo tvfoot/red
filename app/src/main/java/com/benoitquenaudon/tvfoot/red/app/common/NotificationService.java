@@ -9,6 +9,8 @@ import com.benoitquenaudon.tvfoot.red.app.domain.match.receiver.MatchReminderRec
 import javax.inject.Inject;
 import timber.log.Timber;
 
+import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
+
 public class NotificationService {
   private final Context context;
 
@@ -23,7 +25,8 @@ public class NotificationService {
 
     Timber.d("connard doing stuff %s", shouldNotify);
     if (shouldNotify) {
-      alarmManager().setExact(AlarmManager.RTC_WAKEUP, startAt, alarmIntent);
+      alarmManager().setExact(AlarmManager.RTC_WAKEUP, startAt - 10 * MINUTE_IN_MILLIS,
+          alarmIntent);
     } else {
       alarmManager().cancel(alarmIntent);
     }
