@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import com.benoitquenaudon.tvfoot.red.app.domain.match.receiver.MatchReminderReceiver;
+import io.reactivex.Single;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -18,7 +19,8 @@ public class NotificationService {
     this.context = context;
   }
 
-  public void manageNotification(String matchId, long startAt, boolean shouldNotify) {
+  public Single<Notification> manageNotification(String matchId, long startAt,
+      boolean shouldNotify) {
     Intent intent = new Intent(context, MatchReminderReceiver.class);
     PendingIntent alarmIntent = PendingIntent.getBroadcast(context, matchIdAsInt(matchId), intent,
         PendingIntent.FLAG_CANCEL_CURRENT);
@@ -30,6 +32,8 @@ public class NotificationService {
     } else {
       alarmManager().cancel(alarmIntent);
     }
+
+    return Single.just(Notification.INSTANCE);
   }
 
   private AlarmManager alarmManager() {

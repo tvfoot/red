@@ -8,7 +8,6 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.injection.scope.ScreenScope;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.Single;
@@ -108,9 +107,8 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
   private ObservableTransformer<MatchAction.NotifyMatchStartAction, MatchResult.NotifyMatchStartResult>
       notifyMatchStartTransformer = actions -> actions.flatMap(
       action -> preferenceService.saveNotifyMatchStart(action.matchId(), action.notifyMatchStart())
-          .andThen( // not sure about this...
-              (CompletableSource) shouldNotify -> notificationService.manageNotification(
-                  action.matchId(), action.startAt(), action.notifyMatchStart()))
+          .map(ignored -> notificationService.manageNotification(action.matchId(), action.startAt(),
+              action.notifyMatchStart()))
           .toObservable()
           .map(ignored -> MatchResult.NotifyMatchStartResult.create(action.notifyMatchStart())));
 
