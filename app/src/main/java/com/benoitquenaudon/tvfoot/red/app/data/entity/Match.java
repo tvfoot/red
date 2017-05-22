@@ -9,6 +9,8 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 @AutoValue public abstract class Match {
+  public static final String MATCH_ID = "MATCH_ID";
+
   public static TypeAdapter<Match> typeAdapter(Gson gson) {
     return new AutoValue_Match.GsonTypeAdapter(gson);
   }

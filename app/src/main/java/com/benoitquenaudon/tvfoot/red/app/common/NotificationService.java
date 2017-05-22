@@ -5,10 +5,10 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
 import com.benoitquenaudon.tvfoot.red.app.domain.match.receiver.MatchReminderReceiver;
 import io.reactivex.Single;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
 
@@ -22,10 +22,10 @@ public class NotificationService {
   public Single<Notification> manageNotification(String matchId, long startAt,
       boolean shouldNotify) {
     Intent intent = new Intent(context, MatchReminderReceiver.class);
+    intent.putExtra(Match.MATCH_ID, matchId);
     PendingIntent alarmIntent = PendingIntent.getBroadcast(context, matchIdAsInt(matchId), intent,
         PendingIntent.FLAG_CANCEL_CURRENT);
 
-    Timber.d("connard doing stuff %s", shouldNotify);
     if (shouldNotify) {
       alarmManager().setExact(AlarmManager.RTC_WAKEUP, startAt - 10 * MINUTE_IN_MILLIS,
           alarmIntent);
