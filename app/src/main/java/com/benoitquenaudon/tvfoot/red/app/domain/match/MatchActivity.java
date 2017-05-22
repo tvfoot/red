@@ -76,7 +76,7 @@ public class MatchActivity extends BaseActivity {
         .subscribe(shouldNotifyMatchStart -> {
           if (shouldNotifyMatchStart) {
             Snackbar.make(binding.getRoot(),
-                "You will be notified 5 minutes before the game starts", Snackbar.LENGTH_LONG)
+                "You will be notified 10 minutes before the game starts", Snackbar.LENGTH_LONG)
                 .show();
           } else {
             // TODO(benoit) hide if one is displayed. Would happen on sequential taps
