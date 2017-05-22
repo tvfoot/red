@@ -1,6 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.common.schedulers;
 
-import android.support.annotation.NonNull;
+import com.benoitquenaudon.tvfoot.red.util.MethodsAreNonnullByDefault;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -9,17 +9,18 @@ import javax.inject.Singleton;
 /**
  * Provides different types of schedulers.
  */
-@Singleton public class SchedulerProvider implements BaseSchedulerProvider {
+@MethodsAreNonnullByDefault @Singleton public class SchedulerProvider
+    implements BaseSchedulerProvider {
 
-  @Override @NonNull public Scheduler computation() {
+  @Override public Scheduler computation() {
     return Schedulers.computation();
   }
 
-  @Override @NonNull public Scheduler io() {
+  @Override public Scheduler io() {
     return Schedulers.io();
   }
 
-  @Override @NonNull public Scheduler ui() {
+  @Override public Scheduler ui() {
     return AndroidSchedulers.mainThread();
   }
 }

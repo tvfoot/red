@@ -11,9 +11,9 @@ public class PreferenceService {
     this.preferences = preferences;
   }
 
-  public Single<Boolean> saveNotifyMatchStart(String matchId, boolean notifyMatchStart) {
+  public Single<Notification> saveNotifyMatchStart(String matchId, boolean notifyMatchStart) {
     preferences.edit().putBoolean(notifyMatchStartPrefKey(matchId), notifyMatchStart).apply();
-    return Single.just(notifyMatchStart);
+    return Single.just(Notification.INSTANCE);
   }
 
   public Single<Boolean> loadNotifyMatchStart(String matchId) {

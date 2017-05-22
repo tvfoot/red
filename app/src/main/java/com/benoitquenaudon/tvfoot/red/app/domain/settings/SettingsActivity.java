@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
-  @Override protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     addPreferencesFromResource(R.xml.pref_settings);
     setupActionBar();
@@ -99,7 +100,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
    */
   @TargetApi(Build.VERSION_CODES.HONEYCOMB) //
   public static class SettingsPreferenceFragment extends PreferenceFragment {
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       addPreferencesFromResource(R.xml.pref_settings);
       setHasOptionsMenu(true);

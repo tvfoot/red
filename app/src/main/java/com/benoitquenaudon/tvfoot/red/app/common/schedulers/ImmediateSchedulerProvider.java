@@ -1,23 +1,24 @@
 package com.benoitquenaudon.tvfoot.red.app.common.schedulers;
 
-import android.support.annotation.NonNull;
+import com.benoitquenaudon.tvfoot.red.util.MethodsAreNonnullByDefault;
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
 
 /**
  * Implementation of the {@link BaseSchedulerProvider} making all {@link Scheduler}s immediate.
  */
-public class ImmediateSchedulerProvider implements BaseSchedulerProvider {
+@MethodsAreNonnullByDefault public class ImmediateSchedulerProvider
+    implements BaseSchedulerProvider {
 
-  @NonNull @Override public Scheduler computation() {
+  @Override public Scheduler computation() {
     return Schedulers.trampoline();
   }
 
-  @NonNull @Override public Scheduler io() {
+  @Override public Scheduler io() {
     return Schedulers.trampoline();
   }
 
-  @NonNull @Override public Scheduler ui() {
+  @Override public Scheduler ui() {
     return Schedulers.trampoline();
   }
 }

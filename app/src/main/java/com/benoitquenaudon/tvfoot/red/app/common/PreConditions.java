@@ -1,7 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.common;
 
 import android.os.Looper;
-import android.support.annotation.Nullable;
 import io.reactivex.Observer;
 
 public final class PreConditions {
@@ -14,7 +13,8 @@ public final class PreConditions {
     return true;
   }
 
-  public static <T> T checkNotNull(@Nullable T value, String message) {
+  public static <T> T checkNotNull(T value, String message) {
+    //noinspection ConstantConditions
     if (value == null) {
       throw new NullPointerException(message);
     }
