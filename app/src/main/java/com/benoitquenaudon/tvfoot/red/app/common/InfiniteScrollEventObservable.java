@@ -65,7 +65,7 @@ public final class InfiniteScrollEventObservable extends Observable<Object> {
           // End has been reached
           if (!loading && //
               (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-            observer.onNext(Notification.INSTANCE);
+            observer.onNext(StreamNotification.INSTANCE);
             loading = true;
           }
         }

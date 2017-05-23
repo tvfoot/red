@@ -1,5 +1,5 @@
 package com.benoitquenaudon.tvfoot.red.app.common;
 
-public enum Notification {
+public enum StreamNotification {
   INSTANCE
 }

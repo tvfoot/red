@@ -46,7 +46,7 @@
       </intent-filter>
     </activity>
 
-    <receiver android:name=".app.domain.match.receiver.MatchReminderReceiver"/>
+    <service android:name=".app.domain.match.job.MatchReminderService"/>
 
     <activity
         android:name=".app.domain.match.MatchActivity"

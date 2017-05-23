@@ -4,10 +4,12 @@ import android.os.Parcelable;
 import com.google.auto.value.AutoValue;
 
 @AutoValue public abstract class BroadcasterRowDisplayable implements Parcelable {
+  public abstract String name();
+
   public abstract String logoPath();
 
-  public static BroadcasterRowDisplayable create(String broadcasterCode) {
-    return new AutoValue_BroadcasterRowDisplayable(
+  public static BroadcasterRowDisplayable create(String name, String broadcasterCode) {
+    return new AutoValue_BroadcasterRowDisplayable(name,
         String.format("/images/broadcasters/%s_120.png", broadcasterCode));
   }
 }

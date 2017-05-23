@@ -1,5 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.injection.component;
 
+import com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchReminderService;
 import com.squareup.picasso.Picasso;
 import dagger.Component;
 import com.benoitquenaudon.tvfoot.red.RedApp;
@@ -26,7 +27,10 @@ import okhttp3.OkHttpClient;
 
   void inject(RedApp redApp);
 
+  void inject(MatchReminderService matchReminderService);
+
   OkHttpClient okHttpClient();
 
   Picasso picasso();
+
 }

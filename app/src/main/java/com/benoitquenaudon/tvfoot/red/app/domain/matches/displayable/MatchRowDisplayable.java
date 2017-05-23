@@ -1,11 +1,11 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable;
 
 import android.support.annotation.VisibleForTesting;
-import com.google.auto.value.AutoValue;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Broadcaster;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Competition;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Team;
+import com.google.auto.value.AutoValue;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -86,7 +86,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_
 
     List<BroadcasterRowDisplayable> broadcastersVM = new ArrayList<>(broadcasters.size());
     for (Broadcaster broadcaster : broadcasters) {
-      broadcastersVM.add(BroadcasterRowDisplayable.create(broadcaster.code()));
+      broadcastersVM.add(BroadcasterRowDisplayable.create(broadcaster.name(), broadcaster.code()));
     }
     return broadcastersVM;
   }
