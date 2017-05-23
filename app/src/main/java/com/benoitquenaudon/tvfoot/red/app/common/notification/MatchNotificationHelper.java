@@ -42,8 +42,8 @@ public final class MatchNotificationHelper {
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .setContentTitle(matchDisplayable.headline())
-            .setSubText(matchDisplayable.matchDay())
-            .setContentText(matchDisplayable.competition())
+            .setContentText(matchDisplayable.matchDay())
+            .setSubText(matchDisplayable.competition())
             .setWhen(match.startAt().getTime());
 
     NotificationManager notificationManager =

@@ -53,9 +53,10 @@ public class MatchReminderService extends Service {
           .map(pair -> pair.first)
           .subscribeOn(schedulerProvider.io())
           .doFinally(() -> stopSelf(startId))
-          .subscribe(match -> {
-            new MatchNotificationHelper(getApplicationContext(), match).publishMatchStarting();
-          }, error -> Timber.e(error, "Could not display the game's notification")));
+          .subscribe( //
+              match -> new MatchNotificationHelper(getApplicationContext(),
+                  match).publishMatchStarting(),
+              error -> Timber.e(error, "Could not display the game's notification")));
     } else {
       Timber.w("Don't know this action %s", action);
     }

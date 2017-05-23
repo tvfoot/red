@@ -57,9 +57,7 @@ public class MatchActivity extends BaseActivity {
       }
     }
 
-    if (matchId == null)
-
-    {
+    if (matchId == null) {
       Timber.w("matchDisplayable id is null %s", uri);
       Toast.makeText(this, "matchDisplayable id is null with uri " + uri, Toast.LENGTH_LONG).show();
       flowController.toMatches();
@@ -72,10 +70,6 @@ public class MatchActivity extends BaseActivity {
     binding.setViewModel(viewModel);
 
     Timber.d("matchDisplayable with load with id %s", matchId);
-    disposables = new
-
-        CompositeDisposable();
-
     bind();
   }
 
