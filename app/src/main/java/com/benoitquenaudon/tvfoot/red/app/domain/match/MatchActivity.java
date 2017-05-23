@@ -45,20 +45,21 @@ public class MatchActivity extends BaseActivity {
     matchId = intent.getStringExtra(MATCH_ID);
 
     final Uri uri = intent.getData();
-    if (matchId == null) {
-      if (uri != null && //
-          RedAppConfig.AUTHORITIES.contains(uri.getAuthority()) && //
-          RedAppConfig.SCHEMES.contains(uri.getScheme())) {
-        final List<String> segments = uri.getPathSegments();
-        if (segments != null && //
-            segments.size() == 5 && //
-            RedAppConfig.PATH_MATCH.equals(segments.get(0))) {
-          matchId = segments.get(4);
-        }
+    if (matchId == null && //
+        uri != null && //
+        RedAppConfig.AUTHORITIES.contains(uri.getAuthority()) && //
+        RedAppConfig.SCHEMES.contains(uri.getScheme())) {
+      final List<String> segments = uri.getPathSegments();
+      if (segments != null && //
+          segments.size() == 5 && //
+          RedAppConfig.PATH_MATCH.equals(segments.get(0))) {
+        matchId = segments.get(4);
       }
     }
 
-    if (matchId == null) {
+    if (matchId == null)
+
+    {
       Timber.w("matchDisplayable id is null %s", uri);
       Toast.makeText(this, "matchDisplayable id is null with uri " + uri, Toast.LENGTH_LONG).show();
       flowController.toMatches();
@@ -71,7 +72,10 @@ public class MatchActivity extends BaseActivity {
     binding.setViewModel(viewModel);
 
     Timber.d("matchDisplayable with load with id %s", matchId);
-    disposables = new CompositeDisposable();
+    disposables = new
+
+        CompositeDisposable();
+
     bind();
   }
 

@@ -32,9 +32,9 @@ public class MatchReminderService extends Service {
   }
 
   @Override public void onCreate() {
+    super.onCreate();
     RedApp redApp = (RedApp) getApplication();
     redApp.getComponent().inject(this);
-    super.onCreate();
   }
 
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
@@ -64,7 +64,7 @@ public class MatchReminderService extends Service {
   }
 
   @Override public void onDestroy() {
-    super.onDestroy();
     disposables.dispose();
+    super.onDestroy();
   }
 }
