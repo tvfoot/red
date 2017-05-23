@@ -1,10 +1,9 @@
 package com.benoitquenaudon.tvfoot.red.app.injection.module;
 
 import android.app.Activity;
+import com.benoitquenaudon.tvfoot.red.app.injection.scope.ActivityScope;
 import dagger.Module;
 import dagger.Provides;
-import com.benoitquenaudon.tvfoot.red.app.injection.scope.ActivityScope;
-import io.reactivex.disposables.CompositeDisposable;
 
 @Module public class ActivityModule {
   private Activity activity;
@@ -15,9 +14,5 @@ import io.reactivex.disposables.CompositeDisposable;
 
   @Provides @ActivityScope Activity provideActivity() {
     return activity;
-  }
-
-  @Provides CompositeDisposable provideCompositeDisposable() {
-    return new CompositeDisposable();
   }
 }

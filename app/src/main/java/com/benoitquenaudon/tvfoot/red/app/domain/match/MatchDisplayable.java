@@ -89,7 +89,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_
 
     List<BroadcasterRowDisplayable> broadcastersVM = new ArrayList<>(broadcasters.size());
     for (Broadcaster broadcaster : broadcasters) {
-      broadcastersVM.add(BroadcasterRowDisplayable.create(broadcaster.code()));
+      broadcastersVM.add(BroadcasterRowDisplayable.create(broadcaster.name(), broadcaster.code()));
     }
     return broadcastersVM;
   }

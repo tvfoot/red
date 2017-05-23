@@ -1,5 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNull;
+import static com.benoitquenaudon.tvfoot.red.app.data.entity.Match.MATCH_ID;
 
 public class MatchActivity extends BaseActivity {
   @Inject BroadcastersAdapter broadcastersAdapter;
@@ -39,8 +41,12 @@ public class MatchActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
     getActivityComponent().inject(this);
 
-    final Uri uri = getIntent().getData();
-    if (uri != null && //
+    Intent intent = getIntent();
+    matchId = intent.getStringExtra(MATCH_ID);
+
+    final Uri uri = intent.getData();
+    if (matchId == null && //
+        uri != null && //
         RedAppConfig.AUTHORITIES.contains(uri.getAuthority()) && //
         RedAppConfig.SCHEMES.contains(uri.getScheme())) {
       final List<String> segments = uri.getPathSegments();
@@ -64,7 +70,6 @@ public class MatchActivity extends BaseActivity {
     binding.setViewModel(viewModel);
 
     Timber.d("matchDisplayable with load with id %s", matchId);
-    disposables = new CompositeDisposable();
     bind();
   }
 
