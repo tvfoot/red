@@ -9,9 +9,9 @@ import com.benoitquenaudon.tvfoot.red.app.common.StreamNotification;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
 import com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchReminderService;
 import io.reactivex.Single;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
-import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
 import static com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchReminderService.ACTION_PUBLISH_NOTIFICATION;
 
 public class NotificationService {
@@ -33,7 +33,7 @@ public class NotificationService {
         PendingIntent.FLAG_CANCEL_CURRENT);
 
     if (shouldNotify) {
-      alarmManager.setExact(AlarmManager.RTC_WAKEUP, startAt - 10 * MINUTE_IN_MILLIS,
+      alarmManager.setExact(AlarmManager.RTC_WAKEUP, startAt - TimeUnit.MINUTES.toMillis(10),
           serviceIntent);
     } else {
       alarmManager.cancel(serviceIntent);
