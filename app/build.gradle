@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'net.ltgt.errorprone'
 apply from: '../config/quality/quality.gradle'
+apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
   compileSdkVersion rootProject.ext.config.compileSdkVersion
