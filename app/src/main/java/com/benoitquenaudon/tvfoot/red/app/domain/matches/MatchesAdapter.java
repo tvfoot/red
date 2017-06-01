@@ -91,6 +91,8 @@ import javax.inject.Inject;
     this.matchesItems = newItems;
 
     diffUtilCallback.bindItems(oldItems, newItems);
+    // TODO(benoit) calculate diff on worker thread
+    // https://github.com/googlesamples/android-architecture-components/blob/master/GithubBrowserSample/app/src/main/java/com/android/example/github/ui/common/DataBoundListAdapter.java#L77
     DiffUtil.calculateDiff(diffUtilCallback, true).dispatchUpdatesTo(this);
   }
 

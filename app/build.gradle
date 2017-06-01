@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'net.ltgt.errorprone'
 apply from: '../config/quality/quality.gradle'
@@ -100,6 +101,7 @@ dependencies {
   compile "com.google.code.gson:gson:$rootProject.ext.lib.gsonVersion"
   compile "com.google.dagger:dagger:$rootProject.ext.lib.daggerVersion"
   compile "com.google.firebase:firebase-core:$rootProject.ext.lib.firebaseVersion"
+  compile "com.google.firebase:firebase-perf:$rootProject.ext.lib.firebaseVersion"
   compile "com.jakewharton.rxbinding2:rxbinding:$rootProject.ext.lib.rxBindingVersion"
   compile "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$rootProject.ext.lib.rxBindingVersion"
   compile "com.jakewharton.rxbinding2:rxbinding-support-v4:$rootProject.ext.lib.rxBindingVersion"
