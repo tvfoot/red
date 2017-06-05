@@ -6,14 +6,16 @@ buildscript {
     maven {
       url 'https://plugins.gradle.org/m2/'
     }
+    maven { url 'https://maven.google.com' }
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:2.3.2'
     classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
-    classpath 'me.tatarka:gradle-retrolambda:3.3.0'
+    classpath 'me.tatarka:gradle-retrolambda:3.6.1'
     classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
-    classpath 'com.google.gms:google-services:3.0.0'
+    classpath 'com.google.gms:google-services:3.1.0'
     classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.10'
+    classpath 'com.google.firebase:firebase-plugins:1.1.0'
   }
 
   // Exclude the version that the android plugin depends on.
@@ -71,6 +73,6 @@ ext {
          rxAndroidVersion               : '2.0.1',
          retrofit2RxJava2Adapter        : '1.0.0',
          leakCanaryVersion              : '1.5',
-         firebaseVersion                : '9.6.1',
+         firebaseVersion                : '10.2.6',
          rxBindingVersion               : '2.0.0',]
 }
