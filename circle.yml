@@ -12,6 +12,7 @@ dependencies:
   pre:
     - mkdir -p ${ANDROID_HOME}/licenses
     - echo $ANDROID_SDK_LICENSE > ${ANDROID_HOME}/licenses/android-sdk-license
+    - echo y | android update sdk --no-ui --all --filter "extra-google-google_play_services,extra-google-m2repository,extra-android-m2repository"
     - bash ./misc/download_keystore.sh
     - bash ./misc/download_google-services.sh
     - bash ./misc/download_service-account.sh
