@@ -48,10 +48,9 @@ test:
     #- adb shell screencap -p | sed 's/\r$//' > bootscreen.png
     #- ./imgurbash.sh bootscreen.png
 
-# Wait till the suspension thing is dealt with...
-#deployment:
-#  alpha:
-#    branch: develop
-#    commands:
-#      - echo "deploying on track alpha"
-#      - fastlane supply run --json_key "$SERVICE_ACCOUNT" --package_name "$PACKAGE_NAME" --apk ./app/build/outputs/apk/app-prod-release.apk --track alpha
+deployment:
+  alpha:
+    branch: develop
+    commands:
+      - echo "deploying on track alpha"
+      - fastlane supply run --json_key "$SERVICE_ACCOUNT" --package_name "$PACKAGE_NAME" --apk ./app/build/outputs/apk/app-prod-release.apk --track alpha
