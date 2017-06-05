@@ -1,0 +1,31 @@
+Find when a football game will occur and on which french media you can watch it. Including french leagues and international ones as well.
+
+----------------------------------------------
+
+Available leagues and competitions:
+
+FRANCE
+　Ligue 1, Ligue 2, Coupe de France, Coupe de la Ligue, Trophée des champions
+
+UNITED KINGDOM
+　Barclays Premier League, FA Cup, Capital One Cup, FA Community Shield
+
+GERMANY
+　Bundesliga, DFB Pokal, DFL-Supercup
+
+SPAIN
+　Liga BBVA, Copa del Rey, Supercopa de España
+
+ITALI
+　Serie A, TIM Cup, Supercoppa TIM
+
+EUROPE
+　Champions League, Europa League, Youth League, Women's Champions League and the UEFA European Championship
+
+OTHERS
+　Africa Cup of Nations, Copa América, World Cup, FIFA Confederations Cup, FIFA Club World Cup, Football at the Summer Olympics
+, Women's association football, U-17, U-19 and U-21.
+
+----------------------------------------------
+
+We aim at providing you with clear and reactive information. If you have any feedback, feel free to contact us through one of this followings: on Facebook at fb.com/tvfootnet, on Twitter at @tvfoot_net or via e-mail at contact@tvfoot.net.
