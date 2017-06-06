@@ -79,6 +79,13 @@ android {
   }
 }
 
+android.applicationVariants.all {
+  // Set this to false to disable Firebase Performance Monitoring at compile time
+  FirebasePerformance {
+    instrumentationEnabled true
+  }
+}
+
 dependencies {
   compile "com.android.support:appcompat-v7:$rootProject.ext.lib.supportLibraryVersion"
   compile "com.android.support:support-annotations:$rootProject.ext.lib.supportLibraryVersion"
