@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.MainThreadDisposable;
-import java.lang.ref.WeakReference;
 
 import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkMainThread;
 
@@ -14,32 +13,31 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkMainT
  * and {@link com.genius.groupie.example.InfiniteScrollListener}
  */
 public final class InfiniteScrollEventObservable extends Observable<Object> {
-  // TODO(benoit) is it useful to use a WeakReference here?
-  private final WeakReference<RecyclerView> view;
+  private final RecyclerView view;
 
   public InfiniteScrollEventObservable(RecyclerView view) {
-    this.view = new WeakReference<>(view);
+    this.view = view;
   }
 
   @Override protected void subscribeActual(Observer<? super Object> observer) {
     if (!checkMainThread(observer)) {
       return;
     }
-    Listener listener = new Listener(view.get(), observer);
+    Listener listener = new Listener(view, observer);
     observer.onSubscribe(listener);
-    view.get().addOnScrollListener(listener.scrollListener);
+    view.addOnScrollListener(listener.scrollListener);
   }
 
   private static final class Listener extends MainThreadDisposable {
     private final RecyclerView recyclerView;
-    private final RecyclerView.OnScrollListener scrollListener;
+    final RecyclerView.OnScrollListener scrollListener;
 
-    private int previousTotal = 0; // The total number of items in the dataset after the last load
-    private boolean loading = true;
+    int previousTotal = 0; // The total number of items in the dataset after the last load
+    boolean loading = true;
     // True if we are still waiting for the last set of data to load.
     private final int visibleThreshold = 5;
     // The minimum amount of items to have below your current scroll position before loading more.
-    private int firstVisibleItem, visibleItemCount, totalItemCount;
+    int firstVisibleItem, visibleItemCount, totalItemCount;
 
     Listener(RecyclerView recyclerView, final Observer<? super Object> observer) {
       this.recyclerView = recyclerView;

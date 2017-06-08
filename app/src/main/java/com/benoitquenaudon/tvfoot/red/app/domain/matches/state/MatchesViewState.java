@@ -1,10 +1,10 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.state;
 
-import com.google.auto.value.AutoValue;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.HeaderRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.LoadingRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable;
+import com.google.auto.value.AutoValue;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,8 +35,6 @@ import javax.annotation.Nullable;
 
   public abstract boolean refreshLoading();
 
-  @Nullable public abstract MatchRowDisplayable clickedMatch();
-
   public abstract Integer currentPage();
 
   public static Builder builder() {
@@ -44,7 +42,6 @@ import javax.annotation.Nullable;
         .error(null)
         .nextPageLoading(false)
         .refreshLoading(false)
-        .clickedMatch(null)
         .currentPage(0);
   }
 
@@ -62,8 +59,6 @@ import javax.annotation.Nullable;
     public abstract Builder nextPageLoading(boolean nextPageLoading);
 
     public abstract Builder refreshLoading(boolean pullToRefreshLoading);
-
-    public abstract Builder clickedMatch(@Nullable MatchRowDisplayable clickedMatch);
 
     public abstract Builder currentPage(Integer CurrentPage);
 

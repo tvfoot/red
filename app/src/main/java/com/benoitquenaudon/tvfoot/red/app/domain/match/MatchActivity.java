@@ -83,8 +83,6 @@ public class MatchActivity extends BaseActivity {
             Snackbar.make(binding.getRoot(),
                 "You will be notified 10 minutes before the game starts", Snackbar.LENGTH_LONG)
                 .show();
-          } else {
-            // TODO(benoit) hide if one is displayed. Would happen on sequential taps
           }
         }));
   }

@@ -13,7 +13,7 @@ public class MatchViewModel {
   public ObservableBoolean isLoading = new ObservableBoolean();
   public ObservableBoolean hasError = new ObservableBoolean(false);
   public ObservableBoolean hasData = new ObservableBoolean(false);
-  public ObservableBoolean shouldNotifyMatchStart = new ObservableBoolean(false);
+  public ObservableBoolean shouldNotifyMatchStart = new ObservableBoolean(true);
   public ObservableField<MatchDisplayable> match = new ObservableField<>();
   public ObservableField<String> errorMessage = new ObservableField<>();
 

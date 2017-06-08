@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match.state;
 
-import com.google.auto.value.AutoValue;
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable;
+import com.google.auto.value.AutoValue;
 import javax.annotation.Nullable;
 
 @AutoValue public abstract class MatchViewState {
@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
   public abstract Builder buildWith();
 
   static MatchViewState idle() {
-    return MatchViewState.builder().shouldNotifyMatchStart(false).loading(false).build();
+    return MatchViewState.builder().shouldNotifyMatchStart(true).loading(false).build();
   }
 
   @AutoValue.Builder public static abstract class Builder {

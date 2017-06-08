@@ -154,10 +154,6 @@ import javax.inject.Inject;
       BroadcastersAdapter broadcastersAdapter = new BroadcastersAdapter();
       broadcastersAdapter.addAll(match.broadcasters());
 
-      //if (broadcastersAdapter.getItemCount() == 0) {
-      //  broadcastersAdapter.add(
-      //      BroadcasterRowDisplayable.builder().code("ic_tv_black_18px").build());
-      //}
       recyclerView.setAdapter(broadcastersAdapter);
     }
   }
