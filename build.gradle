@@ -9,7 +9,7 @@ buildscript {
     maven { url 'https://maven.google.com' }
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.3.2'
+    classpath 'com.android.tools.build:gradle:2.3.3'
     classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
     classpath 'me.tatarka:gradle-retrolambda:3.6.1'
     classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
