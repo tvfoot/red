@@ -1,11 +1,11 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.state;
 
 import android.os.Bundle;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.injection.scope.ScreenScope;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.functions.BiFunction;
@@ -144,6 +144,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
 
               stateBuilder.refreshLoading(false)
                   .error(null)
+                  .hasMore(!matches.isEmpty())
                   .currentPage(0)
                   .matches(MatchRowDisplayable.fromMatches(matches));
               break;
@@ -172,7 +173,10 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
               matches.addAll(previousState.matches());
               matches.addAll(MatchRowDisplayable.fromMatches(newMatches));
 
-              stateBuilder.nextPageLoading(false).error(null).matches(matches);
+              stateBuilder.nextPageLoading(false)
+                  .error(null)
+                  .matches(matches)
+                  .hasMore(!newMatches.isEmpty());
               break;
             default:
               throw new IllegalArgumentException("Wrong status for LoadNextPageResult: "
@@ -202,14 +206,14 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
   }
 
   private void logResult(MatchesResult result) {
-    Timber.d("Rntent: %s", result);
+    Timber.d("Result: %s", result);
     Bundle params = new Bundle();
     params.putString("result", result.toString());
     firebaseAnalytics.logEvent("result", params);
   }
 
   private void logState(MatchesViewState state) {
-    Timber.d("Sntent: %s", state);
+    Timber.d("State: %s", state);
     Bundle params = new Bundle();
     params.putString("state", state.toString());
     firebaseAnalytics.logEvent("state", params);

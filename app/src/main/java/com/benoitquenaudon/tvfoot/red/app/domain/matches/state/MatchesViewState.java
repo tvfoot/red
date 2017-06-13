@@ -11,7 +11,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 @AutoValue public abstract class MatchesViewState {
-  public List<MatchesItemDisplayable> matchesItemDisplayables() {
+  public List<MatchesItemDisplayable> matchesItemDisplayables(boolean hasMore) {
     List<String> headers = new ArrayList<>();
     List<MatchesItemDisplayable> items = new ArrayList<>();
     for (MatchRowDisplayable match : matches()) {
@@ -21,7 +21,8 @@ import javax.annotation.Nullable;
       }
       items.add(match);
     }
-    if (!items.isEmpty()) {
+    // TODO(benoit) only add it when @param hasMore
+    if (!items.isEmpty() && true) {
       items.add(LoadingRowDisplayable.create());
     }
     return items;
@@ -35,13 +36,16 @@ import javax.annotation.Nullable;
 
   public abstract boolean refreshLoading();
 
-  public abstract Integer currentPage();
+  public abstract int currentPage();
+
+  public abstract boolean hasMore();
 
   public static Builder builder() {
     return new AutoValue_MatchesViewState.Builder().matches(Collections.emptyList())
         .error(null)
         .nextPageLoading(false)
         .refreshLoading(false)
+        .hasMore(true)
         .currentPage(0);
   }
 
@@ -60,7 +64,9 @@ import javax.annotation.Nullable;
 
     public abstract Builder refreshLoading(boolean pullToRefreshLoading);
 
-    public abstract Builder currentPage(Integer CurrentPage);
+    public abstract Builder currentPage(int CurrentPage);
+
+    public abstract Builder hasMore(boolean hasMore);
 
     public abstract MatchesViewState build();
   }

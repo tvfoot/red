@@ -13,6 +13,7 @@ public class MatchesViewModel {
   public ObservableBoolean refreshLoading = new ObservableBoolean(false);
   public ObservableBoolean hasError = new ObservableBoolean(false);
   public ObservableBoolean hasData = new ObservableBoolean(false);
+  public ObservableBoolean hasMore = new ObservableBoolean(true);
   public ObservableField<String> errorMessage = new ObservableField<>();
   private int currentPage = 0;
 
@@ -27,13 +28,14 @@ public class MatchesViewModel {
     refreshLoading.set(state.refreshLoading());
     hasError.set(state.error() != null);
     hasData.set(!state.matches().isEmpty());
+    hasMore.set(state.hasMore());
 
     if (hasError.get()) {
       Throwable error = checkNotNull(state.error(), "state error is null");
       setErrorMessage(error.toString());
     }
     if (hasData.get()) {
-      adapter.setMatchesItems(state.matchesItemDisplayables());
+      adapter.setMatchesItems(state.matchesItemDisplayables(hasMore.get()));
     }
   }
 
