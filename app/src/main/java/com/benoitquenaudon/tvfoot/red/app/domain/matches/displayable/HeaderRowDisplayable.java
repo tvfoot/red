@@ -2,6 +2,7 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable;
 
 import com.benoitquenaudon.tvfoot.red.R;
 import com.benoitquenaudon.tvfoot.red.util.DateUtils;
+import com.benoitquenaudon.tvfoot.red.util.StringUtils;
 import com.google.auto.value.AutoValue;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,14 +11,12 @@ import java.util.Locale;
 import timber.log.Timber;
 
 @AutoValue public abstract class HeaderRowDisplayable implements MatchesItemDisplayable {
-  static SimpleDateFormat headerKeyDateFormat =
+  private static SimpleDateFormat headerKeyDateFormat =
       new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-  static SimpleDateFormat dayOfWeekDateFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
-  static SimpleDateFormat dayDateFormat = new SimpleDateFormat("EEEE d", Locale.getDefault());
-  static SimpleDateFormat monthDateFormat =
-      new SimpleDateFormat("EEEE, dd MMMM", Locale.getDefault());
-  static SimpleDateFormat yearDateFormat =
-      new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+  private static SimpleDateFormat monthDateFormat =
+      new SimpleDateFormat("EEEE, d MMMM", Locale.getDefault());
+  private static SimpleDateFormat yearDateFormat =
+      new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault());
 
   public abstract int dangerResId();
 
@@ -38,20 +37,18 @@ import timber.log.Timber;
     String displayedDate;
     if (DateUtils.isToday(date.getTime())) {
       dangerResId = R.string.matches_row_header_danger_today;
-      displayedDate = dayOfWeekDateFormat.format(date);
+      displayedDate = StringUtils.capitalize(monthDateFormat.format(date));
       return new AutoValue_HeaderRowDisplayable(dangerResId, true, displayedDate);
     }
 
     if (DateUtils.isTomorrow(date.getTime())) {
       dangerResId = R.string.matches_row_header_danger_tomorrow;
-      displayedDate = dayOfWeekDateFormat.format(date);
+      displayedDate = StringUtils.capitalize(monthDateFormat.format(date));
       return new AutoValue_HeaderRowDisplayable(dangerResId, true, displayedDate);
     }
 
-    if (DateUtils.isThisWeek(date.getTime())) {
-      displayedDate = dayDateFormat.format(date);
-    } else if (DateUtils.isThisYear(date.getTime())) {
-      displayedDate = monthDateFormat.format(date);
+    if (DateUtils.isThisYear(date.getTime())) {
+      displayedDate = StringUtils.capitalize(monthDateFormat.format(date));
     } else {
       displayedDate = yearDateFormat.format(date);
     }

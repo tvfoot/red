@@ -27,18 +27,6 @@ public class DateUtils {
     return isToday(time - TimeUnit.DAYS.toMillis(1));
   }
 
-  public static boolean isThisWeek(long time) {
-    Calendar nowCalendar = Calendar.getInstance();
-    nowCalendar.set(DAY_OF_WEEK, MONDAY);
-
-    Calendar targetCalendar = Calendar.getInstance();
-    targetCalendar.setTimeInMillis(time);
-    targetCalendar.set(DAY_OF_WEEK, MONDAY);
-
-    return nowCalendar.get(YEAR) == targetCalendar.get(YEAR)
-        && nowCalendar.get(WEEK_OF_YEAR) == targetCalendar.get(WEEK_OF_YEAR);
-  }
-
   public static boolean isThisYear(long time) {
     Calendar nowCalendar = Calendar.getInstance();
 
