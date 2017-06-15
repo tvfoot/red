@@ -88,8 +88,9 @@ public class MatchActivity extends BaseActivity {
   }
 
   @Override protected void onDestroy() {
-    super.onDestroy();
+    binding.matchDetailBroadcasters.setAdapter(null);
     disposables.dispose();
+    super.onDestroy();
   }
 
   public Observable<MatchIntent> intents() {
