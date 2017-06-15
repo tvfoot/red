@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.state;
 
-import com.google.auto.value.AutoValue;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
+import com.google.auto.value.AutoValue;
 import java.util.List;
 import javax.annotation.Nullable;
 
@@ -46,19 +46,19 @@ interface MatchesResult {
 
     @Nullable abstract Throwable error();
 
-    abstract Integer pageIndex();
+    abstract int pageIndex();
 
-    static LoadNextPageResult success(List<Match> matches) {
-      return new AutoValue_MatchesResult_LoadNextPageResult(NEXT_PAGE_SUCCESS, matches, null, -1);
+    static LoadNextPageResult success(int pageIndex, List<Match> matches) {
+      return new AutoValue_MatchesResult_LoadNextPageResult(NEXT_PAGE_SUCCESS, matches, null,
+          pageIndex);
     }
 
     static LoadNextPageResult failure(Throwable throwable) {
       return new AutoValue_MatchesResult_LoadNextPageResult(NEXT_PAGE_FAILURE, null, throwable, -1);
     }
 
-    static LoadNextPageResult inFlight(int pageIndex) {
-      return new AutoValue_MatchesResult_LoadNextPageResult(NEXT_PAGE_IN_FLIGHT, null, null,
-          pageIndex);
+    static LoadNextPageResult inFlight() {
+      return new AutoValue_MatchesResult_LoadNextPageResult(NEXT_PAGE_IN_FLIGHT, null, null, -1);
     }
   }
 

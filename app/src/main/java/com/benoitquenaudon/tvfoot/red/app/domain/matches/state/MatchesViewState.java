@@ -21,8 +21,7 @@ import javax.annotation.Nullable;
       }
       items.add(match);
     }
-    // TODO(benoit) only add it when @param hasMore
-    if (!items.isEmpty() && true) {
+    if (!items.isEmpty() && hasMore) {
       items.add(LoadingRowDisplayable.create());
     }
     return items;
