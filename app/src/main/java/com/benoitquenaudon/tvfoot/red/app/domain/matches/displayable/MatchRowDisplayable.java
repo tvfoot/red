@@ -104,7 +104,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_
   }
 
   private static String parseMatchDay(@Nullable String matchLabel, @Nullable String matchDay) {
-    if (matchLabel != null && !matchLabel.trim().isEmpty()) {
+    if (matchLabel != null && !matchLabel.isEmpty()) {
       return matchLabel;
     } else {
       return "J. " + matchDay;
