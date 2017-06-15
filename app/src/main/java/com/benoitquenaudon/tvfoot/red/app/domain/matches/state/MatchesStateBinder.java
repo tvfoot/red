@@ -1,11 +1,11 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.state;
 
 import android.os.Bundle;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.injection.scope.ScreenScope;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.functions.BiFunction;
@@ -100,11 +100,11 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
       loadNextPageTransformer = actions -> actions.flatMap(
       action -> service.loadPage(action.pageIndex())
           .toObservable()
-          .map(MatchesResult.LoadNextPageResult::success)
+          .map(matches -> MatchesResult.LoadNextPageResult.success(action.pageIndex(), matches))
           .onErrorReturn(MatchesResult.LoadNextPageResult::failure)
           .subscribeOn(schedulerProvider.io())
           .observeOn(schedulerProvider.ui())
-          .startWith(MatchesResult.LoadNextPageResult.inFlight(action.pageIndex())));
+          .startWith(MatchesResult.LoadNextPageResult.inFlight()));
 
   private ObservableTransformer<MatchesAction.GetLastStateAction, MatchesResult.GetLastStateResult>
       getLastStateTransformer =
@@ -131,22 +131,22 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
         if (matchesResult instanceof MatchesResult.RefreshResult) {
           switch (((MatchesResult.RefreshResult) matchesResult).status()) {
             case REFRESH_IN_FLIGHT:
-              stateBuilder.refreshLoading(true).error(null);
-              break;
+              return stateBuilder.refreshLoading(true).error(null).build();
             case REFRESH_FAILURE:
-              stateBuilder.refreshLoading(false)
-                  .error(((MatchesResult.RefreshResult) matchesResult).throwable());
-              break;
+              return stateBuilder.refreshLoading(false)
+                  .error(((MatchesResult.RefreshResult) matchesResult).throwable())
+                  .build();
             case REFRESH_SUCCESS:
               List<Match> matches =
                   checkNotNull(((MatchesResult.RefreshResult) matchesResult).matches(),
                       "Matches are null");
 
-              stateBuilder.refreshLoading(false)
+              return stateBuilder.refreshLoading(false)
                   .error(null)
+                  .hasMore(!matches.isEmpty())
                   .currentPage(0)
-                  .matches(MatchRowDisplayable.fromMatches(matches));
-              break;
+                  .matches(MatchRowDisplayable.fromMatches(matches))
+                  .build();
             default:
               throw new IllegalArgumentException(
                   "Wrong status for RefreshResult: " + ((MatchesResult.RefreshResult) matchesResult)
@@ -155,14 +155,11 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
         } else if (matchesResult instanceof MatchesResult.LoadNextPageResult) {
           switch (((MatchesResult.LoadNextPageResult) matchesResult).status()) {
             case NEXT_PAGE_IN_FLIGHT:
-              stateBuilder.nextPageLoading(true)
-                  .currentPage(((MatchesResult.LoadNextPageResult) matchesResult).pageIndex())
-                  .error(null);
-              break;
+              return stateBuilder.nextPageLoading(true).error(null).build();
             case NEXT_PAGE_FAILURE:
-              stateBuilder.nextPageLoading(false)
-                  .error(((MatchesResult.LoadNextPageResult) matchesResult).error());
-              break;
+              return stateBuilder.nextPageLoading(false)
+                  .error(((MatchesResult.LoadNextPageResult) matchesResult).error())
+                  .build();
             case NEXT_PAGE_SUCCESS:
               List<Match> newMatches =
                   checkNotNull(((MatchesResult.LoadNextPageResult) matchesResult).matches(),
@@ -172,8 +169,12 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
               matches.addAll(previousState.matches());
               matches.addAll(MatchRowDisplayable.fromMatches(newMatches));
 
-              stateBuilder.nextPageLoading(false).error(null).matches(matches);
-              break;
+              return stateBuilder.nextPageLoading(false)
+                  .error(null)
+                  .matches(matches)
+                  .currentPage(((MatchesResult.LoadNextPageResult) matchesResult).pageIndex())
+                  .hasMore(!newMatches.isEmpty())
+                  .build();
             default:
               throw new IllegalArgumentException("Wrong status for LoadNextPageResult: "
                   + ((MatchesResult.LoadNextPageResult) matchesResult).status());
@@ -183,8 +184,6 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
         } else {
           throw new IllegalArgumentException("Don't know this matchesResult " + matchesResult);
         }
-
-        return stateBuilder.build();
       };
 
   private void logIntent(MatchesIntent intent) {
@@ -202,14 +201,14 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
   }
 
   private void logResult(MatchesResult result) {
-    Timber.d("Rntent: %s", result);
+    Timber.d("Result: %s", result);
     Bundle params = new Bundle();
     params.putString("result", result.toString());
     firebaseAnalytics.logEvent("result", params);
   }
 
   private void logState(MatchesViewState state) {
-    Timber.d("Sntent: %s", state);
+    Timber.d("State: %s", state);
     Bundle params = new Bundle();
     params.putString("state", state.toString());
     firebaseAnalytics.logEvent("state", params);
