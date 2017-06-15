@@ -74,9 +74,8 @@ public class MatchesActivity extends BaseActivity {
   }
 
   @Override protected void onDestroy() {
-    binding.recyclerView.setAdapter(null);
-    disposables.dispose();
     super.onDestroy();
+    disposables.dispose();
   }
 
   public Observable<MatchesIntent> intents() {
