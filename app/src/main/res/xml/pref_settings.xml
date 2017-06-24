@@ -16,7 +16,7 @@
         android:title="@string/pref_about_contact">
       <intent
           android:action="android.intent.action.VIEW"
-          android:data="market://details?id=com.benoitquenaudon.tvfoot.red"/>
+          android:data="https://play.google.com/store/apps/details?id=com.benoitquenaudon.tvfoot.red"/>
     </Preference>
     <Preference
         android:key="pref_key_app_version"
