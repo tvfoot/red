@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'net.ltgt.errorprone'
 apply from: '../config/quality/quality.gradle'
@@ -145,6 +146,7 @@ dependencies {
   androidTestCompile 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
   androidTestCompile "com.google.dagger:dagger:$rootProject.ext.lib.daggerVersion"
   androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.lib.daggerVersion"
+  compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 
 /*
@@ -170,3 +172,6 @@ configurations.compile.dependencies.each { compileDependency ->
 }
 
 apply plugin: 'com.google.gms.google-services'
+repositories {
+  mavenCentral()
+}

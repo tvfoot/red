@@ -1,5 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.util;
 
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 public class StringUtils {
@@ -7,7 +8,7 @@ public class StringUtils {
     throw new RuntimeException("Can't touch this");
   }
 
-  public static String capitalize(String string) {
+  public static String capitalize(@Nullable String string) {
     if (TextUtils.isEmpty(string)) {
       return string;
     } else {
