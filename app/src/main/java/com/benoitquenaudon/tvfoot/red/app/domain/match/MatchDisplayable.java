@@ -16,10 +16,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 
 import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNull;
-import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_TIME_IN_MILLIS;
 
 @AutoValue public abstract class MatchDisplayable implements Parcelable, MatchesItemDisplayable {
   private static SimpleDateFormat shortDateFormat =
@@ -117,7 +117,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.TimeConstants.ONE_MATCH_
   private static boolean isMatchLive(Date startAt) {
     long now = Calendar.getInstance().getTimeInMillis();
     long startTimeInMillis = startAt.getTime();
-    return now >= startTimeInMillis && now <= startTimeInMillis + ONE_MATCH_TIME_IN_MILLIS;
+    return now >= startTimeInMillis && now <= startTimeInMillis + TimeUnit.MINUTES.toMillis(105);
   }
 
   private static String parseStartTimeInText(Date startAt) {
