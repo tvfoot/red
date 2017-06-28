@@ -8,11 +8,8 @@ import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;
 
 public class DateUtils {
-
-  public static boolean isToday(long time) {
-    Calendar nowCalendar = Calendar.getInstance();
-
-    Calendar targetCalendar = Calendar.getInstance();
+  public static boolean isToday(Calendar nowCalendar, long time) {
+    Calendar targetCalendar = (Calendar) nowCalendar.clone();
     targetCalendar.setTimeInMillis(time);
 
     return nowCalendar.get(YEAR) == targetCalendar.get(YEAR)
@@ -20,14 +17,12 @@ public class DateUtils {
         && nowCalendar.get(DAY_OF_MONTH) == targetCalendar.get(DAY_OF_MONTH);
   }
 
-  public static boolean isTomorrow(long time) {
-    return isToday(time - TimeUnit.DAYS.toMillis(1));
+  public static boolean isTomorrow(Calendar nowCalendar, long time) {
+    return isToday(nowCalendar, time - TimeUnit.DAYS.toMillis(1));
   }
 
-  public static boolean isThisYear(long time) {
-    Calendar nowCalendar = Calendar.getInstance();
-
-    Calendar targetCalendar = Calendar.getInstance();
+  public static boolean isCurrentYear(Calendar nowCalendar, long time) {
+    Calendar targetCalendar = (Calendar) nowCalendar.clone();
     targetCalendar.setTimeInMillis(time);
 
     return nowCalendar.get(YEAR) == targetCalendar.get(YEAR);

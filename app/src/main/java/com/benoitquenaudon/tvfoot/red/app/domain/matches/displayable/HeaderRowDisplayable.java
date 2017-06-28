@@ -6,6 +6,7 @@ import com.benoitquenaudon.tvfoot.red.util.StringUtils;
 import com.google.auto.value.AutoValue;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import timber.log.Timber;
@@ -35,19 +36,20 @@ import timber.log.Timber;
 
     int dangerResId = -1;
     String displayedDate;
-    if (DateUtils.isToday(date.getTime())) {
+    Calendar nowCalendar = Calendar.getInstance();
+    if (DateUtils.isToday(nowCalendar, date.getTime())) {
       dangerResId = R.string.matches_row_header_danger_today;
       displayedDate = StringUtils.capitalize(monthDateFormat.format(date));
       return new AutoValue_HeaderRowDisplayable(dangerResId, true, displayedDate);
     }
 
-    if (DateUtils.isTomorrow(date.getTime())) {
+    if (DateUtils.isTomorrow(nowCalendar, date.getTime())) {
       dangerResId = R.string.matches_row_header_danger_tomorrow;
       displayedDate = StringUtils.capitalize(monthDateFormat.format(date));
       return new AutoValue_HeaderRowDisplayable(dangerResId, true, displayedDate);
     }
 
-    if (DateUtils.isThisYear(date.getTime())) {
+    if (DateUtils.isCurrentYear(nowCalendar, date.getTime())) {
       displayedDate = StringUtils.capitalize(monthDateFormat.format(date));
     } else {
       displayedDate = yearDateFormat.format(date);

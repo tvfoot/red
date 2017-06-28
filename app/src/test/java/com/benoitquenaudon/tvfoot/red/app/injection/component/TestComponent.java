@@ -7,7 +7,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesService;
 import com.benoitquenaudon.tvfoot.red.app.injection.module.NetworkModule;
 import com.benoitquenaudon.tvfoot.red.app.injection.module.ServiceMockModule;
 import com.benoitquenaudon.tvfoot.red.app.injection.module.TestSchedulerModule;
-import com.benoitquenaudon.tvfoot.red.util.Fixture;
+import com.benoitquenaudon.tvfoot.red.testutil.Fixture;
 import javax.inject.Singleton;
 
 @Singleton @Component(modules = {

@@ -1,4 +1,4 @@
-package com.benoitquenaudon.tvfoot.red.util;
+package com.benoitquenaudon.tvfoot.red.testutil;
 
 import com.benoitquenaudon.tvfoot.red.app.injection.component.TestComponent;
 

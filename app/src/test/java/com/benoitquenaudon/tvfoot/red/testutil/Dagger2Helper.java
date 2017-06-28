@@ -1,4 +1,4 @@
-package com.benoitquenaudon.tvfoot.red.util;
+package com.benoitquenaudon.tvfoot.red.testutil;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;

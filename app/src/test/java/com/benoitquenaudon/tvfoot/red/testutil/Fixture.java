@@ -1,4 +1,4 @@
-package com.benoitquenaudon.tvfoot.red.util;
+package com.benoitquenaudon.tvfoot.red.testutil;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
