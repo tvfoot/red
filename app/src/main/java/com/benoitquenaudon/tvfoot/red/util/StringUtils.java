@@ -1,7 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.util;
 
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 public class StringUtils {
   private StringUtils() {
@@ -9,7 +8,7 @@ public class StringUtils {
   }
 
   public static String capitalize(@Nullable String string) {
-    if (TextUtils.isEmpty(string)) {
+    if (string == null || string.isEmpty()) {
       return string;
     } else {
       char ch = string.charAt(0);
