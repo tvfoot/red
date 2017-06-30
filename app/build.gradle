@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'net.ltgt.errorprone'
-apply from: '../config/quality/quality.gradle'
 apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
@@ -133,6 +132,7 @@ dependencies {
   testCompile "org.mockito:mockito-core:$rootProject.ext.lib.mockitoVersion"
   testCompile "com.squareup.retrofit2:retrofit-mock:$rootProject.ext.lib.retrofitVersion"
   testCompile "com.google.dagger:dagger:$rootProject.ext.lib.daggerVersion"
+  testCompile "org.robolectric:robolectric:3.3.2"
   testAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.lib.daggerVersion"
 
   androidTestCompile "com.android.support.test.espresso:espresso-contrib:$rootProject.ext.lib.espressoVersion"

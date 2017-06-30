@@ -39,7 +39,7 @@ import static okhttp3.logging.HttpLoggingInterceptor.Level.NONE;
     return new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create(gson))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .client(okHttpClient)
-        .baseUrl(TvfootService.BASE_URL)
+        .baseUrl(TvfootService.Companion.getBASE_URL())
         .build();
   }
 

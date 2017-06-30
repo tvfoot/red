@@ -1,5 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.testutil;
 
+import android.support.annotation.NonNull;
 import com.benoitquenaudon.tvfoot.red.api.TvfootService;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.search.Filter;
@@ -15,17 +16,17 @@ public class FakeTvfootService implements TvfootService {
     this.fixture = fixture;
   }
 
-  @Override public Single<List<Match>> findFuture(@Query("filter") Filter filter) {
+  @Override public Single<List<Match>> findFuture(@NonNull @Query("filter") Filter filter) {
     if (filter.offset() == 0) return Single.just(fixture.anyMatches());
     if (filter.offset() > 0) return Single.just(fixture.anyNextMatches());
     throw new IllegalStateException("negative offset are not supposed to be");
   }
 
-  @Override public Single<List<Match>> getMatches(@Query("filter") Filter filter) {
+  @Override public Single<List<Match>> getMatches(@NonNull @Query("filter") Filter filter) {
     throw new IllegalStateException("implement me");
   }
 
-  @Override public Single<Match> getMatch(@Path("matchId") String matchId) {
+  @Override public Single<Match> getMatch(@NonNull @Path("matchId") String matchId) {
     return Single.just(fixture.anyMatch());
   }
 }

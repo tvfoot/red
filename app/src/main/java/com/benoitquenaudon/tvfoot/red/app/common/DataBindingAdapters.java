@@ -7,9 +7,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.benoitquenaudon.tvfoot.red.R;
 import com.benoitquenaudon.tvfoot.red.RedApp;
+import com.benoitquenaudon.tvfoot.red.api.TvfootService;
 import javax.annotation.Nullable;
 
-import static com.benoitquenaudon.tvfoot.red.api.TvfootService.BASE_URL;
 
 public class DataBindingAdapters {
   @BindingAdapter("tvfootTeamLogoPath")
@@ -36,7 +36,7 @@ public class DataBindingAdapters {
     RedApp.get(imageView.getContext())
         .getComponent()
         .picasso()
-        .load(Uri.parse(BASE_URL + path))
+        .load(Uri.parse(TvfootService.Companion.getBASE_URL() + path))
         .fit().centerInside()
         .placeholder(placeholderResId)
         .into(imageView);
