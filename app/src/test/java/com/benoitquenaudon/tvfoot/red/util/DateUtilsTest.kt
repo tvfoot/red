@@ -6,34 +6,28 @@ import java.util.Calendar
 
 class DateUtilsTest {
   @Test fun isToday() {
-    Assert.assertTrue(DateUtils.isToday(todayCalendar, todayCalendar.timeInMillis))
+    Assert.assertTrue(todayCalendar.timeInMillis.isToday(todayCalendar))
 
-    Assert.assertFalse(
-        DateUtils.isToday(todayCalendar, yesterdayCalendar(todayCalendar).timeInMillis))
+    Assert.assertFalse(yesterdayCalendar(todayCalendar).timeInMillis.isToday(todayCalendar))
 
-    Assert.assertFalse(
-        DateUtils.isToday(todayCalendar, tomorrowCalendar(todayCalendar).timeInMillis))
+    Assert.assertFalse(tomorrowCalendar(todayCalendar).timeInMillis.isToday(todayCalendar))
   }
 
   @Test fun isTomorrow() {
-    Assert.assertFalse(DateUtils.isTomorrow(todayCalendar, todayCalendar.timeInMillis))
+    Assert.assertFalse(todayCalendar.timeInMillis.isTomorrow(todayCalendar))
 
-    Assert.assertFalse(
-        DateUtils.isTomorrow(todayCalendar, yesterdayCalendar(todayCalendar).timeInMillis))
+    Assert.assertFalse(yesterdayCalendar(todayCalendar).timeInMillis.isTomorrow(todayCalendar))
 
-    Assert.assertTrue(
-        DateUtils.isTomorrow(todayCalendar, tomorrowCalendar(todayCalendar).timeInMillis))
+    Assert.assertTrue(tomorrowCalendar(todayCalendar).timeInMillis.isTomorrow(todayCalendar))
   }
 
   @Test fun isCurrentYear() {
-    Assert.assertTrue(DateUtils.isCurrentYear(todayCalendar, todayCalendar.timeInMillis))
+    Assert.assertTrue(todayCalendar.timeInMillis.isCurrentYear(todayCalendar))
 
-    Assert.assertTrue(
-        DateUtils.isCurrentYear(todayCalendar, endOfYearCalendar(todayCalendar).timeInMillis))
+    Assert.assertTrue(endOfYearCalendar(todayCalendar).timeInMillis.isCurrentYear(todayCalendar))
 
     Assert.assertFalse(
-        DateUtils.isCurrentYear(todayCalendar,
-            beginningOfNextYearCalendar(todayCalendar).timeInMillis))
+        beginningOfNextYearCalendar(todayCalendar).timeInMillis.isCurrentYear(todayCalendar))
   }
 
   companion object {

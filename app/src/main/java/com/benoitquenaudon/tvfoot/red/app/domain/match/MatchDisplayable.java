@@ -7,7 +7,6 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Team;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.BroadcasterRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable;
-import com.benoitquenaudon.tvfoot.red.util.StringUtils;
 import com.google.auto.value.AutoValue;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
+import kotlin.text.StringsKt;
 
 import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNull;
 
@@ -122,7 +122,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
 
   private static String parseStartTimeInText(Date startAt) {
     fullTextDateFormat.setTimeZone(TimeZone.getDefault());
-    return StringUtils.capitalize(fullTextDateFormat.format(startAt));
+    return StringsKt.capitalize(fullTextDateFormat.format(startAt));
   }
 
   private static String parseTeamLogoPath(Team team) {

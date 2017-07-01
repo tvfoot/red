@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import com.benoitquenaudon.tvfoot.red.app.injection.ComponentFactory
 import com.benoitquenaudon.tvfoot.red.app.injection.component.ActivityComponent
 import com.benoitquenaudon.tvfoot.red.app.injection.component.ScreenComponent
-import com.benoitquenaudon.tvfoot.red.util.BundleService
 
 abstract class BaseActivity : AppCompatActivity() {
   private val screenComponent: ScreenComponent by lazy {
