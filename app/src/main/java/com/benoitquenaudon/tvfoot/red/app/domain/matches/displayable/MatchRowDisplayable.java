@@ -6,6 +6,7 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Competition;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Team;
 import com.google.auto.value.AutoValue;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,12 +17,21 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 
-
 @AutoValue public abstract class MatchRowDisplayable implements MatchesItemDisplayable {
-  private static SimpleDateFormat shortDateFormat =
-      new SimpleDateFormat("HH:mm", Locale.getDefault());
-  static SimpleDateFormat mediumDateFormat =
-      new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+  private static final ThreadLocal<DateFormat> shortDateFormat = new ThreadLocal<DateFormat>() {
+    @Override protected DateFormat initialValue() {
+      SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+      format.setTimeZone(TimeZone.getDefault());
+      return format;
+    }
+  };
+  static final ThreadLocal<DateFormat> mediumDateFormat = new ThreadLocal<DateFormat>() {
+    @Override protected DateFormat initialValue() {
+      SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+      format.setTimeZone(TimeZone.getDefault());
+      return format;
+    }
+  };
 
   public abstract String headerKey();
 
@@ -69,13 +79,11 @@ import javax.annotation.Nullable;
   }
 
   private static String parseHeaderKey(Date startAt) {
-    mediumDateFormat.setTimeZone(TimeZone.getDefault());
-    return mediumDateFormat.format(startAt);
+    return mediumDateFormat.get().format(startAt);
   }
 
   private static String parseStartTime(Date startAt) {
-    shortDateFormat.setTimeZone(TimeZone.getDefault());
-    return shortDateFormat.format(startAt);
+    return shortDateFormat.get().format(startAt);
   }
 
   private static List<BroadcasterRowDisplayable> parseBroadcasters(

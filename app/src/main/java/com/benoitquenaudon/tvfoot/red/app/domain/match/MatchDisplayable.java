@@ -8,6 +8,7 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Team;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.BroadcasterRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable;
 import com.google.auto.value.AutoValue;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,12 +23,28 @@ import kotlin.text.StringsKt;
 import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNull;
 
 @AutoValue public abstract class MatchDisplayable implements Parcelable, MatchesItemDisplayable {
-  private static SimpleDateFormat shortDateFormat =
-      new SimpleDateFormat("HH:mm", Locale.getDefault());
-  private static SimpleDateFormat mediumDateFormat =
-      new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-  private static SimpleDateFormat fullTextDateFormat =
-      new SimpleDateFormat("EEEE dd MMMM yyyy HH'h'mm", Locale.getDefault());
+  private static final ThreadLocal<DateFormat> shortDateFormat = new ThreadLocal<DateFormat>() {
+    @Override protected DateFormat initialValue() {
+      SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+      format.setTimeZone(TimeZone.getDefault());
+      return format;
+    }
+  };
+  private static final ThreadLocal<DateFormat> mediumDateFormat = new ThreadLocal<DateFormat>() {
+    @Override protected DateFormat initialValue() {
+      SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+      format.setTimeZone(TimeZone.getDefault());
+      return format;
+    }
+  };
+  private static final ThreadLocal<DateFormat> fullTextDateFormat = new ThreadLocal<DateFormat>() {
+    @Override protected DateFormat initialValue() {
+      SimpleDateFormat format =
+          new SimpleDateFormat("EEEE dd MMMM yyyy HH'h'mm", Locale.getDefault());
+      format.setTimeZone(TimeZone.getDefault());
+      return format;
+    }
+  };
 
   public abstract String headerKey();
 
@@ -72,13 +89,11 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
   }
 
   private static String parseHeaderKey(Date startAt) {
-    mediumDateFormat.setTimeZone(TimeZone.getDefault());
-    return mediumDateFormat.format(startAt);
+    return mediumDateFormat.get().format(startAt);
   }
 
   private static String parseStartTime(Date startAt) {
-    shortDateFormat.setTimeZone(TimeZone.getDefault());
-    return shortDateFormat.format(startAt);
+    return shortDateFormat.get().format(startAt);
   }
 
   private static List<BroadcasterRowDisplayable> parseBroadcasters(
@@ -121,8 +136,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
   }
 
   private static String parseStartTimeInText(Date startAt) {
-    fullTextDateFormat.setTimeZone(TimeZone.getDefault());
-    return StringsKt.capitalize(fullTextDateFormat.format(startAt));
+    return StringsKt.capitalize(fullTextDateFormat.get().format(startAt));
   }
 
   private static String parseTeamLogoPath(Team team) {

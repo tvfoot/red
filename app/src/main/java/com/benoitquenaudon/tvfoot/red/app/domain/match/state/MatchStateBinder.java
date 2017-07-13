@@ -1,8 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match.state;
 
 import android.os.Bundle;
-import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationService;
 import com.benoitquenaudon.tvfoot.red.app.common.PreferenceService;
+import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationService;
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable;
@@ -107,8 +107,8 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
   private ObservableTransformer<MatchAction.NotifyMatchStartAction, MatchResult.NotifyMatchStartResult>
       notifyMatchStartTransformer = actions -> actions.flatMap(
       action -> preferenceService.saveNotifyMatchStart(action.matchId(), action.notifyMatchStart())
-          .map(ignored -> notificationService.scheduleNotification(action.matchId(), action.startAt(),
-              action.notifyMatchStart()))
+          .flatMap(ignored -> notificationService.scheduleNotification(action.matchId(),
+              action.startAt(), action.notifyMatchStart()))
           .toObservable()
           .map(ignored -> MatchResult.NotifyMatchStartResult.create(action.notifyMatchStart())));
 

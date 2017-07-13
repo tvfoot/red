@@ -80,10 +80,10 @@ public class MatchesActivity extends BaseActivity {
   }
 
   public Observable<MatchesIntent> intents() {
-    return Observable.merge(InitialIntent(), refreshIntent(), loadNextPageIntent());
+    return Observable.merge(initialIntent(), refreshIntent(), loadNextPageIntent());
   }
 
-  private Observable<MatchesIntent.InitialIntent> InitialIntent() {
+  private Observable<MatchesIntent.InitialIntent> initialIntent() {
     return Observable.just(MatchesIntent.InitialIntent.create());
   }
 
