@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'net.ltgt.errorprone'
 apply plugin: 'com.google.firebase.firebase-perf'
 
@@ -49,6 +48,7 @@ android {
     preDexLibraries = Boolean.valueOf(System.getProperty('pre-dex', 'true'))
   }
 
+  flavorDimensions 'foot'
   productFlavors {
     mock {
       applicationIdSuffix = ".mock"
