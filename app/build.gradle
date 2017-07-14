@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
-apply plugin: 'net.ltgt.errorprone'
+// https://github.com/google/error-prone/issues/676
+// apply plugin: 'net.ltgt.errorprone'
 apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
