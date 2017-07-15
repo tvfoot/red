@@ -94,7 +94,7 @@ public class MatchesActivity extends BaseActivity {
 
   private Observable<MatchesIntent.LoadNextPageIntent> loadNextPageIntent() {
     return RxRecyclerView.scrollEvents(binding.recyclerView)
-        .filter(ignored -> viewModel.hasMore && !viewModel.nextPageLoading)
+        .filter(ignored -> viewModel.getHasMore() && !viewModel.getNextPageLoading())
         .filter(scrollEvent -> {
           LinearLayoutManager layoutManager =
               (LinearLayoutManager) scrollEvent.view().getLayoutManager();
