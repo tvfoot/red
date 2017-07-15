@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable;
 
 import com.benoitquenaudon.tvfoot.red.R;
-import com.benoitquenaudon.tvfoot.red.util.DateUtilsKt;
+import com.benoitquenaudon.tvfoot.red.util.DateExtKt;
 import com.google.auto.value.AutoValue;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -54,19 +54,19 @@ import timber.log.Timber;
     int dangerResId = -1;
     String displayedDate;
     Calendar nowCalendar = Calendar.getInstance();
-    if (DateUtilsKt.isToday(date.getTime(), nowCalendar)) {
+    if (DateExtKt.isToday(date.getTime(), nowCalendar)) {
       dangerResId = R.string.matches_row_header_danger_today;
       displayedDate = StringsKt.capitalize(monthDateFormat.get().format(date));
       return new AutoValue_HeaderRowDisplayable(dangerResId, true, displayedDate);
     }
 
-    if (DateUtilsKt.isTomorrow(date.getTime(), nowCalendar)) {
+    if (DateExtKt.isTomorrow(date.getTime(), nowCalendar)) {
       dangerResId = R.string.matches_row_header_danger_tomorrow;
       displayedDate = StringsKt.capitalize(monthDateFormat.get().format(date));
       return new AutoValue_HeaderRowDisplayable(dangerResId, true, displayedDate);
     }
 
-    if (DateUtilsKt.isCurrentYear(date.getTime(), nowCalendar)) {
+    if (DateExtKt.isCurrentYear(date.getTime(), nowCalendar)) {
       displayedDate = StringsKt.capitalize(monthDateFormat.get().format(date));
     } else {
       displayedDate = yearDateFormat.get().format(date);
