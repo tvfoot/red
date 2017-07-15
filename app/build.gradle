@@ -5,12 +5,12 @@ apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
-  compileSdkVersion rootProject.ext.config.compileSdkVersion
-  buildToolsVersion rootProject.ext.config.buildToolsVersion
+  compileSdkVersion rootProject.config.compileSdkVersion
+  buildToolsVersion rootProject.config.buildToolsVersion
   defaultConfig {
-    applicationId rootProject.ext.config.applicationId
-    minSdkVersion rootProject.ext.config.minSdkVersion
-    targetSdkVersion rootProject.ext.config.targetSdkVersion
+    applicationId rootProject.config.applicationId
+    minSdkVersion rootProject.config.minSdkVersion
+    targetSdkVersion rootProject.config.targetSdkVersion
     versionCode Integer.parseInt(System.getenv('CIRCLE_BUILD_NUM') ?: "153")
     versionName '1.0'
     testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
@@ -88,66 +88,66 @@ android.applicationVariants.all {
 }
 
 dependencies {
-  compile "com.android.support:appcompat-v7:$rootProject.ext.lib.supportLibraryVersion"
-  compile "com.android.support:support-annotations:$rootProject.ext.lib.supportLibraryVersion"
-  compile "com.android.support:design:$rootProject.ext.lib.supportLibraryVersion"
-  compile "com.android.support:recyclerview-v7:$rootProject.ext.lib.supportLibraryVersion"
-  compile "com.android.support:design:$rootProject.ext.lib.supportLibraryVersion"
-  compile "com.android.support:support-v4:$rootProject.ext.lib.supportLibraryVersion"
-  compile "com.android.support.constraint:constraint-layout:$rootProject.ext.lib.constraintLayoutVersion"
-  compile "com.jakewharton.timber:timber:$rootProject.ext.lib.timberVersion"
-  compile "com.genius:groupie:$rootProject.ext.lib.groupieVersion"
-  compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.lib.rxJavaVersion"
-  compile "io.reactivex.rxjava2:rxandroid:$rootProject.ext.lib.rxAndroidVersion"
-  compile "com.squareup.picasso:picasso:$rootProject.ext.lib.picassoVersion"
-  compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:$rootProject.ext.lib.picassoOkHttp3DownloaderVersion"
-  compile "com.squareup.okhttp3:okhttp:$rootProject.ext.lib.okHttpVersion"
-  compile "com.squareup.okhttp3:logging-interceptor:$rootProject.ext.lib.okHttpVersion"
-  compile "com.squareup.retrofit2:retrofit:$rootProject.ext.lib.retrofitVersion"
-  compile "com.squareup.retrofit2:converter-gson:$rootProject.ext.lib.retrofitVersion"
-  compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rootProject.ext.lib.retrofit2RxJava2Adapter"
-  compile "com.google.code.gson:gson:$rootProject.ext.lib.gsonVersion"
-  compile "com.google.dagger:dagger:$rootProject.ext.lib.daggerVersion"
-  compile "com.google.firebase:firebase-core:$rootProject.ext.lib.firebaseVersion"
-  compile "com.google.firebase:firebase-perf:$rootProject.ext.lib.firebaseVersion"
+  implementation "com.android.support:appcompat-v7:$rootProject.lib.supportLibraryVersion"
+  implementation "com.android.support:support-annotations:$rootProject.lib.supportLibraryVersion"
+  implementation "com.android.support:design:$rootProject.lib.supportLibraryVersion"
+  implementation "com.android.support:recyclerview-v7:$rootProject.lib.supportLibraryVersion"
+  implementation "com.android.support:design:$rootProject.lib.supportLibraryVersion"
+  implementation "com.android.support:support-v4:$rootProject.lib.supportLibraryVersion"
+  implementation "com.android.support.constraint:constraint-layout:$rootProject.lib.constraintLayoutVersion"
+  implementation "com.jakewharton.timber:timber:$rootProject.lib.timberVersion"
+  implementation "com.genius:groupie:$rootProject.lib.groupieVersion"
+  implementation "io.reactivex.rxjava2:rxjava:$rootProject.lib.rxJavaVersion"
+  implementation "io.reactivex.rxjava2:rxandroid:$rootProject.lib.rxAndroidVersion"
+  implementation "com.squareup.picasso:picasso:$rootProject.lib.picassoVersion"
+  implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:$rootProject.lib.picassoOkHttp3DownloaderVersion"
+  implementation "com.squareup.okhttp3:okhttp:$rootProject.lib.okHttpVersion"
+  implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.lib.okHttpVersion"
+  implementation "com.squareup.retrofit2:retrofit:$rootProject.lib.retrofitVersion"
+  implementation "com.squareup.retrofit2:converter-gson:$rootProject.lib.retrofitVersion"
+  implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rootProject.lib.retrofit2RxJava2Adapter"
+  implementation "com.google.code.gson:gson:$rootProject.lib.gsonVersion"
+  implementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
+  implementation "com.google.firebase:firebase-core:$rootProject.lib.firebaseVersion"
+  implementation "com.google.firebase:firebase-perf:$rootProject.lib.firebaseVersion"
   // Only use crash reporting in the "prod" product flavor
-  prodCompile "com.google.firebase:firebase-crash:$rootProject.ext.lib.firebaseVersion"
-  compile "com.jakewharton.rxbinding2:rxbinding:$rootProject.ext.lib.rxBindingVersion"
-  compile "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$rootProject.ext.lib.rxBindingVersion"
-  compile "com.jakewharton.rxbinding2:rxbinding-support-v4:$rootProject.ext.lib.rxBindingVersion"
-  compile 'com.benoitquenaudon:rxdatabinding:2.0.0'
-  debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.lib.leakCanaryVersion"
-  releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.lib.leakCanaryVersion"
-  annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.lib.daggerVersion"
-  annotationProcessor "com.google.auto.value:auto-value:$rootProject.ext.lib.autoValueVersion"
-  annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$rootProject.ext.lib.autoValueGsonVersion"
-  annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:$rootProject.ext.lib.autoValueParcelVersion"
-  provided "com.google.code.findbugs:jsr305:$rootProject.ext.lib.jsr305Version"
-  provided "com.google.auto.value:auto-value:$rootProject.ext.lib.autoValueVersion"
-  provided "com.ryanharter.auto.value:auto-value-gson:$rootProject.ext.lib.autoValueGsonVersion"
+  prodImplementation "com.google.firebase:firebase-crash:$rootProject.lib.firebaseVersion"
+  implementation "com.jakewharton.rxbinding2:rxbinding:$rootProject.lib.rxBindingVersion"
+  implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$rootProject.lib.rxBindingVersion"
+  implementation "com.jakewharton.rxbinding2:rxbinding-support-v4:$rootProject.lib.rxBindingVersion"
+  implementation 'com.benoitquenaudon:rxdatabinding:2.0.0'
+  debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.lib.leakCanaryVersion"
+  releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.lib.leakCanaryVersion"
+  annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
+  annotationProcessor "com.google.auto.value:auto-value:$rootProject.lib.autoValueVersion"
+  annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$rootProject.lib.autoValueGsonVersion"
+  annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:$rootProject.lib.autoValueParcelVersion"
+  compileOnly "com.google.code.findbugs:jsr305:$rootProject.lib.jsr305Version"
+  compileOnly "com.google.auto.value:auto-value:$rootProject.lib.autoValueVersion"
+  compileOnly "com.ryanharter.auto.value:auto-value-gson:$rootProject.lib.autoValueGsonVersion"
 
   // JVM Tests
-  testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.lib.leakCanaryVersion"
-  testCompile "junit:junit:$rootProject.ext.lib.junitVersion"
-  testCompile "com.squareup.okhttp3:mockwebserver:$rootProject.ext.lib.okHttpVersion"
-  testCompile "org.mockito:mockito-core:$rootProject.ext.lib.mockitoVersion"
-  testCompile "com.squareup.retrofit2:retrofit-mock:$rootProject.ext.lib.retrofitVersion"
-  testCompile "com.google.dagger:dagger:$rootProject.ext.lib.daggerVersion"
-  testCompile "org.robolectric:robolectric:3.3.2"
-  testAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.lib.daggerVersion"
+  testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.lib.leakCanaryVersion"
+  testImplementation "junit:junit:$rootProject.lib.junitVersion"
+  testImplementation "com.squareup.okhttp3:mockwebserver:$rootProject.lib.okHttpVersion"
+  testImplementation "org.mockito:mockito-core:$rootProject.lib.mockitoVersion"
+  testImplementation "com.squareup.retrofit2:retrofit-mock:$rootProject.lib.retrofitVersion"
+  testImplementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
+  testImplementation "org.robolectric:robolectric:$rootProject.lib.robolectricVersion"
+  testAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
 
-  androidTestCompile "com.android.support.test.espresso:espresso-contrib:$rootProject.ext.lib.espressoVersion"
-  androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.ext.lib.espressoVersion"
-  androidTestCompile "org.mockito:mockito-core:$rootProject.ext.lib.mockitoVersion"
-  androidTestCompile "com.crittercism.dexmaker:dexmaker:$rootProject.ext.lib.dexmakerVersion"
-  androidTestCompile "com.crittercism.dexmaker:dexmaker-mockito:$rootProject.ext.lib.dexmakerVersion"
-  androidTestCompile "com.crittercism.dexmaker:dexmaker-dx:$rootProject.ext.lib.dexmakerVersion"
-  androidTestCompile "com.squareup.okhttp3:mockwebserver:$rootProject.ext.lib.okHttpVersion"
-  androidTestCompile "com.squareup.retrofit2:retrofit-mock:$rootProject.ext.lib.retrofitVersion"
-  androidTestCompile 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
-  androidTestCompile "com.google.dagger:dagger:$rootProject.ext.lib.daggerVersion"
-  androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.lib.daggerVersion"
-  compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+  androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$rootProject.lib.espressoVersion"
+  androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.lib.espressoVersion"
+  androidTestImplementation "org.mockito:mockito-core:$rootProject.lib.mockitoVersion"
+  androidTestImplementation "com.crittercism.dexmaker:dexmaker:$rootProject.lib.dexmakerVersion"
+  androidTestImplementation "com.crittercism.dexmaker:dexmaker-mockito:$rootProject.lib.dexmakerVersion"
+  androidTestImplementation "com.crittercism.dexmaker:dexmaker-dx:$rootProject.lib.dexmakerVersion"
+  androidTestImplementation "com.squareup.okhttp3:mockwebserver:$rootProject.lib.okHttpVersion"
+  androidTestImplementation "com.squareup.retrofit2:retrofit-mock:$rootProject.lib.retrofitVersion"
+  androidTestImplementation 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
+  androidTestImplementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
+  androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 
 /*
@@ -155,8 +155,8 @@ Resolves dependency versions across test and production APKs, specifically, tran
 dependencies. This is required since Espresso internally has a dependency on support-annotations.
 */
 configurations.all {
-  resolutionStrategy.force "com.android.support:support-annotations:$rootProject.ext.lib.supportLibraryVersion"
-  resolutionStrategy.force "com.google.code.findbugs:jsr305:$rootProject.ext.lib.jsr305Version"
+  resolutionStrategy.force "com.android.support:support-annotations:$rootProject.lib.supportLibraryVersion"
+  resolutionStrategy.force "com.google.code.findbugs:jsr305:$rootProject.lib.jsr305Version"
 }
 
 /*
@@ -165,10 +165,10 @@ excluded from the test APK! This is necessary because both APKs will contain the
 excluding these dependencies from your test configuration will result in an dex pre-verifier error
 at runtime. More info in this tools bug: (https://code.google.com/p/android/issues/detail?id=192497)
 */
-configurations.compile.dependencies.each { compileDependency ->
-  println "Excluding compile dependency: ${compileDependency.getName()}"
-  configurations.androidTestCompile.dependencies.each { androidTestCompileDependency ->
-    configurations.androidTestCompile.exclude module: "${compileDependency.getName()}"
+configurations.implementation.dependencies.each { implementationDependency ->
+  println "Excluding implementation dependency: ${implementationDependency.getName()}"
+  configurations.androidTestImplementation.dependencies.each { androidTestImplementationDependency ->
+    configurations.androidTestImplementation.exclude module: "${implementationDependency.getName()}"
   }
 }
 
