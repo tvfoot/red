@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
       items.add(match);
     }
     if (!items.isEmpty() && hasMore) {
-      items.add(LoadingRowDisplayable.create());
+      items.add(LoadingRowDisplayable.INSTANCE);
     }
     return items;
   }

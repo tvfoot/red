@@ -169,8 +169,4 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
     return newItem instanceof MatchDisplayable && this.matchId()
         .equals(((MatchDisplayable) newItem).matchId());
   }
-
-  @SuppressWarnings("unchecked") public static Creator<MatchDisplayable> creator() {
-    return (Creator) AutoValue_MatchDisplayable.CREATOR;
-  }
 }
