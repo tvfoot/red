@@ -8,7 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean;
 import com.benoitquenaudon.tvfoot.red.R;
-import com.benoitquenaudon.tvfoot.red.RedAppConfigKt;
+import com.benoitquenaudon.tvfoot.red.RedAppConfig;
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity;
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController;
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent;
@@ -47,12 +47,12 @@ public class MatchActivity extends BaseActivity {
     final Uri uri = intent.getData();
     if (matchId == null && //
         uri != null && //
-        RedAppConfigKt.getAUTHORITIES().contains(uri.getAuthority()) && //
-        RedAppConfigKt.getSCHEMES().contains(uri.getScheme())) {
+        RedAppConfig.getAUTHORITIES().contains(uri.getAuthority()) && //
+        RedAppConfig.getSCHEMES().contains(uri.getScheme())) {
       final List<String> segments = uri.getPathSegments();
       if (segments != null && //
           segments.size() == 5 && //
-          RedAppConfigKt.getPATH_MATCH().equals(segments.get(0))) {
+          RedAppConfig.getPATH_MATCH().equals(segments.get(0))) {
         matchId = segments.get(4);
       }
     }

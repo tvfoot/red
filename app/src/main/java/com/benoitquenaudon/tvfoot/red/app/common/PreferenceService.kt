@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import io.reactivex.Single
 import javax.inject.Inject
 
-class PreferenceService @Inject constructor(private val preferences: SharedPreferences) {
+open class PreferenceService @Inject constructor(private val preferences: SharedPreferences) {
 
   fun saveNotifyMatchStart(matchId: String, notifyMatchStart: Boolean): Single<StreamNotification> {
     preferences.edit().putBoolean(notifyMatchStartPrefKey(matchId), notifyMatchStart).apply()

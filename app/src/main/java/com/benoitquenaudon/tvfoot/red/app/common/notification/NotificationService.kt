@@ -12,7 +12,7 @@ import io.reactivex.Single
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class NotificationService @Inject constructor(
+open class NotificationService @Inject constructor(
     private val context: Application,
     private val alarmManager: AlarmManager
 ) {

@@ -1,3 +1,5 @@
+@file:JvmName("RedAppConfig")
+
 package com.benoitquenaudon.tvfoot.red
 
 val SCHEMES = listOf("http", "https", "tvfoot")

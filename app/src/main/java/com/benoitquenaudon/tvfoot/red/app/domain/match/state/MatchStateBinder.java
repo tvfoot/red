@@ -2,12 +2,12 @@ package com.benoitquenaudon.tvfoot.red.app.domain.match.state;
 
 import android.os.Bundle;
 import com.benoitquenaudon.tvfoot.red.app.common.PreferenceService;
+import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics;
 import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationService;
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.injection.scope.ScreenScope;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.Single;
@@ -24,14 +24,14 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
   private MatchService matchService;
   private PreferenceService preferenceService;
   private BaseSchedulerProvider schedulerProvider;
-  private FirebaseAnalytics firebaseAnalytics;
+  private BaseRedFirebaseAnalytics firebaseAnalytics;
   private NotificationService notificationService;
 
   @SuppressWarnings("CheckReturnValue") //
   @Inject MatchStateBinder(PublishSubject<MatchIntent> intentsSubject,
       PublishSubject<MatchViewState> statesSubject, MatchService matchService,
       PreferenceService preferenceService, NotificationService notificationService,
-      BaseSchedulerProvider schedulerProvider, FirebaseAnalytics firebaseAnalytics) {
+      BaseSchedulerProvider schedulerProvider, BaseRedFirebaseAnalytics firebaseAnalytics) {
     this.intentsSubject = intentsSubject;
     this.statesSubject = statesSubject;
     this.matchService = matchService;
@@ -78,7 +78,6 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
 
   private MatchAction actionFromIntent(MatchIntent intent) {
     if (intent instanceof MatchIntent.InitialIntent) {
-      // TODO(benoit) what should I do here?
       return MatchAction.LoadMatchAction.create(((MatchIntent.InitialIntent) intent).matchId());
     }
     if (intent instanceof MatchIntent.GetLastState) {
