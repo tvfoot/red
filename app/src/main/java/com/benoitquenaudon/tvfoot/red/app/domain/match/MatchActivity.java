@@ -47,12 +47,12 @@ public class MatchActivity extends BaseActivity {
     final Uri uri = intent.getData();
     if (matchId == null && //
         uri != null && //
-        RedAppConfig.AUTHORITIES.contains(uri.getAuthority()) && //
-        RedAppConfig.SCHEMES.contains(uri.getScheme())) {
+        RedAppConfig.getAUTHORITIES().contains(uri.getAuthority()) && //
+        RedAppConfig.getSCHEMES().contains(uri.getScheme())) {
       final List<String> segments = uri.getPathSegments();
       if (segments != null && //
           segments.size() == 5 && //
-          RedAppConfig.PATH_MATCH.equals(segments.get(0))) {
+          RedAppConfig.getPATH_MATCH().equals(segments.get(0))) {
         matchId = segments.get(4);
       }
     }

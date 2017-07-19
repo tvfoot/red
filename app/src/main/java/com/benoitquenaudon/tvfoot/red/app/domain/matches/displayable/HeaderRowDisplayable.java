@@ -1,22 +1,40 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable;
 
 import com.benoitquenaudon.tvfoot.red.R;
-import com.benoitquenaudon.tvfoot.red.util.DateUtils;
-import com.benoitquenaudon.tvfoot.red.util.StringUtils;
+import com.benoitquenaudon.tvfoot.red.util.DateExtKt;
 import com.google.auto.value.AutoValue;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
+import kotlin.text.StringsKt;
 import timber.log.Timber;
 
 @AutoValue public abstract class HeaderRowDisplayable implements MatchesItemDisplayable {
-  private static SimpleDateFormat headerKeyDateFormat =
-      new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-  private static SimpleDateFormat monthDateFormat =
-      new SimpleDateFormat("EEEE, d MMMM", Locale.getDefault());
-  private static SimpleDateFormat yearDateFormat =
-      new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault());
+  private static final ThreadLocal<DateFormat> headerKeyDateFormat = new ThreadLocal<DateFormat>() {
+    @Override protected DateFormat initialValue() {
+      SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+      format.setTimeZone(TimeZone.getDefault());
+      return format;
+    }
+  };
+  private static final ThreadLocal<DateFormat> monthDateFormat = new ThreadLocal<DateFormat>() {
+    @Override protected DateFormat initialValue() {
+      SimpleDateFormat format = new SimpleDateFormat("EEEE, d MMMM", Locale.getDefault());
+      format.setTimeZone(TimeZone.getDefault());
+      return format;
+    }
+  };
+  private static final ThreadLocal<DateFormat> yearDateFormat = new ThreadLocal<DateFormat>() {
+    @Override protected DateFormat initialValue() {
+      SimpleDateFormat format = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault());
+      format.setTimeZone(TimeZone.getDefault());
+      return format;
+    }
+  };
 
   public abstract int dangerResId();
 
@@ -27,7 +45,7 @@ import timber.log.Timber;
   public static HeaderRowDisplayable create(String headerKey) {
     Date date;
     try {
-      date = headerKeyDateFormat.parse(headerKey);
+      date = headerKeyDateFormat.get().parse(headerKey);
     } catch (ParseException e) {
       Timber.e(e);
       throw new UnsupportedOperationException("What is this date anyway? " + headerKey);
@@ -35,22 +53,23 @@ import timber.log.Timber;
 
     int dangerResId = -1;
     String displayedDate;
-    if (DateUtils.isToday(date.getTime())) {
+    Calendar nowCalendar = Calendar.getInstance();
+    if (DateExtKt.isToday(date.getTime(), nowCalendar)) {
       dangerResId = R.string.matches_row_header_danger_today;
-      displayedDate = StringUtils.capitalize(monthDateFormat.format(date));
+      displayedDate = StringsKt.capitalize(monthDateFormat.get().format(date));
       return new AutoValue_HeaderRowDisplayable(dangerResId, true, displayedDate);
     }
 
-    if (DateUtils.isTomorrow(date.getTime())) {
+    if (DateExtKt.isTomorrow(date.getTime(), nowCalendar)) {
       dangerResId = R.string.matches_row_header_danger_tomorrow;
-      displayedDate = StringUtils.capitalize(monthDateFormat.format(date));
+      displayedDate = StringsKt.capitalize(monthDateFormat.get().format(date));
       return new AutoValue_HeaderRowDisplayable(dangerResId, true, displayedDate);
     }
 
-    if (DateUtils.isThisYear(date.getTime())) {
-      displayedDate = StringUtils.capitalize(monthDateFormat.format(date));
+    if (DateExtKt.isCurrentYear(date.getTime(), nowCalendar)) {
+      displayedDate = StringsKt.capitalize(monthDateFormat.get().format(date));
     } else {
-      displayedDate = yearDateFormat.format(date);
+      displayedDate = yearDateFormat.get().format(date);
     }
 
     return new AutoValue_HeaderRowDisplayable(dangerResId, false, displayedDate);

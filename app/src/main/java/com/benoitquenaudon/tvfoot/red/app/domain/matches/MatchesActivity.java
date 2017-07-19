@@ -80,10 +80,10 @@ public class MatchesActivity extends BaseActivity {
   }
 
   public Observable<MatchesIntent> intents() {
-    return Observable.merge(InitialIntent(), refreshIntent(), loadNextPageIntent());
+    return Observable.merge(initialIntent(), refreshIntent(), loadNextPageIntent());
   }
 
-  private Observable<MatchesIntent.InitialIntent> InitialIntent() {
+  private Observable<MatchesIntent.InitialIntent> initialIntent() {
     return Observable.just(MatchesIntent.InitialIntent.create());
   }
 
@@ -94,7 +94,7 @@ public class MatchesActivity extends BaseActivity {
 
   private Observable<MatchesIntent.LoadNextPageIntent> loadNextPageIntent() {
     return RxRecyclerView.scrollEvents(binding.recyclerView)
-        .filter(ignored -> viewModel.hasMore && !viewModel.nextPageLoading)
+        .filter(ignored -> viewModel.getHasMore() && !viewModel.getNextPageLoading())
         .filter(scrollEvent -> {
           LinearLayoutManager layoutManager =
               (LinearLayoutManager) scrollEvent.view().getLayoutManager();
