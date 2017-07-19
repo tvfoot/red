@@ -27,7 +27,6 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
   private BaseRedFirebaseAnalytics firebaseAnalytics;
   private NotificationService notificationService;
 
-  @SuppressWarnings("CheckReturnValue") //
   @Inject MatchStateBinder(PublishSubject<MatchIntent> intentsSubject,
       PublishSubject<MatchViewState> statesSubject, MatchService matchService,
       PreferenceService preferenceService, NotificationService notificationService,

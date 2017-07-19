@@ -7,7 +7,6 @@ import android.content.Intent
 import com.benoitquenaudon.tvfoot.red.app.common.StreamNotification
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchReminderService
-import com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchReminderService.ACTION_PUBLISH_NOTIFICATION
 import io.reactivex.Single
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -20,7 +19,7 @@ open class NotificationService @Inject constructor(
       matchId: String, startAt: Long, shouldNotify: Boolean
   ): Single<StreamNotification> {
     val intent = Intent(context, MatchReminderService::class.java)
-        .setAction(ACTION_PUBLISH_NOTIFICATION)
+        .setAction(MatchReminderService.ACTION_PUBLISH_NOTIFICATION)
         .putExtra(Match.MATCH_ID, matchId)
 
     val serviceIntent = PendingIntent
