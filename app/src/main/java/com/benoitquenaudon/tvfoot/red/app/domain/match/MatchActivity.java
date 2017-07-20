@@ -77,7 +77,7 @@ public class MatchActivity extends BaseActivity {
     disposables.add(stateBinder.statesAsObservable().subscribe(this::render));
     stateBinder.forwardIntents(intents());
 
-    disposables.add(RxObservableBoolean.propertyChanges(viewModel.shouldNotifyMatchStart)
+    disposables.add(RxObservableBoolean.propertyChanges(viewModel.getShouldNotifyMatchStart())
         .subscribe(shouldNotifyMatchStart -> {
           if (shouldNotifyMatchStart) {
             Snackbar.make(binding.getRoot(),
@@ -102,8 +102,8 @@ public class MatchActivity extends BaseActivity {
 
   private Observable<MatchIntent.NotifyMatchStartIntent> fabClickIntent() {
     return RxView.clicks(binding.notifyMatchStartFab)
-        .map(ignored -> new MatchIntent.NotifyMatchStartIntent(viewModel.match.get().matchId(),
-            viewModel.match.get().startAt(), !isMatchNotificationActivated()));
+        .map(ignored -> new MatchIntent.NotifyMatchStartIntent(viewModel.getMatch().get().matchId(),
+            viewModel.getMatch().get().startAt(), !isMatchNotificationActivated()));
   }
 
   private boolean isMatchNotificationActivated() {
