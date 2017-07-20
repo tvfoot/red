@@ -4,11 +4,11 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.benoitquenaudon.tvfoot.red.RedApp
-import com.benoitquenaudon.tvfoot.red.app.common.PreferenceService
+import com.benoitquenaudon.tvfoot.red.app.common.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MatchNotificationHelper
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchService
+import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchRepository
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 class MatchReminderService : Service() {
   @Inject lateinit var disposables: CompositeDisposable
-  @Inject lateinit var matchService: MatchService
-  @Inject lateinit var preferenceService: PreferenceService
+  @Inject lateinit var matchRepository: MatchRepository
+  @Inject lateinit var preferenceRepository: PreferenceRepository
   @Inject lateinit var schedulerProvider: BaseSchedulerProvider
 
   override fun onBind(intent: Intent): IBinder? {
@@ -43,8 +43,8 @@ class MatchReminderService : Service() {
     if (action == ACTION_PUBLISH_NOTIFICATION) {
       disposables.add(
           Single.zip<Match, Boolean, Pair<Match, Boolean>>(
-              matchService.loadMatch(matchId),
-              preferenceService.loadNotifyMatchStart(matchId),
+              matchRepository.loadMatch(matchId),
+              preferenceRepository.loadNotifyMatchStart(matchId),
               BiFunction<Match, Boolean, Pair<Match, Boolean>> { first, second ->
                 Pair(first, second)
               }

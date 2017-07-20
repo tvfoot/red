@@ -11,7 +11,7 @@ import io.reactivex.Single
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-open class NotificationService @Inject constructor(
+class NotificationRepository @Inject constructor(
     private val context: Application,
     private val alarmManager: AlarmManager
 ) {

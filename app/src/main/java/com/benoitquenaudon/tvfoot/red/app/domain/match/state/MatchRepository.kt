@@ -5,6 +5,6 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import io.reactivex.Single
 import javax.inject.Inject
 
-open class MatchService @Inject constructor(private val tvfootService: TvfootService) {
-  fun loadMatch(matchId: String): Single<Match> = tvfootService.getMatch(matchId)
+open class MatchRepository @Inject constructor(private val tvfootService: TvfootService) {
+   fun loadMatch(matchId: String): Single<Match> = tvfootService.getMatch(matchId)
 }

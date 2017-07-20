@@ -15,14 +15,14 @@ import kotlin.properties.Delegates
 
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class)
-class PreferenceServiceTest {
+class PreferenceRepositoryTest {
   private val SHARED_PREF = "ref_test"
   private var matchId by Delegates.notNull<String>()
-  private var preferenceService by Delegates.notNull<PreferenceService>()
+  private var preferenceService by Delegates.notNull<PreferenceRepository>()
 
   @Before fun before() {
     matchId = "matchid"
-    preferenceService = PreferenceService(fakeSharedPreferences())
+    preferenceService = PreferenceRepository(fakeSharedPreferences())
   }
 
   @Ignore(

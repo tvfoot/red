@@ -1,9 +1,9 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match.state
 
-import com.benoitquenaudon.tvfoot.red.app.common.PreferenceService
+import com.benoitquenaudon.tvfoot.red.app.common.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.common.StreamNotification
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
-import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationService
+import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationRepository
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable
@@ -35,9 +35,9 @@ import javax.inject.Inject
 @ScreenScope class MatchStateBinder @Inject constructor(
     private val intentsSubject: PublishSubject<MatchIntent>,
     private val statesSubject: PublishSubject<MatchViewState>,
-    private val matchService: MatchService,
-    private val preferenceService: PreferenceService,
-    private val notificationService: NotificationService,
+    private val matchRepository: MatchRepository,
+    private val preferenceRepository: PreferenceRepository,
+    private val notificationRepository: NotificationRepository,
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
 ) : StateBinder(firebaseAnalytics) {
@@ -87,8 +87,8 @@ import javax.inject.Inject
   private val loadMatchTransformer: ObservableTransformer<LoadMatchAction, LoadMatchResult>
     get() = ObservableTransformer { actions: Observable<LoadMatchAction> ->
       actions.flatMap({ (matchId) ->
-        Single.zip<Match, Boolean, LoadMatchResult>(matchService.loadMatch(matchId),
-            preferenceService.loadNotifyMatchStart(matchId),
+        Single.zip<Match, Boolean, LoadMatchResult>(matchRepository.loadMatch(matchId),
+            preferenceRepository.loadNotifyMatchStart(matchId),
             BiFunction<Match, Boolean, LoadMatchResult> { match, shouldNotifyMatchStart ->
               LoadMatchResult.success(match, shouldNotifyMatchStart)
             })
@@ -103,9 +103,9 @@ import javax.inject.Inject
   private val notifyMatchStartTransformer: ObservableTransformer<NotifyMatchStartAction, NotifyMatchStartResult>
     get() = ObservableTransformer { actions: Observable<NotifyMatchStartAction> ->
       actions.flatMap({ (matchId, startAt, notifyMatchStart) ->
-        preferenceService.saveNotifyMatchStart(matchId, notifyMatchStart)
+        preferenceRepository.saveNotifyMatchStart(matchId, notifyMatchStart)
             .flatMap<StreamNotification> {
-              notificationService.scheduleNotification(matchId, startAt, notifyMatchStart)
+              notificationRepository.scheduleNotification(matchId, startAt, notifyMatchStart)
             }
             .toObservable()
             .map { NotifyMatchStartResult(notifyMatchStart) }
