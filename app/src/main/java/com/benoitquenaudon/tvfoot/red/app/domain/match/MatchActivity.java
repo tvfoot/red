@@ -74,7 +74,7 @@ public class MatchActivity extends BaseActivity {
   }
 
   private void bind() {
-    disposables.add(stateBinder.getStatesAsObservable().subscribe(this::render));
+    disposables.add(stateBinder.statesAsObservable().subscribe(this::render));
     stateBinder.forwardIntents(intents());
 
     disposables.add(RxObservableBoolean.propertyChanges(viewModel.shouldNotifyMatchStart)
@@ -97,13 +97,12 @@ public class MatchActivity extends BaseActivity {
   }
 
   private Observable<MatchIntent.InitialIntent> initialIntent() {
-    return Observable.just(
-        MatchIntent.InitialIntent.create(checkNotNull(matchId, "MatchId is null")));
+    return Observable.just(new MatchIntent.InitialIntent(checkNotNull(matchId, "MatchId is null")));
   }
 
   private Observable<MatchIntent.NotifyMatchStartIntent> fabClickIntent() {
     return RxView.clicks(binding.notifyMatchStartFab)
-        .map(ignored -> MatchIntent.NotifyMatchStartIntent.create(viewModel.match.get().matchId(),
+        .map(ignored -> new MatchIntent.NotifyMatchStartIntent(viewModel.match.get().matchId(),
             viewModel.match.get().startAt(), !isMatchNotificationActivated()));
   }
 

@@ -23,18 +23,18 @@ public class MatchViewModel {
 
   @SuppressWarnings("ThrowableResultOfMethodCallIgnored") void updateFromState(
       MatchViewState state) {
-    isLoading.set(state.loading());
-    hasError.set(state.error() != null);
-    hasData.set(state.match() != null);
-    shouldNotifyMatchStart.set(state.shouldNotifyMatchStart());
+    isLoading.set(state.getLoading());
+    hasError.set(state.getError() != null);
+    hasData.set(state.getMatch() != null);
+    shouldNotifyMatchStart.set(state.getShouldNotifyMatchStart());
 
     if (hasError.get()) {
-      Throwable error = checkNotNull(state.error(), "state error is null");
+      Throwable error = checkNotNull(state.getError(), "state error is null");
       errorMessage.set(error.toString());
     }
     if (hasData.get() && //
-        (match.get() == null || !match.get().equals(state.match()))) {
-      match.set(state.match());
+        (match.get() == null || !match.get().equals(state.getMatch()))) {
+      match.set(state.getMatch());
       broadcastersAdapter.addAll(match.get().broadcasters());
     }
   }
