@@ -64,7 +64,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
         // been intent in the past, meaning the InitialIntent cannot
         // be the first => it is a reconnection.
         if (newIntent instanceof MatchesIntent.InitialIntent) {
-          return MatchesIntent.GetLastState.create();
+          return MatchesIntent.GetLastState.INSTANCE;
         } else {
           return newIntent;
         }
@@ -72,17 +72,17 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
 
   private MatchesAction actionFromIntent(MatchesIntent intent) {
     if (intent instanceof MatchesIntent.InitialIntent) {
-      return MatchesAction.RefreshAction.create();
+      return MatchesAction.RefreshAction.INSTANCE;
     }
     if (intent instanceof MatchesIntent.RefreshIntent) {
-      return MatchesAction.RefreshAction.create();
+      return MatchesAction.RefreshAction.INSTANCE;
     }
     if (intent instanceof MatchesIntent.GetLastState) {
-      return MatchesAction.GetLastStateAction.create();
+      return MatchesAction.GetLastStateAction.INSTANCE;
     }
     if (intent instanceof MatchesIntent.LoadNextPageIntent) {
-      return MatchesAction.LoadNextPageAction.create(
-          ((MatchesIntent.LoadNextPageIntent) intent).pageIndex());
+      return new MatchesAction.LoadNextPageAction(
+          ((MatchesIntent.LoadNextPageIntent) intent).getPageIndex());
     }
     throw new IllegalArgumentException("do not know how to treat this intents " + intent);
   }
@@ -98,9 +98,9 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
 
   private ObservableTransformer<MatchesAction.LoadNextPageAction, MatchesResult.LoadNextPageResult>
       loadNextPageTransformer = actions -> actions.flatMap(
-      action -> service.loadPage(action.pageIndex())
+      action -> service.loadPage(action.getPageIndex())
           .toObservable()
-          .map(matches -> MatchesResult.LoadNextPageResult.success(action.pageIndex(), matches))
+          .map(matches -> MatchesResult.LoadNextPageResult.success(action.getPageIndex(), matches))
           .onErrorReturn(MatchesResult.LoadNextPageResult::failure)
           .subscribeOn(schedulerProvider.io())
           .observeOn(schedulerProvider.ui())

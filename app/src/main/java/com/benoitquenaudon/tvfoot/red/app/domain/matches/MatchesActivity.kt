@@ -78,12 +78,12 @@ class MatchesActivity : BaseActivity() {
   }
 
   private fun initialIntent(): Observable<MatchesIntent.InitialIntent> {
-    return Observable.just(MatchesIntent.InitialIntent.create())
+    return Observable.just(MatchesIntent.InitialIntent)
   }
 
   private fun refreshIntent(): Observable<MatchesIntent.RefreshIntent> {
     return RxSwipeRefreshLayout.refreshes(binding.swipeRefreshLayout)
-        .map { MatchesIntent.RefreshIntent.create() }
+        .map { MatchesIntent.RefreshIntent }
   }
 
   private fun loadNextPageIntent(): Observable<MatchesIntent.LoadNextPageIntent> {
@@ -94,7 +94,7 @@ class MatchesActivity : BaseActivity() {
           val lastPosition = layoutManager.findLastVisibleItemPosition()
           lastPosition == scrollEvent.view().adapter.itemCount - 1
         }
-        .map { MatchesIntent.LoadNextPageIntent.create(viewModel.currentPage + 1) }
+        .map { MatchesIntent.LoadNextPageIntent(viewModel.currentPage + 1) }
   }
 
   fun render(state: MatchesViewState) = viewModel.updateFromState(state)
