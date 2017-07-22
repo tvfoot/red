@@ -13,7 +13,7 @@ sealed class MatchResult {
       val error: Throwable?,
       val shouldNotifyMatchStart: Boolean
   ) : MatchResult() {
-    companion object {
+    companion object Factory {
       fun success(match: Match, shouldNotifyMatchStart: Boolean): LoadMatchResult {
         return LoadMatchResult(LOAD_MATCH_SUCCESS, match, null, shouldNotifyMatchStart)
       }

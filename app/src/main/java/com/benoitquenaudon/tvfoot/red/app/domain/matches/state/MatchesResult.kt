@@ -1,0 +1,52 @@
+package com.benoitquenaudon.tvfoot.red.app.domain.matches.state
+
+import com.benoitquenaudon.tvfoot.red.app.common.LceStatus
+import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.FAILURE
+import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.IN_FLIGHT
+import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.SUCCESS
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
+
+sealed class MatchesResult {
+  data class RefreshResult private constructor(
+      val status: LceStatus,
+      val matches: List<Match>?,
+      val throwable: Throwable?
+  ) : MatchesResult() {
+    companion object Factory {
+      fun success(matches: List<Match>): RefreshResult {
+        return RefreshResult(SUCCESS, matches, null)
+      }
+
+      fun failure(throwable: Throwable): RefreshResult {
+        return RefreshResult(FAILURE, null, throwable)
+      }
+
+      fun inFlight(): RefreshResult {
+        return RefreshResult(IN_FLIGHT, null, null)
+      }
+    }
+  }
+
+  object GetLastStateResult : MatchesResult()
+
+  data class LoadNextPageResult private constructor(
+      val status: LceStatus,
+      val matches: List<Match>?,
+      val error: Throwable?,
+      val pageIndex: Int
+  ) : MatchesResult() {
+    companion object Factory {
+      fun success(pageIndex: Int, matches: List<Match>): LoadNextPageResult {
+        return LoadNextPageResult(SUCCESS, matches, null, pageIndex)
+      }
+
+      fun failure(throwable: Throwable): LoadNextPageResult {
+        return LoadNextPageResult(FAILURE, null, throwable, -1)
+      }
+
+      fun inFlight(): LoadNextPageResult {
+        return LoadNextPageResult(IN_FLIGHT, null, null, -1)
+      }
+    }
+  }
+}
