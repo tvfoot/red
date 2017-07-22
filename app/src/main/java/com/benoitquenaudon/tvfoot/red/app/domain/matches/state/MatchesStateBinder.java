@@ -145,7 +145,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
                   .error(null)
                   .hasMore(!matches.isEmpty())
                   .currentPage(0)
-                  .matches(MatchRowDisplayable.fromMatches(matches))
+                  .matches(MatchRowDisplayable.Factory.fromMatches(matches))
                   .build();
             default:
               throw new IllegalArgumentException(
@@ -167,7 +167,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
 
               List<MatchRowDisplayable> matches = new ArrayList<>();
               matches.addAll(previousState.matches());
-              matches.addAll(MatchRowDisplayable.fromMatches(newMatches));
+              matches.addAll(MatchRowDisplayable.Factory.fromMatches(newMatches));
 
               return stateBuilder.nextPageLoading(false)
                   .error(null)

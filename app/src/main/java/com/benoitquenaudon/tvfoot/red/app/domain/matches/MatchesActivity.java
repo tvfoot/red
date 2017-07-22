@@ -71,7 +71,7 @@ public class MatchesActivity extends BaseActivity {
     stateBinder.forwardIntents(intents());
 
     disposables.add(adapter.getMatchRowClickObservable()
-        .subscribe(match -> flowController.toMatch(match.matchId())));
+        .subscribe(match -> flowController.toMatch(match.getMatchId())));
   }
 
   @Override protected void onDestroy() {

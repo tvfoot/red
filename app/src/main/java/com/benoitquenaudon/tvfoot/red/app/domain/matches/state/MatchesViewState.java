@@ -15,9 +15,9 @@ import javax.annotation.Nullable;
     List<String> headers = new ArrayList<>();
     List<MatchesItemDisplayable> items = new ArrayList<>();
     for (MatchRowDisplayable match : matches()) {
-      if (!headers.contains(match.headerKey())) {
-        headers.add(match.headerKey());
-        items.add(HeaderRowDisplayable.Factory.create(match.headerKey()));
+      if (!headers.contains(match.getHeaderKey())) {
+        headers.add(match.getHeaderKey());
+        items.add(HeaderRowDisplayable.Factory.create(match.getHeaderKey()));
       }
       items.add(match);
     }

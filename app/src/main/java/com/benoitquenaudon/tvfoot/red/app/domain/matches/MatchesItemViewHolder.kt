@@ -57,7 +57,7 @@ sealed class MatchesItemViewHolder<out B : ViewDataBinding, in T : MatchesItemDi
       val recyclerView = binding.matchBroadcasters
 
       val broadcastersAdapter = BroadcastersAdapter()
-      broadcastersAdapter.addAll(match.broadcasters())
+      broadcastersAdapter.addAll(match.broadcasters)
 
       recyclerView.adapter = broadcastersAdapter
     }
