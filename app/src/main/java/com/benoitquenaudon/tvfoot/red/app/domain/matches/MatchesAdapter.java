@@ -22,8 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
-@ActivityScope public class MatchesAdapter
-    extends RecyclerView.Adapter<MatchesAdapter.MatchesItemViewHolder> {
+@ActivityScope public class MatchesAdapter extends RecyclerView.Adapter<MatchesItemViewHolder> {
   private List<MatchesItemDisplayable> matchesItems = Collections.emptyList();
   private PublishSubject<MatchRowDisplayable> matchRowClickObservable = PublishSubject.create();
 
@@ -36,11 +35,12 @@ import javax.inject.Inject;
 
     switch (viewType) {
       case R.layout.matches_row_header:
-        return new MatchHeaderViewHolder((MatchesRowHeaderBinding) binding);
+        return new MatchesItemViewHolder.MatchHeaderViewHolder((MatchesRowHeaderBinding) binding);
       case R.layout.matches_row_match:
-        return new MatchRowViewHolder((MatchesRowMatchBinding) binding);
+        return new MatchesItemViewHolder.MatchRowViewHolder((MatchesRowMatchBinding) binding,
+            this);
       case R.layout.row_loading:
-        return new LoadingRowViewHolder((RowLoadingBinding) binding);
+        return new MatchesItemViewHolder.LoadingRowViewHolder((RowLoadingBinding) binding);
       default:
         throw new UnsupportedOperationException(
             "don't know how to deal with this viewType: " + viewType);
@@ -94,82 +94,5 @@ import javax.inject.Inject;
     // TODO(benoit) calculate diff on worker thread
     // https://github.com/googlesamples/android-architecture-components/blob/master/GithubBrowserSample/app/src/main/java/com/android/example/github/ui/common/DataBoundListAdapter.java#L77
     DiffUtil.calculateDiff(diffUtilCallback, true).dispatchUpdatesTo(this);
-  }
-
-  static abstract class MatchesItemViewHolder<B extends ViewDataBinding, T extends MatchesItemDisplayable>
-      extends RecyclerView.ViewHolder {
-    final B binding;
-
-    MatchesItemViewHolder(B binding) {
-      super(binding.getRoot());
-      this.binding = binding;
-    }
-
-    abstract void bind(T item);
-
-    abstract void unbind();
-  }
-
-  static private class MatchHeaderViewHolder
-      extends MatchesItemViewHolder<MatchesRowHeaderBinding, HeaderRowDisplayable> {
-    MatchHeaderViewHolder(MatchesRowHeaderBinding binding) {
-      super(binding);
-    }
-
-    @Override void bind(HeaderRowDisplayable header) {
-      binding.setDayHeader(header);
-      binding.executePendingBindings();
-    }
-
-    @Override void unbind() {
-      binding.setDayHeader(null);
-      binding.executePendingBindings();
-    }
-  }
-
-  private class MatchRowViewHolder
-      extends MatchesItemViewHolder<MatchesRowMatchBinding, MatchRowDisplayable> {
-    MatchRowViewHolder(MatchesRowMatchBinding binding) {
-      super(binding);
-    }
-
-    @Override void bind(MatchRowDisplayable match) {
-      binding.setMatch(match);
-      binding.setHandler(MatchesAdapter.this);
-      binding.executePendingBindings();
-
-      setBroadcastsAdapter(match);
-    }
-
-    @Override void unbind() {
-      binding.setMatch(null);
-      binding.setHandler(null);
-      binding.matchBroadcasters.setAdapter(null);
-      binding.executePendingBindings();
-    }
-
-    private void setBroadcastsAdapter(MatchRowDisplayable match) {
-      RecyclerView recyclerView = binding.matchBroadcasters;
-
-      BroadcastersAdapter broadcastersAdapter = new BroadcastersAdapter();
-      broadcastersAdapter.addAll(match.broadcasters());
-
-      recyclerView.setAdapter(broadcastersAdapter);
-    }
-  }
-
-  static private class LoadingRowViewHolder
-      extends MatchesItemViewHolder<RowLoadingBinding, LoadingRowDisplayable> {
-    LoadingRowViewHolder(RowLoadingBinding binding) {
-      super(binding);
-    }
-
-    @Override void bind(LoadingRowDisplayable item) {
-      // nothing to do
-    }
-
-    @Override void unbind() {
-      // nothing to do
-    }
   }
 }
