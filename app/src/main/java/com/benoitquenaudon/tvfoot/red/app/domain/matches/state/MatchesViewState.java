@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
     for (MatchRowDisplayable match : matches()) {
       if (!headers.contains(match.headerKey())) {
         headers.add(match.headerKey());
-        items.add(HeaderRowDisplayable.create(match.headerKey()));
+        items.add(HeaderRowDisplayable.Factory.create(match.headerKey()));
       }
       items.add(match);
     }
