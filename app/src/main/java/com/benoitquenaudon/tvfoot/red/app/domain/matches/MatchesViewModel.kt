@@ -38,7 +38,5 @@ class MatchesViewModel @Inject internal constructor(private val adapter: Matches
     currentPage = state.currentPage()
   }
 
-  private fun setErrorMessage(message: String) = {
-    errorMessage.set(message)
-  }
+  private fun setErrorMessage(message: String) = errorMessage.set(message)
 }

@@ -37,8 +37,7 @@ import javax.inject.Inject;
       case R.layout.matches_row_header:
         return new MatchesItemViewHolder.MatchHeaderViewHolder((MatchesRowHeaderBinding) binding);
       case R.layout.matches_row_match:
-        return new MatchesItemViewHolder.MatchRowViewHolder((MatchesRowMatchBinding) binding,
-            this);
+        return new MatchesItemViewHolder.MatchRowViewHolder((MatchesRowMatchBinding) binding, this);
       case R.layout.row_loading:
         return new MatchesItemViewHolder.LoadingRowViewHolder((RowLoadingBinding) binding);
       default:
