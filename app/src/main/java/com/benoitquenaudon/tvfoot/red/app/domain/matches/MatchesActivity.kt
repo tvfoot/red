@@ -44,7 +44,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     binding.viewModel = viewModel
 
     setSupportActionBar(binding.matchesToolbar)
-    actionBar?.setDisplayShowTitleEnabled(false)
+    supportActionBar?.setDisplayShowTitleEnabled(false)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
