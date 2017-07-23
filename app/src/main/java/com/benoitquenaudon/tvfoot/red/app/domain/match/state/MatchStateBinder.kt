@@ -20,7 +20,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_IN_FLIGHT
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_SUCCESS
 import com.benoitquenaudon.tvfoot.red.app.injection.scope.ScreenScope
-import com.benoitquenaudon.tvfoot.red.app.mvi.StateBinder
+import com.benoitquenaudon.tvfoot.red.app.mvi.RedStateBinder
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
 import com.benoitquenaudon.tvfoot.red.util.logResult
@@ -40,17 +40,17 @@ import javax.inject.Inject
     private val notificationRepository: NotificationRepository,
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
-) : StateBinder(firebaseAnalytics) {
+) : RedStateBinder<MatchIntent, MatchViewState>(firebaseAnalytics) {
 
   init {
     compose().subscribe(statesSubject::onNext)
   }
 
-  fun forwardIntents(intents: Observable<MatchIntent>) {
+  override fun processIntents(intents: Observable<MatchIntent>) {
     intents.subscribe(intentsSubject::onNext)
   }
 
-  fun statesAsObservable(): Observable<MatchViewState> = statesSubject
+  override fun states(): Observable<MatchViewState> = statesSubject
 
   private fun compose(): Observable<MatchViewState> {
     return intentsSubject

@@ -17,7 +17,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.Get
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.LoadNextPageResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.RefreshResult
 import com.benoitquenaudon.tvfoot.red.app.injection.scope.ScreenScope
-import com.benoitquenaudon.tvfoot.red.app.mvi.StateBinder
+import com.benoitquenaudon.tvfoot.red.app.mvi.RedStateBinder
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
 import com.benoitquenaudon.tvfoot.red.util.logResult
@@ -35,28 +35,28 @@ import javax.inject.Inject
     private val service: MatchesService,
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
-) : StateBinder(firebaseAnalytics) {
+) : RedStateBinder<MatchesIntent, MatchesViewState>(firebaseAnalytics) {
 
   init {
-    compose().subscribe { state -> this.statesSubject.onNext(state) }
+    compose().subscribe(statesSubject::onNext)
   }
 
-  fun forwardIntents(intents: Observable<MatchesIntent>) {
-    intents.subscribe { intentsSubject.onNext(it) }
+  override fun processIntents(intents: Observable<MatchesIntent>) {
+    intents.subscribe(intentsSubject::onNext)
   }
 
-  fun statesAsObservable(): Observable<MatchesViewState> = statesSubject
+  override fun states(): Observable<MatchesViewState> = statesSubject
 
   private fun compose(): Observable<MatchesViewState> {
     return intentsSubject
-        .doOnNext { this.logIntent(it) }
+        .doOnNext(this::logIntent)
         .scan(initialIntentFilter)
-        .map { this.actionFromIntent(it) }
-        .doOnNext { this.logAction(it) }
+        .map(this::actionFromIntent)
+        .doOnNext(this::logAction)
         .compose<MatchesResult>(actionToResultTransformer)
-        .doOnNext { this.logResult(it) }
+        .doOnNext(this::logResult)
         .scan(MatchesViewState.idle(), reducer)
-        .doOnNext { this.logState(it) }
+        .doOnNext(this::logState)
   }
 
   private val initialIntentFilter: BiFunction<MatchesIntent, MatchesIntent, MatchesIntent>
@@ -99,17 +99,17 @@ import javax.inject.Inject
           { (pageIndex) ->
             service.loadPage(pageIndex)
                 .toObservable()
-                .map { matches -> MatchesResult.LoadNextPageResult.success(pageIndex, matches) }
-                .onErrorReturn { MatchesResult.LoadNextPageResult.failure(it) }
+                .map { matches -> LoadNextPageResult.success(pageIndex, matches) }
+                .onErrorReturn { LoadNextPageResult.failure(it) }
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
-                .startWith(MatchesResult.LoadNextPageResult.inFlight())
+                .startWith(LoadNextPageResult.inFlight())
           })
     }
 
   private val getLastStateTransformer: ObservableTransformer<GetLastStateAction, GetLastStateResult>
     get() = ObservableTransformer { actions: Observable<GetLastStateAction> ->
-      actions.map({ MatchesResult.GetLastStateResult })
+      actions.map({ GetLastStateResult })
     }
 
   private val actionToResultTransformer: ObservableTransformer<MatchesAction, MatchesResult>

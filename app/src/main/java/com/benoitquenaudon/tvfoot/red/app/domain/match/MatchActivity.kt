@@ -17,6 +17,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchStateBinder
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewState
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.BroadcastersAdapter
+import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchBinding
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
@@ -25,7 +26,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
-class MatchActivity : BaseActivity() {
+class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   @Inject lateinit var broadcastersAdapter: BroadcastersAdapter
   @Inject lateinit var flowController: FlowController
   @Inject lateinit var stateBinder: MatchStateBinder
@@ -67,8 +68,8 @@ class MatchActivity : BaseActivity() {
   }
 
   private fun bind() {
-    disposables.add(stateBinder.statesAsObservable().subscribe(this::render))
-    stateBinder.forwardIntents(intents())
+    disposables.add(stateBinder.states().subscribe(this::render))
+    stateBinder.processIntents(intents())
 
     disposables.add(RxObservableBoolean.propertyChanges(viewModel.shouldNotifyMatchStart)
         .subscribe { shouldNotifyMatchStart ->
@@ -85,7 +86,7 @@ class MatchActivity : BaseActivity() {
     disposables.dispose()
   }
 
-  fun intents(): Observable<MatchIntent> {
+  override fun intents(): Observable<MatchIntent> {
     return Observable.merge(initialIntent(), fabClickIntent())
   }
 
@@ -104,5 +105,5 @@ class MatchActivity : BaseActivity() {
   private val isMatchNotificationActivated: Boolean
     get() = binding.notifyMatchStartFab.isActivated
 
-  fun render(state: MatchViewState) = viewModel.updateFromState(state)
+  override fun render(state: MatchViewState) = viewModel.updateFromState(state)
 }

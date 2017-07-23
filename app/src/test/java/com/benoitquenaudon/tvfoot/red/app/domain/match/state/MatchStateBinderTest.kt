@@ -24,7 +24,7 @@ import kotlin.properties.Delegates
 class MatchStateBinderTest {
   var matchStateBinder: MatchStateBinder by Delegates.notNull<MatchStateBinder>()
   val testObserver: TestObserver<MatchViewState> by lazy {
-    matchStateBinder.statesAsObservable().test()
+    matchStateBinder.states().test()
   }
   @Inject lateinit var matchRepository: MatchRepository
   val preferenceRepository: PreferenceRepository = mock(PreferenceRepository::class.java)
@@ -58,7 +58,7 @@ class MatchStateBinderTest {
     `when`(matchRepository.loadMatch(matchId)).thenReturn(Single.just(fixture.anyMatch()))
     `when`(preferenceRepository.loadNotifyMatchStart(matchId)).thenReturn(Single.just(false))
 
-    matchStateBinder.forwardIntents(Observable.just(InitialIntent(matchId)))
+    matchStateBinder.processIntents(Observable.just(InitialIntent(matchId)))
 
     testObserver.assertValueAt(0, { it.loading })
     testObserver.assertValueAt(1) { (match, _, loading, shouldNotifyMatchStart) ->

@@ -11,6 +11,7 @@ import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesStateBinder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState
+import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchesBinding
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
@@ -19,7 +20,7 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
-class MatchesActivity : BaseActivity() {
+class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState> {
   @Inject lateinit var adapter: MatchesAdapter
   @Inject lateinit var flowController: FlowController
   @Inject lateinit var viewModel: MatchesViewModel
@@ -61,8 +62,8 @@ class MatchesActivity : BaseActivity() {
   }
 
   private fun bind() {
-    disposables.add(stateBinder.statesAsObservable().subscribe(this::render))
-    stateBinder.forwardIntents(intents())
+    disposables.add(stateBinder.states().subscribe(this::render))
+    stateBinder.processIntents(intents())
 
     disposables.add(adapter.matchRowClickObservable
         .subscribe { matchRowDisplayable -> flowController.toMatch(matchRowDisplayable.matchId) })
@@ -73,7 +74,7 @@ class MatchesActivity : BaseActivity() {
     disposables.dispose()
   }
 
-  fun intents(): Observable<MatchesIntent> {
+  override fun intents(): Observable<MatchesIntent> {
     return Observable.merge(initialIntent(), refreshIntent(), loadNextPageIntent())
   }
 
@@ -97,5 +98,5 @@ class MatchesActivity : BaseActivity() {
         .map { MatchesIntent.LoadNextPageIntent(viewModel.currentPage + 1) }
   }
 
-  fun render(state: MatchesViewState) = viewModel.updateFromState(state)
+  override fun render(state: MatchesViewState) = viewModel.updateFromState(state)
 }
