@@ -25,7 +25,7 @@ class MatchNotificationHelper(private val context: Context, private val match: M
     }
 
     val pendingIntent = stackBuilder
-        .getPendingIntent(NotificationService.matchIdAsInt(match.id()),
+        .getPendingIntent(NotificationRepository.matchIdAsInt(match.id()),
             PendingIntent.FLAG_UPDATE_CURRENT)
 
     val matchDisplayable = MatchDisplayable.fromMatch(match)
@@ -42,7 +42,7 @@ class MatchNotificationHelper(private val context: Context, private val match: M
 
     val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    notificationManager.notify(NotificationService.matchIdAsInt(match.id()),
+    notificationManager.notify(NotificationRepository.matchIdAsInt(match.id()),
         notificationBuilder.build())
   }
 }

@@ -32,8 +32,8 @@ object DataBindingAdapters {
   }
 
   private fun loadTvFootImage(imageView: ImageView, path: String, placeholderResId: Int) {
-    RedApp.get(imageView.context)
-        .component
+    RedApp.getApp(imageView.context)
+        .appComponent
         .picasso()
         .load(Uri.parse(TvfootService.BASE_URL + path))
         .fit().centerInside()

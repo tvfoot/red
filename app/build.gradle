@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'kotlin-kapt'
 // https://github.com/google/error-prone/issues/676
 // apply plugin: 'net.ltgt.errorprone'
 apply plugin: 'com.google.firebase.firebase-perf'
@@ -118,10 +119,11 @@ dependencies {
   implementation 'com.benoitquenaudon:rxdatabinding:2.0.0'
   debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.lib.leakCanaryVersion"
   releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.lib.leakCanaryVersion"
-  annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
-  annotationProcessor "com.google.auto.value:auto-value:$rootProject.lib.autoValueVersion"
+  kapt "com.google.auto.value:auto-value:$rootProject.lib.autoValueVersion"
   annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$rootProject.lib.autoValueGsonVersion"
-  annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:$rootProject.lib.autoValueParcelVersion"
+  kapt "com.android.databinding:compiler:3.0.0-alpha7"
+  kapt "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
+  kapt "com.ryanharter.auto.value:auto-value-parcel:$rootProject.lib.autoValueParcelVersion"
   compileOnly "com.google.code.findbugs:jsr305:$rootProject.lib.jsr305Version"
   compileOnly "com.google.auto.value:auto-value:$rootProject.lib.autoValueVersion"
   compileOnly "com.ryanharter.auto.value:auto-value-gson:$rootProject.lib.autoValueGsonVersion"
@@ -167,8 +169,9 @@ at runtime. More info in this tools bug: (https://code.google.com/p/android/issu
 */
 configurations.implementation.dependencies.each { implementationDependency ->
   println "Excluding implementation dependency: ${implementationDependency.getName()}"
-  configurations.androidTestImplementation.dependencies.each { androidTestImplementationDependency ->
-    configurations.androidTestImplementation.exclude module: "${implementationDependency.getName()}"
+  configurations.androidTestImplementation.dependencies.each {
+    androidTestImplementationDependency ->
+      configurations.androidTestImplementation.exclude module: "${implementationDependency.getName()}"
   }
 }
 

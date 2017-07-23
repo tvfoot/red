@@ -7,12 +7,11 @@ import android.content.Intent
 import com.benoitquenaudon.tvfoot.red.app.common.StreamNotification
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchReminderService
-import com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchReminderService.ACTION_PUBLISH_NOTIFICATION
 import io.reactivex.Single
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-open class NotificationService @Inject constructor(
+class NotificationRepository @Inject constructor(
     private val context: Application,
     private val alarmManager: AlarmManager
 ) {
@@ -20,7 +19,7 @@ open class NotificationService @Inject constructor(
       matchId: String, startAt: Long, shouldNotify: Boolean
   ): Single<StreamNotification> {
     val intent = Intent(context, MatchReminderService::class.java)
-        .setAction(ACTION_PUBLISH_NOTIFICATION)
+        .setAction(MatchReminderService.ACTION_PUBLISH_NOTIFICATION)
         .putExtra(Match.MATCH_ID, matchId)
 
     val serviceIntent = PendingIntent
@@ -37,7 +36,7 @@ open class NotificationService @Inject constructor(
   }
 
   companion object {
-    internal fun matchIdAsInt(matchId: String): Int {
+    fun matchIdAsInt(matchId: String): Int {
       //return Integer.parseInt(matchId(), 16);
       return Integer.parseInt(matchId.replace("[^0-9]".toRegex(), "").substring(1, 10))
     }
