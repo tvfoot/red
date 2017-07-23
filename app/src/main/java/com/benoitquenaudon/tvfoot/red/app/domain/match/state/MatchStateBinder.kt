@@ -41,6 +41,7 @@ import javax.inject.Inject
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
 ) : StateBinder(firebaseAnalytics) {
+
   init {
     compose().subscribe(statesSubject::onNext)
   }
@@ -70,7 +71,7 @@ import javax.inject.Inject
       // been intent in the past, meaning the InitialIntent cannot
       // be the first => it is a reconnection.
       if (newIntent is InitialIntent) {
-        MatchIntent.GetLastState
+        GetLastState
       } else {
         newIntent
       }

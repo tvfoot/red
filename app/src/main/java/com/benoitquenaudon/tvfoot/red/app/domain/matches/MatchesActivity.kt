@@ -61,7 +61,7 @@ class MatchesActivity : BaseActivity() {
   }
 
   private fun bind() {
-    disposables.add(stateBinder.statesAsObservable.subscribe(this::render))
+    disposables.add(stateBinder.statesAsObservable().subscribe(this::render))
     stateBinder.forwardIntents(intents())
 
     disposables.add(adapter.matchRowClickObservable
