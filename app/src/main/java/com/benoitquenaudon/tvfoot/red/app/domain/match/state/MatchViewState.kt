@@ -8,7 +8,7 @@ data class MatchViewState(
     val error: Throwable? = null,
     val loading: Boolean,
     val shouldNotifyMatchStart: Boolean) : MviViewState {
-  companion object {
+  companion object Factory {
     fun idle(): MatchViewState = MatchViewState(shouldNotifyMatchStart = true, loading = false)
   }
 }

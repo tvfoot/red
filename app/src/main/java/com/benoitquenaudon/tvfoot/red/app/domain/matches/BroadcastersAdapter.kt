@@ -29,7 +29,7 @@ import javax.inject.Inject
 
   override fun getItemCount(): Int = broadcasters.size
 
-  internal fun add(broadcaster: BroadcasterRowDisplayable) = broadcasters.add(broadcaster)
+  fun add(broadcaster: BroadcasterRowDisplayable) = broadcasters.add(broadcaster)
 
   fun addAll(broadcasters: Collection<BroadcasterRowDisplayable>) {
     this.broadcasters.addAll(broadcasters)

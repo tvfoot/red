@@ -39,7 +39,7 @@ data class MatchRowDisplayable private constructor(
       format.timeZone = TimeZone.getDefault()
       format
     }
-    internal val mediumDateFormat: DateFormat by lazy(NONE) {
+    val mediumDateFormat: DateFormat by lazy(NONE) {
       val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
       format.timeZone = TimeZone.getDefault()
       format

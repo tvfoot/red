@@ -135,43 +135,39 @@ import javax.inject.Inject
     private val reducer = BiFunction { previousState: MatchesViewState, matchesResult: MatchesResult ->
       when (matchesResult) {
         is RefreshResult -> {
-          when ((matchesResult).status) {
-            IN_FLIGHT -> previousState.buildWith().refreshLoading(true).error(null).build()
-            FAILURE -> previousState.buildWith().refreshLoading(false)
-                .error((matchesResult).throwable)
-                .build()
+          when (matchesResult.status) {
+            IN_FLIGHT -> previousState.copy(refreshLoading = true, error = null)
+            FAILURE -> previousState.copy(refreshLoading = false, error = matchesResult.throwable)
             SUCCESS -> {
               val matches = checkNotNull((matchesResult).matches) { "Matches are null" }
 
-              previousState.buildWith().refreshLoading(false)
-                  .error(null)
-                  .hasMore(!matches.isEmpty())
-                  .currentPage(0)
-                  .matches(MatchRowDisplayable.fromMatches(matches))
-                  .build()
+              previousState.copy(
+                  refreshLoading = false,
+                  error = null,
+                  hasMore = !matches.isEmpty(),
+                  currentPage = 0,
+                  matches = MatchRowDisplayable.fromMatches(matches))
             }
           }
         }
-        is GetLastStateResult -> previousState.buildWith().build()
+        is GetLastStateResult -> previousState.copy()
         is LoadNextPageResult -> {
-          when ((matchesResult).status) {
-            IN_FLIGHT -> previousState.buildWith().nextPageLoading(true).error(null).build()
-            FAILURE -> previousState.buildWith().nextPageLoading(false)
-                .error((matchesResult).error)
-                .build()
+          when (matchesResult.status) {
+            IN_FLIGHT -> previousState.copy(nextPageLoading = true, error = null)
+            FAILURE -> previousState.copy(nextPageLoading = false, error = matchesResult.error)
             SUCCESS -> {
               val newMatches = checkNotNull((matchesResult).matches) { "Matches are null" }
 
               val matches = ArrayList<MatchRowDisplayable>()
-              matches.addAll(previousState.matches())
+              matches.addAll(previousState.matches)
               matches.addAll(MatchRowDisplayable.fromMatches(newMatches))
 
-              previousState.buildWith().nextPageLoading(false)
-                  .error(null)
-                  .matches(matches)
-                  .currentPage((matchesResult).pageIndex)
-                  .hasMore(!newMatches.isEmpty())
-                  .build()
+              previousState.copy(
+                  nextPageLoading = false,
+                  error = null,
+                  matches = matches,
+                  currentPage = (matchesResult).pageIndex,
+                  hasMore = !newMatches.isEmpty())
             }
           }
         }

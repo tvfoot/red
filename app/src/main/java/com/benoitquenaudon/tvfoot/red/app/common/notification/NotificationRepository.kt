@@ -36,7 +36,7 @@ class NotificationRepository @Inject constructor(
   }
 
   companion object {
-    internal fun matchIdAsInt(matchId: String): Int {
+    fun matchIdAsInt(matchId: String): Int {
       //return Integer.parseInt(matchId(), 16);
       return Integer.parseInt(matchId.replace("[^0-9]".toRegex(), "").substring(1, 10))
     }
