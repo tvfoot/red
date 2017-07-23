@@ -28,7 +28,7 @@ class MatchReminderService : Service() {
   override fun onCreate() {
     super.onCreate()
     val redApp = application as RedApp
-    redApp.component.inject(this)
+    redApp.appComponent.inject(this)
   }
 
   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {

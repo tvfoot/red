@@ -7,7 +7,7 @@ import com.benoitquenaudon.tvfoot.red.app.injection.component.ScreenComponent
 import com.benoitquenaudon.tvfoot.red.app.injection.module.ActivityModule
 
 fun Activity.newScreenComponent(): ScreenComponent {
-  return RedApp.get(this).component.screenComponent()
+  return RedApp.getApp(this).appComponent.screenComponent()
 }
 
 fun Activity.newActivityComponent(screenComponent: ScreenComponent): ActivityComponent {
