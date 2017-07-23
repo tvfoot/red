@@ -4,13 +4,14 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.HeaderRowDi
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.LoadingRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable;
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable;
+import com.benoitquenaudon.tvfoot.red.app.mvi.MviViewState;
 import com.google.auto.value.AutoValue;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
 
-@AutoValue public abstract class MatchesViewState {
+@AutoValue public abstract class MatchesViewState implements MviViewState {
   public List<MatchesItemDisplayable> matchesItemDisplayables(boolean hasMore) {
     List<String> headers = new ArrayList<>();
     List<MatchesItemDisplayable> items = new ArrayList<>();

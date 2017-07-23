@@ -1,6 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match.state
 
-sealed class MatchIntent {
+import com.benoitquenaudon.tvfoot.red.app.mvi.MviIntent
+
+sealed class MatchIntent : MviIntent {
   data class InitialIntent(val matchId: String) : MatchIntent()
 
   data class NotifyMatchStartIntent(

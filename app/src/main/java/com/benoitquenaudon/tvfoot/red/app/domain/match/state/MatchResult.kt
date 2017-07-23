@@ -4,8 +4,9 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_FAILURE
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_IN_FLIGHT
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_SUCCESS
+import com.benoitquenaudon.tvfoot.red.app.mvi.MviResult
 
-sealed class MatchResult {
+sealed class MatchResult : MviResult {
   @Suppress("DataClassPrivateConstructor")
   data class LoadMatchResult private constructor(
       val status: Status,

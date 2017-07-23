@@ -1,6 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match.state
 
-sealed class MatchAction {
+import com.benoitquenaudon.tvfoot.red.app.mvi.MviAction
+
+sealed class MatchAction : MviAction {
   data class LoadMatchAction(val matchId: String) : MatchAction()
 
   data class NotifyMatchStartAction(

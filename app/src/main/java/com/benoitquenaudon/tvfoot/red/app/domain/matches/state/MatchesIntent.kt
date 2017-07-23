@@ -1,6 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.state
 
-sealed class MatchesIntent {
+import com.benoitquenaudon.tvfoot.red.app.mvi.MviIntent
+
+sealed class MatchesIntent : MviIntent {
   object InitialIntent : MatchesIntent()
 
   object RefreshIntent : MatchesIntent()

@@ -1,6 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.state
 
-sealed class MatchesAction {
+import com.benoitquenaudon.tvfoot.red.app.mvi.MviAction
+
+sealed class MatchesAction : MviAction {
   object GetLastStateAction : MatchesAction()
 
   object RefreshAction : MatchesAction()

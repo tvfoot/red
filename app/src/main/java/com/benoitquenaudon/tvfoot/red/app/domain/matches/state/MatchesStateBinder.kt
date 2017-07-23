@@ -1,6 +1,5 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.state
 
-import android.os.Bundle
 import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.FAILURE
 import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.IN_FLIGHT
 import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.SUCCESS
@@ -19,11 +18,14 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.Loa
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.RefreshResult
 import com.benoitquenaudon.tvfoot.red.app.injection.scope.ScreenScope
 import com.benoitquenaudon.tvfoot.red.app.mvi.StateBinder
+import com.benoitquenaudon.tvfoot.red.util.logAction
+import com.benoitquenaudon.tvfoot.red.util.logIntent
+import com.benoitquenaudon.tvfoot.red.util.logResult
+import com.benoitquenaudon.tvfoot.red.util.logState
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
-import timber.log.Timber
 import java.util.ArrayList
 import javax.inject.Inject
 
@@ -127,34 +129,6 @@ import javax.inject.Inject
                 }))
       })
     }
-
-  private fun logIntent(intent: MatchesIntent) {
-    Timber.d("Intent: %s", intent)
-    val params = Bundle()
-    params.putString("intent", intent.toString())
-    firebaseAnalytics.logEvent("intent", params)
-  }
-
-  private fun logAction(action: MatchesAction) {
-    Timber.d("Action: %s", action)
-    val params = Bundle()
-    params.putString("action", action.toString())
-    firebaseAnalytics.logEvent("action", params)
-  }
-
-  private fun logResult(result: MatchesResult) {
-    Timber.d("Result: %s", result)
-    val params = Bundle()
-    params.putString("result", result.toString())
-    firebaseAnalytics.logEvent("result", params)
-  }
-
-  private fun logState(state: MatchesViewState) {
-    Timber.d("State: %s", state)
-    val params = Bundle()
-    params.putString("state", state.toString())
-    firebaseAnalytics.logEvent("state", params)
-  }
 
   companion object {
 

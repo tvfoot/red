@@ -5,8 +5,10 @@ import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.FAILURE
 import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.IN_FLIGHT
 import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.SUCCESS
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
+import com.benoitquenaudon.tvfoot.red.app.mvi.MviResult
 
-sealed class MatchesResult {
+sealed class MatchesResult : MviResult {
+  @Suppress("DataClassPrivateConstructor")
   data class RefreshResult private constructor(
       val status: LceStatus,
       val matches: List<Match>?,
@@ -29,6 +31,7 @@ sealed class MatchesResult {
 
   object GetLastStateResult : MatchesResult()
 
+  @Suppress("DataClassPrivateConstructor")
   data class LoadNextPageResult private constructor(
       val status: LceStatus,
       val matches: List<Match>?,
