@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.databinding.LibraryRowBinding
+import com.benoitquenaudon.tvfoot.red.util.CircleTransform
 import javax.inject.Inject
 
 class LibrariesAdapter @Inject constructor(
     val libraries: List<Library>
 ) : RecyclerView.Adapter<LibraryViewHolder>() {
-
   override fun getItemCount(): Int = libraries.size
 
   override fun onBindViewHolder(holder: LibraryViewHolder, position: Int) {

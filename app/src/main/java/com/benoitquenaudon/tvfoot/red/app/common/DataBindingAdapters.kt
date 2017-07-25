@@ -50,14 +50,4 @@ object DataBindingAdapters {
 
     textView.setText(textResId)
   }
-
-  @JvmStatic @BindingAdapter("imageUrl")
-  fun setImageUrl(imageView: ImageView, imageUrl: String) {
-    RedApp.getApp(imageView.context)
-        .appComponent
-        .picasso()
-        .load(Uri.parse(imageUrl))
-        .placeholder(R.drawable.avatar_placeholder)
-        .into(imageView)
-  }
 }
