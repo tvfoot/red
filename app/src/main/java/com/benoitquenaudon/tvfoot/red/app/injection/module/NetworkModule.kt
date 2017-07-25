@@ -7,7 +7,6 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.AutoValueGsonTypeAdapterFa
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.jakewharton.picasso.OkHttp3Downloader
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
@@ -16,6 +15,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 

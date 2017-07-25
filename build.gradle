@@ -8,7 +8,7 @@ buildscript {
     maven { url 'https://plugins.gradle.org/m2/' }
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.0.0-alpha7'
+    classpath 'com.android.tools.build:gradle:3.0.0-alpha8'
     classpath 'com.google.gms:google-services:3.1.0'
     classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.10'
     classpath('com.google.firebase:firebase-plugins:1.1.0') {
@@ -66,7 +66,6 @@ ext {
          espressoVersion                : '2.2.2',
          mockitoVersion                 : '1.10.19',
          dexmakerVersion                : '1.4',
-         groupieVersion                 : '0.8.0',
          rxJavaVersion                  : '2.0.7',
          rxAndroidVersion               : '2.0.1',
          retrofit2RxJava2Adapter        : '1.0.0',
