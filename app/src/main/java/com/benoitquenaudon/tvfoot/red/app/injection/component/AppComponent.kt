@@ -4,6 +4,7 @@ import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchReminderService
 import com.benoitquenaudon.tvfoot.red.app.injection.module.AppModule
 import com.benoitquenaudon.tvfoot.red.app.injection.module.FirebaseModule
+import com.benoitquenaudon.tvfoot.red.app.injection.module.LibrariesModule
 import com.benoitquenaudon.tvfoot.red.app.injection.module.NetworkModule
 import com.benoitquenaudon.tvfoot.red.app.injection.module.PreferenceServiceModule
 import com.benoitquenaudon.tvfoot.red.app.injection.module.RxFactoryModule
@@ -22,7 +23,8 @@ import javax.inject.Singleton
     PreferenceServiceModule::class,
     SchedulerModule::class,
     RxFactoryModule::class,
-    FirebaseModule::class))
+    FirebaseModule::class,
+    LibrariesModule::class))
 interface AppComponent {
   fun screenComponent(): ScreenComponent
 

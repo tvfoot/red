@@ -1,5 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.injection.component
 
+import com.benoitquenaudon.tvfoot.red.app.domain.libraries.LibrariesActivity
 import com.benoitquenaudon.tvfoot.red.app.domain.main.MainActivity
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchActivity
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesActivity
@@ -16,4 +17,6 @@ interface ActivityComponent {
   fun inject(matchesActivity: MatchesActivity)
 
   fun inject(matchActivity: MatchActivity)
+
+  fun inject(librariesActivity: LibrariesActivity)
 }

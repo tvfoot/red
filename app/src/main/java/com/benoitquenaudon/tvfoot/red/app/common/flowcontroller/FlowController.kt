@@ -29,7 +29,7 @@ class FlowController @Inject constructor(private val firebaseAnalytics: Firebase
 
   private fun logNavigation(intent: Intent) {
     val params = Bundle()
-    params.putString("navigation intent", intent.toUri(URI_INTENT_SCHEME))
+    params.putString("navigation_intent", intent.toUri(URI_INTENT_SCHEME))
     firebaseAnalytics.logEvent("navigation", params)
   }
 }

@@ -23,7 +23,7 @@
         android:title="@string/pref_about_oss_licenses">
       <intent
           android:action="android.intent.action.VIEW"
-          android:data="https://tvfoot.net/oss_licenses"/>
+          android:data="tvfoot://tvfoot/oss_licenses/"/>
     </Preference>
     <Preference
         android:key="pref_key_app_version"

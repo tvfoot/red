@@ -17,6 +17,7 @@
         android:name=".app.domain.main.MainActivity"
         android:noHistory="true"
         android:theme="@android:style/Theme.NoDisplay"/>
+
     <activity-alias
         android:name=".Launcher"
         android:targetActivity=".app.domain.main.MainActivity">
@@ -65,6 +66,7 @@
         <data android:scheme="tvfoot"/>
         <data android:pathPrefix="/match/"/>
       </intent-filter>
+
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"
           android:value=".app.domain.matches.MatchesActivity"/>
@@ -86,9 +88,25 @@
         <data android:path="/settings"/>
         <data android:pathPrefix="/settings/"/>
       </intent-filter>
+
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"
           android:value=".app.domain.matches.MatchesActivity"/>
+    </activity>
+    <activity android:name=".app.domain.libraries.LibrariesActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+
+        <data android:host="tvfoot"/>
+        <data android:scheme="https"/>
+        <data android:scheme="http"/>
+        <data android:scheme="tvfoot"/>
+        <data android:path="/oss_licenses"/>
+        <data android:pathPrefix="/oss_licenses/"/>
+      </intent-filter>
     </activity>
   </application>
 

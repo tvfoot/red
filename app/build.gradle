@@ -150,6 +150,7 @@ dependencies {
   androidTestImplementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
   androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+  implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 
 /*
@@ -179,3 +180,6 @@ apply plugin: 'com.google.gms.google-services'
 repositories {
   mavenCentral()
 }
+
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
