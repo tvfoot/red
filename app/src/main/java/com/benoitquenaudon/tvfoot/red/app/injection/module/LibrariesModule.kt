@@ -81,7 +81,7 @@ import javax.inject.Singleton
             "https://avatars3.githubusercontent.com/u/1767669",
             true),
         Library("RxJava",
-            "RxJava – Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.",
+            "Library for composing asynchronous and event-based programs using observable sequences for the Java VM.",
             "https://github.com/ReactiveX/RxJava",
             "https://avatars3.githubusercontent.com/u/6407041",
             false),

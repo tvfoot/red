@@ -74,7 +74,8 @@
     <activity
         android:name=".app.domain.settings.SettingsActivity"
         android:label="@string/title_activity_settings"
-        android:parentActivityName=".app.domain.matches.MatchesActivity">
+        android:parentActivityName=".app.domain.matches.MatchesActivity"
+        android:theme="@style/Theme.TvFoot.SettingsActivity">
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
 

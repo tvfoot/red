@@ -19,4 +19,6 @@
   <string name="matches_row_header_danger_tomorrow">TOMORROW</string>
   <string name="location_unknown">Location unknown</string>
   <string name="pref_about_oss_licenses">Open source licenses</string>
+  <string name="library_header_desc">Baked with the help of these amazing libraries</string>
+  <string name="library_link_label">Website</string>
 </resources>
