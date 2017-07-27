@@ -12,6 +12,7 @@ import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.SCHEMES
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
+import com.benoitquenaudon.tvfoot.red.app.common.notification.MINUTES_BEFORE_NOTIFICATION
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match.MATCH_ID
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchStateBinder
@@ -59,12 +60,20 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
       return
     }
 
+    setupView()
+
+    Timber.d("matchDisplayable with load with id %s", matchId)
+    bind()
+  }
+
+  private fun setupView() {
     binding = DataBindingUtil.setContentView<ActivityMatchBinding>(this, R.layout.activity_match)
     binding.matchDetailBroadcasters.adapter = broadcastersAdapter
     binding.viewModel = viewModel
 
-    Timber.d("matchDisplayable with load with id %s", matchId)
-    bind()
+    setSupportActionBar(binding.matchToolbar)
+    supportActionBar?.setDisplayShowTitleEnabled(false)
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
   }
 
   private fun bind() {
@@ -75,8 +84,8 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
         .subscribe { shouldNotifyMatchStart ->
           if (shouldNotifyMatchStart) {
             Snackbar.make(binding.root,
-                "You will be notified 10 minutes before the game starts", Snackbar.LENGTH_LONG)
-                .show()
+                getString(R.string.will_be_notify_desc, MINUTES_BEFORE_NOTIFICATION),
+                Snackbar.LENGTH_LONG).show()
           }
         })
   }
