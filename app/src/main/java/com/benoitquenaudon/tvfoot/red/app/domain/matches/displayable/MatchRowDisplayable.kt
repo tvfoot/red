@@ -89,7 +89,14 @@ data class MatchRowDisplayable private constructor(
 
     private fun parseMatchDay(matchLabel: String?, matchDay: String?): String {
       if (matchLabel.isNullOrEmpty()) {
-        return "J. " + matchDay!!
+        if (matchDay.isNullOrEmpty()) throw IllegalStateException("matchDay is empty")
+
+        val dayAsInt: Int? = matchDay?.toIntOrNull()
+        if (dayAsInt == null) {
+          return checkNotNull(matchDay)
+        } else {
+          return "J. $matchDay"
+        }
       } else {
         return checkNotNull(matchLabel)
       }

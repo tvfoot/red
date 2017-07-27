@@ -19,6 +19,13 @@
           android:data="https://play.google.com/store/apps/details?id=com.benoitquenaudon.tvfoot.red"/>
     </Preference>
     <Preference
+        android:persistent="false"
+        android:title="@string/pref_about_oss_licenses">
+      <intent
+          android:action="android.intent.action.VIEW"
+          android:data="tvfoot://tvfoot/oss_licenses/"/>
+    </Preference>
+    <Preference
         android:key="pref_key_app_version"
         android:persistent="false"
         android:title="@string/pref_about_version"
