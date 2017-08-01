@@ -44,7 +44,7 @@ import javax.inject.Inject
 
   override fun onBindViewHolder(holder: MatchesItemViewHolder<*, *>, position: Int) {
     val item: MatchesItemDisplayable = matchesItems[position]
-    when (holder) {
+    return when (holder) {
       is MatchHeaderViewHolder -> {
         if (item is HeaderRowDisplayable) {
           holder.bind(item)
@@ -67,7 +67,6 @@ import javax.inject.Inject
         }
       }
     }
-    throw IllegalStateException("Undealt view holder $holder with item $item")
   }
 
   override fun onViewRecycled(holder: MatchesItemViewHolder<*, *>?) {
