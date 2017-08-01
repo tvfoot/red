@@ -9,7 +9,7 @@ import javax.inject.Inject
 class MatchesService @Inject constructor(private val tvfootService: TvfootService) {
   fun loadPage(pageIndex: Int): Single<List<Match>> {
     return tvfootService.findFuture(
-        Filter.builder().limit(MATCH_PER_PAGE).offset(MATCH_PER_PAGE * pageIndex).build())
+        Filter(limit = MATCH_PER_PAGE, offset = MATCH_PER_PAGE * pageIndex))
   }
 
   companion object Constant {
