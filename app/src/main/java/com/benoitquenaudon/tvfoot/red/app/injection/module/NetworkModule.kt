@@ -3,8 +3,8 @@ package com.benoitquenaudon.tvfoot.red.app.injection.module
 import android.app.Application
 import com.benoitquenaudon.tvfoot.red.BuildConfig
 import com.benoitquenaudon.tvfoot.red.api.TvfootService
-import com.benoitquenaudon.tvfoot.red.app.data.entity.AutoValueMoshiTypeAdapterFactory
 import com.jakewharton.picasso.OkHttp3Downloader
+import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Rfc3339DateJsonAdapter
 import com.squareup.picasso.Picasso
@@ -25,8 +25,8 @@ import javax.inject.Singleton
   @JvmStatic @Provides @Singleton
   fun provideMoshi(): Moshi {
     return Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
         .add(Date::class.java, Rfc3339DateJsonAdapter())
-        .add(AutoValueMoshiTypeAdapterFactory.create())
         .build()
   }
 

@@ -1,6 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match;
 
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Broadcaster;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Competition;
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
-import javax.annotation.Nullable;
 import kotlin.text.StringsKt;
 
 import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNull;
@@ -74,18 +74,18 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
 
   public static MatchDisplayable fromMatch(Match match) {
     return new AutoValue_MatchDisplayable( //
-        parseHeaderKey(match.startAt()), //
-        match.startAt().getTime(), //
-        parseStartTime(match.startAt()), //
-        parseBroadcasters(match.broadcasters()), //
-        parseHeadLine(match.homeTeam(), match.awayTeam(), match.label()), //
-        parseCompetition(match.competition()), //
-        parseMatchDay(match.label(), match.matchDay()), //
-        isMatchLive(match.startAt()), //
-        parseStartTimeInText(match.startAt()), //
-        parseTeamLogoPath(match.homeTeam()), //
-        parseTeamLogoPath(match.awayTeam()), //
-        parseLocation(match), match.id());
+        parseHeaderKey(match.getStartAt()), //
+        match.getStartAt().getTime(), //
+        parseStartTime(match.getStartAt()), //
+        parseBroadcasters(match.getBroadcasters()), //
+        parseHeadLine(match.getHomeTeam(), match.getAwayTeam(), match.getLabel()), //
+        parseCompetition(match.getCompetition()), //
+        parseMatchDay(match.getLabel(), match.getMatchDay()), //
+        isMatchLive(match.getStartAt()), //
+        parseStartTimeInText(match.getStartAt()), //
+        parseTeamLogoPath(match.getHomeTeam()), //
+        parseTeamLogoPath(match.getAwayTeam()), //
+        parseLocation(match), match.getId());
   }
 
   private static String parseHeaderKey(Date startAt) {
@@ -104,7 +104,8 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
 
     List<BroadcasterRowDisplayable> broadcastersVM = new ArrayList<>(broadcasters.size());
     for (Broadcaster broadcaster : broadcasters) {
-      broadcastersVM.add(BroadcasterRowDisplayable.create(broadcaster.name(), broadcaster.code()));
+      broadcastersVM.add(
+          BroadcasterRowDisplayable.create(broadcaster.getName(), broadcaster.getCode()));
     }
     return broadcastersVM;
   }
@@ -113,12 +114,12 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
     if (homeTeam.isEmpty() || awayTeam.isEmpty()) {
       return String.valueOf(matchLabel);
     }
-    return String.valueOf(homeTeam.name()).toUpperCase() + " - " + String.valueOf(awayTeam.name())
-        .toUpperCase();
+    return String.valueOf(homeTeam.getName()).toUpperCase() + " - " + String.valueOf(
+        awayTeam.getName()).toUpperCase();
   }
 
   private static String parseCompetition(Competition competition) {
-    return competition.name();
+    return competition.getName();
   }
 
   private static String parseMatchDay(@Nullable String matchLabel, @Nullable String matchDay) {
@@ -141,17 +142,17 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
 
   private static String parseTeamLogoPath(Team team) {
     String path;
-    if (team.code() == null || team.type() == null) {
+    if (team.getCode() == null || team.getType() == null) {
       path = "/images/teams/default/large/default.png";
     } else {
-      String type = checkNotNull(team.type(), "team's type should not be null");
-      String code = checkNotNull(team.code(), "team's code should not be null");
+      String type = checkNotNull(team.getType(), "team's type should not be null");
+      String code = checkNotNull(team.getCode(), "team's code should not be null");
       switch (type) {
         case "nation":
           path = String.format("/images/teams/nations/large/%s.png", code.toLowerCase());
           break;
         case "club":
-          String country = checkNotNull(team.country(), "team's country should not be null");
+          String country = checkNotNull(team.getCountry(), "team's country should not be null");
           path = String.format("/images/teams/%s/large/%s.png", country, code.toLowerCase());
           break;
         default:
@@ -162,7 +163,7 @@ import static com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNu
   }
 
   @Nullable private static String parseLocation(Match match) {
-    return match.place();
+    return match.getPlace();
   }
 
   @Override public boolean isSameAs(MatchesItemDisplayable newItem) {
