@@ -1,13 +1,13 @@
 package com.benoitquenaudon.tvfoot.red.app.data.entity;
 
 import com.google.auto.value.AutoValue;
-import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 import javax.annotation.Nullable;
 
 @AutoValue public abstract class Broadcaster {
-  public static TypeAdapter<Broadcaster> typeAdapter(Gson gson) {
-    return new AutoValue_Broadcaster.GsonTypeAdapter(gson);
+  public static JsonAdapter<Broadcaster> jsonAdapter(Moshi moshi) {
+    return new AutoValue_Broadcaster.MoshiJsonAdapter(moshi);
   }
 
   public abstract String name();

@@ -1,15 +1,15 @@
 package com.benoitquenaudon.tvfoot.red.app.data.entity;
 
 import com.google.auto.value.AutoValue;
-import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 import javax.annotation.Nullable;
 
 @AutoValue public abstract class Team {
   public static final String DEFAULT_CODE = "default";
 
-  public static TypeAdapter<Team> typeAdapter(Gson gson) {
-    return new AutoValue_Team.GsonTypeAdapter(gson);
+  public static JsonAdapter<Team> jsonAdapter(Moshi moshi) {
+    return new AutoValue_Team.MoshiJsonAdapter(moshi);
   }
 
   @Nullable public abstract String code();

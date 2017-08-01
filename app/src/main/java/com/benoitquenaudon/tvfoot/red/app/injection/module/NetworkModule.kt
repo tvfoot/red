@@ -3,10 +3,10 @@ package com.benoitquenaudon.tvfoot.red.app.injection.module
 import android.app.Application
 import com.benoitquenaudon.tvfoot.red.BuildConfig
 import com.benoitquenaudon.tvfoot.red.api.TvfootService
-import com.benoitquenaudon.tvfoot.red.app.data.entity.AutoValueGsonTypeAdapterFactory
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.benoitquenaudon.tvfoot.red.app.data.entity.AutoValueMoshiTypeAdapterFactory
 import com.jakewharton.picasso.OkHttp3Downloader
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Rfc3339DateJsonAdapter
 import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
@@ -16,15 +16,18 @@ import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.Date
 import javax.inject.Singleton
 
 @Module object NetworkModule {
 
   @JvmStatic @Provides @Singleton
-  fun provideGson(): Gson {
-    return GsonBuilder().registerTypeAdapterFactory(AutoValueGsonTypeAdapterFactory.create())
-        .create()
+  fun provideMoshi(): Moshi {
+    return Moshi.Builder()
+        .add(Date::class.java, Rfc3339DateJsonAdapter())
+        .add(AutoValueMoshiTypeAdapterFactory.create())
+        .build()
   }
 
   @JvmStatic @Provides @Singleton
@@ -38,8 +41,8 @@ import javax.inject.Singleton
   }
 
   @JvmStatic @Provides @Singleton
-  fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
-    return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create(gson))
+  fun provideRetrofit(moshi: Moshi, okHttpClient: OkHttpClient): Retrofit {
+    return Retrofit.Builder().addConverterFactory(MoshiConverterFactory.create(moshi))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .client(okHttpClient)
         .baseUrl(TvfootService.BASE_URL)
