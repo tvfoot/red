@@ -1,12 +1,14 @@
 package com.benoitquenaudon.tvfoot.red.app.data.entity
 
 import com.squareup.moshi.Json
+import se.ansman.kotshi.JsonSerializable
 import java.util.Date
 
+@JsonSerializable
 data class Match(
     val id: String,
     val label: String?,
-    val `start-at`: Date,
+    @Json(name = "start-at") val startAt: Date,
     @Json(name = "matchday") val matchDay: String?,
     @Json(name = "home-team") val homeTeam: Team,
     @Json(name = "away-team") val awayTeam: Team,
@@ -15,10 +17,6 @@ data class Match(
     val competition: Competition,
     val postponed: Boolean
 ) {
-  val startAt: Date
-    get() {
-      return `start-at`
-    }
 
   companion object Constant {
     val MATCH_ID = "MATCH_ID"
