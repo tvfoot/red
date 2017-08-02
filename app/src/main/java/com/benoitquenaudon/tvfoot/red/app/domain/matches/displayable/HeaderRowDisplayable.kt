@@ -1,18 +1,15 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable
 
 import com.benoitquenaudon.tvfoot.red.R
+import com.benoitquenaudon.tvfoot.red.util.formatter
 import com.benoitquenaudon.tvfoot.red.util.isCurrentYear
 import com.benoitquenaudon.tvfoot.red.util.isToday
 import com.benoitquenaudon.tvfoot.red.util.isTomorrow
 import timber.log.Timber
 import java.text.DateFormat
 import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
-import kotlin.LazyThreadSafetyMode.NONE
 
 @Suppress("DataClassPrivateConstructor")
 data class HeaderRowDisplayable private constructor(
@@ -25,21 +22,9 @@ data class HeaderRowDisplayable private constructor(
   }
 
   companion object Factory {
-    private val headerKeyDateFormat: DateFormat by lazy(NONE) {
-      val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-      format.timeZone = TimeZone.getDefault()
-      format
-    }
-    private val monthDateFormat: DateFormat by lazy(NONE) {
-      val format = SimpleDateFormat("EEEE, d MMMM", Locale.getDefault())
-      format.timeZone = TimeZone.getDefault()
-      format
-    }
-    private val yearDateFormat: DateFormat by lazy(NONE) {
-      val format = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
-      format.timeZone = TimeZone.getDefault()
-      format
-    }
+    private val headerKeyDateFormat: DateFormat by formatter("yyyy-MM-dd")
+    private val monthDateFormat: DateFormat by formatter("EEEE, d MMMM")
+    private val yearDateFormat: DateFormat by formatter("EEEE, d MMMM yyyy")
 
     fun create(headerKey: String): HeaderRowDisplayable {
       val date: Date

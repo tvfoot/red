@@ -4,15 +4,12 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Broadcaster
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Competition
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
-import java.text.DateFormat
+import com.benoitquenaudon.tvfoot.red.util.formatter
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 import java.util.concurrent.TimeUnit
-import kotlin.LazyThreadSafetyMode.NONE
 
 @Suppress("DataClassPrivateConstructor")
 data class MatchRowDisplayable private constructor(
@@ -51,16 +48,8 @@ data class MatchRowDisplayable private constructor(
   }
 }
 
-private val shortDateFormat: DateFormat by lazy(NONE) {
-  val format = SimpleDateFormat("HH:mm", Locale.getDefault())
-  format.timeZone = TimeZone.getDefault()
-  format
-}
-val mediumDateFormat: DateFormat by lazy(NONE) {
-  val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-  format.timeZone = TimeZone.getDefault()
-  format
-}
+private val shortDateFormat: SimpleDateFormat by formatter("HH:mm")
+val mediumDateFormat: SimpleDateFormat by formatter("yyyy-MM-dd")
 
 
 private fun parseHeaderKey(startAt: Date): String = mediumDateFormat.format(startAt)
