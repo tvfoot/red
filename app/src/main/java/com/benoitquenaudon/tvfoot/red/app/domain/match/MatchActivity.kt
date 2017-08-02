@@ -13,7 +13,7 @@ import com.benoitquenaudon.tvfoot.red.SCHEMES
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MINUTES_BEFORE_NOTIFICATION
-import com.benoitquenaudon.tvfoot.red.app.data.entity.Match.MATCH_ID
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchStateBinder
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewState
@@ -42,7 +42,7 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
     activityComponent.inject(this)
 
     val intent = intent
-    matchId = intent.getStringExtra(MATCH_ID)
+    matchId = intent.getStringExtra(Match.MATCH_ID)
 
     val uri: Uri? = intent.data
     if (matchId == null && AUTHORITIES.contains(uri?.authority) && SCHEMES.contains(uri?.scheme)) {

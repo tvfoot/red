@@ -105,9 +105,10 @@ dependencies {
   implementation "com.squareup.okhttp3:okhttp:$rootProject.lib.okHttpVersion"
   implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.lib.okHttpVersion"
   implementation "com.squareup.retrofit2:retrofit:$rootProject.lib.retrofitVersion"
-  implementation "com.squareup.retrofit2:converter-gson:$rootProject.lib.retrofitVersion"
+  implementation "com.squareup.retrofit2:converter-moshi:$rootProject.lib.retrofitVersion"
   implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.lib.retrofitVersion"
-  implementation "com.google.code.gson:gson:$rootProject.lib.gsonVersion"
+  implementation "com.squareup.moshi:moshi:$rootProject.lib.moshiVersion"
+  implementation "com.squareup.moshi:moshi-adapters:$rootProject.lib.moshiVersion"
   implementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
   implementation "com.google.firebase:firebase-core:$rootProject.lib.firebaseVersion"
   implementation "com.google.firebase:firebase-perf:$rootProject.lib.firebaseVersion"
@@ -119,14 +120,14 @@ dependencies {
   implementation 'com.benoitquenaudon:rxdatabinding:2.0.0'
   debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.lib.leakCanaryVersion"
   releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.lib.leakCanaryVersion"
-  kapt "com.google.auto.value:auto-value:$rootProject.lib.autoValueVersion"
-  annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$rootProject.lib.autoValueGsonVersion"
-  kapt "com.android.databinding:compiler:3.0.0-alpha7"
+  annotationProcessor "com.google.auto.value:auto-value:$rootProject.lib.autoValueVersion"
+  kapt "com.android.databinding:compiler:3.0.0-alpha9"
   kapt "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
   kapt "com.ryanharter.auto.value:auto-value-parcel:$rootProject.lib.autoValueParcelVersion"
   compileOnly "com.google.code.findbugs:jsr305:$rootProject.lib.jsr305Version"
   compileOnly "com.google.auto.value:auto-value:$rootProject.lib.autoValueVersion"
-  compileOnly "com.ryanharter.auto.value:auto-value-gson:$rootProject.lib.autoValueGsonVersion"
+  implementation 'se.ansman.kotshi:api:0.1.1'
+  kapt 'se.ansman.kotshi:compiler:0.1.1'
 
   // JVM Tests
   testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.lib.leakCanaryVersion"

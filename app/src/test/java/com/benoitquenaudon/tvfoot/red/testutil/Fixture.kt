@@ -1,19 +1,19 @@
 package com.benoitquenaudon.tvfoot.red.testutil
 
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.google.gson.stream.JsonReader
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import okio.Okio
 import timber.log.Timber
 import java.io.IOException
-import java.io.InputStreamReader
 import java.lang.reflect.Type
 import javax.inject.Inject
 
-class Fixture @Inject constructor(private val gson: Gson) {
+class Fixture @Inject constructor(private val moshi: Moshi) {
 
   private val listMatchType =
-      TypeToken.getParameterized(List::class.java, Match::class.java).type
+      Types.newParameterizedType(List::class.java, Match::class.java)
 
   fun anyMatches(): List<Match> {
     return anyObject("matches_sample.json", listMatchType)
@@ -35,12 +35,13 @@ class Fixture @Inject constructor(private val gson: Gson) {
     val inputStream = this.javaClass.classLoader.getResourceAsStream(filename)
 
     try {
-      val reader = JsonReader(InputStreamReader(inputStream, "UTF-8"))
-      val result = gson.fromJson<T>(reader, typeOfT)
+      val reader = JsonReader.of(Okio.buffer(Okio.source(inputStream)))
+      val adapter = moshi.adapter<T>(typeOfT)
+      val result = adapter.fromJson(reader)
 
       reader.close()
 
-      return result
+      return result ?: throw IllegalStateException("no data for $filename and $typeOfT")
     } catch (e: IOException) {
       Timber.e(e)
       throw RuntimeException("fixture $filename failed")

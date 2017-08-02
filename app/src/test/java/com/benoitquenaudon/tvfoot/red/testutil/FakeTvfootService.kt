@@ -10,8 +10,8 @@ import retrofit2.http.Query
 class FakeTvfootService(private val fixture: Fixture) : TvfootService {
 
   override fun findFuture(@Query("filter") filter: Filter): Single<List<Match>> {
-    if (filter.offset() == 0) return Single.just(fixture.anyMatches())
-    if (filter.offset() > 0) return Single.just(fixture.anyNextMatches())
+    if (filter.offset == 0) return Single.just(fixture.anyMatches())
+    if (filter.offset > 0) return Single.just(fixture.anyNextMatches())
     throw IllegalStateException("negative offset are not supposed to be")
   }
 

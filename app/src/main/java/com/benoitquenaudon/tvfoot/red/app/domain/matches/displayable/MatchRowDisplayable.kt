@@ -35,17 +35,17 @@ data class MatchRowDisplayable private constructor(
   companion object Factory {
     fun fromMatch(match: Match): MatchRowDisplayable =
         MatchRowDisplayable(
-            headerKey = parseHeaderKey(match.startAt()),
-            startTime = parseStartTime(match.startAt()),
-            broadcasters = parseBroadcasters(match.broadcasters()),
-            headline = parseHeadLine(match.homeTeam(), match.awayTeam(), match.label()),
-            competition = parseCompetition(match.competition()),
-            matchDay = parseMatchDay(match.label(), match.matchDay()),
-            live = isMatchLive(match.startAt()),
-            homeTeamDrawableName = parseHomeTeamDrawableName(match.homeTeam()),
-            awayTeamDrawableName = parseAwayTeamDrawableName(match.awayTeam()),
+            headerKey = parseHeaderKey(match.startAt),
+            startTime = parseStartTime(match.startAt),
+            broadcasters = parseBroadcasters(match.broadcasters),
+            headline = parseHeadLine(match.homeTeam, match.awayTeam, match.label),
+            competition = parseCompetition(match.competition),
+            matchDay = parseMatchDay(match.label, match.matchDay),
+            live = isMatchLive(match.startAt),
+            homeTeamDrawableName = parseHomeTeamDrawableName(match.homeTeam),
+            awayTeamDrawableName = parseAwayTeamDrawableName(match.awayTeam),
             location = parseLocation(match),
-            matchId = match.id())
+            matchId = match.id)
 
     fun fromMatches(matches: List<Match>): List<MatchRowDisplayable> = matches.map(this::fromMatch)
   }
@@ -73,20 +73,20 @@ private fun parseBroadcasters(
     return ArrayList()
   }
 
-  return broadcasters.map { BroadcasterRowDisplayable.create(it.name(), it.code()) }
+  return broadcasters.map { BroadcasterRowDisplayable.create(it.name, it.code) }
 }
 
 private fun parseHeadLine(homeTeam: Team, awayTeam: Team, matchLabel: String?): String {
-  if (homeTeam.name().isNullOrEmpty() || awayTeam.name().isNullOrEmpty()) {
+  if (homeTeam.name.isNullOrEmpty() || awayTeam.name.isNullOrEmpty()) {
     return checkNotNull(matchLabel).toString()
   }
 
-  return homeTeam.name().toString().toUpperCase() +
+  return homeTeam.name.toString().toUpperCase() +
       " - " +
-      awayTeam.name().toString().toUpperCase()
+      awayTeam.name.toString().toUpperCase()
 }
 
-private fun parseCompetition(competition: Competition): String = competition.name()
+private fun parseCompetition(competition: Competition): String = competition.name
 
 private fun parseMatchDay(matchLabel: String?, matchDay: String?): String? {
   if (matchLabel.isNullOrEmpty()) {
@@ -111,11 +111,11 @@ private fun isMatchLive(startAt: Date): Boolean {
 }
 
 private fun parseHomeTeamDrawableName(homeTeam: Team): String {
-  return homeTeam.code() ?: Team.DEFAULT_CODE
+  return homeTeam.code ?: Team.DEFAULT_CODE
 }
 
 private fun parseAwayTeamDrawableName(awayTeam: Team): String {
-  return awayTeam.code() ?: Team.DEFAULT_CODE
+  return awayTeam.code ?: Team.DEFAULT_CODE
 }
 
-private fun parseLocation(match: Match): String = match.place().toString()
+private fun parseLocation(match: Match): String = match.place.toString()
