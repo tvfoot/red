@@ -67,13 +67,16 @@ android {
   }
 
   // Always show the result of every unit test, even if it passes.
-  testOptions.unitTests {
-    all {
-      testLogging {
-        events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+  testOptions {
+    unitTests {
+      all {
+        testLogging {
+          events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+        }
       }
+      returnDefaultValues = true
+      includeAndroidResources = true
     }
-    returnDefaultValues = true
   }
 
   lintOptions {
