@@ -51,8 +51,7 @@ class MatchStateBinderTest {
     )
   }
 
-  @Test @Ignore
-  fun initialIntentLoadMatch() {
+  @Ignore @Test fun initialIntentLoadMatch() {
     val matchId = "matchId"
 
     `when`(matchRepository.loadMatch(matchId)).thenReturn(Single.just(fixture.anyMatch()))

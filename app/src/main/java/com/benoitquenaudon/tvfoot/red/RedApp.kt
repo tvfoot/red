@@ -8,7 +8,7 @@ import com.benoitquenaudon.tvfoot.red.app.injection.module.AppModule
 import com.squareup.leakcanary.LeakCanary
 import timber.log.Timber
 
-class RedApp : Application() {
+open class RedApp : Application() {
   val appComponent: AppComponent by lazy {
     DaggerAppComponent.builder().appModule(AppModule(this)).build()
   }
@@ -26,7 +26,7 @@ class RedApp : Application() {
     }
   }
 
-  private fun setupLeakCanary() {
+  protected open fun setupLeakCanary() {
     if (LeakCanary.isInAnalyzerProcess(this)) {
       // This reduce is dedicated to LeakCanary for heap analysis.
       // You should not init your app in this reduce.

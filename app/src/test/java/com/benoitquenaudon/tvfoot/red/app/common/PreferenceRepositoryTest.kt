@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -22,15 +21,14 @@ class PreferenceRepositoryTest {
     preferenceService = PreferenceRepository(fakeSharedPreferences())
   }
 
-  @Ignore(
-      "Robolectric and LeakCanary") @Test fun loadNotifyMatchStart_shouldReturnDefaultValueWhenNone() {
+  @Test fun loadNotifyMatchStart_shouldReturnDefaultValueWhenNone() {
     val obs = preferenceService.loadNotifyMatchStart(matchId).test()
     obs.assertValueCount(1)
     obs.assertComplete()
     obs.assertValue(false)
   }
 
-  @Ignore("Robolectric and LeakCanary") @Test fun loadNotifyMatchStart_shouldReturnTrue() {
+  @Test fun loadNotifyMatchStart_shouldReturnTrue() {
     preferenceService.saveNotifyMatchStart(matchId, true)
 
     val obs = preferenceService.loadNotifyMatchStart(matchId).test()
@@ -39,7 +37,7 @@ class PreferenceRepositoryTest {
     obs.assertValue(true)
   }
 
-  @Ignore("Robolectric and LeakCanary") @Test fun loadNotifyMatchStart_shouldReturnFalse() {
+  @Test fun loadNotifyMatchStart_shouldReturnFalse() {
     preferenceService.saveNotifyMatchStart(matchId, false)
 
     val obs = preferenceService.loadNotifyMatchStart(matchId).test()
@@ -49,7 +47,7 @@ class PreferenceRepositoryTest {
   }
 
   // is that enough?
-  @Ignore("Robolectric and LeakCanary") @Test fun saveNotifyMatchStart() {
+  @Test fun saveNotifyMatchStart() {
     val obs = preferenceService.saveNotifyMatchStart(matchId, true).test()
     obs.assertValueCount(1)
     obs.assertComplete()

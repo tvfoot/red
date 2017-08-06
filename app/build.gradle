@@ -133,7 +133,6 @@ dependencies {
   kapt 'se.ansman.kotshi:compiler:0.1.1'
 
   // JVM Tests
-  testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.lib.leakCanaryVersion"
   testImplementation "junit:junit:$rootProject.lib.junitVersion"
   testImplementation "com.squareup.okhttp3:mockwebserver:$rootProject.lib.okHttpVersion"
   testImplementation "org.mockito:mockito-core:$rootProject.lib.mockitoVersion"
