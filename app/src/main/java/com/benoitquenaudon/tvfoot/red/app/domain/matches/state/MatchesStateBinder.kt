@@ -32,7 +32,7 @@ import javax.inject.Inject
 @ScreenScope class MatchesStateBinder @Inject constructor(
     private val intentsSubject: PublishSubject<MatchesIntent>,
     private val statesSubject: PublishSubject<MatchesViewState>,
-    private val service: MatchesService,
+    private val repository: MatchesRepository,
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
 ) : RedStateBinder<MatchesIntent, MatchesViewState>(firebaseAnalytics) {
@@ -83,7 +83,7 @@ import javax.inject.Inject
   private val refreshTransformer: ObservableTransformer<RefreshAction, RefreshResult>
     get() = ObservableTransformer { actions: Observable<RefreshAction> ->
       actions.flatMap({
-        service.loadPage(0)
+        repository.loadPage(0)
             .toObservable()
             .map { RefreshResult.success(it) }
             .onErrorReturn { RefreshResult.failure(it) }
@@ -97,7 +97,7 @@ import javax.inject.Inject
     get() = ObservableTransformer { actions: Observable<LoadNextPageAction> ->
       actions.flatMap(
           { (pageIndex) ->
-            service.loadPage(pageIndex)
+            repository.loadPage(pageIndex)
                 .toObservable()
                 .map { matches -> LoadNextPageResult.success(pageIndex, matches) }
                 .onErrorReturn { LoadNextPageResult.failure(it) }
