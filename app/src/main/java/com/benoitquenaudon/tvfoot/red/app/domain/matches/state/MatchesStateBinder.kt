@@ -32,7 +32,7 @@ import javax.inject.Inject
 @ScreenScope class MatchesStateBinder @Inject constructor(
     private val intentsSubject: PublishSubject<MatchesIntent>,
     private val statesSubject: PublishSubject<MatchesViewState>,
-    private val repository: MatchesRepository,
+    private val repository: BaseMatchesRepository,
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
 ) : RedStateBinder<MatchesIntent, MatchesViewState>(firebaseAnalytics) {
