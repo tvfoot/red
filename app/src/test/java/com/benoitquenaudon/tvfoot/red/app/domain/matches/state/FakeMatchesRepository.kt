@@ -13,8 +13,10 @@ class FakeMatchesRepository : BaseMatchesRepository {
     InjectionContainer.testComponentInstance.inject(this)
   }
 
-  override fun loadPage(pageIndex: Int): Single<List<Match>> {
-    return Single.just(fixture.anyMatches())
-  }
-
+  override fun loadPage(pageIndex: Int): Single<List<Match>> =
+      when (pageIndex) {
+        0 -> Single.just(fixture.matchesListA())
+        1 -> Single.just(fixture.matchesListB())
+        else -> throw NotImplementedError("need to provide other data")
+      }
 }
