@@ -8,7 +8,7 @@ import com.benoitquenaudon.tvfoot.red.app.common.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MatchNotificationHelper
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchRepository
+import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchRepository
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 class MatchReminderService : Service() {
   @Inject lateinit var disposables: CompositeDisposable
-  @Inject lateinit var matchRepository: MatchRepository
+  @Inject lateinit var matchRepository: BaseMatchRepository
   @Inject lateinit var preferenceRepository: PreferenceRepository
   @Inject lateinit var schedulerProvider: BaseSchedulerProvider
 

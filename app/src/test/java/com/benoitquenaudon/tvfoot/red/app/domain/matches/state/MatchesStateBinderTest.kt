@@ -2,6 +2,7 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches.state
 
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.NoopRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.ImmediateSchedulerProvider
+import com.benoitquenaudon.tvfoot.red.app.data.source.FakeMatchesRepository
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.PublishSubject

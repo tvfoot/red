@@ -3,8 +3,8 @@ package com.benoitquenaudon.tvfoot.red.app.common
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.support.v7.app.AppCompatActivity
-import com.benoitquenaudon.tvfoot.red.app.injection.component.ActivityComponent
-import com.benoitquenaudon.tvfoot.red.app.injection.component.ScreenComponent
+import com.benoitquenaudon.tvfoot.red.injection.component.ActivityComponent
+import com.benoitquenaudon.tvfoot.red.injection.component.ScreenComponent
 import com.benoitquenaudon.tvfoot.red.util.newActivityComponent
 import com.benoitquenaudon.tvfoot.red.util.newScreenComponent
 

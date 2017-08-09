@@ -6,6 +6,7 @@ import com.benoitquenaudon.tvfoot.red.app.common.firebase.NoopRedFirebaseAnalyti
 import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationRepository
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.ImmediateSchedulerProvider
+import com.benoitquenaudon.tvfoot.red.app.data.source.FakeMatchRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.testutil.Fixture
 import com.benoitquenaudon.tvfoot.red.testutil.InjectionContainer
@@ -19,14 +20,10 @@ import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 class MatchStateBinderTest {
-  var matchStateBinder: MatchStateBinder by Delegates.notNull<MatchStateBinder>()
-  val testObserver: TestObserver<MatchViewState> by lazy {
-    matchStateBinder.states().test()
-  }
-  @Inject lateinit var matchRepository: MatchRepository
+  lateinit var matchStateBinder: MatchStateBinder
+  lateinit var testObserver: TestObserver<MatchViewState>
   val preferenceRepository: PreferenceRepository = mock(PreferenceRepository::class.java)
   val notificationRepository: NotificationRepository = mock(NotificationRepository::class.java)
   @Inject lateinit var fixture: Fixture
@@ -43,18 +40,19 @@ class MatchStateBinderTest {
     matchStateBinder = MatchStateBinder(
         intents,
         states,
-        matchRepository,
+        FakeMatchRepository(),
         preferenceRepository,
         notificationRepository,
         schedulerProvider,
         redFirebaseAnalytics
     )
+
+    matchStateBinder.states().test()
   }
 
   @Ignore @Test fun initialIntentLoadMatch() {
     val matchId = "matchId"
 
-    `when`(matchRepository.loadMatch(matchId)).thenReturn(Single.just(fixture.anyMatch()))
     `when`(preferenceRepository.loadNotifyMatchStart(matchId)).thenReturn(Single.just(false))
 
     matchStateBinder.processIntents(Observable.just(InitialIntent(matchId)))
