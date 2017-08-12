@@ -17,27 +17,32 @@ data class MatchesViewState(
     val hasMore: Boolean = true,
     //    val filters: List<FilterRowDisplayable> = emptyList()
     val tags: List<Tag> = listOf(
-        Tag("l1", "League 1"),
-        Tag("l2", "League 2"),
-        Tag("an", "Angleterre"),
-        Tag("es", "Espagne"),
-        Tag("it", "Italie"),
-        Tag("al", "Allemagne"),
-        Tag("po", "Portugal"),
-        Tag("tu", "Turquie"),
-        Tag("ch", "Champions League"),
-        Tag("eu", "Europa League"),
-        Tag("cl", "Coupe de la Ligue"),
-        Tag("cm", "Coupe du monde"),
-        Tag("fo", "Football Feminin"),
-        Tag("am", "Amical")
+        Tag("L1", "League 1"),
+        Tag("L2", "League 2"),
+        Tag("ANG", "Angleterre"),
+        Tag("ESP", "Espagne"),
+        Tag("ITA", "Italie"),
+        Tag("ALL", "Allemagne"),
+        Tag("POR", "Portugal"),
+        Tag("TUR", "Turquie"),
+        Tag("C1", "Champions League"),
+        Tag("C3", "Europa League"),
+        Tag("CDL", "Coupe de la Ligue"),
+        Tag("CM", "Coupe du monde"),
+        Tag("WOM", "Football Feminin"),
+        Tag("AMI", "Amical")
     ),
     var activeFilterIds: Set<String> = emptySet()
 ) : MviViewState {
-  fun matchesItemDisplayables(hasMore: Boolean): List<MatchesItemDisplayable> {
+  fun matchesItemDisplayables(hasMore: Boolean,
+      activeFilterIds: Set<String>): List<MatchesItemDisplayable> {
     val headers = ArrayList<String>()
     val items = ArrayList<MatchesItemDisplayable>()
+
     for (match in matches) {
+      // TODO(benoit) need to manage targets...
+//      if (activeFilterIds.isNotEmpty() && !activeFilterIds.contains(match.competitionCode)) continue
+
       if (!headers.contains(match.headerKey)) {
         headers.add(match.headerKey)
         items.add(HeaderRowDisplayable.create(match.headerKey))

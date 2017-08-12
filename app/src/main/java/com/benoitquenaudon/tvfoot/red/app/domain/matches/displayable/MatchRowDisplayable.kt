@@ -18,6 +18,7 @@ data class MatchRowDisplayable private constructor(
     val broadcasters: List<BroadcasterRowDisplayable>,
     val headline: String,
     val competition: String,
+    val competitionCode: String,
     val matchDay: String?,
     val live: Boolean,
     val homeTeamDrawableName: String,
@@ -37,6 +38,7 @@ data class MatchRowDisplayable private constructor(
             broadcasters = parseBroadcasters(match.broadcasters),
             headline = parseHeadLine(match.homeTeam, match.awayTeam, match.label),
             competition = parseCompetition(match.competition),
+            competitionCode = parseCompetitionCode(match.competition),
             matchDay = parseMatchDay(match.label, match.matchDay),
             live = isMatchLive(match.startAt),
             homeTeamDrawableName = parseHomeTeamDrawableName(match.homeTeam),
@@ -76,6 +78,8 @@ private fun parseHeadLine(homeTeam: Team, awayTeam: Team, matchLabel: String?): 
 }
 
 private fun parseCompetition(competition: Competition): String = competition.name
+
+private fun parseCompetitionCode(competition: Competition): String = competition.code
 
 private fun parseMatchDay(matchLabel: String?, matchDay: String?): String? {
   if (matchLabel.isNullOrEmpty()) {

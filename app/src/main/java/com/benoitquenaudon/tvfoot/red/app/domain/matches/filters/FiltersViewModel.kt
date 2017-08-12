@@ -15,7 +15,10 @@ import javax.inject.Inject
     activeFilterIds = state.activeFilterIds
 
     state.tags.map {
-      FilterRowDisplayable(it.id, it.name, activeFilterIds.contains(it.id))
+      FilterRowDisplayable(
+          code = it.name,
+          label = it.desc,
+          filtered = activeFilterIds.contains(it.name))
     }.also {
       adapter.updateFilters(it)
     }

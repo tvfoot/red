@@ -1,9 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.data.entity
 
 data class Tag(
-    val id: String,
-    val name: String
-//    val desc: String,
+    val name: String,
+    val desc: String
 //    val type: String,
 //    val weight: String,
 //    val display: Boolean,

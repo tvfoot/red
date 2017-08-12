@@ -2,6 +2,7 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -46,9 +47,13 @@ import javax.inject.Inject
 
   fun onClick(filter: FilterRowDisplayable) = filterRowClickObservable.onNext(filter)
 
-  fun updateFilters(filters: List<FilterRowDisplayable>) {
-    // TODO(benoit) diffUtil here...?
-    this.filters = filters
-    notifyDataSetChanged()
+  private val diffUtilCallback = FiltersRowDisplayableDiffUtilCallback()
+
+  fun updateFilters(newItems: List<FilterRowDisplayable>) {
+    val oldItems = this.filters
+    this.filters = newItems
+
+    diffUtilCallback.bindItems(oldItems, newItems)
+    DiffUtil.calculateDiff(diffUtilCallback, true).dispatchUpdatesTo(this)
   }
 }
