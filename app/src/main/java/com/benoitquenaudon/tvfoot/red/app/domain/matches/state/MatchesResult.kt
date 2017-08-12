@@ -52,4 +52,8 @@ sealed class MatchesResult : MviResult {
       }
     }
   }
+
+  object ClearFiltersResult : MatchesResult()
+
+  data class ToggleFilterResult(val filterId: String) : MatchesResult()
 }

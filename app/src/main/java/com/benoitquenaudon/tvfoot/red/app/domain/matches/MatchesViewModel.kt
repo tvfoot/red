@@ -16,7 +16,7 @@ class MatchesViewModel @Inject constructor(private val adapter: MatchesAdapter) 
     private set
 
   fun updateFromState(state: MatchesViewState) {
-    updateCurrentPage(state)
+    currentPage = state.currentPage
 
     nextPageLoading = state.nextPageLoading
     refreshLoading.set(state.refreshLoading)
@@ -26,16 +26,10 @@ class MatchesViewModel @Inject constructor(private val adapter: MatchesAdapter) 
 
     if (hasError.get()) {
       val error = checkNotNull(state.error) { "state error is null" }
-      setErrorMessage(error.toString())
+      errorMessage.set(error.toString())
     }
     if (hasData.get()) {
       adapter.setMatchesItems(state.matchesItemDisplayables(hasMore))
     }
   }
-
-  private fun updateCurrentPage(state: MatchesViewState) {
-    currentPage = state.currentPage
-  }
-
-  private fun setErrorMessage(message: String) = errorMessage.set(message)
 }

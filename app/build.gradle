@@ -1,8 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'kotlin-kapt'
-// https://github.com/google/error-prone/issues/676
-// apply plugin: 'net.ltgt.errorprone'
 apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
@@ -119,12 +117,13 @@ dependencies {
   prodImplementation "com.google.firebase:firebase-crash:$rootProject.lib.firebaseVersion"
   implementation "com.jakewharton.rxbinding2:rxbinding:$rootProject.lib.rxBindingVersion"
   implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$rootProject.lib.rxBindingVersion"
+  implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$rootProject.lib.rxBindingVersion"
   implementation "com.jakewharton.rxbinding2:rxbinding-support-v4:$rootProject.lib.rxBindingVersion"
   implementation 'com.benoitquenaudon:rxdatabinding:2.0.0'
   debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.lib.leakCanaryVersion"
   releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.lib.leakCanaryVersion"
   annotationProcessor "com.google.auto.value:auto-value:$rootProject.lib.autoValueVersion"
-  kapt "com.android.databinding:compiler:3.0.0-alpha9"
+  kapt "com.android.databinding:compiler:3.0.0-beta2"
   kapt "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
   kapt "com.ryanharter.auto.value:auto-value-parcel:$rootProject.lib.autoValueParcelVersion"
   compileOnly "com.google.code.findbugs:jsr305:$rootProject.lib.jsr305Version"

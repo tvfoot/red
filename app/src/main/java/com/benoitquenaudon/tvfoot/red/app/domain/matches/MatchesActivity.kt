@@ -1,14 +1,20 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
+import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersFragment
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.InitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.LoadNextPageIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.RefreshIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesStateBinder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
@@ -29,6 +35,10 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
 
   private var binding: ActivityMatchesBinding by Delegates.notNull<ActivityMatchesBinding>()
 
+  companion object {
+    private const val FRAGMENT_FILTERS = "fragment:filters"
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     activityComponent.inject(this)
@@ -45,6 +55,12 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
 
     setSupportActionBar(binding.matchesToolbar)
     supportActionBar?.setDisplayShowTitleEnabled(false)
+
+    if (supportFragmentManager.findFragmentByTag(FRAGMENT_FILTERS) == null) {
+      supportFragmentManager.beginTransaction()
+          .add(R.id.filters, FiltersFragment.newInstance(), FRAGMENT_FILTERS)
+          .commit()
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -52,13 +68,22 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     return true
   }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (item.itemId == R.id.matches_settings_item) {
-      flowController.toSettings()
-      return true
-    }
+  override fun onOptionsItemSelected(item: MenuItem): Boolean =
+      when (item.itemId) {
+        R.id.matches_settings_item -> {
+          flowController.toSettings()
+          true
+        }
+        R.id.matches_filters_item -> {
+          openFiltersDrawer()
+          true
+        }
+        else -> super.onOptionsItemSelected(item)
+      }
 
-    return super.onOptionsItemSelected(item)
+  @SuppressLint("RtlHardcoded")
+  private fun openFiltersDrawer() {
+    binding.drawerLayout.openDrawer(Gravity.RIGHT)
   }
 
   private fun bind() {
@@ -74,20 +99,16 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     disposables.dispose()
   }
 
-  override fun intents(): Observable<MatchesIntent> {
-    return Observable.merge(initialIntent(), refreshIntent(), loadNextPageIntent())
+  override fun intents(): Observable<MatchesIntent> =
+      Observable.merge(initialIntent(), refreshIntent(), loadNextPageIntent())
+
+  private fun initialIntent(): Observable<InitialIntent> = Observable.just(InitialIntent)
+
+  private fun refreshIntent(): Observable<RefreshIntent> {
+    return RxSwipeRefreshLayout.refreshes(binding.swipeRefreshLayout).map { RefreshIntent }
   }
 
-  private fun initialIntent(): Observable<MatchesIntent.InitialIntent> {
-    return Observable.just(MatchesIntent.InitialIntent)
-  }
-
-  private fun refreshIntent(): Observable<MatchesIntent.RefreshIntent> {
-    return RxSwipeRefreshLayout.refreshes(binding.swipeRefreshLayout)
-        .map { MatchesIntent.RefreshIntent }
-  }
-
-  private fun loadNextPageIntent(): Observable<MatchesIntent.LoadNextPageIntent> {
+  private fun loadNextPageIntent(): Observable<LoadNextPageIntent> {
     return RxRecyclerView.scrollEvents(binding.recyclerView)
         .filter { viewModel.hasMore && !viewModel.nextPageLoading }
         .filter { scrollEvent ->
@@ -95,7 +116,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
           val lastPosition = layoutManager.findLastVisibleItemPosition()
           lastPosition == scrollEvent.view().adapter.itemCount - 1
         }
-        .map { MatchesIntent.LoadNextPageIntent(viewModel.currentPage + 1) }
+        .map { LoadNextPageIntent(viewModel.currentPage + 1) }
   }
 
   override fun render(state: MatchesViewState) = viewModel.updateFromState(state)
