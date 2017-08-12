@@ -7,18 +7,24 @@ import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalyti
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.ClearFiltersAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.GetLastStateAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.LoadNextPageAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.RefreshAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.ToggleFilterAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.ClearFilters
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.GetLastState
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.LoadNextPageIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.RefreshIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.ToggleFilterIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.ClearFiltersResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.GetLastStateResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.LoadNextPageResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.RefreshResult
-import com.benoitquenaudon.tvfoot.red.injection.scope.ScreenScope
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.ToggleFilterResult
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedStateBinder
+import com.benoitquenaudon.tvfoot.red.injection.scope.ScreenScope
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
 import com.benoitquenaudon.tvfoot.red.util.logResult
@@ -79,6 +85,8 @@ import javax.inject.Inject
         is RefreshIntent -> RefreshAction
         is GetLastState -> GetLastStateAction
         is LoadNextPageIntent -> LoadNextPageAction(intent.pageIndex)
+        is ClearFilters -> ClearFiltersAction
+        is ToggleFilterIntent -> ToggleFilterAction(intent.tagName)
       }
 
   private val refreshTransformer: ObservableTransformer<RefreshAction, RefreshResult>
@@ -113,6 +121,16 @@ import javax.inject.Inject
       actions.map({ GetLastStateResult })
     }
 
+  private val clearFilterTransformer: ObservableTransformer<ClearFiltersAction, ClearFiltersResult>
+    get() = ObservableTransformer { actions: Observable<ClearFiltersAction> ->
+      actions.map({ ClearFiltersResult })
+    }
+
+  private val toggleFilterTransformer: ObservableTransformer<ToggleFilterAction, ToggleFilterResult>
+    get() = ObservableTransformer { actions: Observable<ToggleFilterAction> ->
+      actions.map({ ToggleFilterResult(it.tagName) })
+    }
+
   private val actionToResultTransformer: ObservableTransformer<MatchesAction, MatchesResult>
     get() = ObservableTransformer { actions: Observable<MatchesAction> ->
       actions.publish({ shared ->
@@ -121,9 +139,18 @@ import javax.inject.Inject
             shared.ofType(LoadNextPageAction::class.java).compose(loadNextPageTransformer),
             shared.ofType(GetLastStateAction::class.java).compose(getLastStateTransformer))
             .mergeWith(
+                Observable.merge<MatchesResult>(
+                    shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
+                    shared.ofType(ToggleFilterAction::class.java).compose(toggleFilterTransformer))
+            )
+            .mergeWith(
                 // Error for not implemented actions
                 shared.filter({ v ->
-                  v !is RefreshAction && v !is LoadNextPageAction && v !is GetLastStateAction
+                  v !is RefreshAction &&
+                      v !is LoadNextPageAction &&
+                      v !is GetLastStateAction &&
+                      v !is ClearFiltersAction &&
+                      v !is ToggleFilterAction
                 }).flatMap({ w ->
                   Observable.error<MatchesResult>(
                       IllegalArgumentException("Unknown Action type: " + w))
@@ -131,7 +158,7 @@ import javax.inject.Inject
       })
     }
 
-  companion object {
+  companion object Reducer {
 
     private val reducer = BiFunction { previousState: MatchesViewState, matchesResult: MatchesResult ->
       when (matchesResult) {
@@ -170,6 +197,18 @@ import javax.inject.Inject
                   currentPage = (matchesResult).pageIndex,
                   hasMore = !newMatches.isEmpty())
             }
+          }
+        }
+        is MatchesResult.ClearFiltersResult -> previousState.copy(filteredTags = emptyMap())
+        is MatchesResult.ToggleFilterResult -> {
+          previousState.filteredTags.toMutableMap().let {
+            if (it.keys.contains(matchesResult.tagName)) {
+              it.remove(matchesResult.tagName)
+            } else {
+              it.put(matchesResult.tagName,
+                  previousState.tags.first { it.name == matchesResult.tagName }.target)
+            }
+            previousState.copy(filteredTags = it)
           }
         }
       }

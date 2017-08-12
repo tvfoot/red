@@ -15,27 +15,28 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.LoadingRowD
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayableDiffUtilCallback
-import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
 import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowHeaderBinding
 import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowMatchBinding
 import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding
+import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 @ActivityScope class MatchesAdapter @Inject constructor() : RecyclerView.Adapter<MatchesItemViewHolder<*, *>>() {
   private var matchesItems = emptyList<MatchesItemDisplayable>()
-  val matchRowClickObservable = PublishSubject.create<MatchRowDisplayable>()
+  val matchRowClickObservable: PublishSubject<MatchRowDisplayable> =
+      PublishSubject.create<MatchRowDisplayable>()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchesItemViewHolder<*, *> {
     val layoutInflater = LayoutInflater.from(parent.context)
     val binding = DataBindingUtil.inflate<ViewDataBinding>(layoutInflater, viewType, parent, false)
 
-    when (viewType) {
-      R.layout.matches_row_header -> return MatchesItemViewHolder.MatchHeaderViewHolder(
+    return when (viewType) {
+      R.layout.matches_row_header -> MatchesItemViewHolder.MatchHeaderViewHolder(
           binding as MatchesRowHeaderBinding)
-      R.layout.matches_row_match -> return MatchesItemViewHolder.MatchRowViewHolder(
+      R.layout.matches_row_match -> MatchesItemViewHolder.MatchRowViewHolder(
           binding as MatchesRowMatchBinding, this)
-      R.layout.row_loading -> return MatchesItemViewHolder.LoadingRowViewHolder(
+      R.layout.row_loading -> MatchesItemViewHolder.LoadingRowViewHolder(
           binding as RowLoadingBinding)
       else -> throw UnsupportedOperationException(
           "don't know how to deal with this viewType: " + viewType)
@@ -70,27 +71,22 @@ import javax.inject.Inject
   }
 
   override fun onViewRecycled(holder: MatchesItemViewHolder<*, *>?) {
+    holder?.unbind()
     super.onViewRecycled(holder)
-    holder!!.unbind()
   }
 
   override fun getItemCount(): Int {
     return matchesItems.size
   }
 
-  override fun getItemViewType(position: Int): Int {
-    val item = matchesItems[position]
-    if (item is MatchRowDisplayable) {
-      return R.layout.matches_row_match
-    }
-    if (item is HeaderRowDisplayable) {
-      return R.layout.matches_row_header
-    }
-    if (item is LoadingRowDisplayable) {
-      return R.layout.row_loading
-    }
-    throw UnsupportedOperationException("Don't know how to deal with this item: " + item)
-  }
+  override fun getItemViewType(position: Int): Int =
+      when (matchesItems[position]) {
+        is MatchRowDisplayable -> R.layout.matches_row_match
+        is HeaderRowDisplayable -> R.layout.matches_row_header
+        is LoadingRowDisplayable -> R.layout.row_loading
+        else -> throw UnsupportedOperationException(
+            "Don't know how to deal with this item: $matchesItems[position]")
+      }
 
   fun onClick(match: MatchRowDisplayable) {
     matchRowClickObservable.onNext(match)

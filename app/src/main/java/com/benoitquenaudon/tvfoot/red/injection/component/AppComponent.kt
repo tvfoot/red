@@ -29,12 +29,7 @@ import javax.inject.Singleton
     BaseImplementationModule::class))
 interface AppComponent {
   fun screenComponent(): ScreenComponent
-
   fun inject(redApp: RedApp)
-
   fun inject(matchReminderService: MatchReminderService)
-
-  fun okHttpClient(): OkHttpClient
-
   fun picasso(): Picasso
 }

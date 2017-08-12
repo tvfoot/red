@@ -10,4 +10,8 @@ sealed class MatchesIntent : MviIntent {
   object GetLastState : MatchesIntent()
 
   data class LoadNextPageIntent(val pageIndex: Int) : MatchesIntent()
+
+  object ClearFilters : MatchesIntent()
+
+  data class ToggleFilterIntent(val tagName: String) : MatchesIntent()
 }

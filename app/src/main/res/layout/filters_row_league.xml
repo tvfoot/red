@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+  <data>
+    <variable
+        name="filter"
+        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FilterRowDisplayable"
+        />
+    <variable
+        name="handler"
+        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersAdapter"
+        />
+  </data>
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@drawable/ripple_white_background"
+      android:onClick="@{() -> handler.onClick(filter)}"
+      android:orientation="horizontal"
+      android:paddingBottom="8dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:paddingTop="8dp"
+      android:showDividers="middle"
+      >
+
+    <TextView
+        android:id="@+id/filter_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
+        android:text="@{filter.label}"
+        android:textColor="@color/colorGrayDark"
+        tools:text="League 1"
+        />
+
+    <CheckBox
+        android:id="@+id/filter_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@null"
+        android:checked="@{filter.filtered}"
+        android:clickable="false"
+        />
+  </LinearLayout>
+</layout>

@@ -22,4 +22,6 @@
   <string name="library_header_desc">Baked with the help of these amazing libraries</string>
   <string name="library_link_label">Website</string>
   <string name="will_be_notify_desc">You will be notified %d minutes before the game starts</string>
+  <string name="filters">Filters</string>
+  <string name="filters_clearAll">Clear all</string>
 </resources>

@@ -5,6 +5,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.main.MainActivity
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchActivity
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesActivity
 import com.benoitquenaudon.tvfoot.red.injection.module.ActivityModule
+import com.benoitquenaudon.tvfoot.red.injection.module.FragmentModule
 import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
 import dagger.Subcomponent
 
@@ -12,11 +13,10 @@ import dagger.Subcomponent
 @Subcomponent(modules = arrayOf(
     ActivityModule::class))
 interface ActivityComponent {
+  fun plus(fragmentModule: FragmentModule): FragmentComponent
+
   fun inject(mainActivity: MainActivity)
-
   fun inject(matchesActivity: MatchesActivity)
-
   fun inject(matchActivity: MatchActivity)
-
   fun inject(librariesActivity: LibrariesActivity)
 }
