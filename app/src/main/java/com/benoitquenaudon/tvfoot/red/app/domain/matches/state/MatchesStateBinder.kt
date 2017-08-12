@@ -5,6 +5,7 @@ import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.IN_FLIGHT
 import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.SUCCESS
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
+import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.GetLastStateAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.LoadNextPageAction
@@ -16,7 +17,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.Ref
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.GetLastStateResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.LoadNextPageResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.RefreshResult
-import com.benoitquenaudon.tvfoot.red.app.injection.scope.ScreenScope
+import com.benoitquenaudon.tvfoot.red.injection.scope.ScreenScope
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedStateBinder
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
@@ -32,7 +33,7 @@ import javax.inject.Inject
 @ScreenScope class MatchesStateBinder @Inject constructor(
     private val intentsSubject: PublishSubject<MatchesIntent>,
     private val statesSubject: PublishSubject<MatchesViewState>,
-    private val service: MatchesService,
+    private val repository: BaseMatchesRepository,
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
 ) : RedStateBinder<MatchesIntent, MatchesViewState>(firebaseAnalytics) {
@@ -83,7 +84,7 @@ import javax.inject.Inject
   private val refreshTransformer: ObservableTransformer<RefreshAction, RefreshResult>
     get() = ObservableTransformer { actions: Observable<RefreshAction> ->
       actions.flatMap({
-        service.loadPage(0)
+        repository.loadPage(0)
             .toObservable()
             .map { RefreshResult.success(it) }
             .onErrorReturn { RefreshResult.failure(it) }
@@ -97,7 +98,7 @@ import javax.inject.Inject
     get() = ObservableTransformer { actions: Observable<LoadNextPageAction> ->
       actions.flatMap(
           { (pageIndex) ->
-            service.loadPage(pageIndex)
+            repository.loadPage(pageIndex)
                 .toObservable()
                 .map { matches -> LoadNextPageResult.success(pageIndex, matches) }
                 .onErrorReturn { LoadNextPageResult.failure(it) }

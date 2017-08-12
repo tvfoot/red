@@ -6,6 +6,7 @@ import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalyti
 import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationRepository
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
+import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchAction.GetLastStateAction
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchAction.LoadMatchAction
@@ -19,7 +20,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.NotifyM
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_FAILURE
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_IN_FLIGHT
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_SUCCESS
-import com.benoitquenaudon.tvfoot.red.app.injection.scope.ScreenScope
+import com.benoitquenaudon.tvfoot.red.injection.scope.ScreenScope
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedStateBinder
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
@@ -35,7 +36,7 @@ import javax.inject.Inject
 @ScreenScope class MatchStateBinder @Inject constructor(
     private val intentsSubject: PublishSubject<MatchIntent>,
     private val statesSubject: PublishSubject<MatchViewState>,
-    private val matchRepository: MatchRepository,
+    private val matchRepository: BaseMatchRepository,
     private val preferenceRepository: PreferenceRepository,
     private val notificationRepository: NotificationRepository,
     private val schedulerProvider: BaseSchedulerProvider,

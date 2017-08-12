@@ -1,6 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.testutil
 
-import com.benoitquenaudon.tvfoot.red.app.injection.component.TestComponent
+import com.benoitquenaudon.tvfoot.red.injection.component.TestComponent
 
 object InjectionContainer {
   val testComponentInstance: TestComponent by lazy {

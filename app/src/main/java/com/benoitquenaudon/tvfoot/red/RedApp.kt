@@ -2,9 +2,9 @@ package com.benoitquenaudon.tvfoot.red
 
 import android.app.Application
 import android.content.Context
-import com.benoitquenaudon.tvfoot.red.app.injection.component.AppComponent
-import com.benoitquenaudon.tvfoot.red.app.injection.component.DaggerAppComponent
-import com.benoitquenaudon.tvfoot.red.app.injection.module.AppModule
+import com.benoitquenaudon.tvfoot.red.injection.component.AppComponent
+import com.benoitquenaudon.tvfoot.red.injection.component.DaggerAppComponent
+import com.benoitquenaudon.tvfoot.red.injection.module.AppModule
 import com.squareup.leakcanary.LeakCanary
 import timber.log.Timber
 

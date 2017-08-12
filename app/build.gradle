@@ -139,7 +139,7 @@ dependencies {
   testImplementation "com.squareup.retrofit2:retrofit-mock:$rootProject.lib.retrofitVersion"
   testImplementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
   testImplementation "org.robolectric:robolectric:$rootProject.lib.robolectricVersion"
-  testAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
+  kaptTest "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
 
   androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$rootProject.lib.espressoVersion"
   androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.lib.espressoVersion"

@@ -5,7 +5,6 @@ import com.squareup.moshi.JsonReader
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import okio.Okio
-import timber.log.Timber
 import java.io.IOException
 import java.lang.reflect.Type
 import javax.inject.Inject
@@ -17,6 +16,14 @@ class Fixture @Inject constructor(private val moshi: Moshi) {
 
   fun anyMatches(): List<Match> {
     return anyObject("matches_sample.json", listMatchType)
+  }
+
+  fun matchesListA(): List<Match> {
+    return anyObject("matches_list_a.json", listMatchType)
+  }
+
+  fun matchesListB(): List<Match> {
+    return anyObject("matches_list_b.json", listMatchType)
   }
 
   fun anyMatchesShort(): List<Match> {
@@ -43,8 +50,7 @@ class Fixture @Inject constructor(private val moshi: Moshi) {
 
       return result ?: throw IllegalStateException("no data for $filename and $typeOfT")
     } catch (e: IOException) {
-      Timber.e(e)
-      throw RuntimeException("fixture $filename failed")
+      throw RuntimeException("fixture $filename failed", e)
     }
   }
 }

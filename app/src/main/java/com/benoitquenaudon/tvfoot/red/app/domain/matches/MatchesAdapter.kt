@@ -15,7 +15,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.LoadingRowD
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayableDiffUtilCallback
-import com.benoitquenaudon.tvfoot.red.app.injection.scope.ActivityScope
+import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
 import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowHeaderBinding
 import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowMatchBinding
 import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding

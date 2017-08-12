@@ -1,0 +1,688 @@
+[
+  {
+    "start-at": "2016-11-18T18:45:00.000Z",
+    "matchday": "17",
+    "home-team": {
+      "id": "55fd58409f02dbbf0e949321",
+      "code": "BHA",
+      "name": "Brighton & Hove Albion",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcdaae",
+      "code": "AVL",
+      "name": "Aston Villa",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "AMEX Stadium, Falmer",
+    "competition": {
+      "code": "SBC",
+      "name": "Championship"
+    },
+    "weight": 3,
+    "tags": [
+      "sbc",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4d87e771e1aeee2cc12",
+    "sid": "57a3c45a286aee14768b004c"
+  },
+  {
+    "start-at": "2016-11-18T19:00:00.000Z",
+    "matchday": "15",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcda59",
+      "code": "AJA",
+      "name": "Auxerre",
+      "country": "france",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fc5d02524c74bcda46",
+      "code": "RCL",
+      "name": "Lens",
+      "country": "france",
+      "type": "club"
+    },
+    "broadcasters": [
+      {
+        "code": "b3",
+        "name": "beIN SPORTS 3HD",
+        "type": "direct",
+        "weight": 0
+      },
+      {
+        "code": "b2",
+        "name": "beIN SPORTS 2HD",
+        "type": "multiplex",
+        "weight": 1
+      }
+    ],
+    "place": "Stade de l'Abbé-Deschamps, Auxerre",
+    "competition": {
+      "code": "L2",
+      "name": "Ligue 2"
+    },
+    "weight": 3,
+    "tags": [
+      "b3",
+      "direct",
+      "_b3direct",
+      "b2",
+      "multiplex",
+      "_b2multiplex",
+      "l2",
+      "m",
+      "france"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "577700f4c311658b4828df97",
+    "sid": "57543f14be874adb70fb7118"
+  },
+  {
+    "start-at": "2016-11-18T19:00:00.000Z",
+    "matchday": "15",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcda56",
+      "code": "ACA",
+      "name": "AC Ajaccio",
+      "country": "france",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "5642888dc9eec15d3ca6ff80",
+      "code": "RCSA",
+      "name": "Strasbourg",
+      "country": "france",
+      "type": "club"
+    },
+    "broadcasters": [
+      {
+        "code": "b4",
+        "name": "beIN SPORTS MAX 4HD",
+        "type": "direct",
+        "weight": 0
+      },
+      {
+        "code": "b2",
+        "name": "beIN SPORTS 2HD",
+        "type": "multiplex",
+        "weight": 1
+      }
+    ],
+    "place": "Stade François-Coty, Ajaccio",
+    "competition": {
+      "code": "L2",
+      "name": "Ligue 2"
+    },
+    "weight": 4,
+    "tags": [
+      "b4",
+      "direct",
+      "_b4direct",
+      "b2",
+      "multiplex",
+      "_b2multiplex",
+      "l2",
+      "m",
+      "france"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "577700f4c311658b4828df98",
+    "sid": "57543f14be874adb70fb7118"
+  },
+  {
+    "start-at": "2016-11-18T19:00:00.000Z",
+    "matchday": "15",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcda5c",
+      "code": "CF63",
+      "name": "Clermont foot",
+      "country": "france",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcda5f",
+      "code": "GFCA",
+      "name": "GFC Ajaccio",
+      "country": "france",
+      "type": "club"
+    },
+    "broadcasters": [
+      {
+        "code": "b5",
+        "name": "beIN SPORTS MAX 5HD",
+        "type": "direct",
+        "weight": 0
+      },
+      {
+        "code": "b2",
+        "name": "beIN SPORTS 2HD",
+        "type": "multiplex",
+        "weight": 1
+      }
+    ],
+    "place": "Stade Gabriel-Montpied, Clermont-Ferrand",
+    "competition": {
+      "code": "L2",
+      "name": "Ligue 2"
+    },
+    "weight": 5,
+    "tags": [
+      "b5",
+      "direct",
+      "_b5direct",
+      "b2",
+      "multiplex",
+      "_b2multiplex",
+      "l2",
+      "m",
+      "france"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "577700f4c311658b4828df9e",
+    "sid": "57543f14be874adb70fb7118"
+  },
+  {
+    "start-at": "2016-11-18T19:00:00.000Z",
+    "matchday": "15",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcda65",
+      "code": "USO",
+      "name": "Orléans",
+      "country": "france",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcda64",
+      "code": "NIMES",
+      "name": "Nîmes",
+      "country": "france",
+      "type": "club"
+    },
+    "broadcasters": [
+      {
+        "code": "b6",
+        "name": "beIN SPORTS MAX 6HD",
+        "type": "direct",
+        "weight": 0
+      },
+      {
+        "code": "b2",
+        "name": "beIN SPORTS 2HD",
+        "type": "multiplex",
+        "weight": 1
+      }
+    ],
+    "place": "Stade de la Source, Orléans",
+    "competition": {
+      "code": "L2",
+      "name": "Ligue 2"
+    },
+    "weight": 6,
+    "tags": [
+      "b6",
+      "direct",
+      "_b6direct",
+      "b2",
+      "multiplex",
+      "_b2multiplex",
+      "l2",
+      "m",
+      "france"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "577700f4c311658b4828dfa0",
+    "sid": "57543f14be874adb70fb7118"
+  },
+  {
+    "start-at": "2016-11-18T19:00:00.000Z",
+    "matchday": "15",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcdaa9",
+      "code": "RED",
+      "name": "Red Star",
+      "country": "france",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcda68",
+      "code": "ESTAC",
+      "name": "Troyes",
+      "country": "france",
+      "type": "club"
+    },
+    "broadcasters": [
+      {
+        "code": "b7",
+        "name": "beIN SPORTS MAX 7HD",
+        "type": "direct",
+        "weight": 0
+      },
+      {
+        "code": "b2",
+        "name": "beIN SPORTS 2HD",
+        "type": "multiplex",
+        "weight": 1
+      }
+    ],
+    "place": "Stade Bauer, Saint-Ouen",
+    "competition": {
+      "code": "L2",
+      "name": "Ligue 2"
+    },
+    "weight": 7,
+    "tags": [
+      "b7",
+      "direct",
+      "_b7direct",
+      "b2",
+      "multiplex",
+      "_b2multiplex",
+      "l2",
+      "m",
+      "france"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "577700f4c311658b4828df9c",
+    "sid": "57543f14be874adb70fb7118"
+  },
+  {
+    "start-at": "2016-11-18T19:00:00.000Z",
+    "matchday": "15",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcda50",
+      "code": "SDR",
+      "name": "Reims",
+      "country": "france",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcda60",
+      "code": "LAVAL",
+      "name": "Laval",
+      "country": "france",
+      "type": "club"
+    },
+    "broadcasters": [
+      {
+        "code": "b8",
+        "name": "beIN SPORTS MAX 8HD",
+        "type": "direct",
+        "weight": 0
+      },
+      {
+        "code": "b2",
+        "name": "beIN SPORTS 2HD",
+        "type": "multiplex",
+        "weight": 1
+      }
+    ],
+    "place": "Stade Auguste-Delaune, Reims",
+    "competition": {
+      "code": "L2",
+      "name": "Ligue 2"
+    },
+    "weight": 8,
+    "tags": [
+      "b8",
+      "direct",
+      "_b8direct",
+      "b2",
+      "multiplex",
+      "_b2multiplex",
+      "l2",
+      "m",
+      "france"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "577700f4c311658b4828df9d",
+    "sid": "57543f14be874adb70fb7118"
+  },
+  {
+    "start-at": "2016-11-18T19:00:00.000Z",
+    "matchday": "15",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcda66",
+      "code": "FCSM",
+      "name": "Sochaux",
+      "country": "france",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcda67",
+      "code": "TOURS",
+      "name": "Tours",
+      "country": "france",
+      "type": "club"
+    },
+    "broadcasters": [
+      {
+        "code": "b9",
+        "name": "beIN SPORTS MAX 9HD",
+        "type": "direct",
+        "weight": 0
+      },
+      {
+        "code": "b2",
+        "name": "beIN SPORTS 2HD",
+        "type": "multiplex",
+        "weight": 1
+      }
+    ],
+    "place": "Stade Auguste-Bonal, Montbéliard",
+    "competition": {
+      "code": "L2",
+      "name": "Ligue 2"
+    },
+    "weight": 9,
+    "tags": [
+      "b9",
+      "direct",
+      "_b9direct",
+      "b2",
+      "multiplex",
+      "_b2multiplex",
+      "l2",
+      "m",
+      "france"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "577700f4c311658b4828df99",
+    "sid": "57543f14be874adb70fb7118"
+  },
+  {
+    "start-at": "2016-11-18T19:00:00.000Z",
+    "matchday": "15",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcda69",
+      "code": "VAFC",
+      "name": "Valenciennes",
+      "country": "france",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcdaab",
+      "code": "FBBP",
+      "name": "Bourg-Péronnas",
+      "country": "france",
+      "type": "club"
+    },
+    "broadcasters": [
+      {
+        "code": "b10",
+        "name": "beIN SPORTS MAX 10HD",
+        "type": "direct",
+        "weight": 0
+      },
+      {
+        "code": "b2",
+        "name": "beIN SPORTS 2HD",
+        "type": "multiplex",
+        "weight": 1
+      }
+    ],
+    "place": "Stade du Hainaut, Valenciennes",
+    "competition": {
+      "code": "L2",
+      "name": "Ligue 2"
+    },
+    "weight": 10,
+    "tags": [
+      "b10",
+      "direct",
+      "_b10direct",
+      "b2",
+      "multiplex",
+      "_b2multiplex",
+      "l2",
+      "m",
+      "france"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "577700f4c311658b4828df9f",
+    "sid": "57543f14be874adb70fb7118"
+  },
+  {
+    "start-at": "2016-11-18T19:30:00.000Z",
+    "matchday": "11",
+    "home-team": {
+      "id": "55b6ae452dfe211604634736",
+      "code": "B04",
+      "name": "Bayer Leverkusen",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "57bcb8e89be48d6b85602696",
+      "code": "RBL",
+      "name": "RB Leipzig",
+      "country": "allemagne",
+      "type": "club"
+    },
+    "place": "BayArena, Leverkusen",
+    "competition": {
+      "code": "BUN",
+      "name": "Bundesliga"
+    },
+    "weight": 0,
+    "tags": [
+      "bun",
+      "m",
+      "allemagne"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57bcb9101c58b36d5460531b",
+    "sid": "57b05066d1fe794d9bd87533"
+  },
+  {
+    "start-at": "2016-11-18T19:45:00.000Z",
+    "matchday": "12",
+    "home-team": {
+      "id": "55b1404d31e20cc26bbeb3d1",
+      "code": "RBB",
+      "name": "Betis Séville",
+      "country": "espagne",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55b1404d31e20cc26bbeb3d9",
+      "code": "UDLP",
+      "name": "Las Palmas",
+      "country": "espagne",
+      "type": "club"
+    },
+    "place": "Stade Benito-Villamarín, Séville",
+    "competition": {
+      "code": "LIGA",
+      "name": "La Liga"
+    },
+    "weight": 1,
+    "tags": [
+      "liga",
+      "m",
+      "espagne"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57ad01af28c52302cf710266",
+    "sid": "57aa5cfee65fed3ef3048f65"
+  },
+  {
+    "start-at": "2016-11-18T19:45:00.000Z",
+    "matchday": "13",
+    "home-team": {
+      "id": "55a548fc5d02524c74bcda47",
+      "code": "LOSC",
+      "name": "Lille",
+      "country": "france",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fc5d02524c74bcda49",
+      "code": "OL",
+      "name": "Lyon",
+      "country": "france",
+      "type": "club"
+    },
+    "broadcasters": [
+      {
+        "code": "cs",
+        "name": "Canal+ Sport",
+        "type": "direct",
+        "weight": 0
+      }
+    ],
+    "place": "Stade Pierre-Mauroy, Villeneuve-d'Ascq",
+    "competition": {
+      "code": "L1",
+      "name": "Ligue 1"
+    },
+    "weight": 7,
+    "tags": [
+      "cs",
+      "direct",
+      "_csdirect",
+      "l1",
+      "m",
+      "france"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "575441b688355c39181e7c97",
+    "sid": "57543f14be874adb70fb7117"
+  },
+  {
+    "start-at": "2016-11-19T12:00:00.000Z",
+    "matchday": "12",
+    "home-team": {
+      "id": "55b1404d31e20cc26bbeb3d3",
+      "code": "DEPOR",
+      "name": "Deportivo La Corogne",
+      "country": "espagne",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55b1404d31e20cc26bbeb3e0",
+      "code": "SFC",
+      "name": "Séville FC",
+      "country": "espagne",
+      "type": "club"
+    },
+    "place": "Stade de Riazor, La Corogne",
+    "competition": {
+      "code": "LIGA",
+      "name": "La Liga"
+    },
+    "weight": 8,
+    "tags": [
+      "liga",
+      "m",
+      "espagne"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57ad01af28c52302cf71026c",
+    "sid": "57aa5cfee65fed3ef3048f65"
+  },
+  {
+    "start-at": "2016-11-19T12:30:00.000Z",
+    "matchday": "12",
+    "home-team": {
+      "id": "55a548fd5d02524c74bcdab6",
+      "code": "MUN",
+      "name": "Manchester United",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "55a548fd5d02524c74bcdaad",
+      "code": "ARS",
+      "name": "Arsenal",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "broadcasters": [
+      {
+        "code": "s1",
+        "name": "SFR Sport 1",
+        "type": "direct",
+        "weight": 0
+      },
+      {
+        "code": "s4",
+        "name": "SFR Sport 4K",
+        "type": "direct",
+        "weight": 1
+      }
+    ],
+    "place": "Old Trafford, Manchester",
+    "competition": {
+      "code": "BPL",
+      "name": "Premier League"
+    },
+    "weight": 2,
+    "tags": [
+      "s1",
+      "direct",
+      "_s1direct",
+      "s4",
+      "direct",
+      "_s4direct",
+      "bpl",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4f3eccab01cdf0c22a3",
+    "sid": "57a3c45a286aee14768b004b"
+  },
+  {
+    "start-at": "2016-11-19T14:00:00.000Z",
+    "matchday": "17",
+    "home-team": {
+      "id": "55dd87cb3de1459543e270ca",
+      "code": "BAFC",
+      "name": "Barnsley FC",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "away-team": {
+      "id": "57a3c45a286aee14768b0052",
+      "code": "WIG",
+      "name": "Wigan Athletic",
+      "country": "angleterre",
+      "type": "club"
+    },
+    "place": "Oakwell Stadium, Barnsley",
+    "competition": {
+      "code": "SBC",
+      "name": "Championship"
+    },
+    "weight": 0,
+    "tags": [
+      "sbc",
+      "m",
+      "angleterre"
+    ],
+    "postponed": false,
+    "autoupdate": true,
+    "id": "57a3c4d87e771e1aeee2cc0f",
+    "sid": "57a3c45a286aee14768b004c"
+  }
+]
