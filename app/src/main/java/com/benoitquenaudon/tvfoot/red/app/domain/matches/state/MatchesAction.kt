@@ -9,7 +9,7 @@ sealed class MatchesAction : MviAction {
 
   data class LoadNextPageAction(val pageIndex: Int) : MatchesAction()
 
-  data class ToggleFilterAction(val filterCode: String) : MatchesAction()
+  data class ToggleFilterAction(val tagName: String) : MatchesAction()
 
   object ClearFiltersAction : MatchesAction()
 }

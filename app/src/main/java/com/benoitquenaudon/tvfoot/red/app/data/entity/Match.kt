@@ -15,7 +15,8 @@ data class Match(
     val broadcasters: List<Broadcaster>?,
     val place: String?,
     val competition: Competition,
-    val postponed: Boolean
+    val postponed: Boolean,
+    val tags: List<String>?
 ) {
 
   companion object Constant {

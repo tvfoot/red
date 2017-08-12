@@ -13,5 +13,5 @@ sealed class MatchesIntent : MviIntent {
 
   object ClearFilters : MatchesIntent()
 
-  data class ToggleFilterIntent(val filterCode: String) : MatchesIntent()
+  data class ToggleFilterIntent(val tagName: String) : MatchesIntent()
 }

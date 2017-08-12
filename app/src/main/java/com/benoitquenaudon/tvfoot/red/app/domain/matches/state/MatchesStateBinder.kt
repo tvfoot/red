@@ -86,7 +86,7 @@ import javax.inject.Inject
         is GetLastState -> GetLastStateAction
         is LoadNextPageIntent -> LoadNextPageAction(intent.pageIndex)
         is ClearFilters -> ClearFiltersAction
-        is ToggleFilterIntent -> ToggleFilterAction(intent.filterCode)
+        is ToggleFilterIntent -> ToggleFilterAction(intent.tagName)
       }
 
   private val refreshTransformer: ObservableTransformer<RefreshAction, RefreshResult>
@@ -128,7 +128,7 @@ import javax.inject.Inject
 
   private val toggleFilterTransformer: ObservableTransformer<ToggleFilterAction, ToggleFilterResult>
     get() = ObservableTransformer { actions: Observable<ToggleFilterAction> ->
-      actions.map({ ToggleFilterResult(it.filterCode) })
+      actions.map({ ToggleFilterResult(it.tagName) })
     }
 
   private val actionToResultTransformer: ObservableTransformer<MatchesAction, MatchesResult>
@@ -199,15 +199,16 @@ import javax.inject.Inject
             }
           }
         }
-        is MatchesResult.ClearFiltersResult -> previousState.copy(activeFilterIds = emptySet())
+        is MatchesResult.ClearFiltersResult -> previousState.copy(filteredTags = emptyMap())
         is MatchesResult.ToggleFilterResult -> {
-          previousState.activeFilterIds.toMutableSet().let {
-            if (it.contains(matchesResult.filterCode)) {
-              it.remove(matchesResult.filterCode)
+          previousState.filteredTags.toMutableMap().let {
+            if (it.keys.contains(matchesResult.tagName)) {
+              it.remove(matchesResult.tagName)
             } else {
-              it.add(matchesResult.filterCode)
+              it.put(matchesResult.tagName,
+                  previousState.tags.first { it.name == matchesResult.tagName }.target)
             }
-            previousState.copy(activeFilterIds = it)
+            previousState.copy(filteredTags = it)
           }
         }
       }

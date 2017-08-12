@@ -6,19 +6,19 @@ import javax.inject.Inject
 
 @FragmentScope class FiltersViewModel @Inject constructor(private val adapter: FiltersAdapter) {
 
-  var activeFilterIds: Set<String> = emptySet()
+  var filteredTags: Set<String> = emptySet()
 
   val hasFilters: Boolean
-    get() = activeFilterIds.isNotEmpty()
+    get() = filteredTags.isNotEmpty()
 
   fun updateFromState(state: MatchesViewState) {
-    activeFilterIds = state.activeFilterIds
+    filteredTags = state.filteredTags.keys
 
     state.tags.map {
       FilterRowDisplayable(
           code = it.name,
           label = it.desc,
-          filtered = activeFilterIds.contains(it.name))
+          filtered = filteredTags.contains(it.name))
     }.also {
       adapter.updateFilters(it)
     }

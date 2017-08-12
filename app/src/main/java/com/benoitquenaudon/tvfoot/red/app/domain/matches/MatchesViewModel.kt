@@ -29,7 +29,7 @@ class MatchesViewModel @Inject constructor(private val adapter: MatchesAdapter) 
       errorMessage.set(error.toString())
     }
     if (hasData.get()) {
-      adapter.setMatchesItems(state.matchesItemDisplayables(hasMore, state.activeFilterIds))
+      adapter.setMatchesItems(state.matchesItemDisplayables(hasMore, state.filteredTags))
     }
   }
 }

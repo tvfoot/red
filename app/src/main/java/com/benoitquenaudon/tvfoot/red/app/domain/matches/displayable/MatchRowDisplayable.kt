@@ -24,7 +24,8 @@ data class MatchRowDisplayable private constructor(
     val homeTeamDrawableName: String,
     val awayTeamDrawableName: String,
     val location: String,
-    val matchId: String
+    val matchId: String,
+    val tags: List<String>
 ) : MatchesItemDisplayable {
   override fun isSameAs(newItem: MatchesItemDisplayable): Boolean {
     return newItem is MatchRowDisplayable && this.matchId == newItem.matchId
@@ -44,7 +45,9 @@ data class MatchRowDisplayable private constructor(
             homeTeamDrawableName = parseHomeTeamDrawableName(match.homeTeam),
             awayTeamDrawableName = parseAwayTeamDrawableName(match.awayTeam),
             location = parseLocation(match),
-            matchId = match.id)
+            matchId = match.id,
+            tags = parseTags(match)
+        )
 
     fun fromMatches(matches: List<Match>): List<MatchRowDisplayable> = matches.map(this::fromMatch)
   }
@@ -103,12 +106,11 @@ private fun isMatchLive(startAt: Date): Boolean {
   return now in startTimeInMillis..(startTimeInMillis + TimeUnit.MINUTES.toMillis(105))
 }
 
-private fun parseHomeTeamDrawableName(homeTeam: Team): String {
-  return homeTeam.code ?: Team.DEFAULT_CODE
-}
+private fun parseHomeTeamDrawableName(homeTeam: Team): String = homeTeam.code ?: Team.DEFAULT_CODE
 
-private fun parseAwayTeamDrawableName(awayTeam: Team): String {
-  return awayTeam.code ?: Team.DEFAULT_CODE
-}
+private fun parseAwayTeamDrawableName(awayTeam: Team): String = awayTeam.code ?: Team.DEFAULT_CODE
 
 private fun parseLocation(match: Match): String = match.place.toString()
+
+private fun parseTags(match: Match): List<String> =
+    match.tags?.map(String::toLowerCase) ?: emptyList()

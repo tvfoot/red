@@ -55,5 +55,5 @@ sealed class MatchesResult : MviResult {
 
   object ClearFiltersResult : MatchesResult()
 
-  data class ToggleFilterResult(val filterCode: String) : MatchesResult()
+  data class ToggleFilterResult(val tagName: String) : MatchesResult()
 }
