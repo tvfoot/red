@@ -15,10 +15,12 @@ class MatchesViewModel @Inject constructor(private val adapter: MatchesAdapter) 
   var currentPage = 0
     private set
   var areTagsLoaded = ObservableBoolean(false)
+  var hasActiveFilters = ObservableBoolean(false)
 
   fun updateFromState(state: MatchesViewState) {
     currentPage = state.currentPage
     areTagsLoaded.set(state.tags.isNotEmpty())
+    hasActiveFilters.set(state.filteredTags.isNotEmpty())
 
     nextPageLoading = state.nextPageLoading
     refreshLoading.set(state.refreshLoading)

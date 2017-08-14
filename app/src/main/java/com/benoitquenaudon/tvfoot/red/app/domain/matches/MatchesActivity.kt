@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
@@ -23,6 +24,7 @@ import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchesBinding
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
+import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -68,11 +70,19 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.matches_settings_menu, menu)
+    disposables.add(
+        RxView.clicks(menu.findItem(R.id.matches_filters_item).actionView)
+            .subscribe { openFiltersDrawer() }
+    )
+
     return true
   }
 
   override fun onPrepareOptionsMenu(menu: Menu): Boolean {
     menu.findItem(R.id.matches_filters_item).isVisible = viewModel.areTagsLoaded.get()
+    menu.findItem(R.id.matches_filters_item).actionView
+        .findViewById<View>(R.id.filters_usage_badge)
+        .visibility = if (viewModel.hasActiveFilters.get()) View.VISIBLE else View.GONE
     return super.onPrepareOptionsMenu(menu)
   }
 
@@ -83,6 +93,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
           true
         }
         R.id.matches_filters_item -> {
+          // should not be called because we use a actionLayout
           openFiltersDrawer()
           true
         }
@@ -103,6 +114,10 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     )
     disposables.add(
         RxObservableBoolean.propertyChanges(viewModel.areTagsLoaded)
+            .subscribe { invalidateOptionsMenu() }
+    )
+    disposables.add(
+        RxObservableBoolean.propertyChanges(viewModel.hasActiveFilters)
             .subscribe { invalidateOptionsMenu() }
     )
   }
