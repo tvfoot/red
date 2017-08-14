@@ -12,4 +12,6 @@ sealed class MatchesAction : MviAction {
   data class ToggleFilterAction(val tagName: String) : MatchesAction()
 
   object ClearFiltersAction : MatchesAction()
+
+  object LoadTagsAction : MatchesAction()
 }

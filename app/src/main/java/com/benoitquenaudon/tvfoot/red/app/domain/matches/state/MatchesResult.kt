@@ -5,6 +5,7 @@ import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.FAILURE
 import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.IN_FLIGHT
 import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.SUCCESS
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviResult
 
 sealed class MatchesResult : MviResult {
@@ -56,4 +57,25 @@ sealed class MatchesResult : MviResult {
   object ClearFiltersResult : MatchesResult()
 
   data class ToggleFilterResult(val tagName: String) : MatchesResult()
+
+  @Suppress("DataClassPrivateConstructor")
+  data class LoadTagsResult private constructor(
+      val status: LceStatus,
+      val tags: List<Tag>?,
+      val error: Throwable?
+  ) : MatchesResult() {
+    companion object Factory {
+      fun success(tags: List<Tag>): LoadTagsResult {
+        return LoadTagsResult(SUCCESS, tags, null)
+      }
+
+      fun failure(throwable: Throwable): LoadTagsResult {
+        return LoadTagsResult(FAILURE, null, throwable)
+      }
+
+      fun inFlight(): LoadTagsResult {
+        return LoadTagsResult(IN_FLIGHT, null, null)
+      }
+    }
+  }
 }

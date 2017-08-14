@@ -1,13 +1,14 @@
 package com.benoitquenaudon.tvfoot.red.app.data.source
 
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
-import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.testutil.Fixture
 import com.benoitquenaudon.tvfoot.red.testutil.InjectionContainer
 import io.reactivex.Single
 import javax.inject.Inject
 
 class FakeMatchesRepository : BaseMatchesRepository {
+
   @Inject lateinit var fixture: Fixture
 
   init {
@@ -20,4 +21,6 @@ class FakeMatchesRepository : BaseMatchesRepository {
         1 -> Single.just(fixture.matchesListB())
         else -> throw NotImplementedError("need to provide other data")
       }
+
+  override fun loadTags(): Single<List<Tag>> = Single.just(fixture.tags())
 }

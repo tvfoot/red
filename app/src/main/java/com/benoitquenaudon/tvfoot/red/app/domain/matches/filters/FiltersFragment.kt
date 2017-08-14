@@ -8,10 +8,12 @@ import android.support.v7.widget.DividerItemDecoration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseFragment
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.ClearFilters
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.FilterInitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.ToggleFilterIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesStateBinder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState
@@ -66,8 +68,11 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
   }
 
   override fun intents(): Observable<MatchesIntent> {
-    return Observable.merge(clearFilterIntent(), filterClickIntent())
+    return Observable.merge(initialIntent(), clearFilterIntent(), filterClickIntent())
   }
+
+  private fun initialIntent(): Observable<FilterInitialIntent> =
+      Observable.just(FilterInitialIntent)
 
   private fun clearFilterIntent(): Observable<ClearFilters> =
       RxToolbar.itemClicks(binding.filtersToolbar)
@@ -78,12 +83,16 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
 
   override fun render(state: MatchesViewState) {
     viewModel.updateFromState(state)
-
-    binding.filtersToolbar.menu.findItem(R.id.action_clear).isVisible = viewModel.hasFilters
   }
 
   private fun bind() {
     disposables.add(stateBinder.states().subscribe(this::render))
     stateBinder.processIntents(intents())
+    disposables.add(
+        RxObservableBoolean.propertyChanges(viewModel.hasFilters)
+            .subscribe {
+              binding.filtersToolbar.menu.findItem(R.id.action_clear).isVisible = it
+            }
+    )
   }
 }

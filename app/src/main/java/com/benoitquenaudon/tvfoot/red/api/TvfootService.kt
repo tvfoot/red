@@ -1,6 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.api
 
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.entity.search.Filter
 import io.reactivex.Single
 import retrofit2.http.GET
@@ -21,4 +22,6 @@ interface TvfootService {
   fun getMatches(@Query("filter") filter: Filter): Single<List<Match>>
 
   @GET("/api/matches/{matchId}") fun getMatch(@Path("matchId") matchId: String): Single<Match>
+
+  @GET("/api/tags") fun getTags(): Single<List<Tag>>
 }

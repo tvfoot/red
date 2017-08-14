@@ -3,10 +3,12 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.view.GravityCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
@@ -25,6 +27,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import kotlin.properties.Delegates
+
 
 class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState> {
   @Inject lateinit var adapter: MatchesAdapter
@@ -68,6 +71,11 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     return true
   }
 
+  override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+    menu.findItem(R.id.matches_filters_item).isVisible = viewModel.areTagsLoaded.get()
+    return super.onPrepareOptionsMenu(menu)
+  }
+
   override fun onOptionsItemSelected(item: MenuItem): Boolean =
       when (item.itemId) {
         R.id.matches_settings_item -> {
@@ -91,7 +99,12 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     stateBinder.processIntents(intents())
 
     disposables.add(adapter.matchRowClickObservable
-        .subscribe { matchRowDisplayable -> flowController.toMatch(matchRowDisplayable.matchId) })
+        .subscribe { matchRowDisplayable -> flowController.toMatch(matchRowDisplayable.matchId) }
+    )
+    disposables.add(
+        RxObservableBoolean.propertyChanges(viewModel.areTagsLoaded)
+            .subscribe { invalidateOptionsMenu() }
+    )
   }
 
   override fun onDestroy() {
@@ -120,4 +133,12 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   }
 
   override fun render(state: MatchesViewState) = viewModel.updateFromState(state)
+
+  override fun onBackPressed() {
+    if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
+      binding.drawerLayout.closeDrawer(GravityCompat.END)
+    } else {
+      super.onBackPressed()
+    }
+  }
 }

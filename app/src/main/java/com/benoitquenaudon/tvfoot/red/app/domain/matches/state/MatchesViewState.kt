@@ -15,23 +15,9 @@ data class MatchesViewState(
     val refreshLoading: Boolean = false,
     val currentPage: Int = 0,
     val hasMore: Boolean = true,
-    //    val filters: List<FilterRowDisplayable> = emptyList()
-    val tags: List<Tag> = listOf(
-        Tag("L1", "Ligue 1", "competition", listOf("l1")),
-        Tag("L2", "Ligue 2", "competition", listOf("l2")),
-        Tag("ANG", "Angleterre", "competition", listOf("_en", "bpl", "fac", "flc", "facs", "sbc")),
-        Tag("ESP", "Espagne", "competition", listOf("_es", "liga", "cdr,sde")),
-        Tag("ITA", "Italie", "competition", listOf("_it", "sa", "timc", "sdi")),
-        Tag("ALL", "Allemagne", "competition", listOf("_de", "bun", "dfbp", "dfls")),
-        Tag("POR", "Portugal", "competition", listOf("_po", "plp", "tdp", "tdl", "stco")),
-        Tag("TUR", "Turquie", "competition", listOf("_tu", "tsl")),
-        Tag("C1", "Champions League", "competition", listOf("ucl")),
-        Tag("C3", "Europa League", "competition", listOf("uel")),
-        Tag("CDL", "Coupe de la Ligue", "competition", listOf("cdl")),
-        Tag("CM", "Coupe du monde", "competition", listOf("cm")),
-        Tag("WOM", "Football Féminin", "competition", listOf("f")),
-        Tag("AMI", "Amical", "competition", listOf("ami"))
-    ),
+    val tagsLoading: Boolean = false,
+    val tagsError: Throwable? = null,
+    val tags: List<Tag> = emptyList(),
     var filteredTags: Map<String, List<String>> = emptyMap<String, List<String>>()
 ) : MviViewState {
   fun matchesItemDisplayables(hasMore: Boolean, filteredTags: Map<String, List<String>>)

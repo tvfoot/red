@@ -5,14 +5,17 @@ import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.IN_FLIGHT
 import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.SUCCESS
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.ClearFiltersAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.GetLastStateAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.LoadNextPageAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.LoadTagsAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.RefreshAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.ToggleFilterAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.ClearFilters
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.FilterInitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.GetLastState
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.LoadNextPageIntent
@@ -21,6 +24,8 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.Tog
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.ClearFiltersResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.GetLastStateResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.LoadNextPageResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.LoadTagsResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.LoadTagsResult.Factory
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.RefreshResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.ToggleFilterResult
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedStateBinder
@@ -87,6 +92,7 @@ import javax.inject.Inject
         is LoadNextPageIntent -> LoadNextPageAction(intent.pageIndex)
         is ClearFilters -> ClearFiltersAction
         is ToggleFilterIntent -> ToggleFilterAction(intent.tagName)
+        is FilterInitialIntent -> LoadTagsAction
       }
 
   private val refreshTransformer: ObservableTransformer<RefreshAction, RefreshResult>
@@ -94,8 +100,8 @@ import javax.inject.Inject
       actions.flatMap({
         repository.loadPage(0)
             .toObservable()
-            .map { RefreshResult.success(it) }
-            .onErrorReturn { RefreshResult.failure(it) }
+            .map(RefreshResult.Factory::success)
+            .onErrorReturn(RefreshResult.Factory::failure)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
             .startWith(RefreshResult.inFlight())
@@ -109,10 +115,24 @@ import javax.inject.Inject
             repository.loadPage(pageIndex)
                 .toObservable()
                 .map { matches -> LoadNextPageResult.success(pageIndex, matches) }
-                .onErrorReturn { LoadNextPageResult.failure(it) }
+                .onErrorReturn(LoadNextPageResult.Factory::failure)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .startWith(LoadNextPageResult.inFlight())
+          })
+    }
+
+  private val loadTagsTransformer: ObservableTransformer<LoadTagsAction, LoadTagsResult>
+    get() = ObservableTransformer { actions: Observable<LoadTagsAction> ->
+      actions.flatMap(
+          {
+            repository.loadTags()
+                .toObservable()
+                .map(Factory::success)
+                .onErrorReturn(Factory::failure)
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .startWith(LoadTagsResult.inFlight())
           })
     }
 
@@ -141,7 +161,8 @@ import javax.inject.Inject
             .mergeWith(
                 Observable.merge<MatchesResult>(
                     shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
-                    shared.ofType(ToggleFilterAction::class.java).compose(toggleFilterTransformer))
+                    shared.ofType(ToggleFilterAction::class.java).compose(toggleFilterTransformer),
+                    shared.ofType(LoadTagsAction::class.java).compose(loadTagsTransformer))
             )
             .mergeWith(
                 // Error for not implemented actions
@@ -150,7 +171,8 @@ import javax.inject.Inject
                       v !is LoadNextPageAction &&
                       v !is GetLastStateAction &&
                       v !is ClearFiltersAction &&
-                      v !is ToggleFilterAction
+                      v !is ToggleFilterAction &&
+                      v !is LoadTagsAction
                 }).flatMap({ w ->
                   Observable.error<MatchesResult>(
                       IllegalArgumentException("Unknown Action type: " + w))
@@ -206,9 +228,20 @@ import javax.inject.Inject
               it.remove(matchesResult.tagName)
             } else {
               it.put(matchesResult.tagName,
-                  previousState.tags.first { it.name == matchesResult.tagName }.target)
+                  previousState.tags.first { it.name == matchesResult.tagName }.targets)
             }
             previousState.copy(filteredTags = it)
+          }
+        }
+        is MatchesResult.LoadTagsResult -> {
+          when (matchesResult.status) {
+            IN_FLIGHT -> previousState.copy(tagsLoading = true, tagsError = null)
+            FAILURE -> previousState.copy(tagsLoading = false, tagsError = matchesResult.error)
+            SUCCESS -> {
+              checkNotNull(matchesResult.tags).let { tags ->
+                previousState.copy(tagsLoading = false, tags = tags.filter(Tag::display))
+              }
+            }
           }
         }
       }
