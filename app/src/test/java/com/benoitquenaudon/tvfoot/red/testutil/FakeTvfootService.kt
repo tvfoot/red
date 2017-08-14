@@ -2,6 +2,7 @@ package com.benoitquenaudon.tvfoot.red.testutil
 
 import com.benoitquenaudon.tvfoot.red.api.TvfootService
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.entity.search.Filter
 import io.reactivex.Single
 import retrofit2.http.Path
@@ -21,5 +22,9 @@ class FakeTvfootService(private val fixture: Fixture) : TvfootService {
 
   override fun getMatch(@Path("matchId") matchId: String): Single<Match> {
     return Single.just(fixture.anyMatch())
+  }
+
+  override fun getTags(): Single<List<Tag>> {
+    return Single.just(fixture.tags())
   }
 }

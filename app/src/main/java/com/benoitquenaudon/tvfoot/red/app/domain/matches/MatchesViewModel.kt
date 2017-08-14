@@ -14,9 +14,11 @@ class MatchesViewModel @Inject constructor(private val adapter: MatchesAdapter) 
   var errorMessage = ObservableField<String>()
   var currentPage = 0
     private set
+  var areTagsLoaded = ObservableBoolean(false)
 
   fun updateFromState(state: MatchesViewState) {
     currentPage = state.currentPage
+    areTagsLoaded.set(state.tags.isNotEmpty())
 
     nextPageLoading = state.nextPageLoading
     refreshLoading.set(state.refreshLoading)
