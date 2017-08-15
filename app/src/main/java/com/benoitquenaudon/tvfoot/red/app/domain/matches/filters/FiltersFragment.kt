@@ -90,6 +90,7 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
     stateBinder.processIntents(intents())
     disposables.add(
         RxObservableBoolean.propertyChanges(viewModel.hasFilters)
+            .startWith(viewModel.hasFilters.get()) // fix for rotation
             .subscribe {
               binding.filtersToolbar.menu.findItem(R.id.action_clear).isVisible = it
             }

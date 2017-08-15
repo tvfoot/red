@@ -80,6 +80,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
 
   override fun onPrepareOptionsMenu(menu: Menu): Boolean {
     menu.findItem(R.id.matches_filters_item).isVisible = viewModel.areTagsLoaded.get()
+
     menu.findItem(R.id.matches_filters_item).actionView
         .findViewById<View>(R.id.filters_usage_badge)
         .visibility = if (viewModel.hasActiveFilters.get()) View.VISIBLE else View.GONE

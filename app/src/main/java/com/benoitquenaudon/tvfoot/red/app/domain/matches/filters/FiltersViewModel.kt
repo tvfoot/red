@@ -17,12 +17,14 @@ import javax.inject.Inject
     loadingTags.set(state.tagsLoading)
     hasFilters.set(filteredTags.isNotEmpty())
 
-    state.tags.map {
-      FilterRowDisplayable(
-          code = it.name,
-          label = it.desc,
-          filtered = filteredTags.contains(it.name))
-    }.also {
+    state.tags
+        .filter { it.type == "competition" }
+        .map {
+          FilterRowDisplayable(
+              code = it.name,
+              label = it.desc,
+              filtered = filteredTags.contains(it.name))
+        }.also {
       adapter.updateFilters(it)
     }
   }

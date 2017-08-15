@@ -6,7 +6,6 @@
       android:icon="@drawable/ic_filter_list_white_24px"
       android:orderInCategory="100"
       android:title="@string/filters"
-      android:visible="false"
       app:actionLayout="@layout/filter_menu_layout"
       app:showAsAction="ifRoom"/>
   <item
