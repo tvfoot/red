@@ -121,6 +121,42 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
         RxObservableBoolean.propertyChanges(viewModel.hasActiveFilters)
             .subscribe { invalidateOptionsMenu() }
     )
+
+    var previousY = 0
+    disposables.add(
+        RxRecyclerView.scrollEvents(binding.recyclerView).subscribe { event ->
+          val newY = previousY + event.dy()
+
+          // handles case when empty scroll event are emitted by a/ smooth scrolling or b/ when
+          // filtering to smaller group
+          if (newY == previousY) return@subscribe
+
+          if (newY < previousY) { // Scrolling up
+            (event.view().layoutManager as LinearLayoutManager).findFirstVisibleItemPosition().let {
+              binding.scrollToTop.visibility = if (it > 5) {
+                View.VISIBLE
+              } else {
+                View.GONE
+              }
+            }
+          } else { // Scrolling down
+            binding.scrollToTop.visibility = View.GONE
+          }
+          previousY = newY
+        }
+    )
+
+    disposables.add(
+        RxView.clicks(binding.scrollToTop).subscribe {
+          binding.recyclerView.smoothScrollToPosition(0)
+        }
+    )
+
+    disposables.add(
+        RxView.clicks(binding.toolbarImageView).subscribe {
+          binding.recyclerView.smoothScrollToPosition(0)
+        }
+    )
   }
 
   override fun onDestroy() {

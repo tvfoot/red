@@ -11,13 +11,14 @@
   </data>
   <android.support.v4.widget.DrawerLayout
       android:id="@+id/drawer_layout"
-      android:fitsSystemWindows="true"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:fitsSystemWindows="true"
       >
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         android:fitsSystemWindows="true"
         tools:context=".app.domain.matches.MatchesActivity"
         >
@@ -82,6 +83,26 @@
           android:text="@{viewModel.errorMessage}"
           app:visible="@{viewModel.hasError}"
           />
+
+
+      <TextView
+          android:id="@+id/scroll_to_top"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="top|center_horizontal"
+          android:layout_marginTop="16dp"
+          android:background="@drawable/rounded_shape"
+          android:paddingBottom="4dp"
+          android:paddingEnd="8dp"
+          android:paddingStart="8dp"
+          android:paddingTop="4dp"
+          android:text="@string/scrollToTopDesc"
+          android:textColor="@color/colorWhite"
+          android:visibility="gone"
+          app:layout_behavior="@string/appbar_scrolling_view_behavior"
+          tools:visibility="visible"
+          />
+
     </android.support.design.widget.CoordinatorLayout>
 
     <FrameLayout
