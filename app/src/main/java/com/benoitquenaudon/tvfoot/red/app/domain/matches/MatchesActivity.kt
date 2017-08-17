@@ -151,6 +151,12 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
           binding.recyclerView.smoothScrollToPosition(0)
         }
     )
+
+    disposables.add(
+        RxView.clicks(binding.toolbarImageView).subscribe {
+          binding.recyclerView.smoothScrollToPosition(0)
+        }
+    )
   }
 
   override fun onDestroy() {

@@ -33,9 +33,6 @@ android {
       signingConfig signingConfigs.release
       minifyEnabled false
     }
-    debug {
-      applicationIdSuffix '.debug'
-    }
   }
 
   dataBinding {
