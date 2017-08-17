@@ -27,7 +27,6 @@ import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
@@ -126,12 +125,14 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     var previousY = 0
     disposables.add(
         RxRecyclerView.scrollEvents(binding.recyclerView).subscribe { event ->
-//          Timber.d("Connard: Scrolling: previousY: $previousY - newY: ${previousY + event.dy()}")
           val newY = previousY + event.dy()
-          if (newY <= previousY) { // Scrolling up
-            (event.view().layoutManager as LinearLayoutManager)
-                .findFirstCompletelyVisibleItemPosition().let {
-//              Timber.d("Connard: Scrolling and position is: $it")
+
+          // handles case when empty scroll event are emitted by a/ smooth scrolling or b/ when
+          // filtering to smaller group
+          if (newY == previousY) return@subscribe
+
+          if (newY < previousY) { // Scrolling up
+            (event.view().layoutManager as LinearLayoutManager).findFirstVisibleItemPosition().let {
               binding.scrollToTop.visibility = if (it > 5) {
                 View.VISIBLE
               } else {
@@ -139,7 +140,6 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
               }
             }
           } else { // Scrolling down
-//            Timber.d("Connard: Scrolling down")
             binding.scrollToTop.visibility = View.GONE
           }
           previousY = newY
