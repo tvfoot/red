@@ -3,7 +3,9 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.Menu
@@ -66,6 +68,10 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
           .add(R.id.filters, FiltersFragment.newInstance(), FRAGMENT_FILTERS)
           .commit()
     }
+    val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL).apply {
+      setDrawable(ContextCompat.getDrawable(this@MatchesActivity, R.drawable.one_line_divider))
+    }
+    binding.recyclerView.addItemDecoration(divider)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
