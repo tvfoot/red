@@ -24,5 +24,4 @@
   <string name="will_be_notify_desc">You will be notified %d minutes before the game starts</string>
   <string name="filters">Filters</string>
   <string name="filters_clearAll">Clear all</string>
-  <string name="scrollToTopDesc">Scroll to Top</string>
 </resources>
