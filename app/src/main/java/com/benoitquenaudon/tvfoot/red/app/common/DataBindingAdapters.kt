@@ -9,45 +9,42 @@ import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.api.TvfootService
 
-
-object DataBindingAdapters {
-  @JvmStatic @BindingAdapter("tvfootTeamLogoPath")
-  fun setTvFootTeamLogo(imageView: ImageView, logoPath: String?) {
-    if (logoPath == null) {
-      // in_flight, errors etc.
-      return
-    }
-
-    loadTvFootImage(imageView, logoPath, R.drawable.default_team_logo)
+@BindingAdapter("tvfootTeamLogoPath")
+fun setTvFootTeamLogo(imageView: ImageView, logoPath: String?) {
+  if (logoPath == null) {
+    // in_flight, errors etc.
+    return
   }
 
-  @JvmStatic @BindingAdapter("tvfootBroadcasterLogoPath")
-  fun setTvFootBroadcasterLogo(imageView: ImageView, logoPath: String?) {
-    if (logoPath == null) {
-      // in_flight, errors etc.
-      return
-    }
+  loadTvFootImage(imageView, logoPath, R.drawable.default_team_logo)
+}
 
-    loadTvFootImage(imageView, logoPath, R.drawable.ic_tv_black_18px)
+@BindingAdapter("tvfootBroadcasterLogoPath")
+fun setTvFootBroadcasterLogo(imageView: ImageView, logoPath: String?) {
+  if (logoPath == null) {
+    // in_flight, errors etc.
+    return
   }
 
-  private fun loadTvFootImage(imageView: ImageView, path: String, placeholderResId: Int) {
-    RedApp.getApp(imageView.context)
-        .appComponent
-        .picasso()
-        .load(Uri.parse(TvfootService.BASE_URL + path))
-        .fit().centerInside()
-        .placeholder(placeholderResId)
-        .into(imageView)
-  }
+  loadTvFootImage(imageView, logoPath, R.drawable.ic_tv_black_18px)
+}
 
-  @JvmStatic @BindingAdapter("visible") fun setVisibility(view: View, isVisible: Boolean) {
-    view.visibility = if (isVisible) View.VISIBLE else View.GONE
-  }
+private fun loadTvFootImage(imageView: ImageView, path: String, placeholderResId: Int) {
+  RedApp.getApp(imageView.context)
+      .appComponent
+      .picasso()
+      .load(Uri.parse(TvfootService.BASE_URL + path))
+      .fit().centerInside()
+      .placeholder(placeholderResId)
+      .into(imageView)
+}
 
-  @JvmStatic @BindingAdapter("dangerText") fun setDangerText(textView: TextView, textResId: Int) {
-    if (textResId < 1) return
+@BindingAdapter("visible") fun setVisibility(view: View, isVisible: Boolean) {
+  view.visibility = if (isVisible) View.VISIBLE else View.GONE
+}
 
-    textView.setText(textResId)
-  }
+@BindingAdapter("dangerText") fun setDangerText(textView: TextView, textResId: Int) {
+  if (textResId < 1) return
+
+  textView.setText(textResId)
 }
