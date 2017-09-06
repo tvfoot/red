@@ -4,6 +4,7 @@ import com.benoitquenaudon.tvfoot.red.api.TvfootService
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.entity.search.Filter
+import com.benoitquenaudon.tvfoot.red.app.data.entity.search.TagsFilter
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -19,5 +20,5 @@ class MatchesRepository @Inject constructor(
     private val MATCH_PER_PAGE = 100
   }
 
-  override fun loadTags(): Single<List<Tag>> = tvfootService.getTags()
+  override fun loadTags(): Single<List<Tag>> = tvfootService.getTags(TagsFilter())
 }
