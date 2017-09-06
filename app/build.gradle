@@ -58,9 +58,8 @@ android {
 
   // Remove mockRelease as it's not needed.
   android.variantFilter { variant ->
-    if (variant.buildType.name == 'release' && variant.getFlavors().
-        get(0).name == 'mock') {
-      variant.setIgnore(true);
+    if (variant.buildType.name == 'release' && variant.getFlavors().get(0).name == 'mock') {
+      variant.setIgnore(true)
     }
   }
 
@@ -123,7 +122,7 @@ dependencies {
   debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.lib.leakCanaryVersion"
   releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.lib.leakCanaryVersion"
   annotationProcessor "com.google.auto.value:auto-value:$rootProject.lib.autoValueVersion"
-  kapt "com.android.databinding:compiler:3.0.0-beta3"
+  kapt "com.android.databinding:compiler:$android_plugin_version"
   kapt "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
   kapt "com.ryanharter.auto.value:auto-value-parcel:$rootProject.lib.autoValueParcelVersion"
   compileOnly "com.google.code.findbugs:jsr305:$rootProject.lib.jsr305Version"
