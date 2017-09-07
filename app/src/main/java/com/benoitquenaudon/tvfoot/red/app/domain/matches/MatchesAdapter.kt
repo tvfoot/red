@@ -3,10 +3,12 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.support.v7.util.DiffUtil
+import android.support.v7.util.DiffUtil.DiffResult
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.benoitquenaudon.tvfoot.red.R
+import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesItemViewHolder.LoadingRowViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesItemViewHolder.MatchHeaderViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesItemViewHolder.MatchRowViewHolder
@@ -19,13 +21,22 @@ import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowHeaderBinding
 import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowMatchBinding
 import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding
 import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
-@ActivityScope class MatchesAdapter @Inject constructor() : RecyclerView.Adapter<MatchesItemViewHolder<*, *>>() {
+@ActivityScope
+class MatchesAdapter @Inject constructor(
+    private val schedulerProvider: BaseSchedulerProvider
+) : RecyclerView.Adapter<MatchesItemViewHolder<*, *>>() {
   private var matchesItems = emptyList<MatchesItemDisplayable>()
-  val matchRowClickObservable: PublishSubject<MatchRowDisplayable> =
-      PublishSubject.create<MatchRowDisplayable>()
+  private val matchesObservable: PublishSubject<Pair<List<MatchesItemDisplayable>, List<MatchesItemDisplayable>>> = PublishSubject.create()
+  val matchRowClickObservable: PublishSubject<MatchRowDisplayable> = PublishSubject.create()
+
+  init {
+    // calling it to enable subscription
+    processItemDiffs()
+  }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchesItemViewHolder<*, *> {
     val layoutInflater = LayoutInflater.from(parent.context)
@@ -92,15 +103,36 @@ import javax.inject.Inject
     matchRowClickObservable.onNext(match)
   }
 
-  private val diffUtilCallback = MatchesItemDisplayableDiffUtilCallback()
-
   fun setMatchesItems(newItems: List<MatchesItemDisplayable>) {
-    val oldItems = this.matchesItems
-    this.matchesItems = newItems
+    when {
+      matchesItems.isEmpty() -> {
+        if (newItems.isEmpty()) return
 
-    diffUtilCallback.bindItems(oldItems, newItems)
-    // TODO(benoit) calculate diff on worker thread
-    // https://github.com/googlesamples/android-architecture-components/blob/master/GithubBrowserSample/app/src/main/java/com/android/example/github/ui/common/DataBoundListAdapter.java#L77
-    DiffUtil.calculateDiff(diffUtilCallback, true).dispatchUpdatesTo(this)
+        matchesItems = newItems
+        notifyDataSetChanged()
+      }
+      newItems.isEmpty() -> {
+        val oldSize = matchesItems.size
+        matchesItems = newItems
+        notifyItemRangeRemoved(0, oldSize)
+      }
+      else -> matchesObservable.onNext(Pair(matchesItems, newItems))
+    }
   }
+
+  private fun processItemDiffs(): Disposable =
+      matchesObservable
+          .scan(Pair(emptyList(), null),
+              { lastResult: Pair<List<MatchesItemDisplayable>, DiffResult?>, (oldItems, newItems) ->
+                MatchesItemDisplayableDiffUtilCallback(oldItems, newItems).let { callback ->
+                  Pair(newItems, DiffUtil.calculateDiff(callback, true))
+                }
+              })
+          .skip(1)
+          .subscribeOn(schedulerProvider.computation())
+          .observeOn(schedulerProvider.ui())
+          .subscribe { (newItems, diffResult) ->
+            matchesItems = newItems
+            diffResult?.dispatchUpdatesTo(this)
+          }
 }
