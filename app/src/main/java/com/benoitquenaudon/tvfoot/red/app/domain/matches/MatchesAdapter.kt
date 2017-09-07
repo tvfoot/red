@@ -30,8 +30,7 @@ class MatchesAdapter @Inject constructor(
     private val schedulerProvider: BaseSchedulerProvider
 ) : RecyclerView.Adapter<MatchesItemViewHolder<*, *>>() {
   private var matchesItems = emptyList<MatchesItemDisplayable>()
-  private val matchesObservable: PublishSubject<List<MatchesItemDisplayable>> = PublishSubject.create()
-  private val diffUtilCallback = MatchesItemDisplayableDiffUtilCallback()
+  private val matchesObservable: PublishSubject<Pair<List<MatchesItemDisplayable>, List<MatchesItemDisplayable>>> = PublishSubject.create()
   val matchRowClickObservable: PublishSubject<MatchRowDisplayable> = PublishSubject.create()
 
   init {
@@ -104,21 +103,20 @@ class MatchesAdapter @Inject constructor(
   }
 
   fun setMatchesItems(newItems: List<MatchesItemDisplayable>) {
-    matchesObservable.onNext(newItems)
+    matchesObservable.onNext(Pair(matchesItems, newItems))
   }
 
   private fun processItemDiffs(): Disposable =
       matchesObservable
           .scan(Pair(emptyList(), null),
-              { lastResult: Pair<List<MatchesItemDisplayable>, DiffResult?>, newItems: List<MatchesItemDisplayable> ->
-                diffUtilCallback.let { callback ->
-                  callback.bindItems(lastResult.first, newItems)
+              { lastResult: Pair<List<MatchesItemDisplayable>, DiffResult?>, (oldItems, newItems) ->
+                MatchesItemDisplayableDiffUtilCallback(oldItems, newItems).let { callback ->
                   Pair(newItems, DiffUtil.calculateDiff(callback, true))
                 }
               })
           .skip(1)
-          .subscribeOn(schedulerProvider.computation())
-          .observeOn(schedulerProvider.ui())
+//          .subscribeOn(Schedulers.computation())
+//          .observeOn(AndroidSchedulers.mainThread())
           .subscribe { (newItems, diffResult) ->
             matchesItems = newItems
             diffResult?.dispatchUpdatesTo(this)
