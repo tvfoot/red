@@ -34,6 +34,7 @@ class MatchesAdapter @Inject constructor(
   val matchRowClickObservable: PublishSubject<MatchRowDisplayable> = PublishSubject.create()
 
   init {
+    // calling it to enable subscription
     processItemDiffs()
   }
 
@@ -103,7 +104,20 @@ class MatchesAdapter @Inject constructor(
   }
 
   fun setMatchesItems(newItems: List<MatchesItemDisplayable>) {
-    matchesObservable.onNext(Pair(matchesItems, newItems))
+    when {
+      matchesItems.isEmpty() -> {
+        if (newItems.isEmpty()) return
+
+        matchesItems = newItems
+        notifyDataSetChanged()
+      }
+      newItems.isEmpty() -> {
+        val oldSize = matchesItems.size
+        matchesItems = newItems
+        notifyItemRangeRemoved(0, oldSize)
+      }
+      else -> matchesObservable.onNext(Pair(matchesItems, newItems))
+    }
   }
 
   private fun processItemDiffs(): Disposable =
@@ -115,8 +129,8 @@ class MatchesAdapter @Inject constructor(
                 }
               })
           .skip(1)
-//          .subscribeOn(Schedulers.computation())
-//          .observeOn(AndroidSchedulers.mainThread())
+          .subscribeOn(schedulerProvider.computation())
+          .observeOn(schedulerProvider.ui())
           .subscribe { (newItems, diffResult) ->
             matchesItems = newItems
             diffResult?.dispatchUpdatesTo(this)
