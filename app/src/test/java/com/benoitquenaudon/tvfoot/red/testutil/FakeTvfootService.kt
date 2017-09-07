@@ -4,6 +4,7 @@ import com.benoitquenaudon.tvfoot.red.api.TvfootService
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.entity.search.Filter
+import com.benoitquenaudon.tvfoot.red.app.data.entity.search.TagsFilter
 import io.reactivex.Single
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -24,7 +25,7 @@ class FakeTvfootService(private val fixture: Fixture) : TvfootService {
     return Single.just(fixture.anyMatch())
   }
 
-  override fun getTags(): Single<List<Tag>> {
+  override fun getTags(@Query("filter") filter: TagsFilter): Single<List<Tag>> {
     return Single.just(fixture.tags())
   }
 }
