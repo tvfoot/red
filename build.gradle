@@ -2,7 +2,7 @@
 
 buildscript {
   ext.kotlin_version = '1.1.4-3'
-  ext.android_plugin_version = '3.0.0-beta4'
+  ext.android_plugin_version = '3.0.0-beta5'
   repositories {
     jcenter()
     google()
@@ -69,7 +69,7 @@ ext {
          rxAndroidVersion               : '2.0.1',
          retrofit2RxJava2Adapter        : '1.0.0',
          leakCanaryVersion              : '1.5.1',
-         firebaseVersion                : '11.2.0',
+         firebaseVersion                : '11.2.2',
          rxBindingVersion               : '2.0.0',
          robolectricVersion             : '3.4']
 }
