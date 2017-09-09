@@ -15,7 +15,8 @@ import java.util.Date
 data class HeaderRowDisplayable private constructor(
     val dangerResId: Int,
     val hasDanger: Boolean,
-    val displayedDate: String
+    val displayedDate: String,
+    val id: Long
 ) : MatchesItemDisplayable {
   override fun isSameAs(newItem: MatchesItemDisplayable): Boolean {
     return newItem is HeaderRowDisplayable && this.displayedDate == newItem.displayedDate
@@ -35,19 +36,21 @@ data class HeaderRowDisplayable private constructor(
         throw UnsupportedOperationException("What is this date anyway? " + headerKey)
       }
 
+      val id = headerKeyDateFormat.format(date).filter { it != '-' }.toLong()
+
       var dangerResId = -1
       val displayedDate: String
       val nowCalendar = Calendar.getInstance()
       if (date.time.isToday(nowCalendar)) {
         dangerResId = R.string.matches_row_header_danger_today
         displayedDate = monthDateFormat.format(date).capitalize()
-        return HeaderRowDisplayable(dangerResId, true, displayedDate)
+        return HeaderRowDisplayable(dangerResId, true, displayedDate, id)
       }
 
       if (date.time.isTomorrow(nowCalendar)) {
         dangerResId = R.string.matches_row_header_danger_tomorrow
         displayedDate = monthDateFormat.format(date).capitalize()
-        return HeaderRowDisplayable(dangerResId, true, displayedDate)
+        return HeaderRowDisplayable(dangerResId, true, displayedDate, id)
       }
 
       if (date.time.isCurrentYear(nowCalendar)) {
@@ -56,7 +59,7 @@ data class HeaderRowDisplayable private constructor(
         displayedDate = yearDateFormat.format(date)
       }
 
-      return HeaderRowDisplayable(dangerResId, false, displayedDate)
+      return HeaderRowDisplayable(dangerResId, false, displayedDate, id)
     }
   }
 }

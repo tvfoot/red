@@ -58,6 +58,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     binding = DataBindingUtil.setContentView<ActivityMatchesBinding>(this,
         R.layout.activity_matches)
     binding.recyclerView.adapter = adapter
+    binding.recyclerView.addItemDecoration(MatchesHeaderDecoration(adapter), 0)
     binding.viewModel = viewModel
 
     setSupportActionBar(binding.matchesToolbar)

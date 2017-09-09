@@ -29,6 +29,7 @@ import javax.inject.Inject
 class MatchesAdapter @Inject constructor(
     private val schedulerProvider: BaseSchedulerProvider
 ) : RecyclerView.Adapter<MatchesItemViewHolder<*, *>>() {
+  private var allMatchesItems = emptyList<MatchesItemDisplayable>()
   private var matchesItems = emptyList<MatchesItemDisplayable>()
   private val matchesObservable: PublishSubject<Pair<List<MatchesItemDisplayable>, List<MatchesItemDisplayable>>> = PublishSubject.create()
   val matchRowClickObservable: PublishSubject<MatchRowDisplayable> = PublishSubject.create()
@@ -108,12 +109,18 @@ class MatchesAdapter @Inject constructor(
       matchesItems.isEmpty() -> {
         if (newItems.isEmpty()) return
 
-        matchesItems = newItems
+        newItems.let {
+          allMatchesItems = it
+          matchesItems = it.filterNot { it is HeaderRowDisplayable }
+        }
         notifyDataSetChanged()
       }
       newItems.isEmpty() -> {
         val oldSize = matchesItems.size
-        matchesItems = newItems
+        newItems.let {
+          allMatchesItems = it
+          matchesItems = it.filterNot { it is HeaderRowDisplayable }
+        }
         notifyItemRangeRemoved(0, oldSize)
       }
       else -> matchesObservable.onNext(Pair(matchesItems, newItems))
@@ -132,7 +139,34 @@ class MatchesAdapter @Inject constructor(
           .subscribeOn(schedulerProvider.computation())
           .observeOn(schedulerProvider.ui())
           .subscribe { (newItems, diffResult) ->
-            matchesItems = newItems
+            newItems.let {
+              allMatchesItems = it
+              matchesItems = it.filterNot { it is HeaderRowDisplayable }
+            }
             diffResult?.dispatchUpdatesTo(this)
           }
+
+  fun getHeaderId(position: Int): Long {
+    return getClosestHeader(allMatchesItems, allMatchesItems.indexOf(matchesItems[position])).id
+  }
+
+  fun onCreateHeaderViewHolder(parent: ViewGroup): MatchHeaderViewHolder {
+    val layoutInflater = LayoutInflater.from(parent.context)
+    val binding = DataBindingUtil.inflate<MatchesRowHeaderBinding>(layoutInflater,
+        R.layout.matches_row_header, parent, false)
+    return MatchesItemViewHolder.MatchHeaderViewHolder(binding)
+  }
+
+  fun onBindHeaderViewHolder(viewHolder: MatchHeaderViewHolder, position: Int) {
+    viewHolder.bind(
+        getClosestHeader(allMatchesItems, allMatchesItems.indexOf(matchesItems[position])))
+  }
+
+  private fun getClosestHeader(items: List<MatchesItemDisplayable>,
+      index: Int): HeaderRowDisplayable {
+    if (index < 0) throw IllegalStateException("should have a header")
+    return items[index].let { item ->
+      item as? HeaderRowDisplayable ?: getClosestHeader(items, index - 1)
+    }
+  }
 }
