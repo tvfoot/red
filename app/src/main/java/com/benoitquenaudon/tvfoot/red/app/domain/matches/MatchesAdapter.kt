@@ -123,7 +123,7 @@ class MatchesAdapter @Inject constructor(
   private fun processItemDiffs(): Disposable =
       matchesObservable
           .scan(Pair(emptyList(), null),
-              { lastResult: Pair<List<MatchesItemDisplayable>, DiffResult?>, (oldItems, newItems) ->
+              { _: Pair<List<MatchesItemDisplayable>, DiffResult?>, (oldItems, newItems) ->
                 MatchesItemDisplayableDiffUtilCallback(oldItems, newItems).let { callback ->
                   Pair(newItems, DiffUtil.calculateDiff(callback, true))
                 }

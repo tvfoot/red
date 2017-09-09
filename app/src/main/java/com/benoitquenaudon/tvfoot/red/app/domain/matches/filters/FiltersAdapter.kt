@@ -12,7 +12,8 @@ import com.benoitquenaudon.tvfoot.red.injection.scope.FragmentScope
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
-@FragmentScope class FiltersAdapter @Inject constructor() : RecyclerView.Adapter<FiltersViewHolder>() {
+@FragmentScope
+class FiltersAdapter @Inject constructor() : RecyclerView.Adapter<FiltersViewHolder>() {
   private var filters = emptyList<FilterRowDisplayable>()
   val filterRowClickObservable: PublishSubject<FilterRowDisplayable> =
       PublishSubject.create<FilterRowDisplayable>()
@@ -28,11 +29,7 @@ import javax.inject.Inject
     }
   }
 
-  override fun getItemViewType(position: Int): Int =
-      when (filters[position]) {
-        is FilterRowDisplayable -> R.layout.filters_row_league
-        else -> throw NotImplementedError("how about this position $position")
-      }
+  override fun getItemViewType(position: Int): Int = R.layout.filters_row_league
 
   override fun onBindViewHolder(holder: FiltersViewHolder, position: Int) {
     holder.bind(filters[position])
