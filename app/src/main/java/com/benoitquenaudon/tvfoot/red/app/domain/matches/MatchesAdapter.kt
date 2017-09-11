@@ -23,7 +23,6 @@ import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding
 import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
-import timber.log.Timber
 import javax.inject.Inject
 
 @ActivityScope
@@ -44,14 +43,12 @@ class MatchesAdapter @Inject constructor(
     val binding = DataBindingUtil.inflate<ViewDataBinding>(layoutInflater, viewType, parent, false)
 
     return when (viewType) {
-      R.layout.matches_row_header -> {
-        Timber.d("connard creating header view holder")
-        MatchesItemViewHolder.MatchHeaderViewHolder(
-          binding as MatchesRowHeaderBinding)}
-      R.layout.matches_row_match -> MatchesItemViewHolder.MatchRowViewHolder(
-          binding as MatchesRowMatchBinding, this)
-      R.layout.row_loading -> MatchesItemViewHolder.LoadingRowViewHolder(
-          binding as RowLoadingBinding)
+      R.layout.matches_row_header ->
+        MatchesItemViewHolder.MatchHeaderViewHolder(binding as MatchesRowHeaderBinding)
+      R.layout.matches_row_match ->
+        MatchesItemViewHolder.MatchRowViewHolder(binding as MatchesRowMatchBinding, this)
+      R.layout.row_loading ->
+        MatchesItemViewHolder.LoadingRowViewHolder(binding as RowLoadingBinding)
       else -> throw UnsupportedOperationException(
           "don't know how to deal with this viewType: " + viewType)
     }

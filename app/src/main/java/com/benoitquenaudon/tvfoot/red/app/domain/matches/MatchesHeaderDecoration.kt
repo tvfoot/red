@@ -3,6 +3,7 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
+import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesItemViewHolder.MatchHeaderViewHolder
@@ -11,7 +12,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesItemViewHolder.M
 class MatchesHeaderDecoration(
     private val matchesAdapter: MatchesAdapter
 ) : RecyclerView.ItemDecoration() {
-  private val headerViewHolderCache: MutableMap<Int, MatchHeaderViewHolder> = HashMap()
+  private val headerViewHolderCache: SparseArray<MatchHeaderViewHolder> = SparseArray()
   private val headerPositionCache: MutableMap<Int, Int> = HashMap()
 
   override fun getItemOffsets(
@@ -45,7 +46,7 @@ class MatchesHeaderDecoration(
 
     val holder = headerViewHolderCache[headerPosition] ?:
         (matchesAdapter.onCreateViewHolder(parent, matchesAdapter.getItemViewType(headerPosition))
-            as MatchHeaderViewHolder).also { headerViewHolderCache[headerPosition] = it }
+            as MatchHeaderViewHolder).also { headerViewHolderCache.put(headerPosition, it) }
 
     matchesAdapter.onBindViewHolder(holder, headerPosition)
 
