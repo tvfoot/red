@@ -68,6 +68,7 @@ class MatchesHeaderDecoration(
     return holder
   }
 
+  @Suppress("UNUSED_PARAMETER")
   private fun getHeaderHeightForLayout(header: View): Int {
 //    return if (renderInline) 0 else header.height
     return 0

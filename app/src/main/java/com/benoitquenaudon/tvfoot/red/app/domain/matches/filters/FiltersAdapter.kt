@@ -28,6 +28,7 @@ import javax.inject.Inject
     }
   }
 
+  @Suppress("USELESS_IS_CHECK")
   override fun getItemViewType(position: Int): Int =
       when (filters[position]) {
         is FilterRowDisplayable -> R.layout.filters_row_league
