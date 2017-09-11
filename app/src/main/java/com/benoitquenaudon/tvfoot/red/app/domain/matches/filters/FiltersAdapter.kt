@@ -12,7 +12,8 @@ import com.benoitquenaudon.tvfoot.red.injection.scope.FragmentScope
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
-@FragmentScope class FiltersAdapter @Inject constructor() : RecyclerView.Adapter<FiltersViewHolder>() {
+@FragmentScope
+class FiltersAdapter @Inject constructor() : RecyclerView.Adapter<FiltersViewHolder>() {
   private var filters = emptyList<FilterRowDisplayable>()
   val filterRowClickObservable: PublishSubject<FilterRowDisplayable> =
       PublishSubject.create<FilterRowDisplayable>()
