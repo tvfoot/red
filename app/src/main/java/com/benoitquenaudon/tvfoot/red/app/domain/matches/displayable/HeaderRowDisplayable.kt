@@ -16,7 +16,7 @@ data class HeaderRowDisplayable private constructor(
     val dangerResId: Int,
     val hasDanger: Boolean,
     val displayedDate: String,
-    val id: Long
+    val id: Int
 ) : MatchesItemDisplayable {
   override fun isSameAs(newItem: MatchesItemDisplayable): Boolean {
     return newItem is HeaderRowDisplayable && this.displayedDate == newItem.displayedDate
@@ -36,7 +36,8 @@ data class HeaderRowDisplayable private constructor(
         throw UnsupportedOperationException("What is this date anyway? " + headerKey)
       }
 
-      val id = headerKeyDateFormat.format(date).filter { it != '-' }.toLong()
+      // yyyy-MM-dd without the '-' to int
+      val id = headerKeyDateFormat.format(date).filter { it != '-' }.toInt()
 
       var dangerResId = -1
       val displayedDate: String

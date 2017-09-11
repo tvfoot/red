@@ -5,96 +5,91 @@ import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesItemViewHolder.MatchHeaderViewHolder
 
 
 class MatchesHeaderDecoration(
     private val matchesAdapter: MatchesAdapter
 ) : RecyclerView.ItemDecoration() {
-  private val headerCache: MutableMap<Long, RecyclerView.ViewHolder> = HashMap()
-  private val renderInline: Boolean = true
+  private val headerViewHolderCache: MutableMap<Int, MatchHeaderViewHolder> = HashMap()
+  private val headerPositionCache: MutableMap<Int, Int> = HashMap()
 
-  override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView,
-      state: RecyclerView.State) {
+  override fun getItemOffsets(
+      outRect: Rect,
+      view: View,
+      parent: RecyclerView,
+      state: RecyclerView.State
+  ) {
     val position = parent.getChildAdapterPosition(view)
-    var headerHeight = 0
 
-    if (position != RecyclerView.NO_POSITION
-        && hasHeader(position)
-        && showHeaderAboveItem(position)) {
-
-      val header = getHeader(parent, position).itemView
-      headerHeight = getHeaderHeightForLayout(header)
-    }
+    val headerHeight =
+        if (position != RecyclerView.NO_POSITION && showHeaderAboveItem(position)) {
+          getHeaderHeightForLayout(getHeader(parent, position).itemView)
+        } else 0
 
     outRect.set(0, headerHeight, 0, 0)
   }
 
-  private fun showHeaderAboveItem(itemAdapterPosition: Int): Boolean {
-    return itemAdapterPosition == 0 ||
-        matchesAdapter.getHeaderId(itemAdapterPosition - 1) !=
-            matchesAdapter.getHeaderId(itemAdapterPosition)
-  }
+  private fun showHeaderAboveItem(adapterPosition: Int): Boolean =
+      adapterPosition == 0 || !sameHeaderAt(adapterPosition - 1, adapterPosition)
 
-  private fun hasHeader(position: Int): Boolean {
-    return matchesAdapter.getHeaderId(position) != NO_HEADER_ID
-  }
+  private fun sameHeaderAt(firstPosition: Int, secondPosition: Int): Boolean =
+      matchesAdapter.closestHeaderPosition(firstPosition) ==
+          matchesAdapter.closestHeaderPosition(secondPosition)
 
   private fun getHeader(parent: RecyclerView, position: Int): RecyclerView.ViewHolder {
-    val key = matchesAdapter.getHeaderId(position)
+    val headerPosition =
+        headerPositionCache[position] ?: matchesAdapter.closestHeaderPosition(position).also {
+          headerPositionCache[position] = it
+        }
 
-    if (headerCache.containsKey(key)) {
-      return headerCache[key]!! // :/
-    } else {
-      val holder = matchesAdapter.onCreateHeaderViewHolder(parent)
-      val header = holder.itemView
+    val holder = headerViewHolderCache[headerPosition] ?:
+        (matchesAdapter.onCreateViewHolder(parent, matchesAdapter.getItemViewType(headerPosition))
+            as MatchHeaderViewHolder).also { headerViewHolderCache[headerPosition] = it }
 
-      matchesAdapter.onBindHeaderViewHolder(holder, position)
+    matchesAdapter.onBindViewHolder(holder, headerPosition)
 
-      val widthSpec = View.MeasureSpec.makeMeasureSpec(parent.measuredWidth,
-          View.MeasureSpec.EXACTLY)
-      val heightSpec = View.MeasureSpec.makeMeasureSpec(parent.measuredHeight,
-          View.MeasureSpec.UNSPECIFIED)
+    val widthSpec =
+        View.MeasureSpec.makeMeasureSpec(parent.measuredWidth, View.MeasureSpec.EXACTLY)
+    val heightSpec =
+        View.MeasureSpec.makeMeasureSpec(parent.measuredHeight, View.MeasureSpec.UNSPECIFIED)
 
+    holder.itemView.let { headerView ->
       val childWidth = ViewGroup.getChildMeasureSpec(widthSpec,
-          parent.paddingLeft + parent.paddingRight, header.layoutParams.width)
+          parent.paddingLeft + parent.paddingRight, headerView.layoutParams.width)
       val childHeight = ViewGroup.getChildMeasureSpec(heightSpec,
-          parent.paddingTop + parent.paddingBottom, header.layoutParams.height)
+          parent.paddingTop + parent.paddingBottom, headerView.layoutParams.height)
 
-      header.measure(childWidth, childHeight)
-      header.layout(0, 0, header.measuredWidth, header.measuredHeight)
-
-      headerCache.put(key, holder)
-
-      return holder
+      headerView.measure(childWidth, childHeight)
+      headerView.layout(0, 0, headerView.measuredWidth, headerView.measuredHeight)
     }
-  }
 
-  companion object Constants {
-    val NO_HEADER_ID = -1L
+    return holder
   }
 
   private fun getHeaderHeightForLayout(header: View): Int {
-    return if (renderInline) 0 else header.height
+//    return if (renderInline) 0 else header.height
+    return 0
   }
 
   override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
     val childCount = parent.childCount
-    var previousHeaderId: Long = -1
+    var previousHeaderPosition: Int = -1
 
     for (layoutPos in 0 until childCount) {
       val child = parent.getChildAt(layoutPos)
       val adapterPos = parent.getChildAdapterPosition(child)
 
-      if (adapterPos != RecyclerView.NO_POSITION && hasHeader(adapterPos)) {
-        val headerId = matchesAdapter.getHeaderId(adapterPos)
+      if (adapterPos != RecyclerView.NO_POSITION) {
+        val headerPosition = matchesAdapter.closestHeaderPosition(adapterPos)
 
-        if (headerId != previousHeaderId) {
-          previousHeaderId = headerId
+        if (headerPosition != previousHeaderPosition) {
+          previousHeaderPosition = headerPosition
           val header = getHeader(parent, adapterPos).itemView
           canvas.save()
 
           val left = child.left
-          val top = getHeaderTop(parent, child, header, adapterPos, layoutPos)
+          val top = getHeaderTop(parent, child, header, layoutPos, headerPosition)
           canvas.translate(left.toFloat(), top.toFloat())
 
           header.translationX = left.toFloat()
@@ -106,22 +101,26 @@ class MatchesHeaderDecoration(
     }
   }
 
-  private fun getHeaderTop(parent: RecyclerView, child: View, header: View, adapterPos: Int,
-      layoutPos: Int): Int {
+  private fun getHeaderTop(
+      parent: RecyclerView,
+      child: View,
+      header: View,
+      layoutPos: Int,
+      headerPosition: Int
+  ): Int {
     val headerHeight = getHeaderHeightForLayout(header)
     var top = child.y.toInt() - headerHeight
     if (layoutPos == 0) {
       val count = parent.childCount
-      val currentId = matchesAdapter.getHeaderId(adapterPos)
       // find next view with header and compute the offscreen push if needed
       for (i in 1 until count) {
         val adapterPosHere = parent.getChildAdapterPosition(parent.getChildAt(i))
         if (adapterPosHere != RecyclerView.NO_POSITION) {
-          val nextId = matchesAdapter.getHeaderId(adapterPosHere)
-          if (nextId != currentId) {
+          val nextHeaderPosition = matchesAdapter.closestHeaderPosition(adapterPosHere)
+          if (nextHeaderPosition != headerPosition) {
             val next = parent.getChildAt(i)
-            val offset = next.y.toInt() - (headerHeight + getHeader(parent,
-                adapterPosHere).itemView.height)
+            val offset =
+                next.y.toInt() - (headerHeight + getHeader(parent, adapterPosHere).itemView.height)
             return if (offset < 0) {
               offset
             } else {

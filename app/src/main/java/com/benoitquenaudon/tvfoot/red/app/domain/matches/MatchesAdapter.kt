@@ -23,13 +23,13 @@ import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding
 import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
 import javax.inject.Inject
 
 @ActivityScope
 class MatchesAdapter @Inject constructor(
     private val schedulerProvider: BaseSchedulerProvider
 ) : RecyclerView.Adapter<MatchesItemViewHolder<*, *>>() {
-  private var allMatchesItems = emptyList<MatchesItemDisplayable>()
   private var matchesItems = emptyList<MatchesItemDisplayable>()
   private val matchesObservable: PublishSubject<Pair<List<MatchesItemDisplayable>, List<MatchesItemDisplayable>>> = PublishSubject.create()
   val matchRowClickObservable: PublishSubject<MatchRowDisplayable> = PublishSubject.create()
@@ -44,8 +44,10 @@ class MatchesAdapter @Inject constructor(
     val binding = DataBindingUtil.inflate<ViewDataBinding>(layoutInflater, viewType, parent, false)
 
     return when (viewType) {
-      R.layout.matches_row_header -> MatchesItemViewHolder.MatchHeaderViewHolder(
-          binding as MatchesRowHeaderBinding)
+      R.layout.matches_row_header -> {
+        Timber.d("connard creating header view holder")
+        MatchesItemViewHolder.MatchHeaderViewHolder(
+          binding as MatchesRowHeaderBinding)}
       R.layout.matches_row_match -> MatchesItemViewHolder.MatchRowViewHolder(
           binding as MatchesRowMatchBinding, this)
       R.layout.row_loading -> MatchesItemViewHolder.LoadingRowViewHolder(
@@ -109,18 +111,12 @@ class MatchesAdapter @Inject constructor(
       matchesItems.isEmpty() -> {
         if (newItems.isEmpty()) return
 
-        newItems.let {
-          allMatchesItems = it
-          matchesItems = it.filterNot { it is HeaderRowDisplayable }
-        }
+        matchesItems = newItems
         notifyDataSetChanged()
       }
       newItems.isEmpty() -> {
         val oldSize = matchesItems.size
-        newItems.let {
-          allMatchesItems = it
-          matchesItems = it.filterNot { it is HeaderRowDisplayable }
-        }
+        matchesItems = newItems
         notifyItemRangeRemoved(0, oldSize)
       }
       else -> matchesObservable.onNext(Pair(matchesItems, newItems))
@@ -130,7 +126,7 @@ class MatchesAdapter @Inject constructor(
   private fun processItemDiffs(): Disposable =
       matchesObservable
           .scan(Pair(emptyList(), null),
-              { lastResult: Pair<List<MatchesItemDisplayable>, DiffResult?>, (oldItems, newItems) ->
+              { _: Pair<List<MatchesItemDisplayable>, DiffResult?>, (oldItems, newItems) ->
                 MatchesItemDisplayableDiffUtilCallback(oldItems, newItems).let { callback ->
                   Pair(newItems, DiffUtil.calculateDiff(callback, true))
                 }
@@ -139,34 +135,15 @@ class MatchesAdapter @Inject constructor(
           .subscribeOn(schedulerProvider.computation())
           .observeOn(schedulerProvider.ui())
           .subscribe { (newItems, diffResult) ->
-            newItems.let {
-              allMatchesItems = it
-              matchesItems = it.filterNot { it is HeaderRowDisplayable }
-            }
+            matchesItems = newItems
             diffResult?.dispatchUpdatesTo(this)
           }
 
-  fun getHeaderId(position: Int): Long {
-    return getClosestHeader(allMatchesItems, allMatchesItems.indexOf(matchesItems[position])).id
-  }
+  fun closestHeaderPosition(position: Int): Int {
+    if (position < 0) throw IllegalStateException("should have a header")
 
-  fun onCreateHeaderViewHolder(parent: ViewGroup): MatchHeaderViewHolder {
-    val layoutInflater = LayoutInflater.from(parent.context)
-    val binding = DataBindingUtil.inflate<MatchesRowHeaderBinding>(layoutInflater,
-        R.layout.matches_row_header, parent, false)
-    return MatchesItemViewHolder.MatchHeaderViewHolder(binding)
-  }
-
-  fun onBindHeaderViewHolder(viewHolder: MatchHeaderViewHolder, position: Int) {
-    viewHolder.bind(
-        getClosestHeader(allMatchesItems, allMatchesItems.indexOf(matchesItems[position])))
-  }
-
-  private fun getClosestHeader(items: List<MatchesItemDisplayable>,
-      index: Int): HeaderRowDisplayable {
-    if (index < 0) throw IllegalStateException("should have a header")
-    return items[index].let { item ->
-      item as? HeaderRowDisplayable ?: getClosestHeader(items, index - 1)
+    return matchesItems[position].let {
+      if (it is HeaderRowDisplayable) position else closestHeaderPosition(position - 1)
     }
   }
 }
