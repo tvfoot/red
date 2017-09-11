@@ -29,7 +29,12 @@ class FiltersAdapter @Inject constructor() : RecyclerView.Adapter<FiltersViewHol
     }
   }
 
-  override fun getItemViewType(position: Int): Int = R.layout.filters_row_league
+  @Suppress("USELESS_IS_CHECK")
+  override fun getItemViewType(position: Int): Int =
+      when (filters[position]) {
+        is FilterRowDisplayable -> R.layout.filters_row_league
+        else -> throw NotImplementedError("how about this position $position")
+      }
 
   override fun onBindViewHolder(holder: FiltersViewHolder, position: Int) {
     holder.bind(filters[position])

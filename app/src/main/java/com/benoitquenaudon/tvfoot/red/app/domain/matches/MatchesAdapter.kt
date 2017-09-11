@@ -43,12 +43,12 @@ class MatchesAdapter @Inject constructor(
     val binding = DataBindingUtil.inflate<ViewDataBinding>(layoutInflater, viewType, parent, false)
 
     return when (viewType) {
-      R.layout.matches_row_header -> MatchesItemViewHolder.MatchHeaderViewHolder(
-          binding as MatchesRowHeaderBinding)
-      R.layout.matches_row_match -> MatchesItemViewHolder.MatchRowViewHolder(
-          binding as MatchesRowMatchBinding, this)
-      R.layout.row_loading -> MatchesItemViewHolder.LoadingRowViewHolder(
-          binding as RowLoadingBinding)
+      R.layout.matches_row_header ->
+        MatchesItemViewHolder.MatchHeaderViewHolder(binding as MatchesRowHeaderBinding)
+      R.layout.matches_row_match ->
+        MatchesItemViewHolder.MatchRowViewHolder(binding as MatchesRowMatchBinding, this)
+      R.layout.row_loading ->
+        MatchesItemViewHolder.LoadingRowViewHolder(binding as RowLoadingBinding)
       else -> throw UnsupportedOperationException(
           "don't know how to deal with this viewType: " + viewType)
     }
@@ -135,4 +135,12 @@ class MatchesAdapter @Inject constructor(
             matchesItems = newItems
             diffResult?.dispatchUpdatesTo(this)
           }
+
+  fun closestHeaderPosition(position: Int): Int {
+    if (position < 0) throw IllegalStateException("should have a header")
+
+    return matchesItems[position].let {
+      if (it is HeaderRowDisplayable) position else closestHeaderPosition(position - 1)
+    }
+  }
 }
