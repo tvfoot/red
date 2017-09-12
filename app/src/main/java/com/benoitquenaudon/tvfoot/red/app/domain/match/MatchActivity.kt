@@ -40,7 +40,7 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
     ViewModelProviders.of(this, viewModelFactory).get(MatchViewModel::class.java)
   }
 
-  private var binding: ActivityMatchBinding by Delegates.notNull<ActivityMatchBinding>()
+  private var binding: ActivityMatchBinding by Delegates.notNull()
   private var matchId: String? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
