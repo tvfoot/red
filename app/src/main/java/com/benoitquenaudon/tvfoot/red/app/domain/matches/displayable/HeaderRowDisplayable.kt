@@ -13,10 +13,6 @@ import java.util.Date
 
 @Suppress("DataClassPrivateConstructor")
 data class HeaderRowDisplayable private constructor(
-    /**
-     * Used for sticky headers
-     */
-    val id: Int,
     val dangerResId: Int,
     val hasDanger: Boolean,
     val displayedDate: String
@@ -39,22 +35,19 @@ data class HeaderRowDisplayable private constructor(
         throw UnsupportedOperationException("What is this date anyway? " + headerKey)
       }
 
-      // yyyy-MM-dd without the '-' to int
-      val id = headerKeyDateFormat.format(date).filter { it != '-' }.toInt()
-
       var dangerResId = -1
       val displayedDate: String
       val nowCalendar = Calendar.getInstance()
       if (date.time.isToday(nowCalendar)) {
         dangerResId = R.string.matches_row_header_danger_today
         displayedDate = monthDateFormat.format(date).capitalize()
-        return HeaderRowDisplayable(id, dangerResId, true, displayedDate)
+        return HeaderRowDisplayable(dangerResId, true, displayedDate)
       }
 
       if (date.time.isTomorrow(nowCalendar)) {
         dangerResId = R.string.matches_row_header_danger_tomorrow
         displayedDate = monthDateFormat.format(date).capitalize()
-        return HeaderRowDisplayable(id, dangerResId, true, displayedDate)
+        return HeaderRowDisplayable(dangerResId, true, displayedDate)
       }
 
       if (date.time.isCurrentYear(nowCalendar)) {
@@ -63,7 +56,7 @@ data class HeaderRowDisplayable private constructor(
         displayedDate = yearDateFormat.format(date)
       }
 
-      return HeaderRowDisplayable(id, dangerResId, false, displayedDate)
+      return HeaderRowDisplayable(dangerResId, false, displayedDate)
     }
   }
 }
