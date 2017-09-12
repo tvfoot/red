@@ -5,7 +5,7 @@ import android.databinding.ObservableField
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState
 import javax.inject.Inject
 
-class MatchesViewBinding @Inject constructor(private val adapter: MatchesAdapter) {
+class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapter) {
   var refreshLoading = ObservableBoolean(false)
   var hasError = ObservableBoolean(false)
   var hasData = ObservableBoolean(false)

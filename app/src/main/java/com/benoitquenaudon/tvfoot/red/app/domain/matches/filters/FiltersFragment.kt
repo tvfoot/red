@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState> {
   @Inject lateinit var disposables: CompositeDisposable
-  @Inject lateinit var viewBinding: FiltersViewBinding
+  @Inject lateinit var bindingModel: FiltersBindingModel
   @Inject lateinit var stateBinder: MatchesViewModel
   @Inject lateinit var filtersAdapter: FiltersAdapter
 
@@ -82,15 +82,15 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
       filtersAdapter.filterRowClickObservable.map { ToggleFilterIntent(it.code) }
 
   override fun render(state: MatchesViewState) {
-    viewBinding.updateFromState(state)
+    bindingModel.updateFromState(state)
   }
 
   private fun bind() {
     disposables.add(stateBinder.states().subscribe(this::render))
     stateBinder.processIntents(intents())
     disposables.add(
-        RxObservableBoolean.propertyChanges(viewBinding.hasFilters)
-            .startWith(viewBinding.hasFilters.get()) // fix for rotation
+        RxObservableBoolean.propertyChanges(bindingModel.hasFilters)
+            .startWith(bindingModel.hasFilters.get()) // fix for rotation
             .subscribe {
               binding.filtersToolbar.menu.findItem(R.id.action_clear).isVisible = it
             }

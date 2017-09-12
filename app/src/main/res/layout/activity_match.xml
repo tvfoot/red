@@ -5,8 +5,8 @@
     >
   <data>
     <variable
-        name="viewBinding"
-        type="com.benoitquenaudon.tvfoot.red.app.domain.match.MatchViewBinding"
+        name="bindingModel"
+        type="com.benoitquenaudon.tvfoot.red.app.domain.match.MatchBindingModel"
         />
   </data>
 
@@ -49,7 +49,7 @@
         android:layout_gravity="center"
         android:indeterminate="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:visible="@{viewBinding.isLoading}"
+        app:visible="@{bindingModel.isLoading}"
         tools:visibility="visible"
         style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
         />
@@ -61,7 +61,7 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:background="@color/colorWhite"
         android:fitsSystemWindows="true"
-        app:visible="@{viewBinding.hasData}"
+        app:visible="@{bindingModel.hasData}"
         >
       <android.support.constraint.ConstraintLayout
           android:layout_width="match_parent"
@@ -77,7 +77,7 @@
             android:layout_marginTop="24dp"
             android:paddingEnd="12dp"
             android:paddingStart="12dp"
-            android:text="@{viewBinding.match.headline}"
+            android:text="@{bindingModel.match.headline}"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textIsSelectable="true"
@@ -94,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{viewBinding.match.competition}"
+            android:text="@{bindingModel.match.competition}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textIsSelectable="true"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -112,7 +112,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/match_detail_away_team_icon"
             app:layout_constraintTop_toBottomOf="@+id/match_detail_competition"
-            app:tvfootTeamLogoPath="@{viewBinding.match.homeTeamLogoPath}"
+            app:tvfootTeamLogoPath="@{bindingModel.match.homeTeamLogoPath}"
             />
 
         <ImageView
@@ -124,7 +124,7 @@
             app:layout_constraintLeft_toRightOf="@+id/match_detail_home_team_icon"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/match_detail_competition"
-            app:tvfootTeamLogoPath="@{viewBinding.match.awayTeamLogoPath}"
+            app:tvfootTeamLogoPath="@{bindingModel.match.awayTeamLogoPath}"
             />
 
         <TextView
@@ -143,7 +143,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/match_detail_home_team_icon"
-            app:visible="@{viewBinding.match.live}"
+            app:visible="@{bindingModel.match.live}"
             />
 
         <TextView
@@ -151,7 +151,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{viewBinding.match.startTimeInText}"
+            android:text="@{bindingModel.match.startTimeInText}"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
             android:textIsSelectable="true"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -170,7 +170,7 @@
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingStart="12dp"
-            android:text="@{viewBinding.match.location ?? @string/location_unknown}"
+            android:text="@{bindingModel.match.location ?? @string/location_unknown}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textIsSelectable="true"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -201,8 +201,8 @@
         android:id="@+id/error_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@{viewBinding.errorMessage}"
-        app:visible="@{viewBinding.hasError}"
+        android:text="@{bindingModel.errorMessage}"
+        app:visible="@{bindingModel.hasError}"
         />
 
     <android.support.design.widget.FloatingActionButton
@@ -213,11 +213,11 @@
         android:layout_margin="@dimen/fab_margin"
         android:backgroundTint="@color/notifiy_match_start_background_tint"
         android:tint="@color/notifiy_match_start_tint"
-        app:activated="@{viewBinding.shouldNotifyMatchStart}"
+        app:activated="@{bindingModel.shouldNotifyMatchStart}"
         app:borderWidth="0dp"
         app:rippleColor="@color/colorAccentDark"
         app:srcCompat="@drawable/notify_match_start_icon"
-        app:visible="@{viewBinding.hasData}"
+        app:visible="@{bindingModel.hasData}"
         tools:backgroundTint="@color/colorWhite"
         tools:src="@drawable/ic_notifications_none_white_24px"
         tools:tint="@color/colorAccent"
