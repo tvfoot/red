@@ -13,7 +13,6 @@ class MatchesHeaderDecoration(
     private val matchesAdapter: MatchesAdapter
 ) : RecyclerView.ItemDecoration() {
   private val headerViewHolderCache: SparseArray<MatchHeaderViewHolder> = SparseArray()
-  private val headerPositionCache: MutableMap<Int, Int> = HashMap()
 
   override fun getItemOffsets(
       outRect: Rect,
@@ -39,10 +38,7 @@ class MatchesHeaderDecoration(
           matchesAdapter.closestHeaderPosition(secondPosition)
 
   private fun getHeader(parent: RecyclerView, position: Int): RecyclerView.ViewHolder {
-    val headerPosition =
-        headerPositionCache[position] ?: matchesAdapter.closestHeaderPosition(position).also {
-          headerPositionCache[position] = it
-        }
+    val headerPosition = matchesAdapter.closestHeaderPosition(position)
 
     val holder = headerViewHolderCache[headerPosition] ?:
         (matchesAdapter.onCreateViewHolder(parent, matchesAdapter.getItemViewType(headerPosition))
