@@ -15,7 +15,7 @@ import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MINUTES_BEFORE_NOTIFICATION
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchStateBinder
+import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewState
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.BroadcastersAdapter
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
@@ -30,7 +30,7 @@ import kotlin.properties.Delegates
 class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   @Inject lateinit var broadcastersAdapter: BroadcastersAdapter
   @Inject lateinit var flowController: FlowController
-  @Inject lateinit var stateBinder: MatchStateBinder
+  @Inject lateinit var stateBinder: MatchViewModel
   @Inject lateinit var disposables: CompositeDisposable
   @Inject lateinit var viewBinding: MatchViewBinding
 

@@ -22,7 +22,7 @@ import org.mockito.Mockito.mock
 import javax.inject.Inject
 
 class MatchStateBinderTest {
-  lateinit var matchStateBinder: MatchStateBinder
+  lateinit var matchStateBinder: MatchViewModel
   lateinit var testObserver: TestObserver<MatchViewState>
   val preferenceRepository: PreferenceRepository = mock(PreferenceRepository::class.java)
   val notificationRepository: NotificationRepository = mock(NotificationRepository::class.java)
@@ -37,7 +37,7 @@ class MatchStateBinderTest {
     val schedulerProvider: BaseSchedulerProvider = ImmediateSchedulerProvider()
     val redFirebaseAnalytics: BaseRedFirebaseAnalytics = NoopRedFirebaseAnalytics
 
-    matchStateBinder = MatchStateBinder(
+    matchStateBinder = MatchViewModel(
         intents,
         states,
         FakeMatchRepository(),

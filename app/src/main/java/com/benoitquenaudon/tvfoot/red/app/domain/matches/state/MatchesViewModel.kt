@@ -28,7 +28,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.Loa
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.LoadTagsResult.Factory
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.RefreshResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.ToggleFilterResult
-import com.benoitquenaudon.tvfoot.red.app.mvi.RedStateBinder
+import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
 import com.benoitquenaudon.tvfoot.red.injection.scope.ScreenScope
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
@@ -41,13 +41,13 @@ import io.reactivex.subjects.PublishSubject
 import java.util.ArrayList
 import javax.inject.Inject
 
-@ScreenScope class MatchesStateBinder @Inject constructor(
+@ScreenScope class MatchesViewModel @Inject constructor(
     private val intentsSubject: PublishSubject<MatchesIntent>,
     private val statesSubject: PublishSubject<MatchesViewState>,
     private val repository: BaseMatchesRepository,
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
-) : RedStateBinder<MatchesIntent, MatchesViewState>(firebaseAnalytics) {
+) : RedViewModel<MatchesIntent, MatchesViewState>(firebaseAnalytics) {
 
   init {
     compose().subscribe(statesSubject::onNext)

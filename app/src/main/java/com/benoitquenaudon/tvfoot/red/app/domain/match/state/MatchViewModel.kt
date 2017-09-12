@@ -21,7 +21,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_IN_FLIGHT
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_SUCCESS
 import com.benoitquenaudon.tvfoot.red.injection.scope.ScreenScope
-import com.benoitquenaudon.tvfoot.red.app.mvi.RedStateBinder
+import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
 import com.benoitquenaudon.tvfoot.red.util.logResult
@@ -33,7 +33,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
-@ScreenScope class MatchStateBinder @Inject constructor(
+@ScreenScope class MatchViewModel @Inject constructor(
     private val intentsSubject: PublishSubject<MatchIntent>,
     private val statesSubject: PublishSubject<MatchViewState>,
     private val matchRepository: BaseMatchRepository,
@@ -41,7 +41,7 @@ import javax.inject.Inject
     private val notificationRepository: NotificationRepository,
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
-) : RedStateBinder<MatchIntent, MatchViewState>(firebaseAnalytics) {
+) : RedViewModel<MatchIntent, MatchViewState>(firebaseAnalytics) {
 
   init {
     compose().subscribe(statesSubject::onNext)

@@ -12,11 +12,11 @@ import org.junit.Test
 import kotlin.properties.Delegates
 
 class MatchesStateBinderTest {
-  var stateBinder by Delegates.notNull<MatchesStateBinder>()
+  var stateBinder by Delegates.notNull<MatchesViewModel>()
   var testObserver by Delegates.notNull<TestObserver<MatchesViewState>>()
 
   @Before fun setup() {
-    stateBinder = MatchesStateBinder(
+    stateBinder = MatchesViewModel(
         PublishSubject.create<MatchesIntent>(),
         PublishSubject.create<MatchesViewState>(),
         FakeMatchesRepository(),

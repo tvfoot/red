@@ -20,7 +20,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.LoadNextPageIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.RefreshIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesStateBinder
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchesBinding
@@ -37,7 +37,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   @Inject lateinit var adapter: MatchesAdapter
   @Inject lateinit var flowController: FlowController
   @Inject lateinit var viewBinding: MatchesViewBinding
-  @Inject lateinit var stateBinder: MatchesStateBinder
+  @Inject lateinit var stateBinder: MatchesViewModel
   @Inject lateinit var disposables: CompositeDisposable
 
   private var binding: ActivityMatchesBinding by Delegates.notNull<ActivityMatchesBinding>()

@@ -15,7 +15,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.ClearFilters
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.FilterInitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.ToggleFilterIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesStateBinder
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.FragmentFiltersBinding
@@ -27,7 +27,7 @@ import javax.inject.Inject
 class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState> {
   @Inject lateinit var disposables: CompositeDisposable
   @Inject lateinit var viewBinding: FiltersViewBinding
-  @Inject lateinit var stateBinder: MatchesStateBinder
+  @Inject lateinit var stateBinder: MatchesViewModel
   @Inject lateinit var filtersAdapter: FiltersAdapter
 
   lateinit var binding: FragmentFiltersBinding
