@@ -6,7 +6,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewState
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.BroadcastersAdapter
 import javax.inject.Inject
 
-class MatchViewModel @Inject constructor(
+class MatchViewBinding @Inject constructor(
     private val broadcastersAdapter: BroadcastersAdapter
 ) {
   val isLoading = ObservableBoolean()

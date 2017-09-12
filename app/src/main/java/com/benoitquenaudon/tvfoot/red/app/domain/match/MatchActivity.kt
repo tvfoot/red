@@ -32,7 +32,7 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   @Inject lateinit var flowController: FlowController
   @Inject lateinit var stateBinder: MatchStateBinder
   @Inject lateinit var disposables: CompositeDisposable
-  @Inject lateinit var viewModel: MatchViewModel
+  @Inject lateinit var viewBinding: MatchViewBinding
 
   private var binding: ActivityMatchBinding by Delegates.notNull<ActivityMatchBinding>()
   private var matchId: String? = null
@@ -69,7 +69,7 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   private fun setupView() {
     binding = DataBindingUtil.setContentView<ActivityMatchBinding>(this, R.layout.activity_match)
     binding.matchDetailBroadcasters.adapter = broadcastersAdapter
-    binding.viewModel = viewModel
+    binding.viewBinding = viewBinding
 
     setSupportActionBar(binding.matchToolbar)
     supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -80,7 +80,7 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
     disposables.add(stateBinder.states().subscribe(this::render))
     stateBinder.processIntents(intents())
 
-    disposables.add(RxObservableBoolean.propertyChanges(viewModel.shouldNotifyMatchStart)
+    disposables.add(RxObservableBoolean.propertyChanges(viewBinding.shouldNotifyMatchStart)
         .subscribe { shouldNotifyMatchStart ->
           if (shouldNotifyMatchStart) {
             Snackbar.make(binding.root,
@@ -106,13 +106,13 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   private fun fabClickIntent(): Observable<MatchIntent.NotifyMatchStartIntent> {
     return RxView.clicks(binding.notifyMatchStartFab)
         .map {
-          MatchIntent.NotifyMatchStartIntent(viewModel.match.get().matchId(),
-              viewModel.match.get().startAt(), !isMatchNotificationActivated)
+          MatchIntent.NotifyMatchStartIntent(viewBinding.match.get().matchId(),
+              viewBinding.match.get().startAt(), !isMatchNotificationActivated)
         }
   }
 
   private val isMatchNotificationActivated: Boolean
     get() = binding.notifyMatchStartFab.isActivated
 
-  override fun render(state: MatchViewState) = viewModel.updateFromState(state)
+  override fun render(state: MatchViewState) = viewBinding.updateFromState(state)
 }

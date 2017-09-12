@@ -36,7 +36,7 @@ import kotlin.properties.Delegates
 class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState> {
   @Inject lateinit var adapter: MatchesAdapter
   @Inject lateinit var flowController: FlowController
-  @Inject lateinit var viewModel: MatchesViewModel
+  @Inject lateinit var viewBinding: MatchesViewBinding
   @Inject lateinit var stateBinder: MatchesStateBinder
   @Inject lateinit var disposables: CompositeDisposable
 
@@ -58,7 +58,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     binding = DataBindingUtil.setContentView(this, R.layout.activity_matches)
     binding.recyclerView.adapter = adapter
     binding.recyclerView.addItemDecoration(MatchesHeaderDecoration(adapter), 0)
-    binding.viewModel = viewModel
+    binding.viewBinding = viewBinding
 
     setSupportActionBar(binding.matchesToolbar)
     supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -85,11 +85,11 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   }
 
   override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-    menu.findItem(R.id.matches_filters_item).isVisible = viewModel.areTagsLoaded.get()
+    menu.findItem(R.id.matches_filters_item).isVisible = viewBinding.areTagsLoaded.get()
 
     menu.findItem(R.id.matches_filters_item).actionView
         .findViewById<View>(R.id.filters_usage_badge)
-        .visibility = if (viewModel.hasActiveFilters.get()) View.VISIBLE else View.GONE
+        .visibility = if (viewBinding.hasActiveFilters.get()) View.VISIBLE else View.GONE
     return super.onPrepareOptionsMenu(menu)
   }
 
@@ -120,11 +120,11 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
         .subscribe { matchRowDisplayable -> flowController.toMatch(matchRowDisplayable.matchId) }
     )
     disposables.add(
-        RxObservableBoolean.propertyChanges(viewModel.areTagsLoaded)
+        RxObservableBoolean.propertyChanges(viewBinding.areTagsLoaded)
             .subscribe { invalidateOptionsMenu() }
     )
     disposables.add(
-        RxObservableBoolean.propertyChanges(viewModel.hasActiveFilters)
+        RxObservableBoolean.propertyChanges(viewBinding.hasActiveFilters)
             .subscribe { invalidateOptionsMenu() }
     )
 
@@ -157,16 +157,16 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
 
   private fun loadNextPageIntent(): Observable<LoadNextPageIntent> {
     return RxRecyclerView.scrollEvents(binding.recyclerView)
-        .filter { viewModel.hasMore && !viewModel.nextPageLoading }
+        .filter { viewBinding.hasMore && !viewBinding.nextPageLoading }
         .filter { scrollEvent ->
           val layoutManager = scrollEvent.view().layoutManager as LinearLayoutManager
           val lastPosition = layoutManager.findLastVisibleItemPosition()
           lastPosition == scrollEvent.view().adapter.itemCount - 1
         }
-        .map { LoadNextPageIntent(viewModel.currentPage + 1) }
+        .map { LoadNextPageIntent(viewBinding.currentPage + 1) }
   }
 
-  override fun render(state: MatchesViewState) = viewModel.updateFromState(state)
+  override fun render(state: MatchesViewState) = viewBinding.updateFromState(state)
 
   override fun onBackPressed() {
     if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {

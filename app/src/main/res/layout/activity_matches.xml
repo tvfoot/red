@@ -5,8 +5,8 @@
     >
   <data>
     <variable
-        name="viewModel"
-        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewModel"
+        name="viewBinding"
+        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewBinding"
         />
   </data>
   <android.support.v4.widget.DrawerLayout
@@ -55,14 +55,14 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           app:layout_behavior="@string/appbar_scrolling_view_behavior"
-          app:refreshing="@{viewModel.refreshLoading}"
+          app:refreshing="@{viewBinding.refreshLoading}"
           >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            app:visible="@{viewModel.hasData}"
+            app:visible="@{viewBinding.hasData}"
             tools:context="com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesActivity"
             tools:listitem="@layout/matches_row_match"
             />
@@ -73,15 +73,15 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:text="Empty"
-          app:visible="@{!viewModel.hasData}"
+          app:visible="@{!viewBinding.hasData}"
           />
 
       <TextView
           android:id="@+id/error_view"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:text="@{viewModel.errorMessage}"
-          app:visible="@{viewModel.hasError}"
+          android:text="@{viewBinding.errorMessage}"
+          app:visible="@{viewBinding.hasError}"
           />
 
     </android.support.design.widget.CoordinatorLayout>

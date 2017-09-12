@@ -71,5 +71,6 @@ ext {
          leakCanaryVersion              : '1.5.1',
          firebaseVersion                : '11.2.2',
          rxBindingVersion               : '2.0.0',
-         robolectricVersion             : '3.4']
+         robolectricVersion             : '3.4',
+         archComponentsVersion          : '1.0.0-alpha9']
 }

@@ -2,8 +2,8 @@
 <layout xmlns:tools="http://schemas.android.com/tools">
   <data>
     <variable
-        name="viewModel"
-        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewModel"
+        name="viewBinding"
+        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewBinding"
         />
   </data>
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -30,7 +30,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        app:visible="@{!viewModel.loadingTags}"
+        app:visible="@{!viewBinding.loadingTags}"
         tools:context="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersFragment"
         tools:listitem="@layout/filters_row_league"
         />
