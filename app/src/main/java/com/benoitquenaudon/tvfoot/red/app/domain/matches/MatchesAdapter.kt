@@ -135,4 +135,12 @@ class MatchesAdapter @Inject constructor(
             matchesItems = newItems
             diffResult?.dispatchUpdatesTo(this)
           }
+
+  fun closestHeaderPosition(position: Int): Int {
+    if (position < 0) throw IllegalStateException("should have a header")
+
+    return matchesItems[position].let {
+      if (it is HeaderRowDisplayable) position else closestHeaderPosition(position - 1)
+    }
+  }
 }
