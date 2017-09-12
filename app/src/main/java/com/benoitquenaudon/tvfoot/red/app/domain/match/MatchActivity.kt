@@ -11,7 +11,6 @@ import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.AUTHORITIES
 import com.benoitquenaudon.tvfoot.red.PATH_MATCH
 import com.benoitquenaudon.tvfoot.red.R
-import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.SCHEMES
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
@@ -22,7 +21,6 @@ import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewState
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.BroadcastersAdapter
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
-import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModelFactory
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchBinding
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
@@ -37,9 +35,7 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   @Inject lateinit var flowController: FlowController
   @Inject lateinit var disposables: CompositeDisposable
   @Inject lateinit var bindingModel: MatchBindingModel
-  private val viewModelFactory: ViewModelProvider.Factory by lazy(NONE) {
-    RedViewModelFactory(RedApp.getApp(this).appComponent.creators())
-  }
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private val viewModel: MatchViewModel by lazy(NONE) {
     ViewModelProviders.of(this, viewModelFactory).get(MatchViewModel::class.java)
   }

@@ -15,7 +15,6 @@ import android.view.MenuItem
 import android.view.View
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
-import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersFragment
@@ -26,7 +25,6 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.Ref
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
-import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModelFactory
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchesBinding
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
@@ -43,9 +41,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   @Inject lateinit var flowController: FlowController
   @Inject lateinit var bindingModel: MatchesBindingModel
   @Inject lateinit var disposables: CompositeDisposable
-  private val viewModelFactory: ViewModelProvider.Factory by lazy(NONE) {
-    RedViewModelFactory(RedApp.getApp(this).appComponent.creators())
-  }
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private val viewModel: MatchesViewModel by lazy(NONE) {
     ViewModelProviders.of(this, viewModelFactory).get(MatchesViewModel::class.java)
   }

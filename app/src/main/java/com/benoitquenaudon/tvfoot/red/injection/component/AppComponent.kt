@@ -1,6 +1,5 @@
 package com.benoitquenaudon.tvfoot.red.injection.component
 
-import android.arch.lifecycle.ViewModel
 import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchReminderService
 import com.benoitquenaudon.tvfoot.red.injection.module.ActivityModule
@@ -16,7 +15,6 @@ import com.benoitquenaudon.tvfoot.red.injection.module.ServiceModule
 import com.benoitquenaudon.tvfoot.red.injection.module.ViewModelModule
 import com.squareup.picasso.Picasso
 import dagger.Component
-import javax.inject.Provider
 import javax.inject.Singleton
 
 @Singleton
@@ -36,5 +34,4 @@ interface AppComponent {
   fun inject(redApp: RedApp)
   fun inject(matchReminderService: MatchReminderService)
   fun picasso(): Picasso
-  fun creators(): Map<Class<out ViewModel>, Provider<ViewModel>>
 }
