@@ -5,9 +5,12 @@ import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
 import dagger.Module
 import dagger.Provides
 
-@Module class ActivityModule(val activity: Activity) {
+@Module
+class ActivityModule(val activity: Activity) {
 
-  @Provides @ActivityScope fun provideActivity(): Activity {
+  @Provides
+  @ActivityScope
+  fun provideActivity(): Activity {
     return activity
   }
 }

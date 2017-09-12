@@ -1,7 +1,9 @@
 package com.benoitquenaudon.tvfoot.red.injection.component
 
+import android.arch.lifecycle.ViewModel
 import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchReminderService
+import com.benoitquenaudon.tvfoot.red.injection.module.ActivityModule
 import com.benoitquenaudon.tvfoot.red.injection.module.AppModule
 import com.benoitquenaudon.tvfoot.red.injection.module.BaseImplementationModule
 import com.benoitquenaudon.tvfoot.red.injection.module.FirebaseModule
@@ -11,9 +13,10 @@ import com.benoitquenaudon.tvfoot.red.injection.module.PreferenceServiceModule
 import com.benoitquenaudon.tvfoot.red.injection.module.RxFactoryModule
 import com.benoitquenaudon.tvfoot.red.injection.module.SchedulerModule
 import com.benoitquenaudon.tvfoot.red.injection.module.ServiceModule
+import com.benoitquenaudon.tvfoot.red.injection.module.ViewModelModule
 import com.squareup.picasso.Picasso
 import dagger.Component
-import okhttp3.OkHttpClient
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Singleton
@@ -21,6 +24,7 @@ import javax.inject.Singleton
     AppModule::class,
     NetworkModule::class,
     ServiceModule::class,
+    ViewModelModule::class,
     PreferenceServiceModule::class,
     SchedulerModule::class,
     RxFactoryModule::class,
@@ -28,8 +32,9 @@ import javax.inject.Singleton
     LibrariesModule::class,
     BaseImplementationModule::class))
 interface AppComponent {
-  fun screenComponent(): ScreenComponent
+  fun plus(activityModule: ActivityModule): ActivityComponent
   fun inject(redApp: RedApp)
   fun inject(matchReminderService: MatchReminderService)
   fun picasso(): Picasso
+  fun creators(): Map<Class<out ViewModel>, Provider<ViewModel>>
 }

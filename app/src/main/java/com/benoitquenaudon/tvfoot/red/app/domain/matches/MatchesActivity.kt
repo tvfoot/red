@@ -1,6 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -13,6 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
+import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersFragment
@@ -23,6 +26,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.Ref
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
+import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModelFactory
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchesBinding
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
@@ -30,6 +34,7 @@ import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
+import kotlin.LazyThreadSafetyMode.NONE
 import kotlin.properties.Delegates
 
 
@@ -37,10 +42,15 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   @Inject lateinit var adapter: MatchesAdapter
   @Inject lateinit var flowController: FlowController
   @Inject lateinit var viewBinding: MatchesViewBinding
-  @Inject lateinit var stateBinder: MatchesViewModel
   @Inject lateinit var disposables: CompositeDisposable
+  private val viewModelFactory: ViewModelProvider.Factory by lazy(NONE) {
+    RedViewModelFactory(RedApp.getApp(this).appComponent.creators())
+  }
+  private val viewModel: MatchesViewModel by lazy(NONE) {
+    ViewModelProviders.of(this, viewModelFactory).get(MatchesViewModel::class.java)
+  }
 
-  private var binding: ActivityMatchesBinding by Delegates.notNull<ActivityMatchesBinding>()
+  private var binding: ActivityMatchesBinding by Delegates.notNull()
 
   companion object {
     private const val FRAGMENT_FILTERS = "fragment:filters"
@@ -113,8 +123,8 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   }
 
   private fun bind() {
-    disposables.add(stateBinder.states().subscribe(this::render))
-    stateBinder.processIntents(intents())
+    disposables.add(viewModel.states().subscribe(this::render))
+    viewModel.processIntents(intents())
 
     disposables.add(adapter.matchRowClickObservable
         .subscribe { matchRowDisplayable -> flowController.toMatch(matchRowDisplayable.matchId) }

@@ -20,7 +20,6 @@ import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.NotifyM
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_FAILURE
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_IN_FLIGHT
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_SUCCESS
-import com.benoitquenaudon.tvfoot.red.injection.scope.ScreenScope
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
@@ -33,7 +32,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
-@ScreenScope class MatchViewModel @Inject constructor(
+class MatchViewModel @Inject constructor(
     private val intentsSubject: PublishSubject<MatchIntent>,
     private val statesSubject: PublishSubject<MatchViewState>,
     private val matchRepository: BaseMatchRepository,

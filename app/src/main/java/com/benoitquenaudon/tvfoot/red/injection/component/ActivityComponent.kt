@@ -10,8 +10,7 @@ import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
 import dagger.Subcomponent
 
 @ActivityScope
-@Subcomponent(modules = arrayOf(
-    ActivityModule::class))
+@Subcomponent(modules = arrayOf(ActivityModule::class))
 interface ActivityComponent {
   fun plus(fragmentModule: FragmentModule): FragmentComponent
 

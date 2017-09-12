@@ -1,5 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match
 
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +11,7 @@ import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.AUTHORITIES
 import com.benoitquenaudon.tvfoot.red.PATH_MATCH
 import com.benoitquenaudon.tvfoot.red.R
+import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.SCHEMES
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
@@ -19,20 +22,27 @@ import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewState
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.BroadcastersAdapter
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
+import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModelFactory
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchBinding
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.LazyThreadSafetyMode.NONE
 import kotlin.properties.Delegates
 
 class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   @Inject lateinit var broadcastersAdapter: BroadcastersAdapter
   @Inject lateinit var flowController: FlowController
-  @Inject lateinit var stateBinder: MatchViewModel
   @Inject lateinit var disposables: CompositeDisposable
   @Inject lateinit var viewBinding: MatchViewBinding
+  private val viewModelFactory: ViewModelProvider.Factory by lazy(NONE) {
+    RedViewModelFactory(RedApp.getApp(this).appComponent.creators())
+  }
+  private val viewModel: MatchViewModel by lazy(NONE) {
+    ViewModelProviders.of(this, viewModelFactory).get(MatchViewModel::class.java)
+  }
 
   private var binding: ActivityMatchBinding by Delegates.notNull<ActivityMatchBinding>()
   private var matchId: String? = null
@@ -77,8 +87,8 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   }
 
   private fun bind() {
-    disposables.add(stateBinder.states().subscribe(this::render))
-    stateBinder.processIntents(intents())
+    disposables.add(viewModel.states().subscribe(this::render))
+    viewModel.processIntents(intents())
 
     disposables.add(RxObservableBoolean.propertyChanges(viewBinding.shouldNotifyMatchStart)
         .subscribe { shouldNotifyMatchStart ->

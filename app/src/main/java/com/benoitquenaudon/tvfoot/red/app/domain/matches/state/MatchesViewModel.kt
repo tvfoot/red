@@ -29,7 +29,6 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.Loa
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.RefreshResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.ToggleFilterResult
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
-import com.benoitquenaudon.tvfoot.red.injection.scope.ScreenScope
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
 import com.benoitquenaudon.tvfoot.red.util.logResult
@@ -41,7 +40,7 @@ import io.reactivex.subjects.PublishSubject
 import java.util.ArrayList
 import javax.inject.Inject
 
-@ScreenScope class MatchesViewModel @Inject constructor(
+class MatchesViewModel @Inject constructor(
     private val intentsSubject: PublishSubject<MatchesIntent>,
     private val statesSubject: PublishSubject<MatchesViewState>,
     private val repository: BaseMatchesRepository,
