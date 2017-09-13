@@ -18,12 +18,9 @@ import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersFragment
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.InitialIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.LoadNextPageIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.RefreshIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewModel
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.InitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.LoadNextPageIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshIntent
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchesBinding
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
@@ -43,7 +40,8 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   @Inject lateinit var disposables: CompositeDisposable
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private val viewModel: MatchesViewModel by lazy(NONE) {
-    ViewModelProviders.of(this, viewModelFactory).get(MatchesViewModel::class.java)
+    ViewModelProviders.of(this, viewModelFactory).get(
+        MatchesViewModel::class.java)
   }
 
   private var binding: ActivityMatchesBinding by Delegates.notNull()

@@ -1,9 +1,9 @@
 package com.benoitquenaudon.tvfoot.red.injection.module
 
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewState
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchViewState
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
 import dagger.Module
 import dagger.Provides
 import io.reactivex.subjects.PublishSubject

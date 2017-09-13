@@ -2,7 +2,6 @@ package com.benoitquenaudon.tvfoot.red.app.domain.match
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewState
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.BroadcastersAdapter
 import javax.inject.Inject
 

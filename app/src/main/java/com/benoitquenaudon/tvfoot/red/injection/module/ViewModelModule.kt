@@ -2,8 +2,8 @@ package com.benoitquenaudon.tvfoot.red.injection.module
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewModel
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewModel
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchViewModel
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewModel
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModelFactory
 import dagger.Binds
 import dagger.Module

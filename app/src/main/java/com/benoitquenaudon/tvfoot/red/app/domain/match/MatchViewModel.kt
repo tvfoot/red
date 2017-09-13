@@ -1,4 +1,4 @@
-package com.benoitquenaudon.tvfoot.red.app.domain.match.state
+package com.benoitquenaudon.tvfoot.red.app.domain.match
 
 import com.benoitquenaudon.tvfoot.red.app.common.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.common.StreamNotification
@@ -7,19 +7,15 @@ import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationReposi
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchRepository
-import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchAction.GetLastStateAction
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchAction.LoadMatchAction
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchAction.NotifyMatchStartAction
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent.GetLastState
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent.InitialIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent.NotifyMatchStartIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.GetLastStateResult
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.LoadMatchResult
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.NotifyMatchStartResult
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_FAILURE
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_IN_FLIGHT
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchResult.Status.LOAD_MATCH_SUCCESS
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchAction.GetLastStateAction
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchAction.LoadMatchAction
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchAction.NotifyMatchStartAction
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent.GetLastState
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent.InitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent.NotifyMatchStartIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchResult.GetLastStateResult
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchResult.LoadMatchResult
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchResult.NotifyMatchStartResult
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
@@ -60,7 +56,8 @@ class MatchViewModel @Inject constructor(
         .doOnNext(this::logAction)
         .compose<MatchResult>(actionToResultTransformer)
         .doOnNext(this::logResult)
-        .scan(MatchViewState.idle(), reducer)
+        .scan(MatchViewState.idle(),
+            reducer)
         .doOnNext(this::logState)
   }
 
@@ -91,13 +88,13 @@ class MatchViewModel @Inject constructor(
         Single.zip<Match, Boolean, LoadMatchResult>(matchRepository.loadMatch(matchId),
             preferenceRepository.loadNotifyMatchStart(matchId),
             BiFunction<Match, Boolean, LoadMatchResult> { match, shouldNotifyMatchStart ->
-              LoadMatchResult.success(match, shouldNotifyMatchStart)
+              LoadMatchResult.Success(match, shouldNotifyMatchStart)
             })
             .toObservable()
-            .onErrorReturn({ LoadMatchResult.failure(it) })
+            .onErrorReturn(LoadMatchResult::Failure)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
-            .startWith(LoadMatchResult.inFlight())
+            .startWith(LoadMatchResult.InFlight)
       })
     }
 
@@ -140,12 +137,12 @@ class MatchViewModel @Inject constructor(
     private val reducer = BiFunction { previousState: MatchViewState, matchResult: MatchResult ->
       when (matchResult) {
         is LoadMatchResult -> {
-          when (matchResult.status) {
-            LOAD_MATCH_IN_FLIGHT -> previousState.copy(loading = true, error = null)
-            LOAD_MATCH_FAILURE -> {
-              previousState.copy(loading = false, error = matchResult.error)
-            }
-            LOAD_MATCH_SUCCESS -> {
+          when (matchResult) {
+            is LoadMatchResult.InFlight ->
+              previousState.copy(loading = true, error = null)
+            is LoadMatchResult.Failure ->
+              previousState.copy(loading = false, error = matchResult.throwable)
+            is LoadMatchResult.Success -> {
               val match: Match = checkNotNull(matchResult.match) { "Match == null" }
 
               previousState.copy(

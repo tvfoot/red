@@ -2,7 +2,7 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState
+import timber.log.Timber
 import javax.inject.Inject
 
 class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapter) {
@@ -19,6 +19,7 @@ class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapte
 
   fun updateFromState(state: MatchesViewState) {
     currentPage = state.currentPage
+    Timber.d("connard update from state %s", state.tags.isNotEmpty())
     areTagsLoaded.set(state.tags.isNotEmpty())
     hasActiveFilters.set(state.filteredTags.isNotEmpty())
 

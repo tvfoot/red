@@ -16,9 +16,6 @@ import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MINUTES_BEFORE_NOTIFICATION
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewModel
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewState
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.BroadcastersAdapter
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchBinding
@@ -37,7 +34,8 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   @Inject lateinit var bindingModel: MatchBindingModel
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private val viewModel: MatchViewModel by lazy(NONE) {
-    ViewModelProviders.of(this, viewModelFactory).get(MatchViewModel::class.java)
+    ViewModelProviders.of(this, viewModelFactory).get(
+        MatchViewModel::class.java)
   }
 
   private var binding: ActivityMatchBinding by Delegates.notNull()

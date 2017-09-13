@@ -1,4 +1,4 @@
-package com.benoitquenaudon.tvfoot.red.app.domain.matches.state
+package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.HeaderRowDisplayable
@@ -18,7 +18,7 @@ data class MatchesViewState(
     val tagsLoading: Boolean = false,
     val tagsError: Throwable? = null,
     val tags: List<Tag> = emptyList(),
-    var filteredTags: Map<String, List<String>> = emptyMap<String, List<String>>()
+    var filteredTags: Map<String, List<String>> = emptyMap()
 ) : MviViewState {
   fun matchesItemDisplayables(hasMore: Boolean, filteredTags: Map<String, List<String>>)
       : List<MatchesItemDisplayable> {

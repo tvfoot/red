@@ -1,33 +1,29 @@
-package com.benoitquenaudon.tvfoot.red.app.domain.matches.state
+package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
-import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.FAILURE
-import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.IN_FLIGHT
-import com.benoitquenaudon.tvfoot.red.app.common.LceStatus.SUCCESS
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.ClearFiltersAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.GetLastStateAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadNextPageAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadTagsAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.RefreshAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.ToggleFilterAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.ClearFilters
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterInitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.GetLastState
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.InitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.LoadNextPageIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.ToggleFilterIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.ClearFiltersResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.GetLastStateResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadNextPageResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadTagsResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.ToggleFilterResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.ClearFiltersAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.GetLastStateAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.LoadNextPageAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.LoadTagsAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.RefreshAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesAction.ToggleFilterAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.ClearFilters
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.FilterInitialIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.GetLastState
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.InitialIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.LoadNextPageIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.RefreshIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.ToggleFilterIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.ClearFiltersResult
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.GetLastStateResult
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.LoadNextPageResult
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.LoadTagsResult
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.LoadTagsResult.Factory
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.RefreshResult
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesResult.ToggleFilterResult
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
@@ -66,7 +62,9 @@ class MatchesViewModel @Inject constructor(
         .doOnNext(this::logAction)
         .compose<MatchesResult>(actionToResultTransformer)
         .doOnNext(this::logResult)
-        .scan(MatchesViewState.idle(), reducer)
+        .scan(
+            MatchesViewState.idle(),
+            reducer)
         .doOnNext(this::logState)
   }
 
@@ -99,11 +97,11 @@ class MatchesViewModel @Inject constructor(
       actions.flatMap({
         repository.loadPage(0)
             .toObservable()
-            .map(RefreshResult.Factory::success)
-            .onErrorReturn(RefreshResult.Factory::failure)
+            .map<RefreshResult>(RefreshResult::Success)
+            .onErrorReturn(RefreshResult::Failure)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
-            .startWith(RefreshResult.inFlight())
+            .startWith(RefreshResult.InFlight)
       })
     }
 
@@ -113,11 +111,13 @@ class MatchesViewModel @Inject constructor(
           { (pageIndex) ->
             repository.loadPage(pageIndex)
                 .toObservable()
-                .map { matches -> LoadNextPageResult.success(pageIndex, matches) }
-                .onErrorReturn(LoadNextPageResult.Factory::failure)
+                .map<LoadNextPageResult> { matches ->
+                  LoadNextPageResult.Success(pageIndex, matches)
+                }
+                .onErrorReturn(LoadNextPageResult::Failure)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
-                .startWith(LoadNextPageResult.inFlight())
+                .startWith(LoadNextPageResult.InFlight)
           })
     }
 
@@ -127,11 +127,11 @@ class MatchesViewModel @Inject constructor(
           {
             repository.loadTags()
                 .toObservable()
-                .map(Factory::success)
-                .onErrorReturn(Factory::failure)
+                .map<LoadTagsResult>(LoadTagsResult::Success)
+                .onErrorReturn(LoadTagsResult::Failure)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
-                .startWith(LoadTagsResult.inFlight())
+                .startWith(LoadTagsResult.InFlight)
           })
     }
 
@@ -184,10 +184,12 @@ class MatchesViewModel @Inject constructor(
     private val reducer = BiFunction { previousState: MatchesViewState, matchesResult: MatchesResult ->
       when (matchesResult) {
         is RefreshResult -> {
-          when (matchesResult.status) {
-            IN_FLIGHT -> previousState.copy(refreshLoading = true, error = null)
-            FAILURE -> previousState.copy(refreshLoading = false, error = matchesResult.throwable)
-            SUCCESS -> {
+          when (matchesResult) {
+            is RefreshResult.InFlight ->
+              previousState.copy(refreshLoading = true, error = null)
+            is RefreshResult.Failure ->
+              previousState.copy(refreshLoading = false, error = matchesResult.throwable)
+            is RefreshResult.Success -> {
               val matches = checkNotNull((matchesResult).matches) { "Matches are null" }
 
               previousState.copy(
@@ -201,10 +203,12 @@ class MatchesViewModel @Inject constructor(
         }
         is GetLastStateResult -> previousState.copy()
         is LoadNextPageResult -> {
-          when (matchesResult.status) {
-            IN_FLIGHT -> previousState.copy(nextPageLoading = true, error = null)
-            FAILURE -> previousState.copy(nextPageLoading = false, error = matchesResult.error)
-            SUCCESS -> {
+          when (matchesResult) {
+            is LoadNextPageResult.InFlight ->
+              previousState.copy(nextPageLoading = true, error = null)
+            is LoadNextPageResult.Failure ->
+              previousState.copy(nextPageLoading = false, error = matchesResult.throwable)
+            is LoadNextPageResult.Success -> {
               val newMatches = checkNotNull((matchesResult).matches) { "Matches are null" }
 
               val matches = ArrayList<MatchRowDisplayable>()
@@ -220,8 +224,8 @@ class MatchesViewModel @Inject constructor(
             }
           }
         }
-        is MatchesResult.ClearFiltersResult -> previousState.copy(filteredTags = emptyMap())
-        is MatchesResult.ToggleFilterResult -> {
+        is ClearFiltersResult -> previousState.copy(filteredTags = emptyMap())
+        is ToggleFilterResult -> {
           previousState.filteredTags.toMutableMap().let {
             if (it.keys.contains(matchesResult.tagName)) {
               it.remove(matchesResult.tagName)
@@ -232,15 +236,17 @@ class MatchesViewModel @Inject constructor(
             previousState.copy(filteredTags = it)
           }
         }
-        is MatchesResult.LoadTagsResult -> {
-          when (matchesResult.status) {
-            IN_FLIGHT -> previousState.copy(tagsLoading = true, tagsError = null)
-            FAILURE -> previousState.copy(tagsLoading = false, tagsError = matchesResult.error)
-            SUCCESS -> {
-              checkNotNull(matchesResult.tags).let { tags ->
-                previousState.copy(tagsLoading = false, tags = tags.filter(Tag::display))
-              }
-            }
+        is LoadTagsResult -> {
+          when (matchesResult) {
+            is LoadTagsResult.InFlight ->
+              previousState.copy(tagsLoading = true, tagsError = null)
+            is LoadTagsResult.Failure ->
+              previousState.copy(tagsLoading = false, tagsError = matchesResult.throwable)
+            is LoadTagsResult.Success ->
+              previousState.copy(
+                  tagsLoading = false,
+                  tags = matchesResult.tags.filter(Tag::display)
+              )
           }
         }
       }

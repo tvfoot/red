@@ -7,7 +7,10 @@ import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationReposi
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.ImmediateSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.source.FakeMatchRepository
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent.InitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent.InitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchViewModel
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchViewState
 import com.benoitquenaudon.tvfoot.red.testutil.Fixture
 import com.benoitquenaudon.tvfoot.red.testutil.InjectionContainer
 import io.reactivex.Observable
