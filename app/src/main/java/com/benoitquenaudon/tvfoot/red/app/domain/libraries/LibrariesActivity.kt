@@ -15,13 +15,19 @@ class LibrariesActivity : BaseActivity() {
   @Inject lateinit var adapter: LibrariesAdapter
   @Inject lateinit var disposables: CompositeDisposable
 
-  private val binding by lazy(NONE) {
+  private val binding: ActivityLibrariesBinding by lazy(NONE) {
     DataBindingUtil.setContentView<ActivityLibrariesBinding>(this, R.layout.activity_libraries)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     activityComponent.inject(this)
+
+    setSupportActionBar(binding.librariesToolbar)
+    supportActionBar?.let {
+      it.setDisplayShowTitleEnabled(false)
+      it.setDisplayHomeAsUpEnabled(true)
+    }
 
     binding.librariesRecyclerView.adapter = adapter
 
@@ -30,8 +36,8 @@ class LibrariesActivity : BaseActivity() {
   }
 
   override fun onDestroy() {
-    super.onDestroy()
     disposables.dispose()
+    super.onDestroy()
   }
 
 }

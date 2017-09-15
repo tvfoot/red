@@ -94,7 +94,9 @@
           android:name="android.support.PARENT_ACTIVITY"
           android:value=".app.domain.matches.MatchesActivity"/>
     </activity>
-    <activity android:name=".app.domain.libraries.LibrariesActivity">
+    <activity
+        android:name=".app.domain.libraries.LibrariesActivity"
+        android:theme="@style/Theme.TvFoot.NoActionBar">
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
 

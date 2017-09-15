@@ -30,7 +30,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
-import kotlin.properties.Delegates
 
 
 class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState> {
@@ -43,7 +42,9 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     ViewModelProviders.of(this, viewModelFactory).get(MatchesViewModel::class.java)
   }
 
-  private var binding: ActivityMatchesBinding by Delegates.notNull()
+  private val binding: ActivityMatchesBinding by lazy(NONE) {
+    DataBindingUtil.setContentView<ActivityMatchesBinding>(this, R.layout.activity_matches)
+  }
 
   companion object {
     private const val FRAGMENT_FILTERS = "fragment:filters"
@@ -58,7 +59,6 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   }
 
   private fun setupView() {
-    binding = DataBindingUtil.setContentView(this, R.layout.activity_matches)
     binding.recyclerView.adapter = adapter
     binding.recyclerView.addItemDecoration(MatchesHeaderDecoration(adapter), 0)
     binding.bindingModel = bindingModel

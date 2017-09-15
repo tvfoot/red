@@ -4,11 +4,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
-  <android.support.v7.widget.RecyclerView
-      android:id="@+id/librariesRecyclerView"
+
+
+  <android.support.design.widget.CoordinatorLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-      tools:context="com.benoitquenaudon.tvfoot.red.app.domain.libraries.LibrariesActivity"
-      />
+      android:layout_height="match_parent"
+      android:animateLayoutChanges="true"
+      android:fitsSystemWindows="true"
+      tools:context=".app.domain.libraries.LibrariesActivity"
+      >
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.TvFoot.AppBarOverlay"
+        >
+
+      <android.support.v7.widget.Toolbar
+          android:id="@+id/libraries_toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          android:background="?attr/colorPrimary"
+          app:popupTheme="@style/Theme.TvFoot.PopupOverlay"
+          >
+
+        <ImageView
+            android:id="@+id/toolbar_imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/title_activity_main"
+            android:src="@drawable/logo"
+            />
+
+      </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/librariesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.benoitquenaudon.tvfoot.red.app.domain.libraries.LibrariesActivity"
+        />
+  </android.support.design.widget.CoordinatorLayout>
 </layout>

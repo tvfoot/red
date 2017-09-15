@@ -25,7 +25,6 @@ import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
-import kotlin.properties.Delegates
 
 class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   @Inject lateinit var broadcastersAdapter: BroadcastersAdapter
@@ -38,7 +37,9 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
         MatchViewModel::class.java)
   }
 
-  private var binding: ActivityMatchBinding by Delegates.notNull()
+  private val binding: ActivityMatchBinding by lazy(NONE) {
+    DataBindingUtil.setContentView<ActivityMatchBinding>(this, R.layout.activity_match)
+  }
   private var matchId: String? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,13 +72,14 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   }
 
   private fun setupView() {
-    binding = DataBindingUtil.setContentView<ActivityMatchBinding>(this, R.layout.activity_match)
     binding.matchDetailBroadcasters.adapter = broadcastersAdapter
     binding.bindingModel = bindingModel
 
     setSupportActionBar(binding.matchToolbar)
-    supportActionBar?.setDisplayShowTitleEnabled(false)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    supportActionBar?.let {
+      it.setDisplayShowTitleEnabled(false)
+      it.setDisplayHomeAsUpEnabled(true)
+    }
   }
 
   private fun bind() {
