@@ -49,7 +49,7 @@ ext {
             compileSdkVersion: 26,
             buildToolsVersion: '26.0.0',]
 
-  lib = [supportLibraryVersion          : '26.0.2',
+  lib = [supportLibraryVersion          : '26.1.0',
          constraintLayoutVersion        : '1.0.2',
          picassoVersion                 : '2.5.2',
          picassoOkHttp3DownloaderVersion: '1.1.0',
@@ -72,5 +72,5 @@ ext {
          firebaseVersion                : '11.2.2',
          rxBindingVersion               : '2.0.0',
          robolectricVersion             : '3.4',
-         archComponentsVersion          : '1.0.0-alpha9']
+         archComponentsVersion          : '1.0.0-alpha9-1']
 }
