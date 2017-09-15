@@ -1,6 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -15,13 +17,10 @@ import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.InitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.LoadNextPageIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersFragment
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.InitialIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.LoadNextPageIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesIntent.RefreshIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesStateBinder
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchesBinding
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
@@ -30,17 +29,21 @@ import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
+import kotlin.LazyThreadSafetyMode.NONE
 import kotlin.properties.Delegates
 
 
 class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState> {
   @Inject lateinit var adapter: MatchesAdapter
   @Inject lateinit var flowController: FlowController
-  @Inject lateinit var viewModel: MatchesViewModel
-  @Inject lateinit var stateBinder: MatchesStateBinder
+  @Inject lateinit var bindingModel: MatchesBindingModel
   @Inject lateinit var disposables: CompositeDisposable
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+  private val viewModel: MatchesViewModel by lazy(NONE) {
+    ViewModelProviders.of(this, viewModelFactory).get(MatchesViewModel::class.java)
+  }
 
-  private var binding: ActivityMatchesBinding by Delegates.notNull<ActivityMatchesBinding>()
+  private var binding: ActivityMatchesBinding by Delegates.notNull()
 
   companion object {
     private const val FRAGMENT_FILTERS = "fragment:filters"
@@ -58,7 +61,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     binding = DataBindingUtil.setContentView(this, R.layout.activity_matches)
     binding.recyclerView.adapter = adapter
     binding.recyclerView.addItemDecoration(MatchesHeaderDecoration(adapter), 0)
-    binding.viewModel = viewModel
+    binding.bindingModel = bindingModel
 
     setSupportActionBar(binding.matchesToolbar)
     supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -85,11 +88,11 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   }
 
   override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-    menu.findItem(R.id.matches_filters_item).isVisible = viewModel.areTagsLoaded.get()
+    menu.findItem(R.id.matches_filters_item).isVisible = bindingModel.areTagsLoaded.get()
 
     menu.findItem(R.id.matches_filters_item).actionView
         .findViewById<View>(R.id.filters_usage_badge)
-        .visibility = if (viewModel.hasActiveFilters.get()) View.VISIBLE else View.GONE
+        .visibility = if (bindingModel.hasActiveFilters.get()) View.VISIBLE else View.GONE
     return super.onPrepareOptionsMenu(menu)
   }
 
@@ -113,18 +116,18 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   }
 
   private fun bind() {
-    disposables.add(stateBinder.states().subscribe(this::render))
-    stateBinder.processIntents(intents())
+    disposables.add(viewModel.states().subscribe(this::render))
+    viewModel.processIntents(intents())
 
     disposables.add(adapter.matchRowClickObservable
         .subscribe { matchRowDisplayable -> flowController.toMatch(matchRowDisplayable.matchId) }
     )
     disposables.add(
-        RxObservableBoolean.propertyChanges(viewModel.areTagsLoaded)
+        RxObservableBoolean.propertyChanges(bindingModel.areTagsLoaded)
             .subscribe { invalidateOptionsMenu() }
     )
     disposables.add(
-        RxObservableBoolean.propertyChanges(viewModel.hasActiveFilters)
+        RxObservableBoolean.propertyChanges(bindingModel.hasActiveFilters)
             .subscribe { invalidateOptionsMenu() }
     )
 
@@ -157,16 +160,16 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
 
   private fun loadNextPageIntent(): Observable<LoadNextPageIntent> {
     return RxRecyclerView.scrollEvents(binding.recyclerView)
-        .filter { viewModel.hasMore && !viewModel.nextPageLoading }
+        .filter { bindingModel.hasMore && !bindingModel.nextPageLoading }
         .filter { scrollEvent ->
           val layoutManager = scrollEvent.view().layoutManager as LinearLayoutManager
           val lastPosition = layoutManager.findLastVisibleItemPosition()
           lastPosition == scrollEvent.view().adapter.itemCount - 1
         }
-        .map { LoadNextPageIntent(viewModel.currentPage + 1) }
+        .map { LoadNextPageIntent(bindingModel.currentPage + 1) }
   }
 
-  override fun render(state: MatchesViewState) = viewModel.updateFromState(state)
+  override fun render(state: MatchesViewState) = bindingModel.updateFromState(state)
 
   override fun onBackPressed() {
     if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {

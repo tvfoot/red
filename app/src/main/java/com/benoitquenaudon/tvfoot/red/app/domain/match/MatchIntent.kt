@@ -1,4 +1,4 @@
-package com.benoitquenaudon.tvfoot.red.app.domain.match.state
+package com.benoitquenaudon.tvfoot.red.app.domain.match
 
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviIntent
 

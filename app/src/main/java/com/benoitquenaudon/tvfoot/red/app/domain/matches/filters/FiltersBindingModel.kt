@@ -1,11 +1,11 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
 import android.databinding.ObservableBoolean
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.state.MatchesViewState
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
 import com.benoitquenaudon.tvfoot.red.injection.scope.FragmentScope
 import javax.inject.Inject
 
-@FragmentScope class FiltersViewModel @Inject constructor(private val adapter: FiltersAdapter) {
+@FragmentScope class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapter) {
 
   val loadingTags: ObservableBoolean = ObservableBoolean(true)
   var filteredTags: Set<String> = emptySet()

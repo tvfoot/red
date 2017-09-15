@@ -5,7 +5,7 @@ import com.benoitquenaudon.tvfoot.red.injection.component.FragmentComponent
 import com.benoitquenaudon.tvfoot.red.util.newFragmentComponent
 
 abstract class BaseFragment : Fragment() {
-  val activityComponent by lazy {
+  private val activityComponent by lazy {
     (activity as BaseActivity).activityComponent
   }
 

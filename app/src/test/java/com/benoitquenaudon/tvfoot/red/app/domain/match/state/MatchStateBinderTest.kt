@@ -7,7 +7,10 @@ import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationReposi
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.ImmediateSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.source.FakeMatchRepository
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent.InitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent.InitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchViewModel
+import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchViewState
 import com.benoitquenaudon.tvfoot.red.testutil.Fixture
 import com.benoitquenaudon.tvfoot.red.testutil.InjectionContainer
 import io.reactivex.Observable
@@ -22,7 +25,7 @@ import org.mockito.Mockito.mock
 import javax.inject.Inject
 
 class MatchStateBinderTest {
-  lateinit var matchStateBinder: MatchStateBinder
+  lateinit var matchStateBinder: MatchViewModel
   lateinit var testObserver: TestObserver<MatchViewState>
   val preferenceRepository: PreferenceRepository = mock(PreferenceRepository::class.java)
   val notificationRepository: NotificationRepository = mock(NotificationRepository::class.java)
@@ -37,7 +40,7 @@ class MatchStateBinderTest {
     val schedulerProvider: BaseSchedulerProvider = ImmediateSchedulerProvider()
     val redFirebaseAnalytics: BaseRedFirebaseAnalytics = NoopRedFirebaseAnalytics
 
-    matchStateBinder = MatchStateBinder(
+    matchStateBinder = MatchViewModel(
         intents,
         states,
         FakeMatchRepository(),

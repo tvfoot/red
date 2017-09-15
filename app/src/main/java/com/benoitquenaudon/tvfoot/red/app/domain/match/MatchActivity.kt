@@ -1,5 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match
 
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
@@ -14,9 +16,6 @@ import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MINUTES_BEFORE_NOTIFICATION
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchStateBinder
-import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchViewState
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.BroadcastersAdapter
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchBinding
@@ -25,16 +24,21 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.LazyThreadSafetyMode.NONE
 import kotlin.properties.Delegates
 
 class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   @Inject lateinit var broadcastersAdapter: BroadcastersAdapter
   @Inject lateinit var flowController: FlowController
-  @Inject lateinit var stateBinder: MatchStateBinder
   @Inject lateinit var disposables: CompositeDisposable
-  @Inject lateinit var viewModel: MatchViewModel
+  @Inject lateinit var bindingModel: MatchBindingModel
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+  private val viewModel: MatchViewModel by lazy(NONE) {
+    ViewModelProviders.of(this, viewModelFactory).get(
+        MatchViewModel::class.java)
+  }
 
-  private var binding: ActivityMatchBinding by Delegates.notNull<ActivityMatchBinding>()
+  private var binding: ActivityMatchBinding by Delegates.notNull()
   private var matchId: String? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +73,7 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   private fun setupView() {
     binding = DataBindingUtil.setContentView<ActivityMatchBinding>(this, R.layout.activity_match)
     binding.matchDetailBroadcasters.adapter = broadcastersAdapter
-    binding.viewModel = viewModel
+    binding.bindingModel = bindingModel
 
     setSupportActionBar(binding.matchToolbar)
     supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -77,10 +81,10 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   }
 
   private fun bind() {
-    disposables.add(stateBinder.states().subscribe(this::render))
-    stateBinder.processIntents(intents())
+    disposables.add(viewModel.states().subscribe(this::render))
+    viewModel.processIntents(intents())
 
-    disposables.add(RxObservableBoolean.propertyChanges(viewModel.shouldNotifyMatchStart)
+    disposables.add(RxObservableBoolean.propertyChanges(bindingModel.shouldNotifyMatchStart)
         .subscribe { shouldNotifyMatchStart ->
           if (shouldNotifyMatchStart) {
             Snackbar.make(binding.root,
@@ -106,13 +110,13 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   private fun fabClickIntent(): Observable<MatchIntent.NotifyMatchStartIntent> {
     return RxView.clicks(binding.notifyMatchStartFab)
         .map {
-          MatchIntent.NotifyMatchStartIntent(viewModel.match.get().matchId(),
-              viewModel.match.get().startAt(), !isMatchNotificationActivated)
+          MatchIntent.NotifyMatchStartIntent(bindingModel.match.get().matchId(),
+              bindingModel.match.get().startAt(), !isMatchNotificationActivated)
         }
   }
 
   private val isMatchNotificationActivated: Boolean
     get() = binding.notifyMatchStartFab.isActivated
 
-  override fun render(state: MatchViewState) = viewModel.updateFromState(state)
+  override fun render(state: MatchViewState) = bindingModel.updateFromState(state)
 }

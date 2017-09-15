@@ -1,6 +1,5 @@
-package com.benoitquenaudon.tvfoot.red.app.domain.match.state
+package com.benoitquenaudon.tvfoot.red.app.domain.match
 
-import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviViewState
 
 data class MatchViewState(
@@ -9,6 +8,7 @@ data class MatchViewState(
     val loading: Boolean,
     val shouldNotifyMatchStart: Boolean) : MviViewState {
   companion object Factory {
-    fun idle(): MatchViewState = MatchViewState(shouldNotifyMatchStart = true, loading = false)
+    fun idle(): MatchViewState = MatchViewState(
+        shouldNotifyMatchStart = true, loading = false)
   }
 }
