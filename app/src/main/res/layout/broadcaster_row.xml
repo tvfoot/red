@@ -13,9 +13,9 @@
   </data>
 
   <FrameLayout
-      android:layout_width="match_parent"
+      android:layout_width="60dp"
       android:layout_height="wrap_content"
-      android:paddingBottom="4dp"
+      android:paddingEnd="2dp"
       tools:showIn="@layout/matches_row_match"
       >
 
@@ -24,7 +24,7 @@
         android:layout_height="23dp"
         android:layout_gravity="center"
         android:contentDescription="@string/broadcaster_icon"
-        android:paddingBottom="4dp"
+        android:paddingEnd="4dp"
         app:tvfootBroadcasterLogoPath="@{broadcasterLogoPath}"
         tools:src="@drawable/ic_tv_black_18px"
         />
