@@ -33,8 +33,8 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
   @Inject lateinit var filtersAdapter: FiltersAdapter
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private val viewModel: MatchesViewModel by lazy(NONE) {
-    ViewModelProviders.of(activity, viewModelFactory).get(
-        MatchesViewModel::class.java)
+    // we need to use MatchesActivity to get only one instance of the MatchesViewModel
+    ViewModelProviders.of(activity, viewModelFactory).get(MatchesViewModel::class.java)
   }
 
   lateinit var binding: FragmentFiltersBinding

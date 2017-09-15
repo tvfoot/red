@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.BroadcasterRowDisplayable
-import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
 import com.benoitquenaudon.tvfoot.red.databinding.BroadcasterRowBinding
+import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
 import java.util.ArrayList
 import javax.inject.Inject
 

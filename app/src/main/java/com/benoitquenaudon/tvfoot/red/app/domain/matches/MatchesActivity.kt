@@ -40,8 +40,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   @Inject lateinit var disposables: CompositeDisposable
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private val viewModel: MatchesViewModel by lazy(NONE) {
-    ViewModelProviders.of(this, viewModelFactory).get(
-        MatchesViewModel::class.java)
+    ViewModelProviders.of(this, viewModelFactory).get(MatchesViewModel::class.java)
   }
 
   private var binding: ActivityMatchesBinding by Delegates.notNull()

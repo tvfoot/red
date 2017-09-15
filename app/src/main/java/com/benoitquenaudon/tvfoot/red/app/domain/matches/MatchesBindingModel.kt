@@ -2,7 +2,6 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import timber.log.Timber
 import javax.inject.Inject
 
 class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapter) {
