@@ -3,6 +3,7 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 import android.databinding.ObservableBoolean
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
 import com.benoitquenaudon.tvfoot.red.injection.scope.FragmentScope
+import timber.log.Timber
 import javax.inject.Inject
 
 @FragmentScope class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapter) {

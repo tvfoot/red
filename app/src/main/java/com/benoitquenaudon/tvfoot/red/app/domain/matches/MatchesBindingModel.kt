@@ -19,7 +19,6 @@ class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapte
 
   fun updateFromState(state: MatchesViewState) {
     currentPage = state.currentPage
-    Timber.d("connard update from state %s", state.tags.isNotEmpty())
     areTagsLoaded.set(state.tags.isNotEmpty())
     hasActiveFilters.set(state.filteredTags.isNotEmpty())
 

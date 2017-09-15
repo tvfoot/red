@@ -2,6 +2,8 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
@@ -23,12 +25,17 @@ import com.jakewharton.rxbinding2.support.v7.widget.RxToolbar
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
+import kotlin.LazyThreadSafetyMode.NONE
 
 class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState> {
   @Inject lateinit var disposables: CompositeDisposable
   @Inject lateinit var bindingModel: FiltersBindingModel
-  @Inject lateinit var stateBinder: MatchesViewModel
   @Inject lateinit var filtersAdapter: FiltersAdapter
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+  private val viewModel: MatchesViewModel by lazy(NONE) {
+    ViewModelProviders.of(activity, viewModelFactory).get(
+        MatchesViewModel::class.java)
+  }
 
   lateinit var binding: FragmentFiltersBinding
 
@@ -86,8 +93,8 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
   }
 
   private fun bind() {
-    disposables.add(stateBinder.states().subscribe(this::render))
-    stateBinder.processIntents(intents())
+    disposables.add(viewModel.states().subscribe(this::render))
+    viewModel.processIntents(intents())
     disposables.add(
         RxObservableBoolean.propertyChanges(bindingModel.hasFilters)
             .startWith(bindingModel.hasFilters.get()) // fix for rotation
