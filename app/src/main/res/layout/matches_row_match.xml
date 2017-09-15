@@ -43,7 +43,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/match_broadcasters"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:gravity="start|center_vertical"
@@ -51,6 +51,7 @@
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="@+id/match_start_time"
         app:layout_constraintLeft_toRightOf="@+id/match_start_time"
+        app:layout_constraintRight_toRightOf="@+id/match_will_be_notified"
         app:layout_constraintTop_toTopOf="@+id/match_start_time"
         tools:listitem="@layout/broadcaster_row"
         />
@@ -65,9 +66,21 @@
         android:textSize="16sp"
         app:layout_constraintHorizontal_weight=".7"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/match_will_be_notified"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="STRASBOURG - VALENCIENNES"
+        />
+    <ImageView
+        android:id="@+id/match_will_be_notified"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:tint="@color/notifiy_match_start_tint"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:visible="@{match.headline.equals(`BREST - LE HAVRE`)}"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_notifications_active_white_24px"
         />
   </android.support.constraint.ConstraintLayout>
 </layout>
