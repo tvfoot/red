@@ -25,7 +25,9 @@ data class MatchRowDisplayable private constructor(
     val awayTeamDrawableName: String,
     val location: String,
     val matchId: String,
-    val tags: List<String>
+    val tags: List<String>,
+    val homeTeam: TeamRowDisplayable,
+    val awayTeam: TeamRowDisplayable
 ) : MatchesItemDisplayable {
   override fun isSameAs(newItem: MatchesItemDisplayable): Boolean {
     return newItem is MatchRowDisplayable && this.matchId == newItem.matchId
@@ -46,7 +48,9 @@ data class MatchRowDisplayable private constructor(
             awayTeamDrawableName = parseAwayTeamDrawableName(match.awayTeam),
             location = parseLocation(match),
             matchId = match.id,
-            tags = parseTags(match)
+            tags = parseTags(match),
+            homeTeam = TeamRowDisplayable(match.homeTeam.name, parseTeamLogoPath(match.homeTeam)),
+            awayTeam = TeamRowDisplayable(match.awayTeam.name, parseTeamLogoPath(match.awayTeam))
         )
 
     fun fromMatches(matches: List<Match>): List<MatchRowDisplayable> = matches.map(this::fromMatch)
@@ -105,6 +109,22 @@ private fun isMatchLive(startAt: Date): Boolean {
 
   return now in startTimeInMillis..(startTimeInMillis + TimeUnit.MINUTES.toMillis(105))
 }
+
+private fun parseTeamLogoPath(team: Team): String =
+    if (team.code == null || team.type == null) {
+      "/images/teams/default/large/default.png"
+    } else {
+      val type = checkNotNull(team.type) { "team's type should not be null" }
+      val code = checkNotNull(team.code) { "team's code should not be null" }
+      when (type) {
+        "nation" -> String.format("/images/teams/nations/large/%s.png", code.toLowerCase())
+        "club" -> {
+          val country = checkNotNull(team.country) { "team's country should not be null" }
+          "/images/teams/$country/large/${code.toLowerCase()}.png"
+        }
+        else -> throw IllegalStateException("Unknown type " + type)
+      }
+    }
 
 private fun parseHomeTeamDrawableName(homeTeam: Team): String = homeTeam.code ?: Team.DEFAULT_CODE
 
