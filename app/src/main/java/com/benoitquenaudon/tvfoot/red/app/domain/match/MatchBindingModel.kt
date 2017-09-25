@@ -2,11 +2,10 @@ package com.benoitquenaudon.tvfoot.red.app.domain.match
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.BroadcastersAdapter
 import javax.inject.Inject
 
 class MatchBindingModel @Inject constructor(
-    private val broadcastersAdapter: BroadcastersAdapter
+    private val broadcastersAdapter: MatchBroadcastersAdapter
 ) {
   val isLoading = ObservableBoolean()
   val hasError = ObservableBoolean(false)
