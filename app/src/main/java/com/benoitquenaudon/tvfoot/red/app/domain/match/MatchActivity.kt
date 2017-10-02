@@ -16,7 +16,6 @@ import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MINUTES_BEFORE_NOTIFICATION
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.BroadcastersAdapter
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchBinding
 import com.jakewharton.rxbinding2.view.RxView
@@ -27,7 +26,7 @@ import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
 class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
-  @Inject lateinit var broadcastersAdapter: BroadcastersAdapter
+  @Inject lateinit var matchBroadcastersAdapter: MatchBroadcastersAdapter
   @Inject lateinit var flowController: FlowController
   @Inject lateinit var disposables: CompositeDisposable
   @Inject lateinit var bindingModel: MatchBindingModel
@@ -72,7 +71,7 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   }
 
   private fun setupView() {
-    binding.matchDetailBroadcasters.adapter = broadcastersAdapter
+    binding.matchDetailBroadcasters.adapter = matchBroadcastersAdapter
     binding.bindingModel = bindingModel
 
     setSupportActionBar(binding.matchToolbar)

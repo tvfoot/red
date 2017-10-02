@@ -42,7 +42,7 @@
         android:layout_margin="8dp"
         android:text="@{dayHeader.displayedDate}"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-        android:textColor="@color/colorGrayDarker"
+        android:textColor="@color/colorGray"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/dangerView"

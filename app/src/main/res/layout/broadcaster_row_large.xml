@@ -13,14 +13,14 @@
   </data>
 
   <FrameLayout
-      android:layout_width="50dp"
+      android:layout_width="120dp"
       android:layout_height="wrap_content"
       tools:showIn="@layout/matches_row_match"
       >
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="23dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:contentDescription="@string/broadcaster_icon"
         app:tvfootBroadcasterLogoPath="@{broadcasterLogoPath}"
