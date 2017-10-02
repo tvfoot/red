@@ -21,7 +21,6 @@ class MatchesStateBinderTest {
   @Before fun setup() {
     stateBinder = MatchesViewModel(
         PublishSubject.create<MatchesIntent>(),
-        PublishSubject.create<MatchesViewState>(),
         FakeMatchesRepository(),
         ImmediateSchedulerProvider(),
         NoopRedFirebaseAnalytics

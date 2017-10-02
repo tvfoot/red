@@ -7,8 +7,6 @@ sealed class MatchesIntent : MviIntent {
 
   object RefreshIntent : MatchesIntent()
 
-  object GetLastState : MatchesIntent()
-
   data class LoadNextPageIntent(val pageIndex: Int) : MatchesIntent()
 
   object ClearFilters : MatchesIntent()

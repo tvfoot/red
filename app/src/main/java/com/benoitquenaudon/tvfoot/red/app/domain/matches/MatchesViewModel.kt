@@ -5,20 +5,17 @@ import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvide
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.ClearFiltersAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.GetLastStateAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadNextPageAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadTagsAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.RefreshAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.ToggleFilterAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.ClearFilters
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterInitialIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.GetLastState
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.LoadNextPageIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.ToggleFilterIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.ClearFiltersResult
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.GetLastStateResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadNextPageResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadTagsResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshResult
@@ -35,57 +32,42 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import java.util.ArrayList
 import javax.inject.Inject
+import kotlin.LazyThreadSafetyMode.NONE
 
 class MatchesViewModel @Inject constructor(
     private val intentsSubject: PublishSubject<MatchesIntent>,
-    private val statesSubject: PublishSubject<MatchesViewState>,
     private val repository: BaseMatchesRepository,
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
 ) : RedViewModel<MatchesIntent, MatchesViewState>(firebaseAnalytics) {
 
-  init {
-    compose().subscribe(statesSubject::onNext)
+  private val statesObservable: Observable<MatchesViewState> by lazy(NONE) {
+    compose().replay(1).autoConnect(0)
   }
+
+  override fun states(): Observable<MatchesViewState> = statesObservable
 
   override fun processIntents(intents: Observable<MatchesIntent>) {
     intents.subscribe(intentsSubject::onNext)
   }
 
-  override fun states(): Observable<MatchesViewState> = statesSubject
-
   private fun compose(): Observable<MatchesViewState> {
     return intentsSubject
+        .startWith(FilterInitialIntent)
+        .startWith(InitialIntent)
         .doOnNext(this::logIntent)
-        .scan(initialIntentFilter)
         .map(this::actionFromIntent)
         .doOnNext(this::logAction)
         .compose<MatchesResult>(actionToResultTransformer)
         .doOnNext(this::logResult)
-        .scan(
-            MatchesViewState.idle(),
-            reducer)
+        .scan(MatchesViewState.idle(), reducer)
         .doOnNext(this::logState)
   }
-
-  private val initialIntentFilter: BiFunction<MatchesIntent, MatchesIntent, MatchesIntent>
-    get() = BiFunction { _: MatchesIntent, newIntent: MatchesIntent ->
-      // if isReConnection (e.g. after config change)
-      // i.e. we are inside the scan, meaning there has already
-      // been intent in the past, meaning the InitialIntent cannot
-      // be the first => it is a reconnection.
-      if (newIntent is InitialIntent) {
-        GetLastState
-      } else {
-        newIntent
-      }
-    }
 
   private fun actionFromIntent(intent: MatchesIntent): MatchesAction =
       when (intent) {
         is InitialIntent -> RefreshAction
         is RefreshIntent -> RefreshAction
-        is GetLastState -> GetLastStateAction
         is LoadNextPageIntent -> LoadNextPageAction(intent.pageIndex)
         is ClearFilters -> ClearFiltersAction
         is ToggleFilterIntent -> ToggleFilterAction(intent.tagName)
@@ -135,11 +117,6 @@ class MatchesViewModel @Inject constructor(
           })
     }
 
-  private val getLastStateTransformer: ObservableTransformer<GetLastStateAction, GetLastStateResult>
-    get() = ObservableTransformer { actions: Observable<GetLastStateAction> ->
-      actions.map({ GetLastStateResult })
-    }
-
   private val clearFilterTransformer: ObservableTransformer<ClearFiltersAction, ClearFiltersResult>
     get() = ObservableTransformer { actions: Observable<ClearFiltersAction> ->
       actions.map({ ClearFiltersResult })
@@ -155,8 +132,7 @@ class MatchesViewModel @Inject constructor(
       actions.publish({ shared ->
         Observable.merge<MatchesResult>(
             shared.ofType(RefreshAction::class.java).compose(refreshTransformer),
-            shared.ofType(LoadNextPageAction::class.java).compose(loadNextPageTransformer),
-            shared.ofType(GetLastStateAction::class.java).compose(getLastStateTransformer))
+            shared.ofType(LoadNextPageAction::class.java).compose(loadNextPageTransformer))
             .mergeWith(
                 Observable.merge<MatchesResult>(
                     shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
@@ -168,7 +144,6 @@ class MatchesViewModel @Inject constructor(
                 shared.filter({ v ->
                   v !is RefreshAction &&
                       v !is LoadNextPageAction &&
-                      v !is GetLastStateAction &&
                       v !is ClearFiltersAction &&
                       v !is ToggleFilterAction &&
                       v !is LoadTagsAction
@@ -201,7 +176,6 @@ class MatchesViewModel @Inject constructor(
             }
           }
         }
-        is GetLastStateResult -> previousState.copy()
         is LoadNextPageResult -> {
           when (matchesResult) {
             is LoadNextPageResult.InFlight ->
