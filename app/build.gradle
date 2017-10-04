@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.firebase.firebase-perf'
@@ -81,6 +82,10 @@ android {
   }
 }
 
+androidExtensions {
+  experimental = true
+}
+
 android.applicationVariants.all {
   // Set this to false to disable Firebase Performance Monitoring at compile time
   FirebasePerformance {
@@ -89,7 +94,7 @@ android.applicationVariants.all {
 }
 
 dependencies {
-  implementation "android.arch.lifecycle:runtime:$rootProject.lib.archComponentsVersion"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
   implementation "android.arch.lifecycle:extensions:$rootProject.lib.archComponentsVersion"
   kapt "android.arch.lifecycle:compiler:$rootProject.lib.archComponentsVersion"
   implementation "com.android.support:appcompat-v7:$rootProject.lib.supportLibraryVersion"
@@ -124,12 +129,9 @@ dependencies {
   implementation 'com.benoitquenaudon:rxdatabinding:2.0.0'
   debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.lib.leakCanaryVersion"
   releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.lib.leakCanaryVersion"
-  annotationProcessor "com.google.auto.value:auto-value:$rootProject.lib.autoValueVersion"
   kapt "com.android.databinding:compiler:$android_plugin_version"
   kapt "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
-  kapt "com.ryanharter.auto.value:auto-value-parcel:$rootProject.lib.autoValueParcelVersion"
   compileOnly "com.google.code.findbugs:jsr305:$rootProject.lib.jsr305Version"
-  compileOnly "com.google.auto.value:auto-value:$rootProject.lib.autoValueVersion"
   implementation 'se.ansman.kotshi:api:0.1.1'
   kapt 'se.ansman.kotshi:compiler:0.1.1'
 
@@ -153,8 +155,6 @@ dependencies {
   androidTestImplementation 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
   androidTestImplementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
   androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-  implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 
 /*

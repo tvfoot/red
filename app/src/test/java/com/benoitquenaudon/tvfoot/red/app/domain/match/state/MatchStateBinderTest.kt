@@ -64,7 +64,7 @@ class MatchStateBinderTest {
     testObserver.assertValueAt(1) { (match, _, loading, shouldNotifyMatchStart) ->
       !loading &&
           match != null &&
-          match.matchId() == matchId &&
+          match.matchId == matchId &&
           !shouldNotifyMatchStart
     }
   }

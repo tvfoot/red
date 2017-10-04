@@ -42,7 +42,7 @@ class MatchBroadcastersAdapter @Inject constructor(
   ) : ViewHolder(binding.root) {
 
     fun bind(broadcaster: BroadcasterRowDisplayable) {
-      binding.broadcasterLogoPath = broadcaster.logoPath()
+      binding.broadcasterLogoPath = broadcaster.logoPath
       binding.executePendingBindings()
     }
   }
