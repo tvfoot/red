@@ -16,9 +16,9 @@ class MatchesRepository @Inject constructor(
       tvfootService.findFuture(
           Filter(limit = MATCH_PER_PAGE, offset = MATCH_PER_PAGE * pageIndex))
 
+  override fun loadTags(): Single<List<Tag>> = tvfootService.getTags(TagsFilter())
+
   companion object Constant {
     private val MATCH_PER_PAGE = 100
   }
-
-  override fun loadTags(): Single<List<Tag>> = tvfootService.getTags(TagsFilter())
 }
