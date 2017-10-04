@@ -34,9 +34,9 @@ class MatchNotificationHelper(private val context: Context, private val match: M
         .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
         .setAutoCancel(true)
         .setContentIntent(pendingIntent)
-        .setContentTitle(matchDisplayable.headline())
-        .setContentText(matchDisplayable.matchDay())
-        .setSubText(matchDisplayable.competition())
+        .setContentTitle(matchDisplayable.headline)
+        .setContentText(matchDisplayable.matchDay)
+        .setSubText(matchDisplayable.competition)
         .setWhen(match.startAt.time)
 
     val notificationManager =

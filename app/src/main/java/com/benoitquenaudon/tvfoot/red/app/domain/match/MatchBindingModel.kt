@@ -27,7 +27,7 @@ class MatchBindingModel @Inject constructor(
     if (hasData.get() && //
         (match.get() == null || match.get() != state.match)) {
       match.set(state.match)
-      broadcastersAdapter.addAll(match.get().broadcasters())
+      broadcastersAdapter.addAll(match.get().broadcasters)
     }
   }
 }

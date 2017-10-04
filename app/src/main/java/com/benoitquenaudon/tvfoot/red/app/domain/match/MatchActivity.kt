@@ -111,8 +111,8 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   private fun fabClickIntent(): Observable<MatchIntent.NotifyMatchStartIntent> {
     return RxView.clicks(binding.notifyMatchStartFab)
         .map {
-          MatchIntent.NotifyMatchStartIntent(bindingModel.match.get().matchId(),
-              bindingModel.match.get().startAt(), !isMatchNotificationActivated)
+          MatchIntent.NotifyMatchStartIntent(bindingModel.match.get().matchId,
+              bindingModel.match.get().startAt, !isMatchNotificationActivated)
         }
   }
 

@@ -41,7 +41,7 @@ class BroadcastersAdapter @Inject constructor(
   ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(broadcaster: BroadcasterRowDisplayable) {
-      binding.broadcasterLogoPath = broadcaster.logoPath()
+      binding.broadcasterLogoPath = broadcaster.logoPath
       binding.executePendingBindings()
     }
   }
