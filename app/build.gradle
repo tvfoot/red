@@ -89,7 +89,6 @@ android.applicationVariants.all {
 }
 
 dependencies {
-  implementation "android.arch.lifecycle:runtime:$rootProject.lib.archComponentsVersion"
   implementation "android.arch.lifecycle:extensions:$rootProject.lib.archComponentsVersion"
   kapt "android.arch.lifecycle:compiler:$rootProject.lib.archComponentsVersion"
   implementation "com.android.support:appcompat-v7:$rootProject.lib.supportLibraryVersion"
