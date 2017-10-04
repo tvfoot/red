@@ -62,9 +62,7 @@ class MatchesViewModel @Inject constructor(
         .doOnNext(this::logAction)
         .compose<MatchesResult>(actionToResultTransformer)
         .doOnNext(this::logResult)
-        .scan(
-            MatchesViewState.idle(),
-            reducer)
+        .scan(MatchesViewState.idle(), reducer)
         .doOnNext(this::logState)
   }
 
@@ -181,16 +179,16 @@ class MatchesViewModel @Inject constructor(
 
   companion object Reducer {
 
-    private val reducer = BiFunction { previousState: MatchesViewState, matchesResult: MatchesResult ->
-      when (matchesResult) {
+    private val reducer = BiFunction { previousState: MatchesViewState, result: MatchesResult ->
+      when (result) {
         is RefreshResult -> {
-          when (matchesResult) {
+          when (result) {
             is RefreshResult.InFlight ->
               previousState.copy(refreshLoading = true, error = null)
             is RefreshResult.Failure ->
-              previousState.copy(refreshLoading = false, error = matchesResult.throwable)
+              previousState.copy(refreshLoading = false, error = result.throwable)
             is RefreshResult.Success -> {
-              val matches = checkNotNull((matchesResult).matches) { "Matches are null" }
+              val matches = checkNotNull((result).matches) { "Matches are null" }
 
               previousState.copy(
                   refreshLoading = false,
@@ -203,13 +201,13 @@ class MatchesViewModel @Inject constructor(
         }
         is GetLastStateResult -> previousState.copy()
         is LoadNextPageResult -> {
-          when (matchesResult) {
+          when (result) {
             is LoadNextPageResult.InFlight ->
               previousState.copy(nextPageLoading = true, error = null)
             is LoadNextPageResult.Failure ->
-              previousState.copy(nextPageLoading = false, error = matchesResult.throwable)
+              previousState.copy(nextPageLoading = false, error = result.throwable)
             is LoadNextPageResult.Success -> {
-              val newMatches = checkNotNull((matchesResult).matches) { "Matches are null" }
+              val newMatches = checkNotNull((result).matches) { "Matches are null" }
 
               val matches = ArrayList<MatchRowDisplayable>()
               matches.addAll(previousState.matches)
@@ -219,7 +217,7 @@ class MatchesViewModel @Inject constructor(
                   nextPageLoading = false,
                   error = null,
                   matches = matches,
-                  currentPage = (matchesResult).pageIndex,
+                  currentPage = (result).pageIndex,
                   hasMore = !newMatches.isEmpty())
             }
           }
@@ -227,25 +225,28 @@ class MatchesViewModel @Inject constructor(
         is ClearFiltersResult -> previousState.copy(filteredTags = emptyMap())
         is ToggleFilterResult -> {
           previousState.filteredTags.toMutableMap().let {
-            if (it.keys.contains(matchesResult.tagName)) {
-              it.remove(matchesResult.tagName)
+            if (it.keys.contains(result.tagName)) {
+              it.remove(result.tagName)
             } else {
-              it.put(matchesResult.tagName,
-                  previousState.tags.first { it.name == matchesResult.tagName }.targets)
+              it.put(result.tagName, previousState.tags.first { it.name == result.tagName }.targets)
             }
-            previousState.copy(filteredTags = it)
+            if (it.isEmpty()) {
+              previousState.copy(filteredTags = it, hasMore = true)
+            } else {
+              previousState.copy(filteredTags = it)
+            }
           }
         }
         is LoadTagsResult -> {
-          when (matchesResult) {
+          when (result) {
             is LoadTagsResult.InFlight ->
               previousState.copy(tagsLoading = true, tagsError = null)
             is LoadTagsResult.Failure ->
-              previousState.copy(tagsLoading = false, tagsError = matchesResult.throwable)
+              previousState.copy(tagsLoading = false, tagsError = result.throwable)
             is LoadTagsResult.Success ->
               previousState.copy(
                   tagsLoading = false,
-                  tags = matchesResult.tags.filter(Tag::display)
+                  tags = result.tags.filter(Tag::display)
               )
           }
         }
