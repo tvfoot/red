@@ -6,7 +6,7 @@ This is a side project I use to learn new things, experiment with new technologi
 
 The code is organized based on the [Model-View-Intent architecture](https://speakerdeck.com/oldergod/model-view-intent-for-android) which I think is great and worth exploring further.
 
-The app is written in Kotlin and uses many goodies like [RxJava](https://github.com/ReactiveX/RxJava), [Dagger](https://github.com/google/dagger), [Constraint Layout](https://constraintlayout.com/), [Retrofit](https://github.com/square/retrofit/), the [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/index.html), etc.
+The app is written in Kotlin and uses many goodies like [RxJava](https://github.com/ReactiveX/RxJava), [Dagger](https://github.com/google/dagger), [Constraint Layout](https://constraintlayout.com/), [Retrofit](https://github.com/square/retrofit/), the [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/index.html), the [Data Binding Library](https://developer.android.com/topic/libraries/data-binding/index.html), etc.
 
 ## PlayStore
 
