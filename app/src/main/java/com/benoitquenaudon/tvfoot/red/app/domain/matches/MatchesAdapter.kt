@@ -19,6 +19,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItem
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayableDiffUtilCallback
 import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowHeaderBinding
 import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowMatchBinding
+import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowTeamlessMatchBinding
 import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding
 import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
 import io.reactivex.disposables.Disposable
@@ -47,6 +48,9 @@ class MatchesAdapter @Inject constructor(
         MatchesItemViewHolder.MatchHeaderViewHolder(binding as MatchesRowHeaderBinding)
       R.layout.matches_row_match ->
         MatchesItemViewHolder.MatchRowViewHolder(binding as MatchesRowMatchBinding, this)
+      R.layout.matches_row_teamless_match ->
+        MatchesItemViewHolder.MatchTeamlessRowViewHolder(binding as MatchesRowTeamlessMatchBinding,
+            this)
       R.layout.row_loading ->
         MatchesItemViewHolder.LoadingRowViewHolder(binding as RowLoadingBinding)
       else -> throw UnsupportedOperationException(
@@ -71,6 +75,13 @@ class MatchesAdapter @Inject constructor(
           throw IllegalStateException("Wrong item for MatchRowViewHolder $item")
         }
       }
+      is MatchesItemViewHolder.MatchTeamlessRowViewHolder -> {
+        if (item is MatchRowDisplayable) {
+          holder.bind(item)
+        } else {
+          throw IllegalStateException("Wrong item for MatchTeamlessRowViewHolder $item")
+        }
+      }
       is LoadingRowViewHolder -> {
         if (item is LoadingRowDisplayable) {
           holder.bind(item)
@@ -91,12 +102,18 @@ class MatchesAdapter @Inject constructor(
   }
 
   override fun getItemViewType(position: Int): Int =
-      when (matchesItems[position]) {
-        is MatchRowDisplayable -> R.layout.matches_row_match
-        is HeaderRowDisplayable -> R.layout.matches_row_header
-        is LoadingRowDisplayable -> R.layout.row_loading
-        else -> throw UnsupportedOperationException(
-            "Don't know how to deal with this item: $matchesItems[position]")
+      matchesItems[position].let { item ->
+        when (item) {
+          is MatchRowDisplayable -> if (item.homeTeam.name.isNullOrEmpty()) {
+            R.layout.matches_row_teamless_match
+          } else {
+            R.layout.matches_row_match
+          }
+          is HeaderRowDisplayable -> R.layout.matches_row_header
+          is LoadingRowDisplayable -> R.layout.row_loading
+          else -> throw UnsupportedOperationException(
+              "Don't know how to deal with this item: $matchesItems[position]")
+        }
       }
 
   fun onClick(match: MatchRowDisplayable) {
