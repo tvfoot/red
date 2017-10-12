@@ -1,57 +1,92 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/code
     docker:
-      - image: circleci/java:oraclejdk8
+      - image: circleci/android:api-25-alpha
     environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx3200m -XX:+HeapDumpOnOutOfMemoryError"'
       SERVICE_ACCOUNT: 'service-account.json'
       PACKAGE_NAME: 'com.benoitquenaudon.tvfoot.red'
+      ANDROID_SDK_LICENSE: '8933bad161af4178b1185d1a37fbf41ea5269c55'
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+#      - run:
+#          name: Setup Android Licenses
+#          command: mkdir -p ${ANDROID_HOME}/licenses && echo $ANDROID_SDK_LICENSE > ${ANDROID_HOME}/licenses/android-sdk-license
+      - run:
+          name: Download Keystore
+          command: bash ./misc/download_keystore.sh
+      - run:
+          name: Download Google Services
+          command: bash ./misc/download_google-services.sh
+      - run:
+          name: Download Service Account
+          command: bash ./misc/download_service-account.sh
+      - run:
+          name: Download Dependencies
+          command: ./gradlew dependencies
+      - run:
+          name: Install Fastlane
+          command: gem install fastlane
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Run Tests
+          command: ./gradlew clean assemble lint test
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_test_results:
+          path: app/build/test-results
+      - deploy:
+          name: Deploy on Track Alpha if Develop
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              fastlane supply run --json_key "$SERVICE_ACCOUNT"
+                                  --package_name "$PACKAGE_NAME"
+                                  --apk ./app/build/outputs/apk/prod/release/app-prod-release.apk
+                                  --track alpha
+                                  --skip_upload_metadata true
+                                  --skip_upload_images true
+                                  --skip_upload_screenshots true
+            fi
 
-dependencies:
-  cache_directories:
-    - "/opt/circleci/.rvm/gems"
-  pre:
-    - mkdir -p ${ANDROID_HOME}/licenses
-    - echo $ANDROID_SDK_LICENSE > ${ANDROID_HOME}/licenses/android-sdk-license
-    - echo y | android update sdk --no-ui --all --filter "extra-google-google_play_services,extra-google-m2repository,extra-android-m2repository"
-    - bash ./misc/download_keystore.sh
-    - bash ./misc/download_google-services.sh
-    - bash ./misc/download_service-account.sh
-  override:
-    - ./gradlew dependencies
-    - gem install fastlane
 
-test:
-  pre:
-    #    - emulator -avd circleci-android22 -no-audio -no-window:
-    #        background: true
-    #        parallel: true
-    #    - circle-android wait-for-boot
-    #    - sleep 30
-    #    # Unlock the screen
-    #    - adb shell input keyevent 82
-  override:
-    - ./gradlew clean assemble -Dpre-dex=false --console=plain --stacktrace
-    - ./gradlew test --console=plain
-    #    - ./gradlew connectedAndroidTest --console=plain
-    - ./gradlew lint --console=plain
-  post:
-    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
-    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - find app/build/test-results/ -name \*.xml -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
-    #    - find app/build/outputs/androidTest-results/ -name \*.xml -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
-    - find app/build/reports/ -name \*.xml -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
-
-    # screenshot debugging
-    #- wget http://imgur.com/tools/imgurbash.sh
-    #- chmod a+x imgurbash.sh
-    #- adb shell screencap -p | sed 's/\r$//' > bootscreen.png
-    #- ./imgurbash.sh bootscreen.png
-
-deployment:
-  alpha:
-    branch: develop
-    commands:
-      - echo "deploying on track alpha"
-      - fastlane supply run --json_key "$SERVICE_ACCOUNT" --package_name "$PACKAGE_NAME" --apk ./app/build/outputs/apk/prod/release/app-prod-release.apk --track alpha --skip_upload_metadata true --skip_upload_images true --skip_upload_screenshots true
+#test:
+#  pre:
+#    #    - emulator -avd circleci-android22 -no-audio -no-window:
+#    #        background: true
+#    #        parallel: true
+#    #    - circle-android wait-for-boot
+#    #    - sleep 30
+#    #    # Unlock the screen
+#    #    - adb shell input keyevent 82
+#  override:
+#    - ./gradlew clean assemble -Dpre-dex=false --console=plain --stacktrace
+#    - ./gradlew test --console=plain
+#    #    - ./gradlew connectedAndroidTest --console=plain
+#    - ./gradlew lint --console=plain
+#  post:
+#    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+#    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+#    - find app/build/test-results/ -name \*.xml -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+#    #    - find app/build/outputs/androidTest-results/ -name \*.xml -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+#    - find app/build/reports/ -name \*.xml -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+#
+#    # screenshot debugging
+#    #- wget http://imgur.com/tools/imgurbash.sh
+#    #- chmod a+x imgurbash.sh
+#    #- adb shell screencap -p | sed 's/\r$//' > bootscreen.png
+#    #- ./imgurbash.sh bootscreen.png
+#
+#deployment:
+#  alpha:
+#    branch: develop
+#    commands:
+#      - echo "deploying on track alpha"
+#      - fastlane supply run --json_key "$SERVICE_ACCOUNT" --package_name "$PACKAGE_NAME" --apk ./app/build/outputs/apk/prod/release/app-prod-release.apk --track alpha --skip_upload_metadata true --skip_upload_images true --skip_upload_screenshots true
