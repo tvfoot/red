@@ -8,6 +8,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDis
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable
 import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowHeaderBinding
 import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowMatchBinding
+import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowTeamlessMatchBinding
 import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding
 
 
@@ -37,6 +38,36 @@ sealed class MatchesItemViewHolder<out B : ViewDataBinding, in T : MatchesItemDi
       binding: MatchesRowMatchBinding,
       val handler: MatchesAdapter
   ) : MatchesItemViewHolder<MatchesRowMatchBinding, MatchRowDisplayable>(binding) {
+
+    override fun bind(item: MatchRowDisplayable) {
+      binding.match = item
+      binding.handler = handler
+      binding.executePendingBindings()
+
+      setBroadcastsAdapter(item)
+    }
+
+    override fun unbind() {
+      binding.match = null
+      binding.handler = null
+      binding.matchBroadcasters.adapter = null
+      binding.executePendingBindings()
+    }
+
+    private fun setBroadcastsAdapter(match: MatchRowDisplayable) {
+      val recyclerView = binding.matchBroadcasters
+
+      val broadcastersAdapter = BroadcastersAdapter()
+      broadcastersAdapter.addAll(match.broadcasters)
+
+      recyclerView.adapter = broadcastersAdapter
+    }
+  }
+
+  class MatchTeamlessRowViewHolder(
+      binding: MatchesRowTeamlessMatchBinding,
+      val handler: MatchesAdapter
+  ) : MatchesItemViewHolder<MatchesRowTeamlessMatchBinding, MatchRowDisplayable>(binding) {
 
     override fun bind(item: MatchRowDisplayable) {
       binding.match = item
