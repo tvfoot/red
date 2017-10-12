@@ -150,7 +150,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   }
 
   override fun intents(): Observable<MatchesIntent> =
-      Observable.merge(refreshIntent(), loadNextPageIntent())
+      Observable.merge(initialIntent(), refreshIntent(), loadNextPageIntent())
 
   private fun initialIntent(): Observable<InitialIntent> = Observable.just(InitialIntent)
 

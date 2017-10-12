@@ -75,7 +75,7 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
   }
 
   override fun intents(): Observable<MatchesIntent> {
-    return Observable.merge(clearFilterIntent(), filterClickIntent())
+    return Observable.merge(initialIntent(), clearFilterIntent(), filterClickIntent())
   }
 
   private fun initialIntent(): Observable<FilterInitialIntent> =

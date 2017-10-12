@@ -26,6 +26,7 @@ import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
 import com.benoitquenaudon.tvfoot.red.util.logResult
 import com.benoitquenaudon.tvfoot.red.util.logState
+import com.benoitquenaudon.tvfoot.red.util.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
@@ -53,8 +54,18 @@ class MatchesViewModel @Inject constructor(
 
   private fun compose(): Observable<MatchesViewState> {
     return intentsSubject
-        .startWith(FilterInitialIntent)
-        .startWith(InitialIntent)
+        .publish { shared ->
+          Observable.merge(
+              shared.ofType(InitialIntent::class.java).take(1),
+              shared.notOfType(InitialIntent::class.java)
+          )
+        }
+        .publish { shared ->
+          Observable.merge(
+              shared.ofType(FilterInitialIntent::class.java).take(1),
+              shared.notOfType(FilterInitialIntent::class.java)
+          )
+        }
         .doOnNext(this::logIntent)
         .map(this::actionFromIntent)
         .doOnNext(this::logAction)
