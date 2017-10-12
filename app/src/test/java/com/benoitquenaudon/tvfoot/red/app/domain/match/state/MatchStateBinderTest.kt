@@ -11,7 +11,6 @@ import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchViewState
-import com.benoitquenaudon.tvfoot.red.testutil.Fixture
 import com.benoitquenaudon.tvfoot.red.testutil.InjectionContainer
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -22,27 +21,23 @@ import org.junit.Ignore
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import javax.inject.Inject
 
 class MatchStateBinderTest {
   lateinit var matchStateBinder: MatchViewModel
   lateinit var testObserver: TestObserver<MatchViewState>
   val preferenceRepository: PreferenceRepository = mock(PreferenceRepository::class.java)
   val notificationRepository: NotificationRepository = mock(NotificationRepository::class.java)
-  @Inject lateinit var fixture: Fixture
 
   @Before
   fun setup() {
     InjectionContainer.testComponentInstance.inject(this)
 
     val intents = PublishSubject.create<MatchIntent>()
-    val states = PublishSubject.create<MatchViewState>()
     val schedulerProvider: BaseSchedulerProvider = ImmediateSchedulerProvider()
     val redFirebaseAnalytics: BaseRedFirebaseAnalytics = NoopRedFirebaseAnalytics
 
     matchStateBinder = MatchViewModel(
         intents,
-        states,
         FakeMatchRepository(),
         preferenceRepository,
         notificationRepository,
@@ -53,7 +48,9 @@ class MatchStateBinderTest {
     matchStateBinder.states().test()
   }
 
-  @Ignore @Test fun initialIntentLoadMatch() {
+  @Ignore
+  @Test
+  fun initialIntentLoadMatch() {
     val matchId = "matchId"
 
     `when`(preferenceRepository.loadNotifyMatchStart(matchId)).thenReturn(Single.just(false))
