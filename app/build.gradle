@@ -51,17 +51,7 @@ android {
 
   flavorDimensions 'foot'
   productFlavors {
-    mock {
-      applicationIdSuffix = ".mock"
-    }
     prod {}
-  }
-
-  // Remove mockRelease as it's not needed.
-  android.variantFilter { variant ->
-    if (variant.buildType.name == 'release' && variant.getFlavors().get(0).name == 'mock') {
-      variant.setIgnore(true)
-    }
   }
 
   // Always show the result of every unit test, even if it passes.
@@ -79,6 +69,10 @@ android {
 
   lintOptions {
     warning 'InvalidPackage' // prevent error from references of non-Android package
+  }
+
+  sourceSets {
+    androidTest.java.srcDirs += 'src/androidTest/kotlin'
   }
 }
 
@@ -126,12 +120,11 @@ dependencies {
   implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$rootProject.lib.rxBindingVersion"
   implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$rootProject.lib.rxBindingVersion"
   implementation "com.jakewharton.rxbinding2:rxbinding-support-v4:$rootProject.lib.rxBindingVersion"
-  implementation 'com.benoitquenaudon:rxdatabinding:2.0.0'
+  implementation "com.benoitquenaudon:rxdatabinding:$rootProject.lib.rxDataBindingVersion"
   debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.lib.leakCanaryVersion"
   releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.lib.leakCanaryVersion"
   kapt "com.android.databinding:compiler:$android_plugin_version"
   kapt "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
-  compileOnly "com.google.code.findbugs:jsr305:$rootProject.lib.jsr305Version"
   implementation 'se.ansman.kotshi:api:0.1.1'
   kapt 'se.ansman.kotshi:compiler:0.1.1'
 
@@ -140,21 +133,11 @@ dependencies {
   testImplementation "com.squareup.okhttp3:mockwebserver:$rootProject.lib.okHttpVersion"
   testImplementation "org.mockito:mockito-core:$rootProject.lib.mockitoVersion"
   testImplementation "com.squareup.retrofit2:retrofit-mock:$rootProject.lib.retrofitVersion"
-  testImplementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
-  testImplementation "org.robolectric:robolectric:$rootProject.lib.robolectricVersion"
   kaptTest "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
 
   androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$rootProject.lib.espressoVersion"
   androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.lib.espressoVersion"
-  androidTestImplementation "org.mockito:mockito-core:$rootProject.lib.mockitoVersion"
-  androidTestImplementation "com.crittercism.dexmaker:dexmaker:$rootProject.lib.dexmakerVersion"
-  androidTestImplementation "com.crittercism.dexmaker:dexmaker-mockito:$rootProject.lib.dexmakerVersion"
-  androidTestImplementation "com.crittercism.dexmaker:dexmaker-dx:$rootProject.lib.dexmakerVersion"
-  androidTestImplementation "com.squareup.okhttp3:mockwebserver:$rootProject.lib.okHttpVersion"
-  androidTestImplementation "com.squareup.retrofit2:retrofit-mock:$rootProject.lib.retrofitVersion"
-  androidTestImplementation 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
-  androidTestImplementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
-  androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
+  kaptAndroidTest "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
 }
 
 /*
@@ -166,24 +149,4 @@ configurations.all {
   resolutionStrategy.force "com.google.code.findbugs:jsr305:$rootProject.lib.jsr305Version"
 }
 
-/*
-All direct/transitive dependencies shared between your test and production APKs need to be
-excluded from the test APK! This is necessary because both APKs will contain the same classes. Not
-excluding these dependencies from your test configuration will result in an dex pre-verifier error
-at runtime. More info in this tools bug: (https://code.google.com/p/android/issues/detail?id=192497)
-*/
-configurations.implementation.dependencies.each { implementationDependency ->
-  println "Excluding implementation dependency: ${implementationDependency.getName()}"
-  configurations.androidTestImplementation.dependencies.each {
-    androidTestImplementationDependency ->
-      configurations.androidTestImplementation.exclude module: "${implementationDependency.getName()}"
-  }
-}
-
 apply plugin: 'com.google.gms.google-services'
-repositories {
-  mavenCentral()
-}
-
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'

@@ -43,7 +43,7 @@ class MatchesViewModel @Inject constructor(
 ) : RedViewModel<MatchesIntent, MatchesViewState>(firebaseAnalytics) {
 
   private val statesObservable: Observable<MatchesViewState> by lazy(NONE) {
-    compose().replay(1).autoConnect(0)
+    compose().skip(1).replay(1).autoConnect(0)
   }
 
   override fun states(): Observable<MatchesViewState> = statesObservable
