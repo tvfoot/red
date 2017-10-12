@@ -44,11 +44,11 @@ jobs:
           name: Deploy on Track Alpha if Develop
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              fastlane supply run --json_key "$SERVICE_ACCOUNT"
-                                  --package_name "$PACKAGE_NAME"
-                                  --apk ./app/build/outputs/apk/prod/release/app-prod-release.apk
-                                  --track alpha
-                                  --skip_upload_metadata true
-                                  --skip_upload_images true
+              fastlane supply run --json_key "$SERVICE_ACCOUNT" \
+                                  --package_name "$PACKAGE_NAME" \
+                                  --apk ./app/build/outputs/apk/prod/release/app-prod-release.apk \
+                                  --track alpha \
+                                  --skip_upload_metadata true \
+                                  --skip_upload_images true \
                                   --skip_upload_screenshots true
             fi
