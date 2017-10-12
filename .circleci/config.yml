@@ -36,9 +36,6 @@ jobs:
           name: Run Tests
           command: ./gradlew clean assemble lint test
       - store_artifacts:
-          path: app/build/outputs
-          destination: outputs
-      - store_artifacts:
           path: app/build/reports
           destination: reports
       - store_test_results:
