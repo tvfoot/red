@@ -13,8 +13,6 @@ sealed class MatchesResult : MviResult {
     object InFlight : RefreshResult()
   }
 
-  object GetLastStateResult : MatchesResult()
-
   sealed class LoadNextPageResult : MatchesResult() {
     data class Success(val pageIndex: Int, val matches: List<Match>) : LoadNextPageResult()
 

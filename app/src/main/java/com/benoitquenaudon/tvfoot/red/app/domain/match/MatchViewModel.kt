@@ -7,13 +7,10 @@ import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationReposi
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchRepository
-import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchAction.GetLastStateAction
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchAction.LoadMatchAction
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchAction.NotifyMatchStartAction
-import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent.GetLastState
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent.NotifyMatchStartIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchResult.GetLastStateResult
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchResult.LoadMatchResult
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchResult.NotifyMatchStartResult
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
@@ -21,16 +18,17 @@ import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
 import com.benoitquenaudon.tvfoot.red.util.logResult
 import com.benoitquenaudon.tvfoot.red.util.logState
+import com.benoitquenaudon.tvfoot.red.util.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
+import kotlin.LazyThreadSafetyMode.NONE
 
 class MatchViewModel @Inject constructor(
     private val intentsSubject: PublishSubject<MatchIntent>,
-    private val statesSubject: PublishSubject<MatchViewState>,
     private val matchRepository: BaseMatchRepository,
     private val preferenceRepository: PreferenceRepository,
     private val notificationRepository: NotificationRepository,
@@ -38,20 +36,25 @@ class MatchViewModel @Inject constructor(
     firebaseAnalytics: BaseRedFirebaseAnalytics
 ) : RedViewModel<MatchIntent, MatchViewState>(firebaseAnalytics) {
 
-  init {
-    compose().subscribe(statesSubject::onNext)
+  private val statesObservable: Observable<MatchViewState> by lazy(NONE) {
+    compose().replay(1).autoConnect(0)
   }
 
   override fun processIntents(intents: Observable<MatchIntent>) {
     intents.subscribe(intentsSubject::onNext)
   }
 
-  override fun states(): Observable<MatchViewState> = statesSubject
+  override fun states(): Observable<MatchViewState> = statesObservable
 
   private fun compose(): Observable<MatchViewState> {
     return intentsSubject
+        .publish { shared ->
+          Observable.merge(
+              shared.ofType(InitialIntent::class.java).take(1),
+              shared.notOfType(InitialIntent::class.java)
+          )
+        }
         .doOnNext(this::logIntent)
-        .scan(initialIntentFilter)
         .map(this::actionFromIntent)
         .doOnNext(this::logAction)
         .compose<MatchResult>(actionToResultTransformer)
@@ -61,23 +64,9 @@ class MatchViewModel @Inject constructor(
         .doOnNext(this::logState)
   }
 
-  private val initialIntentFilter: BiFunction<MatchIntent, MatchIntent, MatchIntent>
-    get() = BiFunction { _: MatchIntent, newIntent: MatchIntent ->
-      // if isReConnection (e.g. after config change)
-      // i.e. we are inside the scan, meaning there has already
-      // been intent in the past, meaning the InitialIntent cannot
-      // be the first => it is a reconnection.
-      if (newIntent is InitialIntent) {
-        GetLastState
-      } else {
-        newIntent
-      }
-    }
-
   private fun actionFromIntent(intent: MatchIntent): MatchAction =
       when (intent) {
         is InitialIntent -> LoadMatchAction(intent.matchId)
-        is GetLastState -> GetLastStateAction
         is NotifyMatchStartIntent ->
           NotifyMatchStartAction(intent.matchId, intent.startAt, intent.notifyMatchStart)
       }
@@ -110,22 +99,16 @@ class MatchViewModel @Inject constructor(
       })
     }
 
-  private val getLastStateTransformer: ObservableTransformer<GetLastStateAction, GetLastStateResult>
-    get() = ObservableTransformer { actions: Observable<GetLastStateAction> ->
-      actions.map({ GetLastStateResult })
-    }
-
   private val actionToResultTransformer: ObservableTransformer<MatchAction, MatchResult>
     get() = ObservableTransformer { actions: Observable<MatchAction> ->
       actions.publish({ shared ->
         Observable.merge<MatchResult>(
             shared.ofType(LoadMatchAction::class.java).compose(loadMatchTransformer),
-            shared.ofType(GetLastStateAction::class.java).compose(getLastStateTransformer),
             shared.ofType(NotifyMatchStartAction::class.java).compose(notifyMatchStartTransformer))
             .mergeWith(
                 // Error for not implemented actions
                 shared.filter({ v ->
-                  v !is LoadMatchAction && v !is GetLastStateAction && v !is NotifyMatchStartAction
+                  v !is LoadMatchAction && v !is NotifyMatchStartAction
                 }).flatMap({ w ->
                   Observable.error<MatchResult>(
                       IllegalArgumentException("Unknown Action type: " + w))
@@ -153,7 +136,6 @@ class MatchViewModel @Inject constructor(
             }
           }
         }
-        is GetLastStateResult -> previousState.copy()
         is NotifyMatchStartResult -> {
           previousState.copy(shouldNotifyMatchStart = matchResult.shouldNotifyMatchStart)
         }

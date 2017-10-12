@@ -13,10 +13,4 @@ sealed class MatchResult : MviResult {
   }
 
   data class NotifyMatchStartResult(val shouldNotifyMatchStart: Boolean) : MatchResult()
-
-  object GetLastStateResult : MatchResult()
-
-  enum class Status {
-    LOAD_MATCH_IN_FLIGHT, LOAD_MATCH_FAILURE, LOAD_MATCH_SUCCESS
-  }
 }
