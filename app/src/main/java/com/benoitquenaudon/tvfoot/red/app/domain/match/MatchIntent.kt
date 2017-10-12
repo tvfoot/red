@@ -10,6 +10,4 @@ sealed class MatchIntent : MviIntent {
       val startAt: Long,
       val notifyMatchStart: Boolean
   ) : MatchIntent()
-
-  object GetLastState : MatchIntent()
 }

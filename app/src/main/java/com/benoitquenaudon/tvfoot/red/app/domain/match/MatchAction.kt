@@ -10,6 +10,4 @@ sealed class MatchAction : MviAction {
       val startAt: Long,
       val notifyMatchStart: Boolean
   ) : MatchAction()
-
-  object GetLastStateAction : MatchAction()
 }
