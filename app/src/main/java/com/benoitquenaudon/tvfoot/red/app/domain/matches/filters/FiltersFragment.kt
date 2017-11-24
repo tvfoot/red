@@ -34,7 +34,7 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private val viewModel: MatchesViewModel by lazy(NONE) {
     // we need to use MatchesActivity to get only one instance of the MatchesViewModel
-    ViewModelProviders.of(activity, viewModelFactory).get(MatchesViewModel::class.java)
+    ViewModelProviders.of(activity!!, viewModelFactory).get(MatchesViewModel::class.java)
   }
 
   lateinit var binding: FragmentFiltersBinding
@@ -49,10 +49,12 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
     super.onAttach(activity)
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-      savedInstanceState: Bundle?): View? {
-    binding = DataBindingUtil.inflate<FragmentFiltersBinding>(inflater, R.layout.fragment_filters,
-        container, false)
+  override fun onCreateView(
+      inflater: LayoutInflater,
+      container: ViewGroup?,
+      savedInstanceState: Bundle?
+  ): View? {
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_filters, container, false)
     return binding.root
   }
 
@@ -74,16 +76,17 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
     super.onDestroyView()
   }
 
-  override fun intents(): Observable<MatchesIntent> {
-    return Observable.merge(initialIntent(), clearFilterIntent(), filterClickIntent())
-  }
+  override fun intents(): Observable<MatchesIntent> =
+      Observable.merge(initialIntent(), clearFilterIntent(), filterClickIntent())
 
   private fun initialIntent(): Observable<FilterInitialIntent> =
       Observable.just(FilterInitialIntent)
 
   private fun clearFilterIntent(): Observable<ClearFilters> =
-      RxToolbar.itemClicks(binding.filtersToolbar)
-          .filter { it.itemId == R.id.action_clear }.map { ClearFilters }
+      RxToolbar
+          .itemClicks(binding.filtersToolbar)
+          .filter { it.itemId == R.id.action_clear }
+          .map { ClearFilters }
 
   private fun filterClickIntent(): Observable<ToggleFilterIntent> =
       filtersAdapter.filterRowClickObservable.map { ToggleFilterIntent(it.code) }
