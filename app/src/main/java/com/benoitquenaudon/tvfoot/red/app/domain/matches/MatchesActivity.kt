@@ -22,6 +22,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshIn
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersFragment
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchesBinding
+import com.benoitquenaudon.tvfoot.red.util.getDrawableCompat
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import com.jakewharton.rxbinding2.view.RxView
@@ -71,7 +72,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
           .commit()
     }
     val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL).apply {
-      setDrawable(this@MatchesActivity.getDrawable(R.drawable.one_line_divider))
+      setDrawable(this@MatchesActivity.getDrawableCompat(R.drawable.one_line_divider))
     }
     binding.recyclerView.addItemDecoration(divider)
   }
