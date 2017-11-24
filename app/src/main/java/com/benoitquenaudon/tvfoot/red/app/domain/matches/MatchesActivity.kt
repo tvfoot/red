@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -72,7 +71,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
           .commit()
     }
     val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL).apply {
-      setDrawable(ContextCompat.getDrawable(this@MatchesActivity, R.drawable.one_line_divider))
+      setDrawable(this@MatchesActivity.getDrawable(R.drawable.one_line_divider))
     }
     binding.recyclerView.addItemDecoration(divider)
   }
