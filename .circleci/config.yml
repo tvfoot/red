@@ -73,7 +73,7 @@ jobs:
       - run:
           name: Deploy to Alpha channel
           command: |
-            fastlane supply run --json_key signing/playstore_service-account.json \
+            fastlane supply run --json_key "$SERVICE_ACCOUNT" \
                                 --package_name "$PACKAGE_NAME" \
                                 --apk ./app/build/outputs/apk/prod/release/app-prod-release.apk \
                                 --track alpha \
