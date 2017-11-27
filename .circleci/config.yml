@@ -1,14 +1,18 @@
 version: 2
+
+defaults: &defaults
+  docker:
+    - image: circleci/android:api-26-alpha
+  working_directory: ~/red
+  environment:
+    GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx3200m -XX:+HeapDumpOnOutOfMemoryError"'
+    SERVICE_ACCOUNT: 'service-account.json'
+    PACKAGE_NAME: 'com.benoitquenaudon.tvfoot.red'
+  resource_class: large
+
 jobs:
   build:
-    working_directory: ~/code
-    docker:
-      - image: circleci/android:api-25-alpha
-    environment:
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx3200m -XX:+HeapDumpOnOutOfMemoryError"'
-      SERVICE_ACCOUNT: 'service-account.json'
-      PACKAGE_NAME: 'com.benoitquenaudon.tvfoot.red'
-      ANDROID_SDK_LICENSE: '8933bad161af4178b1185d1a37fbf41ea5269c55'
+    <<: *defaults
     steps:
       - checkout
       - restore_cache:
@@ -20,35 +24,74 @@ jobs:
           name: Download Google Services
           command: bash ./misc/download_google-services.sh
       - run:
-          name: Download Service Account
-          command: bash ./misc/download_service-account.sh
-      - run:
           name: Download Dependencies
-          command: ./gradlew dependencies
-      - run:
-          name: Install Fastlane
-          command: gem install fastlane
+          command: ./gradlew dependencies --no-daemon
       - save_cache:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          name: Run Tests
-          command: ./gradlew clean assemble lint test
+          name: Check APKs
+          command: ./gradlew clean check --no-daemon
+      - run:
+          name: Assemble APKs
+          command: ./gradlew clean assemble --no-daemon
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_artifacts:
+          path: app/build/outputs/apk
+          destination: apks
       - store_artifacts:
           path: app/build/reports
           destination: reports
       - store_test_results:
           path: app/build/test-results
-      - deploy:
-          name: Deploy on Track Alpha if Develop
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .gradle
+            - build
+            - app/build
+  deploy_to_play:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - attach_workspace:
+          at: ~/red
+      - run:
+          name: Download Keystore
+          command: bash ./misc/download_keystore.sh
+      - run:
+          name: Download Google Services
+          command: bash ./misc/download_google-services.sh
+      - run:
+          name: Download Service Account
+          command: bash ./misc/download_service-account.sh
+      - run:
+          name: Install Fastlane
+          command: gem install fastlane
+      - run:
+          name: Deploy to Alpha channel
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              fastlane supply run --json_key "$SERVICE_ACCOUNT" \
-                                  --package_name "$PACKAGE_NAME" \
-                                  --apk ./app/build/outputs/apk/prod/release/app-prod-release.apk \
-                                  --track alpha \
-                                  --skip_upload_metadata true \
-                                  --skip_upload_images true \
-                                  --skip_upload_screenshots true
-            fi
+            fastlane supply run --json_key signing/playstore_service-account.json \
+                                --package_name "$PACKAGE_NAME" \
+                                --apk ./app/build/outputs/apk/prod/release/app-prod-release.apk \
+                                --track alpha \
+                                --skip_upload_metadata true \
+                                --skip_upload_images true \
+                                --skip_upload_screenshots true
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - deploy_to_play:
+          requires:
+            - build
+          filters:
+            branches:
+              only: develop
