@@ -8,6 +8,7 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorGrayLighter">#f6f7f9</color>
     <color name="colorGrayLight">#e9ebee</color>
+    <color name="colorGrayMediumLight">#b9bbbe</color>
     <color name="colorGray">#90949c</color>
     <color name="colorGrayDark">#53565d</color>
     <color name="colorGrayDarker">@color/colorPrimary</color>
