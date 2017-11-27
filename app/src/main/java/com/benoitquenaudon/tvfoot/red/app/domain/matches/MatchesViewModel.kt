@@ -1,7 +1,9 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
+import com.benoitquenaudon.tvfoot.red.app.common.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.ClearFiltersAction
@@ -22,6 +24,9 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshRe
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.ToggleFilterResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
+import com.benoitquenaudon.tvfoot.red.util.MatchId
+import com.benoitquenaudon.tvfoot.red.util.WillBeNotified
+import com.benoitquenaudon.tvfoot.red.util.flatMapIterable
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
 import com.benoitquenaudon.tvfoot.red.util.logResult
@@ -29,7 +34,9 @@ import com.benoitquenaudon.tvfoot.red.util.logState
 import com.benoitquenaudon.tvfoot.red.util.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.toMap
 import io.reactivex.subjects.PublishSubject
 import java.util.ArrayList
 import javax.inject.Inject
@@ -37,7 +44,8 @@ import kotlin.LazyThreadSafetyMode.NONE
 
 class MatchesViewModel @Inject constructor(
     private val intentsSubject: PublishSubject<MatchesIntent>,
-    private val repository: BaseMatchesRepository,
+    private val matchesRepository: BaseMatchesRepository,
+    private val preferenceRepository: PreferenceRepository,
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
 ) : RedViewModel<MatchesIntent, MatchesViewState>(firebaseAnalytics) {
@@ -88,9 +96,25 @@ class MatchesViewModel @Inject constructor(
   private val refreshTransformer: ObservableTransformer<RefreshAction, RefreshResult>
     get() = ObservableTransformer { actions: Observable<RefreshAction> ->
       actions.flatMap({
-        repository.loadPage(0)
+        val matches: Observable<Match> = matchesRepository
+            .loadPage(0)
+            .flatMapIterable()
+            .share()
+
+        Single.zip(
+            matches.toList(),
+            matches.map(Match::id)
+                .flatMapSingle { matchId ->
+                  preferenceRepository
+                      .loadNotifyMatchStart(matchId)
+                      .map { matchId to it }
+                }.toMap(),
+            BiFunction<List<Match>,
+                Map<String, WillBeNotified>,
+                Pair<List<Match>, Map<MatchId, WillBeNotified>>>(::Pair)
+        )
             .toObservable()
-            .map<RefreshResult>(RefreshResult::Success)
+            .map<RefreshResult> { RefreshResult.Success(it.first, it.second) }
             .onErrorReturn(RefreshResult::Failure)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
@@ -98,14 +122,31 @@ class MatchesViewModel @Inject constructor(
       })
     }
 
-  private val loadNextPageTransformer: ObservableTransformer<LoadNextPageAction, LoadNextPageResult>
-    get() = ObservableTransformer { actions: Observable<LoadNextPageAction> ->
+  private
+  val loadNextPageTransformer: ObservableTransformer<LoadNextPageAction, LoadNextPageResult>
+    get () = ObservableTransformer { actions: Observable<LoadNextPageAction> ->
       actions.flatMap(
           { (pageIndex) ->
-            repository.loadPage(pageIndex)
+            val matches: Observable<Match> = matchesRepository
+                .loadPage(pageIndex)
+                .flatMapIterable()
+                .share()
+
+            Single.zip(
+                matches.toList(),
+                matches.map(Match::id)
+                    .flatMapSingle { matchId ->
+                      preferenceRepository
+                          .loadNotifyMatchStart(matchId)
+                          .map { matchId to it }
+                    }.toMap(),
+                BiFunction<List<Match>,
+                    Map<String, WillBeNotified>,
+                    Pair<List<Match>, Map<MatchId, WillBeNotified>>>(::Pair)
+            )
                 .toObservable()
-                .map<LoadNextPageResult> { matches ->
-                  LoadNextPageResult.Success(pageIndex, matches)
+                .map<LoadNextPageResult> { (matches, notificationPairs) ->
+                  LoadNextPageResult.Success(pageIndex, matches, notificationPairs)
                 }
                 .onErrorReturn(LoadNextPageResult::Failure)
                 .subscribeOn(schedulerProvider.io())
@@ -114,11 +155,12 @@ class MatchesViewModel @Inject constructor(
           })
     }
 
-  private val loadTagsTransformer: ObservableTransformer<LoadTagsAction, LoadTagsResult>
-    get() = ObservableTransformer { actions: Observable<LoadTagsAction> ->
+  private
+  val loadTagsTransformer: ObservableTransformer<LoadTagsAction, LoadTagsResult>
+    get () = ObservableTransformer { actions: Observable<LoadTagsAction> ->
       actions.flatMap(
           {
-            repository.loadTags()
+            matchesRepository.loadTags()
                 .toObservable()
                 .map<LoadTagsResult>(LoadTagsResult::Success)
                 .onErrorReturn(LoadTagsResult::Failure)
@@ -128,18 +170,21 @@ class MatchesViewModel @Inject constructor(
           })
     }
 
-  private val clearFilterTransformer: ObservableTransformer<ClearFiltersAction, ClearFiltersResult>
-    get() = ObservableTransformer { actions: Observable<ClearFiltersAction> ->
+  private
+  val clearFilterTransformer: ObservableTransformer<ClearFiltersAction, ClearFiltersResult>
+    get () = ObservableTransformer { actions: Observable<ClearFiltersAction> ->
       actions.map({ ClearFiltersResult })
     }
 
-  private val toggleFilterTransformer: ObservableTransformer<ToggleFilterAction, ToggleFilterResult>
-    get() = ObservableTransformer { actions: Observable<ToggleFilterAction> ->
+  private
+  val toggleFilterTransformer: ObservableTransformer<ToggleFilterAction, ToggleFilterResult>
+    get () = ObservableTransformer { actions: Observable<ToggleFilterAction> ->
       actions.map({ ToggleFilterResult(it.tagName) })
     }
 
-  private val actionToResultTransformer: ObservableTransformer<MatchesAction, MatchesResult>
-    get() = ObservableTransformer { actions: Observable<MatchesAction> ->
+  private
+  val actionToResultTransformer: ObservableTransformer<MatchesAction, MatchesResult>
+    get () = ObservableTransformer { actions: Observable<MatchesAction> ->
       actions.publish({ shared ->
         Observable.merge<MatchesResult>(
             shared.ofType(RefreshAction::class.java).compose(refreshTransformer),
@@ -147,7 +192,8 @@ class MatchesViewModel @Inject constructor(
             .mergeWith(
                 Observable.merge<MatchesResult>(
                     shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
-                    shared.ofType(ToggleFilterAction::class.java).compose(toggleFilterTransformer),
+                    shared.ofType(ToggleFilterAction::class.java).compose(
+                        toggleFilterTransformer),
                     shared.ofType(LoadTagsAction::class.java).compose(loadTagsTransformer))
             )
             .mergeWith(
@@ -176,14 +222,15 @@ class MatchesViewModel @Inject constructor(
             is RefreshResult.Failure ->
               previousState.copy(refreshLoading = false, error = result.throwable)
             is RefreshResult.Success -> {
-              val matches = checkNotNull((result).matches) { "Matches are null" }
+              val matches = checkNotNull(result.matches) { "Matches is null" }
+              val willBeNotifiedPairs = checkNotNull(result.willBeNotifiedPairs)
 
               previousState.copy(
                   refreshLoading = false,
                   error = null,
                   hasMore = !matches.isEmpty(),
                   currentPage = 0,
-                  matches = MatchRowDisplayable.fromMatches(matches))
+                  matches = MatchRowDisplayable.fromMatches(matches, willBeNotifiedPairs))
             }
           }
         }
@@ -194,17 +241,18 @@ class MatchesViewModel @Inject constructor(
             is LoadNextPageResult.Failure ->
               previousState.copy(nextPageLoading = false, error = result.throwable)
             is LoadNextPageResult.Success -> {
-              val newMatches = checkNotNull((result).matches) { "Matches are null" }
+              val newMatches = checkNotNull(result.matches) { "Matches are null" }
+              val willBeNotifiedPairs = checkNotNull(result.willBeNotifiedPairs)
 
               val matches = ArrayList<MatchRowDisplayable>()
               matches.addAll(previousState.matches)
-              matches.addAll(MatchRowDisplayable.fromMatches(newMatches))
+              matches.addAll(MatchRowDisplayable.fromMatches(newMatches, willBeNotifiedPairs))
 
               previousState.copy(
                   nextPageLoading = false,
                   error = null,
                   matches = matches,
-                  currentPage = (result).pageIndex,
+                  currentPage = result.pageIndex,
                   hasMore = !newMatches.isEmpty())
             }
           }
@@ -215,7 +263,8 @@ class MatchesViewModel @Inject constructor(
             if (it.keys.contains(result.tagName)) {
               it.remove(result.tagName)
             } else {
-              it.put(result.tagName, previousState.tags.first { it.name == result.tagName }.targets)
+              it.put(result.tagName,
+                  previousState.tags.first { it.name == result.tagName }.targets)
             }
             if (it.isEmpty()) {
               previousState.copy(filteredTags = it, hasMore = true)

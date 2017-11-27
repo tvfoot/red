@@ -3,10 +3,15 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviResult
+import com.benoitquenaudon.tvfoot.red.util.MatchId
+import com.benoitquenaudon.tvfoot.red.util.WillBeNotified
 
 sealed class MatchesResult : MviResult {
   sealed class RefreshResult : MatchesResult() {
-    data class Success(val matches: List<Match>) : RefreshResult()
+    data class Success(
+        val matches: List<Match>,
+        val willBeNotifiedPairs: Map<MatchId, WillBeNotified>
+    ) : RefreshResult()
 
     data class Failure(val throwable: Throwable) : RefreshResult()
 
@@ -14,7 +19,11 @@ sealed class MatchesResult : MviResult {
   }
 
   sealed class LoadNextPageResult : MatchesResult() {
-    data class Success(val pageIndex: Int, val matches: List<Match>) : LoadNextPageResult()
+    data class Success(
+        val pageIndex: Int,
+        val matches: List<Match>,
+        val willBeNotifiedPairs: Map<MatchId, WillBeNotified>
+    ) : LoadNextPageResult()
 
     data class Failure(val throwable: Throwable) : LoadNextPageResult()
 

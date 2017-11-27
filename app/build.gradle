@@ -101,6 +101,7 @@ dependencies {
   implementation "com.android.support.constraint:constraint-layout:$rootProject.lib.constraintLayoutVersion"
   implementation "com.jakewharton.timber:timber:$rootProject.lib.timberVersion"
   implementation "io.reactivex.rxjava2:rxjava:$rootProject.lib.rxJavaVersion"
+  implementation "io.reactivex.rxjava2:rxkotlin:$rootProject.lib.rxKotlinVersion"
   implementation "io.reactivex.rxjava2:rxandroid:$rootProject.lib.rxAndroidVersion"
   implementation "com.squareup.picasso:picasso:$rootProject.lib.picassoVersion"
   implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:$rootProject.lib.picassoOkHttp3DownloaderVersion"
