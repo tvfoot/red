@@ -8,6 +8,7 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.BroadcasterRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable
+import com.benoitquenaudon.tvfoot.red.util.stripAccents
 import kotlinx.android.parcel.Parcelize
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -126,7 +127,7 @@ data class MatchDisplayable(
             "nation" -> "/images/teams/nations/large/${code.toLowerCase()}.png"
             "club" -> {
               val country = checkNotNull(team.country) { "team's country should not be null" }
-              "/images/teams/${country}/large/${code.toLowerCase()}.png"
+              "/images/teams/${country.stripAccents()}/large/${code.toLowerCase()}.png"
             }
             else -> throw IllegalStateException("Unkown type " + type)
           }

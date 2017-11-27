@@ -5,6 +5,7 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Competition
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
 import com.benoitquenaudon.tvfoot.red.util.formatter
+import com.benoitquenaudon.tvfoot.red.util.stripAccents
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Calendar
@@ -120,7 +121,7 @@ private fun parseTeamLogoPath(team: Team): String =
         "nation" -> String.format("/images/teams/nations/large/%s.png", code.toLowerCase())
         "club" -> {
           val country = checkNotNull(team.country) { "team's country should not be null" }
-          "/images/teams/$country/large/${code.toLowerCase()}.png"
+          "/images/teams/${country.stripAccents()}/large/${code.toLowerCase()}.png"
         }
         else -> throw IllegalStateException("Unknown type " + type)
       }
