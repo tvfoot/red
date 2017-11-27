@@ -24,7 +24,7 @@
         android:layout_gravity="center"
         android:contentDescription="@string/broadcaster_icon"
         app:tvfootBroadcasterLogoPath="@{broadcasterLogoPath}"
-        tools:src="@drawable/ic_tv_black_18px"
+        tools:src="@drawable/ic_tv_black_24px"
         />
   </FrameLayout>
 </layout>

@@ -116,7 +116,19 @@
         app:layout_constraintRight_toRightOf="@+id/match_start_time"
         app:layout_constraintTop_toBottomOf="@+id/match_start_time"
         app:layout_constraintWidth_default="wrap"
+        app:visible="@{!match.broadcasters.isEmpty}"
         tools:listitem="@layout/broadcaster_row"
+        />
+    <ImageView
+        android:id="@+id/match_not_broadcasted_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:tint="@color/colorGrayMediumLight"
+        app:layout_constraintLeft_toLeftOf="@+id/match_start_time"
+        app:layout_constraintRight_toRightOf="@+id/match_start_time"
+        app:layout_constraintTop_toBottomOf="@+id/match_start_time"
+        app:srcCompat="@drawable/ic_tv_black_off_24px"
+        app:visible="@{match.broadcasters.isEmpty}"
         />
   </android.support.constraint.ConstraintLayout>
 </layout>

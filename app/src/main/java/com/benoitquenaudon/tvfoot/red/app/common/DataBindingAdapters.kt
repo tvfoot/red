@@ -16,7 +16,10 @@ fun setTvFootTeamLogo(imageView: ImageView, logoPath: String?) {
     return
   }
 
-  loadTvFootImage(imageView, logoPath, R.drawable.default_team_logo)
+  loadTvFootImage(
+      imageView = imageView,
+      path = logoPath,
+      placeholderResId = R.drawable.default_team_logo)
 }
 
 @BindingAdapter("tvfootBroadcasterLogoPath")
@@ -26,7 +29,10 @@ fun setTvFootBroadcasterLogo(imageView: ImageView, logoPath: String?) {
     return
   }
 
-  loadTvFootImage(imageView, logoPath, R.drawable.ic_tv_black_18px)
+  loadTvFootImage(
+      imageView = imageView,
+      path = logoPath,
+      placeholderResId = R.drawable.ic_tv_black_24px)
 }
 
 private fun loadTvFootImage(imageView: ImageView, path: String, placeholderResId: Int) {
@@ -39,11 +45,13 @@ private fun loadTvFootImage(imageView: ImageView, path: String, placeholderResId
       .into(imageView)
 }
 
-@BindingAdapter("visible") fun setVisibility(view: View, isVisible: Boolean) {
+@BindingAdapter("visible")
+fun setVisibility(view: View, isVisible: Boolean) {
   view.visibility = if (isVisible) View.VISIBLE else View.GONE
 }
 
-@BindingAdapter("dangerText") fun setDangerText(textView: TextView, textResId: Int) {
+@BindingAdapter("dangerText")
+fun setDangerText(textView: TextView, textResId: Int) {
   if (textResId < 1) return
 
   textView.setText(textResId)
