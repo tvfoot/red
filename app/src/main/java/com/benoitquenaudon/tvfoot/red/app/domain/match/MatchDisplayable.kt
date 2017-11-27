@@ -1,13 +1,13 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match
 
 import android.os.Parcelable
-import com.benoitquenaudon.tvfoot.red.util.PreConditions.checkNotNull
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Broadcaster
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Competition
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.BroadcasterRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable
+import com.benoitquenaudon.tvfoot.red.util.PreConditions.checkNotNull
 import com.benoitquenaudon.tvfoot.red.util.stripAccents
 import kotlinx.android.parcel.Parcelize
 import java.text.DateFormat
@@ -63,19 +63,20 @@ data class MatchDisplayable(
     }
 
     fun fromMatch(match: Match): MatchDisplayable {
-      return MatchDisplayable( //
-          parseHeaderKey(match.startAt), //
-          match.startAt.time, //
-          parseStartTime(match.startAt), //
-          parseBroadcasters(match.broadcasters), //
-          parseHeadLine(match.homeTeam, match.awayTeam, match.label), //
-          parseCompetition(match.competition), //
-          parseMatchDay(match.label, match.matchDay), //
-          isMatchLive(match.startAt), //
-          parseStartTimeInText(match.startAt), //
-          parseTeamLogoPath(match.homeTeam), //
-          parseTeamLogoPath(match.awayTeam), //
-          parseLocation(match)!!, match.id)
+      return MatchDisplayable(
+          parseHeaderKey(match.startAt),
+          match.startAt.time,
+          parseStartTime(match.startAt),
+          parseBroadcasters(match.broadcasters),
+          parseHeadLine(match.homeTeam, match.awayTeam, match.label),
+          parseCompetition(match.competition),
+          parseMatchDay(match.label, match.matchDay),
+          isMatchLive(match.startAt),
+          parseStartTimeInText(match.startAt),
+          parseTeamLogoPath(match.homeTeam),
+          parseTeamLogoPath(match.awayTeam),
+          parseLocation(match),
+          match.id)
     }
 
     private fun parseHeaderKey(startAt: Date): String {
