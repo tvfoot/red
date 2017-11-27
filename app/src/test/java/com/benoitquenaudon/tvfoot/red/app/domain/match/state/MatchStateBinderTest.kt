@@ -1,6 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match.state
 
-import com.benoitquenaudon.tvfoot.red.app.common.PreferenceRepository
+import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.NoopRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationRepository
@@ -25,7 +25,8 @@ import org.mockito.Mockito.mock
 class MatchStateBinderTest {
   lateinit var matchStateBinder: MatchViewModel
   lateinit var testObserver: TestObserver<MatchViewState>
-  val preferenceRepository: PreferenceRepository = mock(PreferenceRepository::class.java)
+  val preferenceRepository: PreferenceRepository = mock(
+      PreferenceRepository::class.java)
   val notificationRepository: NotificationRepository = mock(NotificationRepository::class.java)
 
   @Before

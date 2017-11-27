@@ -1,6 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match
 
-import com.benoitquenaudon.tvfoot.red.app.common.PreferenceRepository
+import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.common.StreamNotification
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationRepository

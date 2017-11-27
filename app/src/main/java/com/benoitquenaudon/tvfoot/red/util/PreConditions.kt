@@ -1,4 +1,4 @@
-package com.benoitquenaudon.tvfoot.red.app.common
+package com.benoitquenaudon.tvfoot.red.util
 
 object PreConditions {
   @JvmStatic fun <T> checkNotNull(value: T,

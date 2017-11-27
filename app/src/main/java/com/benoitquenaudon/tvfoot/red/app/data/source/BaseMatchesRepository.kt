@@ -6,6 +6,5 @@ import io.reactivex.Single
 
 interface BaseMatchesRepository {
   fun loadPage(pageIndex: Int): Single<List<Match>>
-
   fun loadTags(): Single<List<Tag>>
 }

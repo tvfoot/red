@@ -4,7 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.benoitquenaudon.tvfoot.red.RedApp
-import com.benoitquenaudon.tvfoot.red.app.common.PreferenceRepository
+import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MatchNotificationHelper
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match

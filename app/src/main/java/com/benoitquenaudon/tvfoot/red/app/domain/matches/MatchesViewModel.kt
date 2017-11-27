@@ -1,11 +1,12 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
-import com.benoitquenaudon.tvfoot.red.app.common.PreferenceRepository
+import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
+import com.benoitquenaudon.tvfoot.red.app.data.source.BasePreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.ClearFiltersAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadNextPageAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadTagsAction
@@ -45,7 +46,7 @@ import kotlin.LazyThreadSafetyMode.NONE
 class MatchesViewModel @Inject constructor(
     private val intentsSubject: PublishSubject<MatchesIntent>,
     private val matchesRepository: BaseMatchesRepository,
-    private val preferenceRepository: PreferenceRepository,
+    private val preferenceRepository: BasePreferenceRepository,
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
 ) : RedViewModel<MatchesIntent, MatchesViewState>(firebaseAnalytics) {
