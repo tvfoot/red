@@ -2,6 +2,7 @@ package com.benoitquenaudon.tvfoot.red.api
 
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
 import com.benoitquenaudon.tvfoot.red.app.data.entity.search.Filter
 import com.benoitquenaudon.tvfoot.red.app.data.entity.search.TagsFilter
 import io.reactivex.Single
@@ -28,4 +29,7 @@ interface TvfootService {
   // e.g.: {"where":{"display":true},"order":"weight ASC"}
   @GET("/api/tags")
   fun getTags(@Query("filter") filter: TagsFilter): Single<List<Tag>>
+
+  @GET("/api/teams/findByName/{input}")
+  fun findTeams(@Path("input") input: String): Single<List<Team>>
 }

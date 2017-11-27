@@ -1,29 +1,34 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
-import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.BasePreferenceRepository
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.ClearFiltersAction
+import com.benoitquenaudon.tvfoot.red.app.data.source.BaseTeamRepository
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ClearFiltersAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.LoadTagsAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchTeamAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ToggleFilterAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadNextPageAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadTagsAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.RefreshAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.ToggleFilterAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.ClearFilters
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterInitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearFilters
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.FilterInitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchTeamIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.LoadNextPageIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.ToggleFilterIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.ClearFiltersResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ClearFiltersResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.LoadTagsResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchTeamResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadNextPageResult
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadTagsResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshResult
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.ToggleFilterResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.TeamSearchDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
 import com.benoitquenaudon.tvfoot.red.util.MatchId
 import com.benoitquenaudon.tvfoot.red.util.WillBeNotified
@@ -46,6 +51,7 @@ import kotlin.LazyThreadSafetyMode.NONE
 class MatchesViewModel @Inject constructor(
     private val intentsSubject: PublishSubject<MatchesIntent>,
     private val matchesRepository: BaseMatchesRepository,
+    private val teamRepository: BaseTeamRepository,
     private val preferenceRepository: BasePreferenceRepository,
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
@@ -92,11 +98,12 @@ class MatchesViewModel @Inject constructor(
         is ClearFilters -> ClearFiltersAction
         is ToggleFilterIntent -> ToggleFilterAction(intent.tagName)
         is FilterInitialIntent -> LoadTagsAction
+        is SearchTeamIntent -> SearchTeamAction(intent.input)
       }
 
   private val refreshTransformer: ObservableTransformer<RefreshAction, RefreshResult>
     get() = ObservableTransformer { actions: Observable<RefreshAction> ->
-      actions.flatMap({
+      actions.flatMap {
         val matches: Observable<Match> = matchesRepository
             .loadPage(0)
             .flatMapIterable()
@@ -120,96 +127,108 @@ class MatchesViewModel @Inject constructor(
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
             .startWith(RefreshResult.InFlight)
-      })
+      }
     }
 
   private
   val loadNextPageTransformer: ObservableTransformer<LoadNextPageAction, LoadNextPageResult>
-    get () = ObservableTransformer { actions: Observable<LoadNextPageAction> ->
-      actions.flatMap(
-          { (pageIndex) ->
-            val matches: Observable<Match> = matchesRepository
-                .loadPage(pageIndex)
-                .flatMapIterable()
-                .share()
+    get() = ObservableTransformer { actions: Observable<LoadNextPageAction> ->
+      actions.flatMap { (pageIndex) ->
+        val matches: Observable<Match> = matchesRepository
+            .loadPage(pageIndex)
+            .flatMapIterable()
+            .share()
 
-            Single.zip(
-                matches.toList(),
-                matches.map(Match::id)
-                    .flatMapSingle { matchId ->
-                      preferenceRepository
-                          .loadNotifyMatchStart(matchId)
-                          .map { matchId to it }
-                    }.toMap(),
-                BiFunction<List<Match>,
-                    Map<String, WillBeNotified>,
-                    Pair<List<Match>, Map<MatchId, WillBeNotified>>>(::Pair)
-            )
-                .toObservable()
-                .map<LoadNextPageResult> { (matches, notificationPairs) ->
-                  LoadNextPageResult.Success(pageIndex, matches, notificationPairs)
-                }
-                .onErrorReturn(LoadNextPageResult::Failure)
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.ui())
-                .startWith(LoadNextPageResult.InFlight)
-          })
+        Single.zip(
+            matches.toList(),
+            matches.map(Match::id)
+                .flatMapSingle { matchId ->
+                  preferenceRepository
+                      .loadNotifyMatchStart(matchId)
+                      .map { matchId to it }
+                }.toMap(),
+            BiFunction<List<Match>,
+                Map<String, WillBeNotified>,
+                Pair<List<Match>, Map<MatchId, WillBeNotified>>>(::Pair)
+        )
+            .toObservable()
+            .map<LoadNextPageResult> { (matches, notificationPairs) ->
+              LoadNextPageResult.Success(pageIndex, matches, notificationPairs)
+            }
+            .onErrorReturn(LoadNextPageResult::Failure)
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
+            .startWith(LoadNextPageResult.InFlight)
+      }
     }
 
   private
   val loadTagsTransformer: ObservableTransformer<LoadTagsAction, LoadTagsResult>
-    get () = ObservableTransformer { actions: Observable<LoadTagsAction> ->
-      actions.flatMap(
-          {
-            matchesRepository.loadTags()
-                .toObservable()
-                .map<LoadTagsResult>(LoadTagsResult::Success)
-                .onErrorReturn(LoadTagsResult::Failure)
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.ui())
-                .startWith(LoadTagsResult.InFlight)
-          })
+    get() = ObservableTransformer { actions: Observable<LoadTagsAction> ->
+      actions.flatMap {
+        matchesRepository.loadTags()
+            .toObservable()
+            .map<LoadTagsResult>(LoadTagsResult::Success)
+            .onErrorReturn(LoadTagsResult::Failure)
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
+            .startWith(LoadTagsResult.InFlight)
+      }
+    }
+
+  private val searchTeamTransformer: ObservableTransformer<SearchTeamAction, SearchTeamResult>
+    get() = ObservableTransformer { actions: Observable<SearchTeamAction> ->
+      actions.flatMap { (searchInput) ->
+        teamRepository.findTeams(searchInput)
+            .toObservable()
+            .map<SearchTeamResult>(SearchTeamResult::Success)
+            .onErrorReturn(SearchTeamResult::Failure)
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
+            .startWith(SearchTeamResult.InFlight)
+      }
     }
 
   private
   val clearFilterTransformer: ObservableTransformer<ClearFiltersAction, ClearFiltersResult>
-    get () = ObservableTransformer { actions: Observable<ClearFiltersAction> ->
-      actions.map({ ClearFiltersResult })
+    get() = ObservableTransformer { actions: Observable<ClearFiltersAction> ->
+      actions.map { ClearFiltersResult }
     }
 
   private
   val toggleFilterTransformer: ObservableTransformer<ToggleFilterAction, ToggleFilterResult>
-    get () = ObservableTransformer { actions: Observable<ToggleFilterAction> ->
-      actions.map({ ToggleFilterResult(it.tagName) })
+    get() = ObservableTransformer { actions: Observable<ToggleFilterAction> ->
+      actions.map { ToggleFilterResult(it.tagName) }
     }
 
   private
   val actionToResultTransformer: ObservableTransformer<MatchesAction, MatchesResult>
-    get () = ObservableTransformer { actions: Observable<MatchesAction> ->
-      actions.publish({ shared ->
+    get() = ObservableTransformer { actions: Observable<MatchesAction> ->
+      actions.publish { shared ->
         Observable.merge<MatchesResult>(
             shared.ofType(RefreshAction::class.java).compose(refreshTransformer),
             shared.ofType(LoadNextPageAction::class.java).compose(loadNextPageTransformer))
             .mergeWith(
-                Observable.merge<MatchesResult>(
+                Observable.merge<FilterResult>(
                     shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
                     shared.ofType(ToggleFilterAction::class.java).compose(
                         toggleFilterTransformer),
-                    shared.ofType(LoadTagsAction::class.java).compose(loadTagsTransformer))
+                    shared.ofType(LoadTagsAction::class.java).compose(loadTagsTransformer),
+                    shared.ofType(SearchTeamAction::class.java).compose(searchTeamTransformer))
             )
             .mergeWith(
                 // Error for not implemented actions
-                shared.filter({ v ->
+                shared.filter { v ->
                   v !is RefreshAction &&
                       v !is LoadNextPageAction &&
                       v !is ClearFiltersAction &&
                       v !is ToggleFilterAction &&
                       v !is LoadTagsAction
-                }).flatMap({ w ->
+                }.flatMap { w ->
                   Observable.error<MatchesResult>(
                       IllegalArgumentException("Unknown Action type: " + w))
-                }))
-      })
+                })
+      }
     }
 
   companion object Reducer {
@@ -287,6 +306,18 @@ class MatchesViewModel @Inject constructor(
               )
           }
         }
+        is SearchTeamResult ->
+          when (result) {
+            is SearchTeamResult.InFlight ->
+              previousState.copy(searchingTeam = true)
+            is SearchTeamResult.Failure ->
+              previousState.copy(searchingTeam = false, error = result.throwable)
+            is SearchTeamResult.Success ->
+              previousState.copy(
+                  searchingTeam = false,
+                  searchedTeams = result.teams.map { TeamSearchDisplayable(it) }
+              )
+          }
       }
     }
   }

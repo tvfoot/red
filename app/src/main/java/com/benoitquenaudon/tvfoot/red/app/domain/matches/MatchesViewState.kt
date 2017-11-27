@@ -5,6 +5,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.HeaderRowDi
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.LoadingRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.TeamSearchDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviViewState
 import java.util.ArrayList
 
@@ -18,7 +19,9 @@ data class MatchesViewState(
     val tagsLoading: Boolean = false,
     val tagsError: Throwable? = null,
     val tags: List<Tag> = emptyList(),
-    var filteredTags: Map<String, List<String>> = emptyMap()
+    var filteredTags: Map<String, List<String>> = emptyMap(),
+    val searchingTeam: Boolean = false,
+    val searchedTeams: List<TeamSearchDisplayable> = emptyList()
 ) : MviViewState {
   fun matchesItemDisplayables(hasMore: Boolean, filteredTags: Map<String, List<String>>)
       : List<MatchesItemDisplayable> {

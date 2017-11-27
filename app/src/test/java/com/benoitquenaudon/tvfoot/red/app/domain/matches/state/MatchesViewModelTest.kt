@@ -4,7 +4,9 @@ import com.benoitquenaudon.tvfoot.red.app.common.firebase.NoopRedFirebaseAnalyti
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.ImmediateSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.source.FakeMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.FakePreferenceRepository
+import com.benoitquenaudon.tvfoot.red.app.data.source.FakeTeamRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchTeamIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
 import io.reactivex.Observable
@@ -14,15 +16,16 @@ import org.junit.Before
 import org.junit.Test
 import kotlin.properties.Delegates
 
-class MatchesStateBinderTest {
-  var stateBinder by Delegates.notNull<MatchesViewModel>()
-  var testObserver by Delegates.notNull<TestObserver<MatchesViewState>>()
+class MatchesViewModelTest {
+  private var stateBinder by Delegates.notNull<MatchesViewModel>()
+  private var testObserver by Delegates.notNull<TestObserver<MatchesViewState>>()
 
   @Before
   fun setup() {
     stateBinder = MatchesViewModel(
         PublishSubject.create<MatchesIntent>(),
         FakeMatchesRepository(),
+        FakeTeamRepository(),
         FakePreferenceRepository(),
         ImmediateSchedulerProvider(),
         NoopRedFirebaseAnalytics
@@ -83,6 +86,16 @@ class MatchesStateBinderTest {
       assert(viewStates[3].matches.size > viewStates[2].matches.size) {
         "A next page loading should append matches"
       }
+    }
+  }
+
+  @Test
+  fun searchTeamIntent_shouldSearchTeams() {
+    stateBinder.processIntents(Observable.just(SearchTeamIntent("")))
+
+    testObserver.assertValueAt(0, MatchesViewState::searchingTeam)
+    testObserver.assertValueAt(1) { state ->
+      !state.searchingTeam && state.searchedTeams.isNotEmpty()
     }
   }
 }

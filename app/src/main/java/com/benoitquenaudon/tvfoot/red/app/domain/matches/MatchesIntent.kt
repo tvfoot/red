@@ -9,9 +9,13 @@ sealed class MatchesIntent : MviIntent {
 
   data class LoadNextPageIntent(val pageIndex: Int) : MatchesIntent()
 
-  object ClearFilters : MatchesIntent()
+  sealed class FilterIntent : MatchesIntent() {
+    object ClearFilters : FilterIntent()
 
-  data class ToggleFilterIntent(val tagName: String) : MatchesIntent()
+    data class ToggleFilterIntent(val tagName: String) : FilterIntent()
 
-  object FilterInitialIntent : MatchesIntent()
+    object FilterInitialIntent : FilterIntent()
+
+    data class SearchTeamIntent(val input: String) : FilterIntent()
+  }
 }

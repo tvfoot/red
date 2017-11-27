@@ -7,9 +7,13 @@ sealed class MatchesAction : MviAction {
 
   data class LoadNextPageAction(val pageIndex: Int) : MatchesAction()
 
-  data class ToggleFilterAction(val tagName: String) : MatchesAction()
+  sealed class FilterAction : MatchesAction() {
+    data class ToggleFilterAction(val tagName: String) : FilterAction()
 
-  object ClearFiltersAction : MatchesAction()
+    object ClearFiltersAction : FilterAction()
 
-  object LoadTagsAction : MatchesAction()
+    object LoadTagsAction : FilterAction()
+
+    data class SearchTeamAction(val input: String): FilterAction()
+  }
 }
