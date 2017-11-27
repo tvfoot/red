@@ -8,18 +8,18 @@ import io.reactivex.functions.Predicate
 import io.reactivex.internal.functions.Functions
 
 
-fun <T> Predicate<T>.negate(): Predicate<T> = Predicate { t -> !test(t) }
+fun <T: Any> Predicate<T>.negate(): Predicate<T> = Predicate { t -> !test(t) }
 
 @CheckReturnValue
 @SchedulerSupport(SchedulerSupport.NONE)
-fun <T, U> Observable<T>.notOfType(clazz: Class<U>): Observable<T> {
+fun <T: Any, U: Any> Observable<T>.notOfType(clazz: Class<U>): Observable<T> {
   checkNotNull(clazz) { "clazz is null" }
   return filter(Functions.isInstanceOf<T, U>(clazz).negate())
 }
 
 @CheckReturnValue
 @SchedulerSupport(SchedulerSupport.NONE)
-fun <U, T : Iterable<U>> Single<T>.flatMapIterable(): Observable<U> {
+fun <U: Any, T : Iterable<U>> Single<T>.flatMapIterable(): Observable<U> {
   return this.flatMapObservable {
     Observable.fromIterable(it)
   }

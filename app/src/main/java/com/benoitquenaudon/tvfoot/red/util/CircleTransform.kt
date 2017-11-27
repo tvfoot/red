@@ -10,7 +10,6 @@ import android.graphics.Paint.FILTER_BITMAP_FLAG
 import android.graphics.Shader.TileMode.CLAMP
 import com.squareup.picasso.Transformation
 
-
 object CircleTransform : Transformation {
   override fun transform(source: Bitmap): Bitmap {
     val size = Math.min(source.width, source.height)
