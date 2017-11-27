@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
+import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,7 +21,8 @@ class PreferenceRepositoryTest {
   @Before
   fun before() {
     matchId = "matchid"
-    preferenceService = PreferenceRepository(fakeSharedPreferences())
+    preferenceService = PreferenceRepository(
+        fakeSharedPreferences())
   }
 
   @Test

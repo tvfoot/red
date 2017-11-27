@@ -3,6 +3,7 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches.state
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.NoopRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.ImmediateSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.source.FakeMatchesRepository
+import com.benoitquenaudon.tvfoot.red.app.data.source.FakePreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
@@ -22,6 +23,7 @@ class MatchesStateBinderTest {
     stateBinder = MatchesViewModel(
         PublishSubject.create<MatchesIntent>(),
         FakeMatchesRepository(),
+        FakePreferenceRepository(),
         ImmediateSchedulerProvider(),
         NoopRedFirebaseAnalytics
     )

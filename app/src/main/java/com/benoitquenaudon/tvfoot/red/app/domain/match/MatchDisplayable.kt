@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match
 
 import android.os.Parcelable
-import com.benoitquenaudon.tvfoot.red.app.common.PreConditions.checkNotNull
+import com.benoitquenaudon.tvfoot.red.util.PreConditions.checkNotNull
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Broadcaster
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Competition
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match

@@ -4,6 +4,8 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Broadcaster
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Competition
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
+import com.benoitquenaudon.tvfoot.red.util.MatchId
+import com.benoitquenaudon.tvfoot.red.util.WillBeNotified
 import com.benoitquenaudon.tvfoot.red.util.formatter
 import com.benoitquenaudon.tvfoot.red.util.stripAccents
 import java.text.SimpleDateFormat
@@ -28,33 +30,46 @@ data class MatchRowDisplayable private constructor(
     val matchId: String,
     val tags: List<String>,
     val homeTeam: TeamRowDisplayable,
-    val awayTeam: TeamRowDisplayable
+    val awayTeam: TeamRowDisplayable,
+    val willBeNotified: Boolean = false
 ) : MatchesItemDisplayable {
   override fun isSameAs(newItem: MatchesItemDisplayable): Boolean {
     return newItem is MatchRowDisplayable && this.matchId == newItem.matchId
   }
 
   companion object Factory {
-    fun fromMatch(match: Match): MatchRowDisplayable =
-        MatchRowDisplayable(
-            headerKey = parseHeaderKey(match.startAt),
-            startTime = parseStartTime(match.startAt),
-            broadcasters = parseBroadcasters(match.broadcasters),
-            headline = parseHeadLine(match.homeTeam, match.awayTeam, match.label),
-            competition = parseCompetition(match.competition),
-            competitionCode = parseCompetitionCode(match.competition),
-            matchDay = parseMatchDay(match.label, match.matchDay),
-            live = isMatchLive(match.startAt),
-            homeTeamDrawableName = parseHomeTeamDrawableName(match.homeTeam),
-            awayTeamDrawableName = parseAwayTeamDrawableName(match.awayTeam),
-            location = parseLocation(match),
-            matchId = match.id,
-            tags = parseTags(match),
-            homeTeam = TeamRowDisplayable(match.homeTeam.name, parseTeamLogoPath(match.homeTeam)),
-            awayTeam = TeamRowDisplayable(match.awayTeam.name, parseTeamLogoPath(match.awayTeam))
-        )
+    private fun fromMatch(
+        match: Match,
+        willBeNotified: WillBeNotified
+    ): MatchRowDisplayable {
+      return MatchRowDisplayable(
+          headerKey = parseHeaderKey(match.startAt),
+          startTime = parseStartTime(match.startAt),
+          broadcasters = parseBroadcasters(match.broadcasters),
+          headline = parseHeadLine(match.homeTeam, match.awayTeam, match.label),
+          competition = parseCompetition(match.competition),
+          competitionCode = parseCompetitionCode(match.competition),
+          matchDay = parseMatchDay(match.label, match.matchDay),
+          live = isMatchLive(match.startAt),
+          homeTeamDrawableName = parseHomeTeamDrawableName(match.homeTeam),
+          awayTeamDrawableName = parseAwayTeamDrawableName(match.awayTeam),
+          location = parseLocation(match),
+          matchId = match.id,
+          tags = parseTags(match),
+          homeTeam = TeamRowDisplayable(match.homeTeam.name, parseTeamLogoPath(match.homeTeam)),
+          awayTeam = TeamRowDisplayable(match.awayTeam.name, parseTeamLogoPath(match.awayTeam)),
+          willBeNotified = willBeNotified
+      )
+    }
 
-    fun fromMatches(matches: List<Match>): List<MatchRowDisplayable> = matches.map(this::fromMatch)
+    fun fromMatches(
+        matches: List<Match>,
+        willBeNotifiedPairs: Map<MatchId, WillBeNotified>
+    ): List<MatchRowDisplayable> {
+      return matches.map {
+        this.fromMatch(it, willBeNotifiedPairs.getOrElse(it.id, { false }))
+      }
+    }
   }
 }
 
