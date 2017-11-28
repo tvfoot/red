@@ -1,4 +1,4 @@
-# Android application for TVFoot
+# Android application for [TVFoot](https://tvfoot.net/)
 
 This is a side project I use to learn new things, experiment with new technologies and allow TVFoot user to fully enjoy their Android experience.
 
