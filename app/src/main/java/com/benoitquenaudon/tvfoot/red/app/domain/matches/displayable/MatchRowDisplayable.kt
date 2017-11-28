@@ -33,8 +33,8 @@ data class MatchRowDisplayable private constructor(
     val awayTeam: TeamRowDisplayable,
     val willBeNotified: Boolean = false
 ) : MatchesItemDisplayable {
-  override fun isSameAs(newItem: MatchesItemDisplayable): Boolean {
-    return newItem is MatchRowDisplayable && this.matchId == newItem.matchId
+  override fun isSameAs(other: MatchesItemDisplayable): Boolean {
+    return other is MatchRowDisplayable && this.matchId == other.matchId
   }
 
   companion object Factory {

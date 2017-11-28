@@ -6,7 +6,7 @@
   <data>
     <variable
         name="filter"
-        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FilterRowDisplayable"
+        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersCompetitionDisplayable"
         />
     <variable
         name="handler"

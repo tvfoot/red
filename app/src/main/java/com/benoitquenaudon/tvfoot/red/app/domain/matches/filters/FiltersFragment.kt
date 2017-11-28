@@ -89,7 +89,9 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
           .map { ClearFilters }
 
   private fun filterClickIntent(): Observable<ToggleFilterIntent> =
-      filtersAdapter.filterRowClickObservable.map { ToggleFilterIntent(it.code) }
+      filtersAdapter.filterItemClickObservable
+          .ofType(FiltersCompetitionDisplayable::class.java)
+          .map { ToggleFilterIntent(it.code) }
 
   override fun render(state: MatchesViewState) {
     bindingModel.updateFromState(state)

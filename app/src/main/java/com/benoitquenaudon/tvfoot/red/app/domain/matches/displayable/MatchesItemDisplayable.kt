@@ -1,5 +1,5 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable
 
 interface MatchesItemDisplayable {
-  fun isSameAs(newItem: MatchesItemDisplayable): Boolean
+  fun isSameAs(other: MatchesItemDisplayable): Boolean
 }

@@ -3,9 +3,9 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 import android.support.v7.util.DiffUtil
 import kotlin.properties.Delegates
 
-class FiltersRowDisplayableDiffUtilCallback : DiffUtil.Callback() {
-  private var oldItems by Delegates.notNull<List<FilterRowDisplayable>>()
-  private var newItems by Delegates.notNull<List<FilterRowDisplayable>>()
+class FiltersItemDisplayableDiffUtilCallback : DiffUtil.Callback() {
+  private var oldItems by Delegates.notNull<List<FiltersItemDisplayable>>()
+  private var newItems by Delegates.notNull<List<FiltersItemDisplayable>>()
 
   override fun getOldListSize(): Int {
     return oldItems.size
@@ -16,10 +16,7 @@ class FiltersRowDisplayableDiffUtilCallback : DiffUtil.Callback() {
   }
 
   override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-    val oldItem = oldItems[oldItemPosition]
-    val newItem = newItems[newItemPosition]
-
-    return oldItem.code == newItem.code
+    return oldItems[oldItemPosition].isSameAs(newItems[newItemPosition])
   }
 
   override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -29,7 +26,7 @@ class FiltersRowDisplayableDiffUtilCallback : DiffUtil.Callback() {
     return oldItem == newItem
   }
 
-  fun bindItems(oldItems: List<FilterRowDisplayable>, newItems: List<FilterRowDisplayable>) {
+  fun bindItems(oldItems: List<FiltersItemDisplayable>, newItems: List<FiltersItemDisplayable>) {
     this.oldItems = oldItems
     this.newItems = newItems
   }

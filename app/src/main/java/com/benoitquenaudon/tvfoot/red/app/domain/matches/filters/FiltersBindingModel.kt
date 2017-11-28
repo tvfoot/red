@@ -20,7 +20,7 @@ import javax.inject.Inject
     state.tags
         .filter { it.type == "competition" }
         .map {
-          FilterRowDisplayable(
+          FiltersCompetitionDisplayable(
               code = it.name,
               label = it.desc,
               filtered = filteredTags.contains(it.name))

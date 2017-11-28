@@ -35,8 +35,8 @@ data class MatchDisplayable(
     val matchId: String
 ) : Parcelable, MatchesItemDisplayable {
 
-  override fun isSameAs(newItem: MatchesItemDisplayable): Boolean {
-    return newItem is MatchDisplayable && this.matchId == newItem.matchId
+  override fun isSameAs(other: MatchesItemDisplayable): Boolean {
+    return other is MatchDisplayable && this.matchId == other.matchId
   }
 
   companion object {
