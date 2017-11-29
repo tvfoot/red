@@ -16,6 +16,7 @@ import com.benoitquenaudon.tvfoot.red.app.common.BaseFragment
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearFilters
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.FilterInitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchTeamIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
@@ -24,6 +25,7 @@ import com.benoitquenaudon.tvfoot.red.databinding.FragmentFiltersBinding
 import com.jakewharton.rxbinding2.support.v7.widget.RxToolbar
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -77,7 +79,11 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
   }
 
   override fun intents(): Observable<MatchesIntent> =
-      Observable.merge(initialIntent(), clearFilterIntent(), filterClickIntent())
+      Observable.merge(
+          initialIntent(),
+          clearFilterIntent(),
+          filterClickIntent(),
+          searchTeamIntent())
 
   private fun initialIntent(): Observable<FilterInitialIntent> =
       Observable.just(FilterInitialIntent)
@@ -92,6 +98,12 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
       filtersAdapter.filterItemClickObservable
           .ofType(FiltersCompetitionDisplayable::class.java)
           .map { ToggleFilterIntent(it.code) }
+
+  private fun searchTeamIntent(): Observable<SearchTeamIntent> =
+      filtersAdapter.filterSearchInputObservable
+          .filter { it.length > 2 }
+          .debounce(300, MILLISECONDS)
+          .map(::SearchTeamIntent)
 
   override fun render(state: MatchesViewState) {
     bindingModel.updateFromState(state)

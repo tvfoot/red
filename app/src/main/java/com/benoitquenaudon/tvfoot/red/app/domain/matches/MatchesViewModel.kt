@@ -223,7 +223,8 @@ class MatchesViewModel @Inject constructor(
                       v !is LoadNextPageAction &&
                       v !is ClearFiltersAction &&
                       v !is ToggleFilterAction &&
-                      v !is LoadTagsAction
+                      v !is LoadTagsAction &&
+                      v !is SearchTeamAction
                 }.flatMap { w ->
                   Observable.error<MatchesResult>(
                       IllegalArgumentException("Unknown Action type: " + w))

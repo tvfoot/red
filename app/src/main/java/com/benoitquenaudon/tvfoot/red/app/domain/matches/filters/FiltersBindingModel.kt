@@ -5,10 +5,11 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
 import com.benoitquenaudon.tvfoot.red.injection.scope.FragmentScope
 import javax.inject.Inject
 
-@FragmentScope class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapter) {
+@FragmentScope
+class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapter) {
 
   val loadingTags: ObservableBoolean = ObservableBoolean(true)
-  var filteredTags: Set<String> = emptySet()
+  private var filteredTags: Set<String> = emptySet()
 
   val hasFilters: ObservableBoolean = ObservableBoolean(false)
 
@@ -17,15 +18,18 @@ import javax.inject.Inject
     loadingTags.set(state.tagsLoading)
     hasFilters.set(filteredTags.isNotEmpty())
 
-    state.tags
+    val tagFilters = state.tags
         .filter { it.type == "competition" }
         .map {
           FiltersCompetitionDisplayable(
               code = it.name,
               label = it.desc,
-              filtered = filteredTags.contains(it.name))
-        }.also {
-      adapter.updateFilters(it)
-    }
+              filtered = filteredTags.contains(it.name)) as FiltersItemDisplayable
+        }
+    val teamFilters = listOf(FiltersTeamSearchDisplayable)
+
+    val filters = if (tagFilters.isEmpty()) emptyList() else teamFilters + tagFilters
+
+    adapter.setFiltersItems(filters)
   }
 }
