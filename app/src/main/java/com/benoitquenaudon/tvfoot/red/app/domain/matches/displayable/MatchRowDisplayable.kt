@@ -56,8 +56,14 @@ data class MatchRowDisplayable private constructor(
           location = parseLocation(match),
           matchId = match.id,
           tags = parseTags(match),
-          homeTeam = TeamRowDisplayable(match.homeTeam.name, parseTeamLogoPath(match.homeTeam)),
-          awayTeam = TeamRowDisplayable(match.awayTeam.name, parseTeamLogoPath(match.awayTeam)),
+          homeTeam = TeamRowDisplayable(
+              match.homeTeam.name,
+              parseTeamLogoPath(match.homeTeam),
+              match.homeTeam.code),
+          awayTeam = TeamRowDisplayable(
+              match.awayTeam.name,
+              parseTeamLogoPath(match.awayTeam),
+              match.awayTeam.code),
           willBeNotified = willBeNotified
       )
     }

@@ -19,7 +19,7 @@ class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapte
   fun updateFromState(state: MatchesViewState) {
     currentPage = state.currentPage
     areTagsLoaded.set(state.tags.isNotEmpty())
-    hasActiveFilters.set(state.filteredTags.isNotEmpty())
+    hasActiveFilters.set(state.filteredTags.isNotEmpty() || state.filteredTeams.isNotEmpty())
 
     nextPageLoading = state.nextPageLoading
     refreshLoading.set(state.refreshLoading)
@@ -32,7 +32,13 @@ class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapte
       errorMessage.set(error.toString())
     }
     if (hasData.get()) {
-      adapter.setMatchesItems(state.matchesItemDisplayables(hasMore, state.filteredTags))
+      adapter.setMatchesItems(
+          state.matchesItemDisplayables(
+              hasMore,
+              state.filteredTags,
+              state.filteredTeams
+          )
+      )
     }
   }
 }

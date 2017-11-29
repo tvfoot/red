@@ -4,7 +4,7 @@
   <data>
     <variable
         name="filter"
-        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersTeamSearchInputDisplayable"
+        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchInputDisplayable"
         />
     <variable
         name="handler"
@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/team_search_input_hint"
+        android:imeOptions="actionDone"
         android:inputType="text"
         android:maxLines="1"
         android:onTextChanged="@{handler.onSearchInputChanged}"

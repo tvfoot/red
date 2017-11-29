@@ -8,27 +8,32 @@ import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.BasePreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseTeamRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ClearFiltersAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ClearSearchAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.LoadTagsAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchTeamAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchedTeamSelectedAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ToggleFilterAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadNextPageAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.RefreshAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearFilters
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearSearchIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.FilterInitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchTeamIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchedTeamSelectedIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.LoadNextPageIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ClearFiltersResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ClearSearchResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.LoadTagsResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchTeamResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchedTeamSelectedResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadNextPageResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersTeamSearchResultDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
 import com.benoitquenaudon.tvfoot.red.util.MatchId
 import com.benoitquenaudon.tvfoot.red.util.WillBeNotified
@@ -99,6 +104,8 @@ class MatchesViewModel @Inject constructor(
         is ToggleFilterIntent -> ToggleFilterAction(intent.tagName)
         is FilterInitialIntent -> LoadTagsAction
         is SearchTeamIntent -> SearchTeamAction(intent.input)
+        is ClearSearchIntent -> ClearSearchAction
+        is SearchedTeamSelectedIntent -> SearchedTeamSelectedAction(intent.team)
       }
 
   private val refreshTransformer: ObservableTransformer<RefreshAction, RefreshResult>
@@ -202,33 +209,53 @@ class MatchesViewModel @Inject constructor(
     }
 
   private
+  val clearSearchTransformer: ObservableTransformer<ClearSearchAction, ClearSearchResult>
+    get() = ObservableTransformer { actions: Observable<ClearSearchAction> ->
+      actions.map { ClearSearchResult }
+    }
+
+  private
+  val searchedTeamSelectedTransformer: ObservableTransformer<SearchedTeamSelectedAction, SearchedTeamSelectedResult>
+    get() = ObservableTransformer { actions: Observable<SearchedTeamSelectedAction> ->
+      actions.map { SearchedTeamSelectedResult(it.team, filtered = true) }
+    }
+
+  private
   val actionToResultTransformer: ObservableTransformer<MatchesAction, MatchesResult>
     get() = ObservableTransformer { actions: Observable<MatchesAction> ->
       actions.publish { shared ->
         Observable.merge<MatchesResult>(
             shared.ofType(RefreshAction::class.java).compose(refreshTransformer),
-            shared.ofType(LoadNextPageAction::class.java).compose(loadNextPageTransformer))
-            .mergeWith(
-                Observable.merge<FilterResult>(
-                    shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
-                    shared.ofType(ToggleFilterAction::class.java).compose(
-                        toggleFilterTransformer),
-                    shared.ofType(LoadTagsAction::class.java).compose(loadTagsTransformer),
-                    shared.ofType(SearchTeamAction::class.java).compose(searchTeamTransformer))
+            shared.ofType(LoadNextPageAction::class.java).compose(loadNextPageTransformer)
+        ).mergeWith(
+            Observable.merge<MatchesResult>(
+                shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
+                shared.ofType(ToggleFilterAction::class.java)
+                    .compose(toggleFilterTransformer),
+                shared.ofType(LoadTagsAction::class.java).compose(loadTagsTransformer),
+                shared.ofType(SearchTeamAction::class.java).compose(searchTeamTransformer)
             )
-            .mergeWith(
-                // Error for not implemented actions
-                shared.filter { v ->
-                  v !is RefreshAction &&
-                      v !is LoadNextPageAction &&
-                      v !is ClearFiltersAction &&
-                      v !is ToggleFilterAction &&
-                      v !is LoadTagsAction &&
-                      v !is SearchTeamAction
-                }.flatMap { w ->
-                  Observable.error<MatchesResult>(
-                      IllegalArgumentException("Unknown Action type: " + w))
-                })
+        ).mergeWith(
+            Observable.merge<MatchesResult>(
+                shared.ofType(ClearSearchAction::class.java).compose(clearSearchTransformer),
+                shared.ofType(SearchedTeamSelectedAction::class.java)
+                    .compose(searchedTeamSelectedTransformer)
+            )
+        ).mergeWith(
+            // Error for not implemented actions
+            shared.filter { v ->
+              v !is RefreshAction &&
+                  v !is LoadNextPageAction &&
+                  v !is ClearFiltersAction &&
+                  v !is ToggleFilterAction &&
+                  v !is LoadTagsAction &&
+                  v !is SearchTeamAction &&
+                  v !is ClearSearchAction &&
+                  v !is SearchedTeamSelectedAction
+            }.flatMap { w ->
+              Observable.error<MatchesResult>(
+                  IllegalArgumentException("Unknown Action type: " + w))
+            })
       }
     }
 
@@ -316,9 +343,16 @@ class MatchesViewModel @Inject constructor(
             is SearchTeamResult.Success ->
               previousState.copy(
                   searchingTeam = false,
-                  searchedTeams = result.teams.map { FiltersTeamSearchResultDisplayable(it) }
+                  searchedTeams = result.teams.map { TeamSearchResultDisplayable(it) }
               )
           }
+        is ClearSearchResult ->
+          previousState.copy(searchingTeam = false, searchedTeams = emptyList())
+        is SearchedTeamSelectedResult ->
+          previousState.copy(
+              teams = previousState.teams + result.team,
+              filteredTeams = previousState.filteredTeams + result.team.code
+          )
       }
     }
   }

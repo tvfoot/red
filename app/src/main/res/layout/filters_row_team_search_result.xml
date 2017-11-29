@@ -7,7 +7,7 @@
   <data>
     <variable
         name="team"
-        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersTeamSearchResultDisplayable"
+        type="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable"
         />
     <variable
         name="handler"
@@ -21,9 +21,8 @@
       android:layout_marginEnd="16dp"
       android:layout_marginStart="16dp"
       android:layout_marginTop="0dp"
-      android:clickable="true"
-      android:focusable="true"
       android:foreground="?attr/selectableItemBackground"
+      android:onClick="@{() -> handler.onSearchTeamSelected(team)}"
       >
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

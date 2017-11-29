@@ -9,12 +9,22 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterSearchLoadingRowDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersCompetitionDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersTeamDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchInputDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterCompetitionViewHolder
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterSearchLoadingRowViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterTeamSearchResultViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterTeamSearchViewHolder
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterTeamViewHolder
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowCompetitionBinding
+import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamSearchBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamSearchResultBinding
+import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding
 import com.benoitquenaudon.tvfoot.red.injection.scope.FragmentScope
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -27,9 +37,10 @@ class FiltersAdapter @Inject constructor(
   private var filterItems = emptyList<FiltersItemDisplayable>()
   private val filtersObservable: PublishSubject<Pair<List<FiltersItemDisplayable>, List<FiltersItemDisplayable>>> =
       PublishSubject.create()
-  val filterItemClickObservable: PublishSubject<FiltersItemDisplayable> =
-      PublishSubject.create()
+  val filterItemClickObservable: PublishSubject<FiltersAppliableItem> = PublishSubject.create()
   val filterSearchInputObservable: PublishSubject<String> = PublishSubject.create()
+  val searchedTeamClickObservable: PublishSubject<TeamSearchResultDisplayable> =
+      PublishSubject.create()
 
   init {
     // calling it to enable subscription
@@ -43,10 +54,14 @@ class FiltersAdapter @Inject constructor(
     return when (viewType) {
       R.layout.filters_row_competition ->
         FilterCompetitionViewHolder(binding as FiltersRowCompetitionBinding, this)
+      R.layout.filters_row_team ->
+        FilterTeamViewHolder(binding as FiltersRowTeamBinding, this)
       R.layout.filters_row_team_search ->
         FilterTeamSearchViewHolder(binding as FiltersRowTeamSearchBinding, this)
       R.layout.filters_row_team_search_result ->
         FilterTeamSearchResultViewHolder(binding as FiltersRowTeamSearchResultBinding, this)
+      R.layout.row_loading ->
+        FilterSearchLoadingRowViewHolder(binding as RowLoadingBinding)
       else -> throw UnsupportedOperationException(
           "don't know how to deal with this viewType: " + viewType)
     }
@@ -55,9 +70,10 @@ class FiltersAdapter @Inject constructor(
   override fun getItemViewType(position: Int): Int =
       when (filterItems[position]) {
         is FiltersCompetitionDisplayable -> R.layout.filters_row_competition
-        is FiltersTeamSearchInputDisplayable -> R.layout.filters_row_team_search
-        is FiltersTeamSearchResultDisplayable -> R.layout.filters_row_team_search_result
-        else -> throw NotImplementedError("how about this position $position")
+        is FiltersTeamDisplayable -> R.layout.filters_row_team
+        is TeamSearchInputDisplayable -> R.layout.filters_row_team_search
+        is TeamSearchResultDisplayable -> R.layout.filters_row_team_search_result
+        is FilterSearchLoadingRowDisplayable -> R.layout.row_loading
       }
 
   override fun onBindViewHolder(holder: FiltersViewHolder<*, *>, position: Int) {
@@ -71,19 +87,28 @@ class FiltersAdapter @Inject constructor(
         }
       }
       is FilterTeamSearchViewHolder -> {
-        if (item is FiltersTeamSearchInputDisplayable) {
+        if (item is TeamSearchInputDisplayable) {
           holder.bind(item)
         } else {
           throw IllegalStateException("Wrong item for FilterTeamSearchViewHolder $item")
         }
       }
       is FilterTeamSearchResultViewHolder -> {
-        if (item is FiltersTeamSearchResultDisplayable) {
+        if (item is TeamSearchResultDisplayable) {
           holder.bind(item)
         } else {
           throw IllegalStateException("Wrong item for FilterTeamSearchResultViewHolder $item")
         }
       }
+      is FilterSearchLoadingRowViewHolder -> {
+        // stateless view, no need to bind anything
+      }
+      is FilterTeamViewHolder ->
+        if (item is FiltersTeamDisplayable) {
+          holder.bind(item)
+        } else {
+          throw IllegalStateException("Wrong item for FilterTeamViewHolder $item")
+        }
     }
   }
 
@@ -94,11 +119,15 @@ class FiltersAdapter @Inject constructor(
 
   override fun getItemCount(): Int = filterItems.size
 
-  fun onClick(filter: FiltersItemDisplayable) = filterItemClickObservable.onNext(filter)
+  fun onClick(filter: FiltersAppliableItem) = filterItemClickObservable.onNext(filter)
 
   @Suppress("UNUSED_PARAMETER")
   fun onSearchInputChanged(text: CharSequence, start: Int, before: Int, count: Int) {
     filterSearchInputObservable.onNext(text.toString())
+  }
+
+  fun onSearchTeamSelected(team: TeamSearchResultDisplayable) {
+    searchedTeamClickObservable.onNext(team)
   }
 
   fun setFiltersItems(newItems: List<FiltersItemDisplayable>) {
