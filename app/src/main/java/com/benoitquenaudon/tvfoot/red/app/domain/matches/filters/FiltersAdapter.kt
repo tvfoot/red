@@ -10,9 +10,11 @@ import android.view.ViewGroup
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterCompetitionViewHolder
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterTeamSearchResultViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterTeamSearchViewHolder
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowCompetitionBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamSearchBinding
+import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamSearchResultBinding
 import com.benoitquenaudon.tvfoot.red.injection.scope.FragmentScope
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -43,16 +45,18 @@ class FiltersAdapter @Inject constructor(
         FilterCompetitionViewHolder(binding as FiltersRowCompetitionBinding, this)
       R.layout.filters_row_team_search ->
         FilterTeamSearchViewHolder(binding as FiltersRowTeamSearchBinding, this)
+      R.layout.filters_row_team_search_result ->
+        FilterTeamSearchResultViewHolder(binding as FiltersRowTeamSearchResultBinding, this)
       else -> throw UnsupportedOperationException(
           "don't know how to deal with this viewType: " + viewType)
     }
   }
 
-  @Suppress("USELESS_IS_CHECK")
   override fun getItemViewType(position: Int): Int =
       when (filterItems[position]) {
         is FiltersCompetitionDisplayable -> R.layout.filters_row_competition
-        is FiltersTeamSearchDisplayable -> R.layout.filters_row_team_search
+        is FiltersTeamSearchInputDisplayable -> R.layout.filters_row_team_search
+        is FiltersTeamSearchResultDisplayable -> R.layout.filters_row_team_search_result
         else -> throw NotImplementedError("how about this position $position")
       }
 
@@ -67,10 +71,17 @@ class FiltersAdapter @Inject constructor(
         }
       }
       is FilterTeamSearchViewHolder -> {
-        if (item is FiltersTeamSearchDisplayable) {
+        if (item is FiltersTeamSearchInputDisplayable) {
           holder.bind(item)
         } else {
           throw IllegalStateException("Wrong item for FilterTeamSearchViewHolder $item")
+        }
+      }
+      is FilterTeamSearchResultViewHolder -> {
+        if (item is FiltersTeamSearchResultDisplayable) {
+          holder.bind(item)
+        } else {
+          throw IllegalStateException("Wrong item for FilterTeamSearchResultViewHolder $item")
         }
       }
     }
@@ -85,6 +96,7 @@ class FiltersAdapter @Inject constructor(
 
   fun onClick(filter: FiltersItemDisplayable) = filterItemClickObservable.onNext(filter)
 
+  @Suppress("UNUSED_PARAMETER")
   fun onSearchInputChanged(text: CharSequence, start: Int, before: Int, count: Int) {
     filterSearchInputObservable.onNext(text.toString())
   }

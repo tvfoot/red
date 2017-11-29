@@ -28,7 +28,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterRes
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadNextPageResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.TeamSearchDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersTeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
 import com.benoitquenaudon.tvfoot.red.util.MatchId
 import com.benoitquenaudon.tvfoot.red.util.WillBeNotified
@@ -316,7 +316,7 @@ class MatchesViewModel @Inject constructor(
             is SearchTeamResult.Success ->
               previousState.copy(
                   searchingTeam = false,
-                  searchedTeams = result.teams.map { TeamSearchDisplayable(it) }
+                  searchedTeams = result.teams.map { FiltersTeamSearchResultDisplayable(it) }
               )
           }
       }

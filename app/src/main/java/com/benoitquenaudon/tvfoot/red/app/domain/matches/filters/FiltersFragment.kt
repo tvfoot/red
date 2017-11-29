@@ -105,6 +105,11 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
           .debounce(300, MILLISECONDS)
           .map(::SearchTeamIntent)
 
+  // TODO wip
+//  private fun clearSearchTeamInputIntent(): Observable<SearchTeamIntent> =
+//      filtersAdapter.filterSearchInputObservable
+//          .map(::SearchTeamIntent)
+
   override fun render(state: MatchesViewState) {
     bindingModel.updateFromState(state)
   }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.widget.DividerItemDecoration
@@ -11,7 +12,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
+import android.widget.EditText
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
@@ -23,6 +26,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersFragment
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchesBinding
 import com.benoitquenaudon.tvfoot.red.util.getDrawableCompat
+import com.benoitquenaudon.tvfoot.red.util.hideKeyboard
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import com.jakewharton.rxbinding2.view.RxView
@@ -177,5 +181,23 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     } else {
       super.onBackPressed()
     }
+  }
+
+  /**
+   * Clear focus for a currently focused EditText if touch happens elsewhere
+   */
+  override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+    if (event.action == MotionEvent.ACTION_DOWN) {
+      val focusedView = currentFocus
+      if (focusedView is EditText) {
+        val outRect = Rect()
+        focusedView.getGlobalVisibleRect(outRect);
+        if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+          focusedView.clearFocus()
+          hideKeyboard(focusedView)
+        }
+      }
+    }
+    return super.dispatchTouchEvent(event)
   }
 }

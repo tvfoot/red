@@ -1,6 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
 import android.databinding.ObservableBoolean
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
 import com.benoitquenaudon.tvfoot.red.injection.scope.FragmentScope
 import javax.inject.Inject
@@ -18,7 +19,14 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
     loadingTags.set(state.tagsLoading)
     hasFilters.set(filteredTags.isNotEmpty())
 
-    val tagFilters = state.tags
+    adapter.setFiltersItems(buildFilterList(state.tags, state.searchedTeams))
+  }
+
+  private fun buildFilterList(
+      tags: List<Tag>,
+      searchedTeams: List<FiltersTeamSearchResultDisplayable>
+  ): List<FiltersItemDisplayable> {
+    val tagFilters = tags
         .filter { it.type == "competition" }
         .map {
           FiltersCompetitionDisplayable(
@@ -26,10 +34,8 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
               label = it.desc,
               filtered = filteredTags.contains(it.name)) as FiltersItemDisplayable
         }
-    val teamFilters = listOf(FiltersTeamSearchDisplayable)
+    if (tagFilters.isEmpty()) return emptyList()
 
-    val filters = if (tagFilters.isEmpty()) emptyList() else teamFilters + tagFilters
-
-    adapter.setFiltersItems(filters)
+    return listOf(FiltersTeamSearchInputDisplayable) + searchedTeams + tagFilters
   }
 }

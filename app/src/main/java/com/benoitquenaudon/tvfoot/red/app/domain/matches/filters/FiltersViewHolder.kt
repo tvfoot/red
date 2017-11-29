@@ -4,8 +4,7 @@ import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowCompetitionBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamSearchBinding
-import com.jakewharton.rxbinding2.view.RxView
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamSearchResultBinding
 
 sealed class FiltersViewHolder<out B : ViewDataBinding, in T : FiltersItemDisplayable>(
     val binding: B, val adapter: FiltersAdapter
@@ -33,10 +32,30 @@ sealed class FiltersViewHolder<out B : ViewDataBinding, in T : FiltersItemDispla
   class FilterTeamSearchViewHolder(
       binding: FiltersRowTeamSearchBinding,
       adapter: FiltersAdapter
-  ) : FiltersViewHolder<FiltersRowTeamSearchBinding, FiltersTeamSearchDisplayable>(binding,
+  ) : FiltersViewHolder<FiltersRowTeamSearchBinding, FiltersTeamSearchInputDisplayable>(binding,
       adapter) {
-    override fun bind(item: FiltersTeamSearchDisplayable) {
+    override fun bind(item: FiltersTeamSearchInputDisplayable) {
       binding.filter = item
+      binding.handler = adapter
+      binding.executePendingBindings()
+      // TODO(benoit) clean search result when losing focus
+      // binding.filterInput.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+      //   Timber.d("CONNARD $hasFocus $v")
+      // }
+    }
+
+    override fun unbind() {
+      binding.handler = null
+    }
+  }
+
+  class FilterTeamSearchResultViewHolder(
+      binding: FiltersRowTeamSearchResultBinding,
+      adapter: FiltersAdapter
+  ) : FiltersViewHolder<FiltersRowTeamSearchResultBinding, FiltersTeamSearchResultDisplayable>(
+      binding, adapter) {
+    override fun bind(item: FiltersTeamSearchResultDisplayable) {
+      binding.team = item
       binding.handler = adapter
       binding.executePendingBindings()
     }
