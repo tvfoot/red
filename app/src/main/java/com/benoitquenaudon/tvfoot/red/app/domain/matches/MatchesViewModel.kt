@@ -12,7 +12,8 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAct
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.LoadTagsAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchTeamAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchedTeamSelectedAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ToggleFilterAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ToggleFilterCompetitionAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ToggleFilterTeamAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadNextPageAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.RefreshAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearFilters
@@ -20,7 +21,8 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterInt
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.FilterInitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchTeamIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchedTeamSelectedIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent.ToggleFilterCompetitionIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent.ToggleFilterTeamIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.LoadNextPageIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshIntent
@@ -29,7 +31,8 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterRes
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.LoadTagsResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchTeamResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchedTeamSelectedResult
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterCompetitionResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterTeamResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadNextPageResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
@@ -101,7 +104,8 @@ class MatchesViewModel @Inject constructor(
         is RefreshIntent -> RefreshAction
         is LoadNextPageIntent -> LoadNextPageAction(intent.pageIndex)
         is ClearFilters -> ClearFiltersAction
-        is ToggleFilterIntent -> ToggleFilterAction(intent.tagName)
+        is ToggleFilterCompetitionIntent -> ToggleFilterCompetitionAction(intent.tagName)
+        is ToggleFilterTeamIntent -> ToggleFilterTeamAction(intent.teamCode)
         is FilterInitialIntent -> LoadTagsAction
         is SearchTeamIntent -> SearchTeamAction(intent.input)
         is ClearSearchIntent -> ClearSearchAction
@@ -203,9 +207,15 @@ class MatchesViewModel @Inject constructor(
     }
 
   private
-  val toggleFilterTransformer: ObservableTransformer<ToggleFilterAction, ToggleFilterResult>
-    get() = ObservableTransformer { actions: Observable<ToggleFilterAction> ->
-      actions.map { ToggleFilterResult(it.tagName) }
+  val toggleFilterCompetitionTransformer: ObservableTransformer<ToggleFilterCompetitionAction, ToggleFilterCompetitionResult>
+    get() = ObservableTransformer { actions: Observable<ToggleFilterCompetitionAction> ->
+      actions.map { ToggleFilterCompetitionResult(it.tagName) }
+    }
+
+  private
+  val toggleFilterTeamTransformer: ObservableTransformer<ToggleFilterTeamAction, ToggleFilterTeamResult>
+    get() = ObservableTransformer { actions: Observable<ToggleFilterTeamAction> ->
+      actions.map { ToggleFilterTeamResult(it.teamCode) }
     }
 
   private
@@ -217,7 +227,7 @@ class MatchesViewModel @Inject constructor(
   private
   val searchedTeamSelectedTransformer: ObservableTransformer<SearchedTeamSelectedAction, SearchedTeamSelectedResult>
     get() = ObservableTransformer { actions: Observable<SearchedTeamSelectedAction> ->
-      actions.map { SearchedTeamSelectedResult(it.team, filtered = true) }
+      actions.map { SearchedTeamSelectedResult(it.team) }
     }
 
   private
@@ -230,13 +240,15 @@ class MatchesViewModel @Inject constructor(
         ).mergeWith(
             Observable.merge<MatchesResult>(
                 shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
-                shared.ofType(ToggleFilterAction::class.java)
-                    .compose(toggleFilterTransformer),
-                shared.ofType(LoadTagsAction::class.java).compose(loadTagsTransformer),
-                shared.ofType(SearchTeamAction::class.java).compose(searchTeamTransformer)
+                shared.ofType(ToggleFilterCompetitionAction::class.java)
+                    .compose(toggleFilterCompetitionTransformer),
+                shared.ofType(ToggleFilterTeamAction::class.java)
+                    .compose(toggleFilterTeamTransformer),
+                shared.ofType(LoadTagsAction::class.java).compose(loadTagsTransformer)
             )
         ).mergeWith(
             Observable.merge<MatchesResult>(
+                shared.ofType(SearchTeamAction::class.java).compose(searchTeamTransformer),
                 shared.ofType(ClearSearchAction::class.java).compose(clearSearchTransformer),
                 shared.ofType(SearchedTeamSelectedAction::class.java)
                     .compose(searchedTeamSelectedTransformer)
@@ -247,7 +259,8 @@ class MatchesViewModel @Inject constructor(
               v !is RefreshAction &&
                   v !is LoadNextPageAction &&
                   v !is ClearFiltersAction &&
-                  v !is ToggleFilterAction &&
+                  v !is ToggleFilterCompetitionAction &&
+                  v !is ToggleFilterTeamAction &&
                   v !is LoadTagsAction &&
                   v !is SearchTeamAction &&
                   v !is ClearSearchAction &&
@@ -306,7 +319,7 @@ class MatchesViewModel @Inject constructor(
           }
         }
         is ClearFiltersResult -> previousState.copy(filteredTags = emptyMap())
-        is ToggleFilterResult -> {
+        is ToggleFilterCompetitionResult -> {
           previousState.filteredTags.toMutableMap().let {
             if (it.keys.contains(result.tagName)) {
               it.remove(result.tagName)
@@ -314,11 +327,22 @@ class MatchesViewModel @Inject constructor(
               it.put(result.tagName,
                   previousState.tags.first { it.name == result.tagName }.targets)
             }
+            // what was I thinking ??
             if (it.isEmpty()) {
               previousState.copy(filteredTags = it, hasMore = true)
             } else {
               previousState.copy(filteredTags = it)
             }
+          }
+        }
+        is ToggleFilterTeamResult -> {
+          previousState.filteredTeams.toMutableList().let { filteredTeams ->
+            if (filteredTeams.contains(result.teamCode)) {
+              filteredTeams.remove(result.teamCode)
+            } else {
+              filteredTeams.add(result.teamCode)
+            }
+            previousState.copy(filteredTeams = filteredTeams)
           }
         }
         is LoadTagsResult -> {
@@ -350,7 +374,8 @@ class MatchesViewModel @Inject constructor(
           previousState.copy(searchingTeam = false, searchedTeams = emptyList())
         is SearchedTeamSelectedResult ->
           previousState.copy(
-              teams = previousState.teams + result.team,
+              // insert at 0 for UI
+              teams = listOf(result.team) + previousState.teams,
               filteredTeams = previousState.filteredTeams + result.team.code
           )
       }

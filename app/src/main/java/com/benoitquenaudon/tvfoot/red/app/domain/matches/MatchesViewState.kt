@@ -1,11 +1,11 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
+import com.benoitquenaudon.tvfoot.red.app.data.entity.FilterTeam
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.HeaderRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.LoadingRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersTeamDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviViewState
 import com.benoitquenaudon.tvfoot.red.util.TagName
@@ -26,7 +26,7 @@ data class MatchesViewState(
     var filteredTags: Map<TagName, TagTargets> = emptyMap(),
     val searchingTeam: Boolean = false,
     val searchedTeams: List<TeamSearchResultDisplayable> = emptyList(),
-    val teams: List<FiltersTeamDisplayable> = emptyList(),
+    val teams: List<FilterTeam> = emptyList(),
     val filteredTeams: List<TeamCode> = emptyList()
 ) : MviViewState {
   fun matchesItemDisplayables(
@@ -39,13 +39,13 @@ data class MatchesViewState(
     val items = ArrayList<MatchesItemDisplayable>()
 
     val filteredTargets = filteredTags.values.flatten().toSet()
-    val filteredTeamsTargets = filteredTeams.toSet()
+    val filteredTeamsCodes = filteredTeams.toSet()
     for (match in matches) {
       if (filteredTargets.isNotEmpty() && filteredTargets.intersect(match.tags).isEmpty()) {
         continue
       }
-      if (filteredTeamsTargets.isNotEmpty() &&
-          filteredTeamsTargets.intersect(
+      if (filteredTeamsCodes.isNotEmpty() &&
+          filteredTeamsCodes.intersect(
               setOf(match.homeTeam.code, match.awayTeam.code)).isEmpty()) {
         continue
       }
@@ -62,7 +62,7 @@ data class MatchesViewState(
     return items
   }
 
-  companion object Factory {
+  companion object {
     fun idle(): MatchesViewState = MatchesViewState()
   }
 }

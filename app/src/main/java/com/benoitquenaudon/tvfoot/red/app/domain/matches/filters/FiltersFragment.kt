@@ -20,9 +20,12 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterInt
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchTeamIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchedTeamSelectedIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent.ToggleFilterCompetitionIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent.ToggleFilterTeamIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersCompetitionDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersTeamDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.FragmentFiltersBinding
 import com.jakewharton.rxbinding2.support.v7.widget.RxToolbar
@@ -106,9 +109,12 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
           .map { ClearFilters }
 
   private fun filterClickIntent(): Observable<ToggleFilterIntent> =
-      filtersAdapter.filterItemClickObservable
-          .ofType(FiltersCompetitionDisplayable::class.java)
-          .map { ToggleFilterIntent(it.code) }
+      filtersAdapter.filterItemClickObservable.map { item ->
+        when (item) {
+          is FiltersCompetitionDisplayable -> ToggleFilterCompetitionIntent(item.code)
+          is FiltersTeamDisplayable -> ToggleFilterTeamIntent(item.code)
+        }
+      }
 
   private fun searchTeamIntent(): Observable<SearchTeamIntent> =
       filtersAdapter.filterSearchInputObservable

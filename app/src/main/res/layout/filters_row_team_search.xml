@@ -26,7 +26,7 @@
         android:imeOptions="actionDone"
         android:inputType="text"
         android:maxLines="1"
-        android:onTextChanged="@{handler.onSearchInputChanged}"
+        android:onTextChanged="@{handler::onSearchInputChanged}"
         />
   </LinearLayout>
 </layout>
