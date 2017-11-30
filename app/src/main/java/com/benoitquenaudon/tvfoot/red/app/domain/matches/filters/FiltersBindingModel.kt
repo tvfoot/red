@@ -1,14 +1,23 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
 import android.databinding.ObservableBoolean
+import com.benoitquenaudon.tvfoot.red.app.data.entity.FilterTeam
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterSearchLoadingRowDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersCompetitionDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersTeamDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchInputDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.injection.scope.FragmentScope
+import com.benoitquenaudon.tvfoot.red.util.TeamCode
 import javax.inject.Inject
 
-@FragmentScope class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapter) {
+@FragmentScope
+class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapter) {
 
   val loadingTags: ObservableBoolean = ObservableBoolean(true)
-  var filteredTags: Set<String> = emptySet()
+  private var filteredTags: Set<String> = emptySet()
 
   val hasFilters: ObservableBoolean = ObservableBoolean(false)
 
@@ -17,15 +26,48 @@ import javax.inject.Inject
     loadingTags.set(state.tagsLoading)
     hasFilters.set(filteredTags.isNotEmpty())
 
-    state.tags
+    adapter.setFiltersItems(
+        buildFilterList(
+            state.tags,
+            state.searchedTeams,
+            state.searchingTeam,
+            state.teams,
+            state.filteredTeams
+        )
+    )
+  }
+
+  private fun buildFilterList(
+      tags: List<Tag>,
+      searchedTeams: List<TeamSearchResultDisplayable>,
+      searchingTeam: Boolean,
+      teams: List<FilterTeam>,
+      filteredTeams: List<TeamCode>
+  ): List<FiltersItemDisplayable> {
+    val tagFilters = tags
         .filter { it.type == "competition" }
         .map {
-          FilterRowDisplayable(
+          FiltersCompetitionDisplayable(
               code = it.name,
               label = it.desc,
               filtered = filteredTags.contains(it.name))
-        }.also {
-      adapter.updateFilters(it)
+        }
+    val teamFilters = teams
+        .map {
+          FiltersTeamDisplayable(
+              code = it.code,
+              name = it.name,
+              type = it.type,
+              filtered = filteredTeams.contains(it.code)
+          )
+        }
+
+    val teamSearchDisplayables = if (searchingTeam) {
+      listOf(FilterSearchLoadingRowDisplayable)
+    } else {
+      searchedTeams.filter { searched -> teams.none { it.code == searched.code } }
     }
+
+    return listOf(TeamSearchInputDisplayable) + teamSearchDisplayables + teamFilters + tagFilters
   }
 }

@@ -2,6 +2,7 @@ package com.benoitquenaudon.tvfoot.red.testutil
 
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -14,6 +15,7 @@ class Fixture @Inject constructor(private val moshi: Moshi) {
 
   private val listMatchType = Types.newParameterizedType(List::class.java, Match::class.java)
   private val listTagType = Types.newParameterizedType(List::class.java, Tag::class.java)
+  private val listTeamType = Types.newParameterizedType(List::class.java, Team::class.java)
 
   fun anyMatches(): List<Match> {
     return anyObject("matches_sample.json", listMatchType)
@@ -37,6 +39,10 @@ class Fixture @Inject constructor(private val moshi: Moshi) {
 
   fun anyNextMatches(): List<Match> {
     return anyObject("matches_next_sample.json", listMatchType)
+  }
+
+  fun anyTeams(): List<Team> {
+    return anyObject("teams_sample.json", listTeamType)
   }
 
   private fun <T> anyObject(filename: String, typeOfT: Type): T {

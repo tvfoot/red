@@ -1,6 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviIntent
+import com.benoitquenaudon.tvfoot.red.util.TeamCode
 
 sealed class MatchesIntent : MviIntent {
   object InitialIntent : MatchesIntent()
@@ -9,9 +11,21 @@ sealed class MatchesIntent : MviIntent {
 
   data class LoadNextPageIntent(val pageIndex: Int) : MatchesIntent()
 
-  object ClearFilters : MatchesIntent()
+  sealed class FilterIntent : MatchesIntent() {
+    object ClearFilters : FilterIntent()
 
-  data class ToggleFilterIntent(val tagName: String) : MatchesIntent()
+    sealed class ToggleFilterIntent : FilterIntent() {
+      data class ToggleFilterCompetitionIntent(val tagName: String) : ToggleFilterIntent()
 
-  object FilterInitialIntent : MatchesIntent()
+      data class ToggleFilterTeamIntent(val teamCode: TeamCode) : ToggleFilterIntent()
+    }
+
+    object FilterInitialIntent : FilterIntent()
+
+    data class SearchTeamIntent(val input: String) : FilterIntent()
+
+    object ClearSearchIntent : FilterIntent()
+
+    data class SearchedTeamSelectedIntent(val team: TeamSearchResultDisplayable) : FilterIntent()
+  }
 }

@@ -1,29 +1,42 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
-import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.BasePreferenceRepository
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.ClearFiltersAction
+import com.benoitquenaudon.tvfoot.red.app.data.source.BaseTeamRepository
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ClearFiltersAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ClearSearchAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.LoadTagsAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchTeamAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchedTeamSelectedAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ToggleFilterCompetitionAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ToggleFilterTeamAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadNextPageAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadTagsAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.RefreshAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.ToggleFilterAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.ClearFilters
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterInitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearFilters
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearSearchIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.FilterInitialIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchTeamIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchedTeamSelectedIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent.ToggleFilterCompetitionIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent.ToggleFilterTeamIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.LoadNextPageIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.ToggleFilterIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.ClearFiltersResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ClearFiltersResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ClearSearchResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.LoadTagsResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchTeamResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchedTeamSelectedResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterCompetitionResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterTeamResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadNextPageResult
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadTagsResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshResult
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.ToggleFilterResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
 import com.benoitquenaudon.tvfoot.red.util.MatchId
 import com.benoitquenaudon.tvfoot.red.util.WillBeNotified
@@ -46,6 +59,7 @@ import kotlin.LazyThreadSafetyMode.NONE
 class MatchesViewModel @Inject constructor(
     private val intentsSubject: PublishSubject<MatchesIntent>,
     private val matchesRepository: BaseMatchesRepository,
+    private val teamRepository: BaseTeamRepository,
     private val preferenceRepository: BasePreferenceRepository,
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
@@ -90,13 +104,17 @@ class MatchesViewModel @Inject constructor(
         is RefreshIntent -> RefreshAction
         is LoadNextPageIntent -> LoadNextPageAction(intent.pageIndex)
         is ClearFilters -> ClearFiltersAction
-        is ToggleFilterIntent -> ToggleFilterAction(intent.tagName)
+        is ToggleFilterCompetitionIntent -> ToggleFilterCompetitionAction(intent.tagName)
+        is ToggleFilterTeamIntent -> ToggleFilterTeamAction(intent.teamCode)
         is FilterInitialIntent -> LoadTagsAction
+        is SearchTeamIntent -> SearchTeamAction(intent.input)
+        is ClearSearchIntent -> ClearSearchAction
+        is SearchedTeamSelectedIntent -> SearchedTeamSelectedAction(intent.team)
       }
 
   private val refreshTransformer: ObservableTransformer<RefreshAction, RefreshResult>
     get() = ObservableTransformer { actions: Observable<RefreshAction> ->
-      actions.flatMap({
+      actions.flatMap {
         val matches: Observable<Match> = matchesRepository
             .loadPage(0)
             .flatMapIterable()
@@ -120,96 +138,138 @@ class MatchesViewModel @Inject constructor(
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
             .startWith(RefreshResult.InFlight)
-      })
+      }
     }
 
   private
   val loadNextPageTransformer: ObservableTransformer<LoadNextPageAction, LoadNextPageResult>
-    get () = ObservableTransformer { actions: Observable<LoadNextPageAction> ->
-      actions.flatMap(
-          { (pageIndex) ->
-            val matches: Observable<Match> = matchesRepository
-                .loadPage(pageIndex)
-                .flatMapIterable()
-                .share()
+    get() = ObservableTransformer { actions: Observable<LoadNextPageAction> ->
+      actions.flatMap { (pageIndex) ->
+        val matches: Observable<Match> = matchesRepository
+            .loadPage(pageIndex)
+            .flatMapIterable()
+            .share()
 
-            Single.zip(
-                matches.toList(),
-                matches.map(Match::id)
-                    .flatMapSingle { matchId ->
-                      preferenceRepository
-                          .loadNotifyMatchStart(matchId)
-                          .map { matchId to it }
-                    }.toMap(),
-                BiFunction<List<Match>,
-                    Map<String, WillBeNotified>,
-                    Pair<List<Match>, Map<MatchId, WillBeNotified>>>(::Pair)
-            )
-                .toObservable()
-                .map<LoadNextPageResult> { (matches, notificationPairs) ->
-                  LoadNextPageResult.Success(pageIndex, matches, notificationPairs)
-                }
-                .onErrorReturn(LoadNextPageResult::Failure)
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.ui())
-                .startWith(LoadNextPageResult.InFlight)
-          })
+        Single.zip(
+            matches.toList(),
+            matches.map(Match::id)
+                .flatMapSingle { matchId ->
+                  preferenceRepository
+                      .loadNotifyMatchStart(matchId)
+                      .map { matchId to it }
+                }.toMap(),
+            BiFunction<List<Match>,
+                Map<String, WillBeNotified>,
+                Pair<List<Match>, Map<MatchId, WillBeNotified>>>(::Pair)
+        )
+            .toObservable()
+            .map<LoadNextPageResult> { (matches, notificationPairs) ->
+              LoadNextPageResult.Success(pageIndex, matches, notificationPairs)
+            }
+            .onErrorReturn(LoadNextPageResult::Failure)
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
+            .startWith(LoadNextPageResult.InFlight)
+      }
     }
 
   private
   val loadTagsTransformer: ObservableTransformer<LoadTagsAction, LoadTagsResult>
-    get () = ObservableTransformer { actions: Observable<LoadTagsAction> ->
-      actions.flatMap(
-          {
-            matchesRepository.loadTags()
-                .toObservable()
-                .map<LoadTagsResult>(LoadTagsResult::Success)
-                .onErrorReturn(LoadTagsResult::Failure)
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.ui())
-                .startWith(LoadTagsResult.InFlight)
-          })
+    get() = ObservableTransformer { actions: Observable<LoadTagsAction> ->
+      actions.flatMap {
+        matchesRepository.loadTags()
+            .toObservable()
+            .map<LoadTagsResult>(LoadTagsResult::Success)
+            .onErrorReturn(LoadTagsResult::Failure)
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
+            .startWith(LoadTagsResult.InFlight)
+      }
+    }
+
+  private val searchTeamTransformer: ObservableTransformer<SearchTeamAction, SearchTeamResult>
+    get() = ObservableTransformer { actions: Observable<SearchTeamAction> ->
+      actions.flatMap { (searchInput) ->
+        teamRepository.findTeams(searchInput)
+            .toObservable()
+            .map<SearchTeamResult>(SearchTeamResult::Success)
+            .onErrorReturn(SearchTeamResult::Failure)
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
+            .startWith(SearchTeamResult.InFlight)
+      }
     }
 
   private
   val clearFilterTransformer: ObservableTransformer<ClearFiltersAction, ClearFiltersResult>
-    get () = ObservableTransformer { actions: Observable<ClearFiltersAction> ->
-      actions.map({ ClearFiltersResult })
+    get() = ObservableTransformer { actions: Observable<ClearFiltersAction> ->
+      actions.map { ClearFiltersResult }
     }
 
   private
-  val toggleFilterTransformer: ObservableTransformer<ToggleFilterAction, ToggleFilterResult>
-    get () = ObservableTransformer { actions: Observable<ToggleFilterAction> ->
-      actions.map({ ToggleFilterResult(it.tagName) })
+  val toggleFilterCompetitionTransformer: ObservableTransformer<ToggleFilterCompetitionAction, ToggleFilterCompetitionResult>
+    get() = ObservableTransformer { actions: Observable<ToggleFilterCompetitionAction> ->
+      actions.map { ToggleFilterCompetitionResult(it.tagName) }
+    }
+
+  private
+  val toggleFilterTeamTransformer: ObservableTransformer<ToggleFilterTeamAction, ToggleFilterTeamResult>
+    get() = ObservableTransformer { actions: Observable<ToggleFilterTeamAction> ->
+      actions.map { ToggleFilterTeamResult(it.teamCode) }
+    }
+
+  private
+  val clearSearchTransformer: ObservableTransformer<ClearSearchAction, ClearSearchResult>
+    get() = ObservableTransformer { actions: Observable<ClearSearchAction> ->
+      actions.map { ClearSearchResult }
+    }
+
+  private
+  val searchedTeamSelectedTransformer: ObservableTransformer<SearchedTeamSelectedAction, SearchedTeamSelectedResult>
+    get() = ObservableTransformer { actions: Observable<SearchedTeamSelectedAction> ->
+      actions.map { SearchedTeamSelectedResult(it.team) }
     }
 
   private
   val actionToResultTransformer: ObservableTransformer<MatchesAction, MatchesResult>
-    get () = ObservableTransformer { actions: Observable<MatchesAction> ->
-      actions.publish({ shared ->
+    get() = ObservableTransformer { actions: Observable<MatchesAction> ->
+      actions.publish { shared ->
         Observable.merge<MatchesResult>(
             shared.ofType(RefreshAction::class.java).compose(refreshTransformer),
-            shared.ofType(LoadNextPageAction::class.java).compose(loadNextPageTransformer))
-            .mergeWith(
-                Observable.merge<MatchesResult>(
-                    shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
-                    shared.ofType(ToggleFilterAction::class.java).compose(
-                        toggleFilterTransformer),
-                    shared.ofType(LoadTagsAction::class.java).compose(loadTagsTransformer))
+            shared.ofType(LoadNextPageAction::class.java).compose(loadNextPageTransformer)
+        ).mergeWith(
+            Observable.merge<MatchesResult>(
+                shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
+                shared.ofType(ToggleFilterCompetitionAction::class.java)
+                    .compose(toggleFilterCompetitionTransformer),
+                shared.ofType(ToggleFilterTeamAction::class.java)
+                    .compose(toggleFilterTeamTransformer),
+                shared.ofType(LoadTagsAction::class.java).compose(loadTagsTransformer)
             )
-            .mergeWith(
-                // Error for not implemented actions
-                shared.filter({ v ->
-                  v !is RefreshAction &&
-                      v !is LoadNextPageAction &&
-                      v !is ClearFiltersAction &&
-                      v !is ToggleFilterAction &&
-                      v !is LoadTagsAction
-                }).flatMap({ w ->
-                  Observable.error<MatchesResult>(
-                      IllegalArgumentException("Unknown Action type: " + w))
-                }))
-      })
+        ).mergeWith(
+            Observable.merge<MatchesResult>(
+                shared.ofType(SearchTeamAction::class.java).compose(searchTeamTransformer),
+                shared.ofType(ClearSearchAction::class.java).compose(clearSearchTransformer),
+                shared.ofType(SearchedTeamSelectedAction::class.java)
+                    .compose(searchedTeamSelectedTransformer)
+            )
+        ).mergeWith(
+            // Error for not implemented actions
+            shared.filter { v ->
+              v !is RefreshAction &&
+                  v !is LoadNextPageAction &&
+                  v !is ClearFiltersAction &&
+                  v !is ToggleFilterCompetitionAction &&
+                  v !is ToggleFilterTeamAction &&
+                  v !is LoadTagsAction &&
+                  v !is SearchTeamAction &&
+                  v !is ClearSearchAction &&
+                  v !is SearchedTeamSelectedAction
+            }.flatMap { w ->
+              Observable.error<MatchesResult>(
+                  IllegalArgumentException("Unknown Action type: " + w))
+            })
+      }
     }
 
   companion object Reducer {
@@ -259,7 +319,7 @@ class MatchesViewModel @Inject constructor(
           }
         }
         is ClearFiltersResult -> previousState.copy(filteredTags = emptyMap())
-        is ToggleFilterResult -> {
+        is ToggleFilterCompetitionResult -> {
           previousState.filteredTags.toMutableMap().let {
             if (it.keys.contains(result.tagName)) {
               it.remove(result.tagName)
@@ -267,11 +327,22 @@ class MatchesViewModel @Inject constructor(
               it.put(result.tagName,
                   previousState.tags.first { it.name == result.tagName }.targets)
             }
+            // what was I thinking ??
             if (it.isEmpty()) {
               previousState.copy(filteredTags = it, hasMore = true)
             } else {
               previousState.copy(filteredTags = it)
             }
+          }
+        }
+        is ToggleFilterTeamResult -> {
+          previousState.filteredTeams.toMutableList().let { filteredTeams ->
+            if (filteredTeams.contains(result.teamCode)) {
+              filteredTeams.remove(result.teamCode)
+            } else {
+              filteredTeams.add(result.teamCode)
+            }
+            previousState.copy(filteredTeams = filteredTeams)
           }
         }
         is LoadTagsResult -> {
@@ -287,6 +358,26 @@ class MatchesViewModel @Inject constructor(
               )
           }
         }
+        is SearchTeamResult ->
+          when (result) {
+            is SearchTeamResult.InFlight ->
+              previousState.copy(searchingTeam = true)
+            is SearchTeamResult.Failure ->
+              previousState.copy(searchingTeam = false, error = result.throwable)
+            is SearchTeamResult.Success ->
+              previousState.copy(
+                  searchingTeam = false,
+                  searchedTeams = result.teams.map { TeamSearchResultDisplayable(it) }
+              )
+          }
+        is ClearSearchResult ->
+          previousState.copy(searchingTeam = false, searchedTeams = emptyList())
+        is SearchedTeamSelectedResult ->
+          previousState.copy(
+              // insert at 0 for UI
+              teams = listOf(result.team) + previousState.teams,
+              filteredTeams = previousState.filteredTeams + result.team.code
+          )
       }
     }
   }

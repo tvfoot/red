@@ -32,7 +32,7 @@
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:visible="@{!bindingModel.loadingTags}"
         tools:context="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersFragment"
-        tools:listitem="@layout/filters_row_league"
+        tools:listitem="@layout/filters_row_competition"
         />
   </LinearLayout>
 </layout>

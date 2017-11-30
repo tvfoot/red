@@ -3,6 +3,7 @@ package com.benoitquenaudon.tvfoot.red.injection.component
 import com.benoitquenaudon.tvfoot.red.app.data.source.FakeMatchRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.FakeMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.FakePreferenceRepository
+import com.benoitquenaudon.tvfoot.red.app.data.source.FakeTeamRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.match.state.MatchStateBinderTest
 import com.benoitquenaudon.tvfoot.red.injection.module.FakeImplementationModule
 import com.benoitquenaudon.tvfoot.red.injection.module.NetworkModule
@@ -22,4 +23,5 @@ interface TestComponent {
   fun inject(fakeMatchesRepository: FakeMatchesRepository)
   fun inject(fakeMatchRepository: FakeMatchRepository)
   fun inject(fakePreferenceRepository: FakePreferenceRepository)
+  fun inject(fakeTeamRepository: FakeTeamRepository)
 }

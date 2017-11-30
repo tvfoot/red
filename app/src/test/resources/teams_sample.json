@@ -1,0 +1,79 @@
+[
+  {
+    "code": "AM",
+    "name": "Atlético Madrid",
+    "fullname": "Club Atlético de Madrid",
+    "city": "madrid",
+    "country": "espagne",
+    "url": "www.clubatleticodemadrid.com",
+    "stadium": "Stade Vicente-Calderón, Madrid",
+    "twitter": "Atleti",
+    "hashtag": [
+      "ATM",
+      "Atleti"
+    ],
+    "type": "club",
+    "id": "55b1404d31e20cc26bbeb3d0"
+  },
+  {
+    "code": "RVM",
+    "name": "Rayo Vallecano",
+    "fullname": "Rayo Vallecano de Madrid",
+    "city": "madrid",
+    "country": "espagne",
+    "url": "www.rayovallecano.es",
+    "stadium": "Stade de Vallecas, Madrid",
+    "twitter": "RVMOficial",
+    "hashtag": [
+      "RVM"
+    ],
+    "type": "club",
+    "id": "55b1404d31e20cc26bbeb3dc"
+  },
+  {
+    "code": "RM",
+    "name": "Real Madrid",
+    "fullname": "Real Madrid Club de Fútbol",
+    "city": "madrid",
+    "country": "espagne",
+    "url": "www.realmadrid.com",
+    "stadium": "Stade Santiago Bernabéu, Madrid",
+    "twitter": "realmadriden",
+    "hashtag": [
+      "RMA",
+      "RMLiga"
+    ],
+    "type": "club",
+    "id": "55b1404d31e20cc26bbeb3dd"
+  },
+  {
+    "code": "ESP",
+    "name": "Espagne",
+    "fullname": "Real Federación Española de Fútbol",
+    "city": "madrid",
+    "country": "espagne",
+    "url": "www.rfef.es",
+    "stadium": "Stade Santiago Bernabéu, Madrid",
+    "twitter": "rfef",
+    "hashtag": [
+      "ESP"
+    ],
+    "type": "nation",
+    "id": "55e894eff0125aa60e252da3"
+  },
+  {
+    "code": "PSG",
+    "name": "Paris SG",
+    "fullname": "Paris-Saint-Germain Football Club",
+    "city": "paris",
+    "country": "france",
+    "url": "www.psg.fr",
+    "stadium": "Parc des Princes, Paris",
+    "twitter": "PSG_inside",
+    "hashtag": [
+      "PSG"
+    ],
+    "type": "club",
+    "id": "55a548fd5d02524c74bcda4f"
+  }
+]

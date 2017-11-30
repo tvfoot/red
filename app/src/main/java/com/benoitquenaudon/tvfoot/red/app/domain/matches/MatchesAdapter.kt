@@ -12,6 +12,7 @@ import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvide
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesItemViewHolder.LoadingRowViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesItemViewHolder.MatchHeaderViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesItemViewHolder.MatchRowViewHolder
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesItemViewHolder.MatchTeamlessRowViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.HeaderRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.LoadingRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
@@ -45,14 +46,13 @@ class MatchesAdapter @Inject constructor(
 
     return when (viewType) {
       R.layout.matches_row_header ->
-        MatchesItemViewHolder.MatchHeaderViewHolder(binding as MatchesRowHeaderBinding)
+        MatchHeaderViewHolder(binding as MatchesRowHeaderBinding)
       R.layout.matches_row_match ->
-        MatchesItemViewHolder.MatchRowViewHolder(binding as MatchesRowMatchBinding, this)
+        MatchRowViewHolder(binding as MatchesRowMatchBinding, this)
       R.layout.matches_row_teamless_match ->
-        MatchesItemViewHolder.MatchTeamlessRowViewHolder(binding as MatchesRowTeamlessMatchBinding,
-            this)
+        MatchTeamlessRowViewHolder(binding as MatchesRowTeamlessMatchBinding, this)
       R.layout.row_loading ->
-        MatchesItemViewHolder.LoadingRowViewHolder(binding as RowLoadingBinding)
+        LoadingRowViewHolder(binding as RowLoadingBinding)
       else -> throw UnsupportedOperationException(
           "don't know how to deal with this viewType: " + viewType)
     }
@@ -75,7 +75,7 @@ class MatchesAdapter @Inject constructor(
           throw IllegalStateException("Wrong item for MatchRowViewHolder $item")
         }
       }
-      is MatchesItemViewHolder.MatchTeamlessRowViewHolder -> {
+      is MatchTeamlessRowViewHolder -> {
         if (item is MatchRowDisplayable) {
           holder.bind(item)
         } else {

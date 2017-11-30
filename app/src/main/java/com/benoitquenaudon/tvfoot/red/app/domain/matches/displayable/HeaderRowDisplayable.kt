@@ -21,8 +21,8 @@ data class HeaderRowDisplayable private constructor(
     val hasDanger: Boolean,
     val displayedDate: String
 ) : MatchesItemDisplayable {
-  override fun isSameAs(newItem: MatchesItemDisplayable): Boolean {
-    return newItem is HeaderRowDisplayable && this.displayedDate == newItem.displayedDate
+  override fun isSameAs(other: MatchesItemDisplayable): Boolean {
+    return other is HeaderRowDisplayable && this.displayedDate == other.displayedDate
   }
 
   companion object Factory {

@@ -1,9 +1,10 @@
 package com.benoitquenaudon.tvfoot.red.app.data.entity
 
 data class Team(
+    val id: String?,
     val code: String?,
     val name: String?,
-    val fullName: String?,
+    val fullname: String?,
     val city: String?,
     val country: String?,
     val url: String?,

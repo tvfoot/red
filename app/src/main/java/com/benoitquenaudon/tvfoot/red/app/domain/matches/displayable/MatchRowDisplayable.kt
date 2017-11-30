@@ -33,8 +33,8 @@ data class MatchRowDisplayable private constructor(
     val awayTeam: TeamRowDisplayable,
     val willBeNotified: Boolean = false
 ) : MatchesItemDisplayable {
-  override fun isSameAs(newItem: MatchesItemDisplayable): Boolean {
-    return newItem is MatchRowDisplayable && this.matchId == newItem.matchId
+  override fun isSameAs(other: MatchesItemDisplayable): Boolean {
+    return other is MatchRowDisplayable && this.matchId == other.matchId
   }
 
   companion object Factory {
@@ -56,8 +56,14 @@ data class MatchRowDisplayable private constructor(
           location = parseLocation(match),
           matchId = match.id,
           tags = parseTags(match),
-          homeTeam = TeamRowDisplayable(match.homeTeam.name, parseTeamLogoPath(match.homeTeam)),
-          awayTeam = TeamRowDisplayable(match.awayTeam.name, parseTeamLogoPath(match.awayTeam)),
+          homeTeam = TeamRowDisplayable(
+              match.homeTeam.name,
+              parseTeamLogoPath(match.homeTeam),
+              match.homeTeam.code),
+          awayTeam = TeamRowDisplayable(
+              match.awayTeam.name,
+              parseTeamLogoPath(match.awayTeam),
+              match.awayTeam.code),
           willBeNotified = willBeNotified
       )
     }
