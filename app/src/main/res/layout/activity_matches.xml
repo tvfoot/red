@@ -56,13 +56,14 @@
           android:layout_height="match_parent"
           app:layout_behavior="@string/appbar_scrolling_view_behavior"
           app:refreshing="@{bindingModel.refreshLoading}"
+          app:visible="@{bindingModel.hasData}"
+          tools:visibility="gone"
           >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            app:visible="@{bindingModel.hasData}"
             tools:context="com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesActivity"
             tools:listitem="@layout/matches_row_match"
             />
@@ -72,7 +73,9 @@
           android:id="@+id/empty_view"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:text="Empty"
+          android:gravity="center"
+          android:text="@string/no_match_found"
+          android:textSize="20sp"
           app:visible="@{!bindingModel.hasData}"
           />
 
@@ -81,6 +84,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:text="@{bindingModel.errorMessage}"
+          android:textSize="16sp"
           app:visible="@{bindingModel.hasError}"
           />
 

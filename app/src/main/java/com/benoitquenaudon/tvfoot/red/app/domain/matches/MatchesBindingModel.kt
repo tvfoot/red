@@ -24,21 +24,21 @@ class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapte
     nextPageLoading = state.nextPageLoading
     refreshLoading.set(state.refreshLoading)
     hasError.set(state.error != null)
-    hasData.set(!state.matches.isEmpty())
     hasMore = state.hasMore
 
     if (hasError.get()) {
       val error = checkNotNull(state.error) { "state error is null" }
       errorMessage.set(error.toString())
     }
+
+    val matchesDisplayables = state.matchesItemDisplayables(
+        hasMore,
+        state.filteredTags,
+        state.filteredTeams
+    )
+    hasData.set(matchesDisplayables.isNotEmpty() || state.refreshLoading || state.nextPageLoading)
     if (hasData.get()) {
-      adapter.setMatchesItems(
-          state.matchesItemDisplayables(
-              hasMore,
-              state.filteredTags,
-              state.filteredTeams
-          )
-      )
+      adapter.setMatchesItems(matchesDisplayables)
     }
   }
 }
