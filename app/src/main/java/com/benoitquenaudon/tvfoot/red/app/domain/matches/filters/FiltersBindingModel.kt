@@ -60,6 +60,7 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
               code = it.code,
               name = it.name,
               type = it.type,
+              country = it.country,
               filtered = filteredTeams.contains(it.code)
           )
         }

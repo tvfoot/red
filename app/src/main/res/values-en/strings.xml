@@ -30,4 +30,5 @@
   <string name="close_menu">Close menu</string>
   <string name="competitions">Competitions</string>
   <string name="teams">Teams</string>
+  <string name="add_team_to_filter">Add this team to the filter</string>
 </resources>

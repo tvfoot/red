@@ -69,7 +69,8 @@ sealed class MatchesResult : MviResult {
               FilterTeam(
                   code = searchedTeam.code,
                   type = searchedTeam.type,
-                  name = searchedTeam.name
+                  name = searchedTeam.name,
+                  country = searchedTeam.country
               )
           )
         }

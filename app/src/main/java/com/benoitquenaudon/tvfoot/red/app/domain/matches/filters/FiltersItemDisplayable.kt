@@ -21,8 +21,22 @@ sealed class FiltersItemDisplayable {
         val code: String,
         val name: String,
         val type: String,
+        val country: String,
         val filtered: Boolean
     ) : FiltersAppliableItem() {
+      val logoPath: String
+        get() = Team(
+            code = code,
+            type = type,
+            country = country,
+            id = null,
+            name = null,
+            url = null,
+            city = null,
+            fullname = null,
+            stadium = null,
+            twitter = null).logoPath
+
       override fun isSameAs(other: FiltersItemDisplayable): Boolean {
         return if (other is FiltersTeamDisplayable) {
           this.code == other.code
@@ -42,8 +56,22 @@ sealed class FiltersItemDisplayable {
       val code: String,
       val name: String,
       val fullName: String,
-      val type: String
+      val type: String,
+      val country: String
   ) : FiltersItemDisplayable() {
+    val logoPath: String
+      get() = Team(
+          code = code,
+          type = type,
+          country = country,
+          id = null,
+          name = null,
+          url = null,
+          city = null,
+          fullname = null,
+          stadium = null,
+          twitter = null).logoPath
+
     override fun isSameAs(other: FiltersItemDisplayable): Boolean {
       return if (other is TeamSearchResultDisplayable) {
         this.code == other.code
@@ -59,7 +87,8 @@ sealed class FiltersItemDisplayable {
             code = checkNotNull(team.code) { "Team code is null" },
             name = checkNotNull(team.name) { "Team name is null" },
             fullName = checkNotNull(team.fullname) { "Team fullname is null" },
-            type = checkNotNull(team.type) { "Team type is null" }
+            type = checkNotNull(team.type) { "Team type is null" },
+            country = checkNotNull(team.country) { "Country is null" }
         )
       }
     }

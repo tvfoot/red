@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
   <data>
@@ -32,12 +33,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
+        android:drawablePadding="4dp"
         android:paddingBottom="4dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingTop="4dp"
         android:text="@{team.name}"
         android:textColor="@color/colorGrayDark"
+        app:tvFootTeamLogoPathLeftDrawable="@{team.logoPath}"
         tools:text="League 1"
         />
 

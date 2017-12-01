@@ -7,7 +7,6 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
 import com.benoitquenaudon.tvfoot.red.util.MatchId
 import com.benoitquenaudon.tvfoot.red.util.WillBeNotified
 import com.benoitquenaudon.tvfoot.red.util.formatter
-import com.benoitquenaudon.tvfoot.red.util.stripAccents
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Calendar
@@ -58,11 +57,11 @@ data class MatchRowDisplayable private constructor(
           tags = parseTags(match),
           homeTeam = TeamRowDisplayable(
               match.homeTeam.name,
-              parseTeamLogoPath(match.homeTeam),
+              match.homeTeam.logoPath,
               match.homeTeam.code),
           awayTeam = TeamRowDisplayable(
               match.awayTeam.name,
-              parseTeamLogoPath(match.awayTeam),
+              match.awayTeam.logoPath,
               match.awayTeam.code),
           willBeNotified = willBeNotified
       )
@@ -131,22 +130,6 @@ private fun isMatchLive(startAt: Date): Boolean {
 
   return now in startTimeInMillis..(startTimeInMillis + TimeUnit.MINUTES.toMillis(105))
 }
-
-private fun parseTeamLogoPath(team: Team): String =
-    if (team.code == null || team.type == null) {
-      "/images/teams/default/large/default.png"
-    } else {
-      val type = checkNotNull(team.type) { "team's type should not be null" }
-      val code = checkNotNull(team.code) { "team's code should not be null" }
-      when (type) {
-        "nation" -> String.format("/images/teams/nations/large/%s.png", code.toLowerCase())
-        "club" -> {
-          val country = checkNotNull(team.country) { "team's country should not be null" }
-          "/images/teams/${country.stripAccents()}/large/${code.toLowerCase()}.png"
-        }
-        else -> throw IllegalStateException("Unknown type " + type)
-      }
-    }
 
 private fun parseHomeTeamDrawableName(homeTeam: Team): String = homeTeam.code ?: Team.DEFAULT_CODE
 

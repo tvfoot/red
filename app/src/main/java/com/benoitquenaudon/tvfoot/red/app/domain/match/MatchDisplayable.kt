@@ -7,8 +7,6 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.BroadcasterRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable
-import com.benoitquenaudon.tvfoot.red.util.PreConditions.checkNotNull
-import com.benoitquenaudon.tvfoot.red.util.stripAccents
 import kotlinx.android.parcel.Parcelize
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -73,8 +71,8 @@ data class MatchDisplayable(
           parseMatchDay(match.label, match.matchDay),
           isMatchLive(match.startAt),
           parseStartTimeInText(match.startAt),
-          parseTeamLogoPath(match.homeTeam),
-          parseTeamLogoPath(match.awayTeam),
+          match.homeTeam.logoPath,
+          match.awayTeam.logoPath,
           parseLocation(match),
           match.id)
     }
@@ -117,22 +115,6 @@ data class MatchDisplayable(
 
     private fun parseStartTimeInText(startAt: Date): String =
         fullTextDateFormat.get().format(startAt).capitalize()
-
-    private fun parseTeamLogoPath(team: Team): String =
-        if (team.code == null || team.type == null) {
-          "/images/teams/default/large/default.png"
-        } else {
-          val type = checkNotNull(team.type, "team's type should not be null")
-          val code = checkNotNull(team.code, "team's code should not be null")
-          when (type) {
-            "nation" -> "/images/teams/nations/large/${code.toLowerCase()}.png"
-            "club" -> {
-              val country = checkNotNull(team.country) { "team's country should not be null" }
-              "/images/teams/${country.stripAccents()}/large/${code.toLowerCase()}.png"
-            }
-            else -> throw IllegalStateException("Unkown type " + type)
-          }
-        }
 
     private fun parseLocation(match: Match): String? = match.place
   }

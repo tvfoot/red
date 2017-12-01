@@ -84,6 +84,7 @@ sealed class FiltersViewHolder<out B : ViewDataBinding, in T : FiltersItemDispla
     }
 
     override fun unbind() {
+      binding.filterTeamResultName.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
       binding.handler = null
     }
   }

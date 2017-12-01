@@ -1,6 +1,9 @@
 package com.benoitquenaudon.tvfoot.red.app.common
 
 import android.databinding.BindingAdapter
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
@@ -8,6 +11,35 @@ import android.widget.TextView
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.api.TvfootService
+import com.squareup.picasso.Picasso.LoadedFrom
+import com.squareup.picasso.Target
+
+@BindingAdapter("tvFootTeamLogoPathLeftDrawable")
+fun setTvFootTeamLogoToLeftDrawable(textView: TextView, logoPath: String?) {
+  if (logoPath == null) return
+
+  val mediumLogoPath = logoPath.replace("/large/", "/medium/")
+
+  RedApp.getApp(textView.context)
+      .appComponent
+      .picasso()
+      .load(Uri.parse(TvfootService.BASE_URL + mediumLogoPath))
+      .into(object : Target {
+        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+        }
+
+        override fun onBitmapFailed(errorDrawable: Drawable?) {
+        }
+
+        override fun onBitmapLoaded(bitmap: Bitmap?, from: LoadedFrom?) {
+          if (bitmap == null) return
+
+          textView.setCompoundDrawablesWithIntrinsicBounds(
+              BitmapDrawable(textView.context.resources, bitmap), null, null, null
+          )
+        }
+      })
+}
 
 @BindingAdapter("tvfootTeamLogoPath")
 fun setTvFootTeamLogo(imageView: ImageView, logoPath: String?) {
