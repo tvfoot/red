@@ -318,7 +318,8 @@ class MatchesViewModel @Inject constructor(
             }
           }
         }
-        is ClearFiltersResult -> previousState.copy(filteredTags = emptyMap())
+        is ClearFiltersResult ->
+          previousState.copy(filteredTags = emptyMap(), filteredTeams = emptyList())
         is ToggleFilterCompetitionResult -> {
           previousState.filteredTags.toMutableMap().let {
             if (it.keys.contains(result.tagName)) {

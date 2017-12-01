@@ -24,7 +24,7 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
   fun updateFromState(state: MatchesViewState) {
     filteredTags = state.filteredTags.keys
     loadingTags.set(state.tagsLoading)
-    hasFilters.set(filteredTags.isNotEmpty())
+    hasFilters.set(filteredTags.isNotEmpty() || state.filteredTeams.isNotEmpty())
 
     adapter.setFiltersItems(
         buildFilterList(
