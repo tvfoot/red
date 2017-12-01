@@ -28,4 +28,6 @@
   <string name="team_search_input_hint">Votre équipe…</string>
   <string name="no_match_found">Aucun match trouvé</string>
   <string name="close_menu">Fermer le menu</string>
+  <string name="competitions">Compétitions</string>
+  <string name="teams">Equipes</string>
 </resources>

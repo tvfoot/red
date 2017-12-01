@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterHeaderDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterSearchLoadingRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersCompetitionDisplayable
@@ -16,10 +17,12 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisp
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchInputDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterCompetitionViewHolder
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterSearchLoadingRowViewHolder
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterEmptyViewHolder.FilterSearchLoadingRowViewHolder
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterHeaderViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterTeamSearchResultViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterTeamSearchViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterTeamViewHolder
+import com.benoitquenaudon.tvfoot.red.databinding.FiltersHeaderBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowCompetitionBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamSearchBinding
@@ -62,6 +65,8 @@ class FiltersAdapter @Inject constructor(
         FilterTeamSearchResultViewHolder(binding as FiltersRowTeamSearchResultBinding, this)
       R.layout.row_loading ->
         FilterSearchLoadingRowViewHolder(binding as RowLoadingBinding)
+      R.layout.filters_header ->
+        FilterHeaderViewHolder(binding as FiltersHeaderBinding)
       else -> throw UnsupportedOperationException(
           "don't know how to deal with this viewType: " + viewType)
     }
@@ -74,6 +79,7 @@ class FiltersAdapter @Inject constructor(
         is TeamSearchInputDisplayable -> R.layout.filters_row_team_search
         is TeamSearchResultDisplayable -> R.layout.filters_row_team_search_result
         is FilterSearchLoadingRowDisplayable -> R.layout.row_loading
+        is FilterHeaderDisplayable -> R.layout.filters_header
       }
 
   override fun onBindViewHolder(holder: FiltersViewHolder<*, *>, position: Int) {
@@ -102,6 +108,13 @@ class FiltersAdapter @Inject constructor(
       }
       is FilterSearchLoadingRowViewHolder -> {
         // stateless view, no need to bind anything
+      }
+      is FilterHeaderViewHolder -> {
+        if (item is FilterHeaderDisplayable) {
+          holder.bind(item)
+        } else {
+          throw IllegalStateException("Wrong item for FilterHeaderViewHolder $item")
+        }
       }
       is FilterTeamViewHolder ->
         if (item is FiltersTeamDisplayable) {

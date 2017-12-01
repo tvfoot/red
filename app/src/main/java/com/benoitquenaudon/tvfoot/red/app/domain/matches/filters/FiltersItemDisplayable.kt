@@ -1,5 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
+import android.support.annotation.StringRes
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
 
 sealed class FiltersItemDisplayable {
@@ -67,6 +68,14 @@ sealed class FiltersItemDisplayable {
   object FilterSearchLoadingRowDisplayable : FiltersItemDisplayable() {
     override fun isSameAs(other: FiltersItemDisplayable): Boolean {
       return other is FilterSearchLoadingRowDisplayable
+    }
+  }
+
+  data class FilterHeaderDisplayable(
+      @StringRes val headerStringId: Int
+  ) : FiltersItemDisplayable() {
+    override fun isSameAs(other: FiltersItemDisplayable): Boolean {
+      return other is FilterHeaderDisplayable
     }
   }
 }

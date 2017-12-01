@@ -1,9 +1,11 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
 import android.databinding.ObservableBoolean
+import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.data.entity.FilterTeam
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterHeaderDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterSearchLoadingRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersCompetitionDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersTeamDisplayable
@@ -68,6 +70,20 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
       searchedTeams.filter { searched -> teams.none { it.code == searched.code } }
     }
 
-    return listOf(TeamSearchInputDisplayable) + teamSearchDisplayables + teamFilters + tagFilters
+    // so ugly TODO(benoit) refactor this shit
+    return listOf(TeamSearchInputDisplayable) +
+        teamSearchDisplayables +
+        if (teamFilters.isEmpty()) {
+          emptyList()
+        } else {
+          listOf(FilterHeaderDisplayable(R.string.teams))
+        } +
+        teamFilters +
+        if (tagFilters.isEmpty()) {
+          emptyList()
+        } else {
+          listOf(FilterHeaderDisplayable(R.string.competitions))
+        } +
+        tagFilters
   }
 }
