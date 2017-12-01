@@ -179,10 +179,14 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
 
   override fun onBackPressed() {
     if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
-      binding.drawerLayout.closeDrawer(GravityCompat.END)
+      closeDrawer()
     } else {
       super.onBackPressed()
     }
+  }
+
+  fun closeDrawer() {
+    binding.drawerLayout.closeDrawer(GravityCompat.END)
   }
 
   /**

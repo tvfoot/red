@@ -8,11 +8,13 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseFragment
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesActivity
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearFilters
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearSearchIntent
@@ -31,6 +33,7 @@ import com.benoitquenaudon.tvfoot.red.databinding.FragmentFiltersBinding
 import com.jakewharton.rxbinding2.support.v7.widget.RxToolbar
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
@@ -43,6 +46,9 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
   private val viewModel: MatchesViewModel by lazy(NONE) {
     // we need to use MatchesActivity to get only one instance of the MatchesViewModel
     ViewModelProviders.of(activity!!, viewModelFactory).get(MatchesViewModel::class.java)
+  }
+  private val toolbarClicks: Observable<MenuItem> by lazy {
+    RxToolbar.itemClicks(binding.filtersToolbar).share()
   }
 
   lateinit var binding: FragmentFiltersBinding
@@ -103,9 +109,9 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
       Observable.just(FilterInitialIntent)
 
   private fun clearFilterIntent(): Observable<ClearFilters> =
-      RxToolbar
-          .itemClicks(binding.filtersToolbar)
+      toolbarClicks
           .filter { it.itemId == R.id.action_clear }
+          .doOnNext { Timber.d("CONNARD CLICKED") }
           .map { ClearFilters }
 
   private fun filterClickIntent(): Observable<ToggleFilterIntent> =
@@ -144,6 +150,13 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
             .startWith(bindingModel.hasFilters.get()) // fix for rotation
             .subscribe {
               binding.filtersToolbar.menu.findItem(R.id.action_clear).isVisible = it
+            }
+    )
+    disposables.add(
+        toolbarClicks
+            .filter { it.itemId == R.id.action_close }
+            .subscribe {
+              activity?.let { activity -> (activity as MatchesActivity).closeDrawer() }
             }
     )
   }
