@@ -7,7 +7,8 @@ import javax.inject.Singleton
 /**
  * Implementation of the [BaseSchedulerProvider] making all [Scheduler]s immediate.
  */
-@Singleton class ImmediateSchedulerProvider : BaseSchedulerProvider {
+@Singleton
+class ImmediateSchedulerProvider : BaseSchedulerProvider {
   override fun computation(): Scheduler {
     return Schedulers.trampoline()
   }

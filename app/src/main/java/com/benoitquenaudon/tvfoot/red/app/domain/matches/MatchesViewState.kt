@@ -24,6 +24,7 @@ data class MatchesViewState(
     val tagsError: Throwable? = null,
     val tags: List<Tag> = emptyList(),
     var filteredTags: Map<TagName, TagTargets> = emptyMap(),
+    val searchInput: String = "",
     val searchingTeam: Boolean = false,
     val searchedTeams: List<TeamSearchResultDisplayable> = emptyList(),
     val teams: List<FilterTeam> = emptyList(),

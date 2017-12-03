@@ -88,3 +88,8 @@ fun setDangerText(textView: TextView, textResId: Int) {
 
   textView.setText(textResId)
 }
+
+@BindingAdapter("nonNotifyingText")
+fun setTextWithoutNotify(textView: TextView, text: String) {
+  textView.text = text
+}

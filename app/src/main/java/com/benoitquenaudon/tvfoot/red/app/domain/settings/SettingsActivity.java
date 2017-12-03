@@ -29,6 +29,15 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
+  /**
+   * Helper method to determine if the device has an extra-large screen. For
+   * example, 10" tablets are extra-large.
+   */
+  private static boolean isXLargeTablet(Context context) {
+    return (context.getResources().getConfiguration().screenLayout
+        & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
+  }
+
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     addPreferencesFromResource(R.xml.pref_settings);
@@ -66,15 +75,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
   /** {@inheritDoc} */
   @Override public boolean onIsMultiPane() {
     return isXLargeTablet(this);
-  }
-
-  /**
-   * Helper method to determine if the device has an extra-large screen. For
-   * example, 10" tablets are extra-large.
-   */
-  private static boolean isXLargeTablet(Context context) {
-    return (context.getResources().getConfiguration().screenLayout
-        & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
   }
 
   /** {@inheritDoc} */

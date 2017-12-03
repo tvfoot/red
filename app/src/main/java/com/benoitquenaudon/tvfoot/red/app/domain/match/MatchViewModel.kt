@@ -1,12 +1,12 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match
 
-import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.common.StreamNotification
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationRepository
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchRepository
+import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchAction.LoadMatchAction
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchAction.NotifyMatchStartAction
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent.InitialIntent

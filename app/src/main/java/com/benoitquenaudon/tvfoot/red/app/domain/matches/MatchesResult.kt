@@ -50,12 +50,14 @@ sealed class MatchesResult : MviResult {
     }
 
     sealed class SearchTeamResult : FilterResult() {
-      data class Success(val teams: List<Team>) : SearchTeamResult()
+      data class Success(val searchedInput: String, val teams: List<Team>) : SearchTeamResult()
       data class Failure(val throwable: Throwable) : SearchTeamResult()
       object InFlight : SearchTeamResult()
     }
 
     object ClearSearchResult : FilterResult()
+
+    object ClearSearchInputResult : FilterResult()
 
     @Suppress("DataClassPrivateConstructor")
     data class SearchedTeamSelectedResult private constructor(

@@ -4,11 +4,11 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.benoitquenaudon.tvfoot.red.RedApp
-import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MatchNotificationHelper
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchRepository
+import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction

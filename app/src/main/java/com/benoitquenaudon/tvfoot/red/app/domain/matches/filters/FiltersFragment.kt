@@ -33,7 +33,6 @@ import com.benoitquenaudon.tvfoot.red.databinding.FragmentFiltersBinding
 import com.jakewharton.rxbinding2.support.v7.widget.RxToolbar
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
@@ -111,7 +110,6 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
   private fun clearFilterIntent(): Observable<ClearFilters> =
       toolbarClicks
           .filter { it.itemId == R.id.action_clear }
-          .doOnNext { Timber.d("CONNARD CLICKED") }
           .map { ClearFilters }
 
   private fun filterClickIntent(): Observable<ToggleFilterIntent> =
@@ -124,12 +122,14 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
 
   private fun searchTeamIntent(): Observable<SearchTeamIntent> =
       filtersAdapter.filterSearchInputObservable
+          .distinctUntilChanged()
           .filter { it.length > 2 }
           .debounce(300, MILLISECONDS)
           .map(::SearchTeamIntent)
 
   private fun clearSearchTeamInputIntent(): Observable<ClearSearchIntent> =
       filtersAdapter.filterSearchInputObservable
+          .distinctUntilChanged()
           .filter { it.length < 3 }
           .map { ClearSearchIntent }
 

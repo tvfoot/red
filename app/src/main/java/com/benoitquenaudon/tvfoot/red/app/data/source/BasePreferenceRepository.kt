@@ -6,5 +6,6 @@ import io.reactivex.Single
 interface BasePreferenceRepository {
   // TODO(benoit) should return a Completable, no need for StreamNotification here
   fun saveNotifyMatchStart(matchId: String, notifyMatchStart: Boolean): Single<StreamNotification>
+
   fun loadNotifyMatchStart(matchId: String): Single<Boolean>
 }

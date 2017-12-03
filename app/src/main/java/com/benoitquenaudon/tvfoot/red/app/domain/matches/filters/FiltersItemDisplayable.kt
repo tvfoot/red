@@ -47,7 +47,7 @@ sealed class FiltersItemDisplayable {
     }
   }
 
-  object TeamSearchInputDisplayable : FiltersItemDisplayable() {
+  data class TeamSearchInputDisplayable(val text: String) : FiltersItemDisplayable() {
     override fun isSameAs(
         other: FiltersItemDisplayable) = other is TeamSearchInputDisplayable
   }

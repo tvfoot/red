@@ -58,13 +58,9 @@ sealed class FiltersViewHolder<out B : ViewDataBinding, in T : FiltersItemDispla
       val adapter: FiltersAdapter
   ) : FiltersViewHolder<FiltersRowTeamSearchBinding, TeamSearchInputDisplayable>(binding) {
     override fun bind(item: TeamSearchInputDisplayable) {
-      binding.filter = item
+      binding.input = item
       binding.handler = adapter
       binding.executePendingBindings()
-      // TODO(benoit) clean search result when losing focus
-      // binding.filterInput.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
-      //   Timber.d("CONNARD $hasFocus $v")
-      // }
     }
 
     override fun unbind() {

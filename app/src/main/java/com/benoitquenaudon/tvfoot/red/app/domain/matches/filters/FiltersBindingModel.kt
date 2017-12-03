@@ -30,6 +30,7 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
 
     adapter.setFiltersItems(
         buildFilterList(
+            state.searchInput,
             state.tags,
             state.searchedTeams,
             state.searchingTeam,
@@ -40,6 +41,7 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
   }
 
   private fun buildFilterList(
+      inputText: String,
       tags: List<Tag>,
       searchedTeams: List<TeamSearchResultDisplayable>,
       searchingTeam: Boolean,
@@ -72,7 +74,7 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
     }
 
     // so ugly TODO(benoit) refactor this shit
-    return listOf(TeamSearchInputDisplayable) +
+    return listOf(TeamSearchInputDisplayable(inputText)) +
         teamSearchDisplayables +
         if (teamFilters.isEmpty()) {
           emptyList()

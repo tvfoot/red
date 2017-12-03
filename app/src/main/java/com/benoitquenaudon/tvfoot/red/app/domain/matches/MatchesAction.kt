@@ -22,6 +22,8 @@ sealed class MatchesAction : MviAction {
 
     object ClearSearchAction : FilterAction()
 
+    object ClearSearchInputAction : FilterAction()
+
     data class SearchedTeamSelectedAction(val team: TeamSearchResultDisplayable) : FilterAction()
   }
 }

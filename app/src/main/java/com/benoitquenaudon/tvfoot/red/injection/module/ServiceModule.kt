@@ -9,12 +9,18 @@ import dagger.Provides
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-@Module object ServiceModule {
-  @JvmStatic @Provides @Singleton fun provideTvfootService(retrofit: Retrofit): TvfootService {
+@Module
+object ServiceModule {
+  @JvmStatic
+  @Provides
+  @Singleton
+  fun provideTvfootService(retrofit: Retrofit): TvfootService {
     return retrofit.create(TvfootService::class.java)
   }
 
-  @JvmStatic @Provides fun provideAlarmManager(context: Application): AlarmManager {
+  @JvmStatic
+  @Provides
+  fun provideAlarmManager(context: Application): AlarmManager {
     return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
   }
 }

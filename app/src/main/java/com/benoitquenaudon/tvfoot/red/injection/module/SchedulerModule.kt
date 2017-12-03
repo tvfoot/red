@@ -6,9 +6,13 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-@Module object SchedulerModule {
+@Module
+object SchedulerModule {
 
-  @JvmStatic @Provides @Singleton fun provideSchedulerProvider(): BaseSchedulerProvider {
+  @JvmStatic
+  @Provides
+  @Singleton
+  fun provideSchedulerProvider(): BaseSchedulerProvider {
     return SchedulerProvider()
   }
 }

@@ -26,6 +26,8 @@ sealed class MatchesIntent : MviIntent {
 
     object ClearSearchIntent : FilterIntent()
 
+    object ClearSearchInputIntent : FilterIntent()
+
     data class SearchedTeamSelectedIntent(val team: TeamSearchResultDisplayable) : FilterIntent()
   }
 }
