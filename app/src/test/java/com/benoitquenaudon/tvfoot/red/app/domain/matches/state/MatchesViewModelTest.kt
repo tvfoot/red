@@ -6,7 +6,7 @@ import com.benoitquenaudon.tvfoot.red.app.data.source.FakeMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.FakePreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.FakeTeamRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchTeamIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchInputIntent.SearchTeamIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
 import io.reactivex.Observable
@@ -91,7 +91,7 @@ class MatchesViewModelTest {
 
   @Test
   fun searchTeamIntent_shouldSearchTeams() {
-    stateBinder.processIntents(Observable.just(SearchTeamIntent("")))
+    stateBinder.processIntents(Observable.just(SearchTeamIntent("abc")))
 
     testObserver.assertValueAt(0, MatchesViewState::searchingTeam)
     testObserver.assertValueAt(1) { state ->
