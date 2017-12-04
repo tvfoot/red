@@ -12,7 +12,7 @@ android {
     minSdkVersion rootProject.config.minSdkVersion
     targetSdkVersion rootProject.config.targetSdkVersion
     versionCode Integer.parseInt(System.getenv('CIRCLE_BUILD_NUM') ?: "153")
-    versionName '1.0'
+    versionName rootProject.config.versionName
     testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     vectorDrawables {
       useSupportLibrary true
