@@ -2,12 +2,15 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviAction
+import com.benoitquenaudon.tvfoot.red.util.MatchId
 import com.benoitquenaudon.tvfoot.red.util.TeamCode
 
 sealed class MatchesAction : MviAction {
   object RefreshAction : MatchesAction()
 
   data class LoadNextPageAction(val pageIndex: Int) : MatchesAction()
+
+  data class RefreshNotificationStatusAction(val matchId: MatchId) : MatchesAction()
 
   sealed class FilterAction : MatchesAction() {
     data class ToggleFilterCompetitionAction(val tagName: String) : FilterAction()

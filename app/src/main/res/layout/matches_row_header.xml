@@ -5,7 +5,6 @@
     >
 
   <data>
-
     <variable
         name="dayHeader"
         type="com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.HeaderRowDisplayable"

@@ -18,6 +18,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAct
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ToggleFilterTeamAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadNextPageAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.RefreshAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.RefreshNotificationStatusAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearFilters
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearSearchInputIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.FilterInitialIntent
@@ -29,6 +30,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterInt
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.LoadNextPageIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshNotificationStatusIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ClearFiltersResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ClearSearchInputResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.LoadTagsResult
@@ -39,6 +41,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterRes
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterCompetitionResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterTeamResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadNextPageResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshNotificationStatusResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
@@ -116,6 +119,7 @@ class MatchesViewModel @Inject constructor(
         is ClearSearchIntent -> ClearSearchAction
         is SearchedTeamSelectedIntent -> SearchedTeamSelectedAction(intent.team)
         is ClearSearchInputIntent -> ClearSearchInputAction
+        is RefreshNotificationStatusIntent -> RefreshNotificationStatusAction(intent.matchId)
       }
 
   private val refreshTransformer: ObservableTransformer<RefreshAction, RefreshResult>
@@ -135,7 +139,7 @@ class MatchesViewModel @Inject constructor(
                       .map { matchId to it }
                 }.toMap(),
             BiFunction<List<Match>,
-                Map<String, WillBeNotified>,
+                Map<MatchId, WillBeNotified>,
                 Pair<List<Match>, Map<MatchId, WillBeNotified>>>(::Pair)
         )
             .toObservable()
@@ -164,7 +168,7 @@ class MatchesViewModel @Inject constructor(
                       .map { matchId to it }
                 }.toMap(),
             BiFunction<List<Match>,
-                Map<String, WillBeNotified>,
+                Map<MatchId, WillBeNotified>,
                 Pair<List<Match>, Map<MatchId, WillBeNotified>>>(::Pair)
         )
             .toObservable()
@@ -176,6 +180,17 @@ class MatchesViewModel @Inject constructor(
             .observeOn(schedulerProvider.ui())
             .startWith(LoadNextPageResult.InFlight)
       }
+    }
+
+  private val refreshNotificationStatusTransformer: ObservableTransformer<RefreshNotificationStatusAction, RefreshNotificationStatusResult>
+    get() = ObservableTransformer { actions: Observable<RefreshNotificationStatusAction> ->
+      actions
+          .map(RefreshNotificationStatusAction::matchId)
+          .flatMapSingle { matchId ->
+            preferenceRepository
+                .loadNotifyMatchStart(matchId)
+                .map { RefreshNotificationStatusResult(matchId, it) }
+          }
     }
 
   private val loadTagsTransformer: ObservableTransformer<LoadTagsAction, LoadTagsResult>
@@ -244,7 +259,9 @@ class MatchesViewModel @Inject constructor(
       actions.publish { shared ->
         Observable.merge<MatchesResult>(
             shared.ofType(RefreshAction::class.java).compose(refreshTransformer),
-            shared.ofType(LoadNextPageAction::class.java).compose(loadNextPageTransformer)
+            shared.ofType(LoadNextPageAction::class.java).compose(loadNextPageTransformer),
+            shared.ofType(RefreshNotificationStatusAction::class.java)
+                .compose(refreshNotificationStatusTransformer)
         ).mergeWith(
             Observable.merge<MatchesResult>(
                 shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
@@ -274,7 +291,8 @@ class MatchesViewModel @Inject constructor(
                   v !is SearchTeamAction &&
                   v !is ClearSearchAction &&
                   v !is SearchedTeamSelectedAction &&
-                  v !is ClearSearchInputAction
+                  v !is ClearSearchInputAction &&
+                  v !is RefreshNotificationStatusAction
             }.flatMap { w ->
               Observable.error<MatchesResult>(
                   IllegalArgumentException("Unknown Action type: " + w))
@@ -396,6 +414,16 @@ class MatchesViewModel @Inject constructor(
               searchedTeams = emptyList(),
               searchInput = ""
           )
+        is RefreshNotificationStatusResult -> {
+          val newMatches = previousState.matches.map { match ->
+            if (match.matchId == result.matchId) {
+              match.copy(willBeNotified = result.willBeNotified)
+            } else {
+              match
+            }
+          }
+          previousState.copy(matches = newMatches)
+        }
       }
     }
   }

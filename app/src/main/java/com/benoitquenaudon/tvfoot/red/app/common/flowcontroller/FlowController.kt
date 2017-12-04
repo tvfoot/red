@@ -16,8 +16,8 @@ class FlowController @Inject constructor(private val firebaseAnalytics: Firebase
     navigate(FlowIntentFactory.toMatchesIntent())
   }
 
-  fun toMatch(matchId: String) {
-    navigate(FlowIntentFactory.toMatchIntent(matchId))
+  fun toMatchForResult(matchId: String, requestCode: Int) {
+    navigateForResult(FlowIntentFactory.toMatchIntent(matchId), requestCode)
   }
 
   fun toSettings() {
@@ -27,6 +27,11 @@ class FlowController @Inject constructor(private val firebaseAnalytics: Firebase
   private fun navigate(intent: Intent) {
     logNavigation(intent)
     activity.startActivity(intent)
+  }
+
+  private fun navigateForResult(intent: Intent, requestCode: Int) {
+    logNavigation(intent)
+    activity.startActivityForResult(intent, requestCode)
   }
 
   private fun logNavigation(intent: Intent) {

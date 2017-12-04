@@ -2,12 +2,15 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviIntent
+import com.benoitquenaudon.tvfoot.red.util.MatchId
 import com.benoitquenaudon.tvfoot.red.util.TeamCode
 
 sealed class MatchesIntent : MviIntent {
   object InitialIntent : MatchesIntent()
 
   object RefreshIntent : MatchesIntent()
+
+  data class RefreshNotificationStatusIntent(val matchId: MatchId) : MatchesIntent()
 
   data class LoadNextPageIntent(val pageIndex: Int) : MatchesIntent()
 
