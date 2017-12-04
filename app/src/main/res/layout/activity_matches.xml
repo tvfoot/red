@@ -94,10 +94,9 @@
         android:id="@+id/filters"
         android:layout_width="300dp"
         android:layout_height="match_parent"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
         android:clickable="true"
         android:focusable="true"
-        tools:ignore="RtlHardcoded"
         />
   </android.support.v4.widget.DrawerLayout>
 </layout>
