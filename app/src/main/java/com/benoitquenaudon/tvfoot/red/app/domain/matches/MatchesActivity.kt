@@ -1,6 +1,5 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -123,9 +122,8 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
         else -> super.onOptionsItemSelected(item)
       }
 
-  @SuppressLint("RtlHardcoded")
   private fun openFiltersDrawer() {
-    binding.drawerLayout.openDrawer(Gravity.RIGHT)
+    binding.drawerLayout.openDrawer(Gravity.END)
   }
 
   private fun bind() {
