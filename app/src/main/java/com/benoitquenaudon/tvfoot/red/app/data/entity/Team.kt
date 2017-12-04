@@ -1,5 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.data.entity
 
+import com.benoitquenaudon.tvfoot.red.util.stripAccents
+
 data class Team(
     val id: String?,
     val code: String?,
@@ -18,4 +20,20 @@ data class Team(
   companion object Constant {
     val DEFAULT_CODE = "default"
   }
+
+  val logoPath: String
+    get() = if (code == null || type == null) {
+      "/images/teams/default/large/default.png"
+    } else {
+      val type = checkNotNull(type) { "team's type should not be null" }
+      val code = checkNotNull(code) { "team's code should not be null" }
+      when (type) {
+        "nation" -> String.format("/images/teams/nations/large/%s.png", code.toLowerCase())
+        "club" -> {
+          val country = checkNotNull(country) { "team's country should not be null" }
+          "/images/teams/${country.stripAccents()}/large/${code.toLowerCase()}.png"
+        }
+        else -> throw IllegalStateException("Unknown type " + type)
+      }
+    }
 }

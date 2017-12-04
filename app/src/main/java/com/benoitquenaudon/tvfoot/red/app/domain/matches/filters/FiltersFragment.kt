@@ -8,16 +8,17 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseFragment
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesActivity
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearFilters
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearSearchIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.FilterInitialIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchTeamIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchInputIntent.SearchTeamIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchedTeamSelectedIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent.ToggleFilterCompetitionIntent
@@ -43,6 +44,9 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
   private val viewModel: MatchesViewModel by lazy(NONE) {
     // we need to use MatchesActivity to get only one instance of the MatchesViewModel
     ViewModelProviders.of(activity!!, viewModelFactory).get(MatchesViewModel::class.java)
+  }
+  private val toolbarClicks: Observable<MenuItem> by lazy {
+    RxToolbar.itemClicks(binding.filtersToolbar).share()
   }
 
   lateinit var binding: FragmentFiltersBinding
@@ -93,8 +97,7 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
         ),
         Observable.merge(
             searchedTeamSelectedIntent(),
-            searchTeamIntent(),
-            clearSearchTeamInputIntent()
+            searchTeamIntent()
         )
     )
   }
@@ -103,8 +106,7 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
       Observable.just(FilterInitialIntent)
 
   private fun clearFilterIntent(): Observable<ClearFilters> =
-      RxToolbar
-          .itemClicks(binding.filtersToolbar)
+      toolbarClicks
           .filter { it.itemId == R.id.action_clear }
           .map { ClearFilters }
 
@@ -118,14 +120,16 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
 
   private fun searchTeamIntent(): Observable<SearchTeamIntent> =
       filtersAdapter.filterSearchInputObservable
-          .filter { it.length > 2 }
-          .debounce(300, MILLISECONDS)
+          .distinctUntilChanged()
+          .publish { shared ->
+            Observable.merge(
+                // Only debounce for more than 2 because search doesn't happen for lesser.
+                // should probably TODO(benoit) put that logic in the ViewModel
+                shared.filter { it.length > 2 }.debounce(300, MILLISECONDS),
+                shared.filter { it.length <= 2 }
+            )
+          }
           .map(::SearchTeamIntent)
-
-  private fun clearSearchTeamInputIntent(): Observable<ClearSearchIntent> =
-      filtersAdapter.filterSearchInputObservable
-          .filter { it.length < 3 }
-          .map { ClearSearchIntent }
 
   private fun searchedTeamSelectedIntent(): Observable<SearchedTeamSelectedIntent> {
     return filtersAdapter.searchedTeamClickObservable
@@ -144,6 +148,13 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
             .startWith(bindingModel.hasFilters.get()) // fix for rotation
             .subscribe {
               binding.filtersToolbar.menu.findItem(R.id.action_clear).isVisible = it
+            }
+    )
+    disposables.add(
+        toolbarClicks
+            .filter { it.itemId == R.id.action_close }
+            .subscribe {
+              activity?.let { activity -> (activity as MatchesActivity).closeDrawer() }
             }
     )
   }

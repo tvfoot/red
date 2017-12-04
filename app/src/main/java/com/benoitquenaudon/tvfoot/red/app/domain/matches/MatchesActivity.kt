@@ -14,6 +14,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.EditText
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
@@ -96,7 +98,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
 
     menu.findItem(R.id.matches_filters_item).actionView
         .findViewById<View>(R.id.filters_usage_badge)
-        .visibility = if (bindingModel.hasActiveFilters.get()) View.VISIBLE else View.GONE
+        .visibility = if (bindingModel.hasActiveFilters.get()) VISIBLE else GONE
     return super.onPrepareOptionsMenu(menu)
   }
 
@@ -177,10 +179,14 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
 
   override fun onBackPressed() {
     if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
-      binding.drawerLayout.closeDrawer(GravityCompat.END)
+      closeDrawer()
     } else {
       super.onBackPressed()
     }
+  }
+
+  fun closeDrawer() {
+    binding.drawerLayout.closeDrawer(GravityCompat.END)
   }
 
   /**

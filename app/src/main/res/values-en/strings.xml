@@ -26,4 +26,9 @@
   <string name="filters_clearAll">Clear all</string>
   <string name="notification_match_starting_channel_name">Start of games</string>
   <string name="team_search_input_hint">Your team…</string>
+  <string name="no_match_found">No match found.</string>
+  <string name="close_menu">Close menu</string>
+  <string name="competitions">Competitions</string>
+  <string name="teams">Teams</string>
+  <string name="add_team_to_filter">Add this team to the filter</string>
 </resources>

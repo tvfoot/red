@@ -8,20 +8,29 @@ import dagger.Module
 import dagger.Provides
 import io.reactivex.subjects.PublishSubject
 
-@Module object RxFactoryModule {
-  @JvmStatic @Provides fun provideMatchesIntentSubject(): PublishSubject<MatchesIntent> {
+@Module
+object RxFactoryModule {
+  @JvmStatic
+  @Provides
+  fun provideMatchesIntentSubject(): PublishSubject<MatchesIntent> {
     return PublishSubject.create<MatchesIntent>()
   }
 
-  @JvmStatic @Provides fun provideMatchesViewStateSubject(): PublishSubject<MatchesViewState> {
+  @JvmStatic
+  @Provides
+  fun provideMatchesViewStateSubject(): PublishSubject<MatchesViewState> {
     return PublishSubject.create<MatchesViewState>()
   }
 
-  @JvmStatic @Provides fun provideMatchIntentSubject(): PublishSubject<MatchIntent> {
+  @JvmStatic
+  @Provides
+  fun provideMatchIntentSubject(): PublishSubject<MatchIntent> {
     return PublishSubject.create<MatchIntent>()
   }
 
-  @JvmStatic @Provides fun provideMatchViewStateSubject(): PublishSubject<MatchViewState> {
+  @JvmStatic
+  @Provides
+  fun provideMatchViewStateSubject(): PublishSubject<MatchViewState> {
     return PublishSubject.create<MatchViewState>()
   }
 }

@@ -8,18 +8,21 @@ import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.BasePreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseTeamRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ClearFiltersAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ClearSearchAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ClearSearchInputAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.LoadTagsAction
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchTeamAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchInputAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchInputAction.ClearSearchAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchInputAction.SearchTeamAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchedTeamSelectedAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ToggleFilterCompetitionAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ToggleFilterTeamAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadNextPageAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.RefreshAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearFilters
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearSearchIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearSearchInputIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.FilterInitialIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchTeamIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchInputIntent.ClearSearchIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchInputIntent.SearchTeamIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchedTeamSelectedIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent.ToggleFilterCompetitionIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent.ToggleFilterTeamIntent
@@ -27,9 +30,11 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.InitialIn
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.LoadNextPageIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ClearFiltersResult
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ClearSearchResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ClearSearchInputResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.LoadTagsResult
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchTeamResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchInputResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchInputResult.ClearSearchResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchInputResult.SearchTeamResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchedTeamSelectedResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterCompetitionResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterTeamResult
@@ -110,6 +115,7 @@ class MatchesViewModel @Inject constructor(
         is SearchTeamIntent -> SearchTeamAction(intent.input)
         is ClearSearchIntent -> ClearSearchAction
         is SearchedTeamSelectedIntent -> SearchedTeamSelectedAction(intent.team)
+        is ClearSearchInputIntent -> ClearSearchInputAction
       }
 
   private val refreshTransformer: ObservableTransformer<RefreshAction, RefreshResult>
@@ -141,8 +147,7 @@ class MatchesViewModel @Inject constructor(
       }
     }
 
-  private
-  val loadNextPageTransformer: ObservableTransformer<LoadNextPageAction, LoadNextPageResult>
+  private val loadNextPageTransformer: ObservableTransformer<LoadNextPageAction, LoadNextPageResult>
     get() = ObservableTransformer { actions: Observable<LoadNextPageAction> ->
       actions.flatMap { (pageIndex) ->
         val matches: Observable<Match> = matchesRepository
@@ -173,8 +178,7 @@ class MatchesViewModel @Inject constructor(
       }
     }
 
-  private
-  val loadTagsTransformer: ObservableTransformer<LoadTagsAction, LoadTagsResult>
+  private val loadTagsTransformer: ObservableTransformer<LoadTagsAction, LoadTagsResult>
     get() = ObservableTransformer { actions: Observable<LoadTagsAction> ->
       actions.flatMap {
         matchesRepository.loadTags()
@@ -187,51 +191,55 @@ class MatchesViewModel @Inject constructor(
       }
     }
 
-  private val searchTeamTransformer: ObservableTransformer<SearchTeamAction, SearchTeamResult>
-    get() = ObservableTransformer { actions: Observable<SearchTeamAction> ->
-      actions.flatMap { (searchInput) ->
-        teamRepository.findTeams(searchInput)
-            .toObservable()
-            .map<SearchTeamResult>(SearchTeamResult::Success)
-            .onErrorReturn(SearchTeamResult::Failure)
-            .subscribeOn(schedulerProvider.io())
-            .observeOn(schedulerProvider.ui())
-            .startWith(SearchTeamResult.InFlight)
+  private val searchInputTransformer: ObservableTransformer<SearchInputAction, SearchInputResult>
+    get() = ObservableTransformer { actions: Observable<SearchInputAction> ->
+      actions.switchMap { action ->
+        when (action) {
+          is SearchTeamAction -> {
+            if (action.input.length > 2) {
+              teamRepository.findTeams(action.input)
+                  .toObservable()
+                  .map<SearchTeamResult>({ teams -> SearchTeamResult.Success(action.input, teams) })
+                  .onErrorReturn(SearchTeamResult::Failure)
+                  .subscribeOn(schedulerProvider.io())
+                  .observeOn(schedulerProvider.ui())
+                  .startWith(SearchTeamResult.InFlight(action.input))
+            } else {
+              Observable.just(SearchTeamResult.Success(action.input, emptyList()))
+            }
+          }
+          is ClearSearchAction -> Observable.just(ClearSearchResult)
+        }
       }
     }
 
-  private
-  val clearFilterTransformer: ObservableTransformer<ClearFiltersAction, ClearFiltersResult>
+  private val clearFilterTransformer: ObservableTransformer<ClearFiltersAction, ClearFiltersResult>
     get() = ObservableTransformer { actions: Observable<ClearFiltersAction> ->
       actions.map { ClearFiltersResult }
     }
 
-  private
-  val toggleFilterCompetitionTransformer: ObservableTransformer<ToggleFilterCompetitionAction, ToggleFilterCompetitionResult>
+  private val toggleFilterCompetitionTransformer: ObservableTransformer<ToggleFilterCompetitionAction, ToggleFilterCompetitionResult>
     get() = ObservableTransformer { actions: Observable<ToggleFilterCompetitionAction> ->
       actions.map { ToggleFilterCompetitionResult(it.tagName) }
     }
 
-  private
-  val toggleFilterTeamTransformer: ObservableTransformer<ToggleFilterTeamAction, ToggleFilterTeamResult>
+  private val toggleFilterTeamTransformer: ObservableTransformer<ToggleFilterTeamAction, ToggleFilterTeamResult>
     get() = ObservableTransformer { actions: Observable<ToggleFilterTeamAction> ->
       actions.map { ToggleFilterTeamResult(it.teamCode) }
     }
 
-  private
-  val clearSearchTransformer: ObservableTransformer<ClearSearchAction, ClearSearchResult>
-    get() = ObservableTransformer { actions: Observable<ClearSearchAction> ->
-      actions.map { ClearSearchResult }
+  private val clearSearchInputTransformer: ObservableTransformer<ClearSearchInputAction, ClearSearchInputResult>
+    get() = ObservableTransformer { actions: Observable<ClearSearchInputAction> ->
+      actions
+          .map { ClearSearchInputResult }
     }
 
-  private
-  val searchedTeamSelectedTransformer: ObservableTransformer<SearchedTeamSelectedAction, SearchedTeamSelectedResult>
+  private val searchedTeamSelectedTransformer: ObservableTransformer<SearchedTeamSelectedAction, SearchedTeamSelectedResult>
     get() = ObservableTransformer { actions: Observable<SearchedTeamSelectedAction> ->
       actions.map { SearchedTeamSelectedResult(it.team) }
     }
 
-  private
-  val actionToResultTransformer: ObservableTransformer<MatchesAction, MatchesResult>
+  private val actionToResultTransformer: ObservableTransformer<MatchesAction, MatchesResult>
     get() = ObservableTransformer { actions: Observable<MatchesAction> ->
       actions.publish { shared ->
         Observable.merge<MatchesResult>(
@@ -248,10 +256,11 @@ class MatchesViewModel @Inject constructor(
             )
         ).mergeWith(
             Observable.merge<MatchesResult>(
-                shared.ofType(SearchTeamAction::class.java).compose(searchTeamTransformer),
-                shared.ofType(ClearSearchAction::class.java).compose(clearSearchTransformer),
+                shared.ofType(SearchInputAction::class.java).compose(searchInputTransformer),
                 shared.ofType(SearchedTeamSelectedAction::class.java)
-                    .compose(searchedTeamSelectedTransformer)
+                    .compose(searchedTeamSelectedTransformer),
+                shared.ofType(ClearSearchInputAction::class.java).compose(
+                    clearSearchInputTransformer)
             )
         ).mergeWith(
             // Error for not implemented actions
@@ -264,7 +273,8 @@ class MatchesViewModel @Inject constructor(
                   v !is LoadTagsAction &&
                   v !is SearchTeamAction &&
                   v !is ClearSearchAction &&
-                  v !is SearchedTeamSelectedAction
+                  v !is SearchedTeamSelectedAction &&
+                  v !is ClearSearchInputAction
             }.flatMap { w ->
               Observable.error<MatchesResult>(
                   IllegalArgumentException("Unknown Action type: " + w))
@@ -318,7 +328,8 @@ class MatchesViewModel @Inject constructor(
             }
           }
         }
-        is ClearFiltersResult -> previousState.copy(filteredTags = emptyMap())
+        is ClearFiltersResult ->
+          previousState.copy(filteredTags = emptyMap(), filteredTeams = emptyList())
         is ToggleFilterCompetitionResult -> {
           previousState.filteredTags.toMutableMap().let {
             if (it.keys.contains(result.tagName)) {
@@ -361,22 +372,29 @@ class MatchesViewModel @Inject constructor(
         is SearchTeamResult ->
           when (result) {
             is SearchTeamResult.InFlight ->
-              previousState.copy(searchingTeam = true)
+              previousState.copy(
+                  searchingTeam = true,
+                  searchInput = result.searchedInput)
             is SearchTeamResult.Failure ->
               previousState.copy(searchingTeam = false, error = result.throwable)
             is SearchTeamResult.Success ->
               previousState.copy(
                   searchingTeam = false,
-                  searchedTeams = result.teams.map { TeamSearchResultDisplayable(it) }
+                  searchedTeams = result.teams.map { TeamSearchResultDisplayable(it) },
+                  searchInput = result.searchedInput
               )
           }
         is ClearSearchResult ->
-          previousState.copy(searchingTeam = false, searchedTeams = emptyList())
+          previousState.copy(
+              searchingTeam = false,
+              searchedTeams = emptyList())
+        is ClearSearchInputResult -> previousState.copy()
         is SearchedTeamSelectedResult ->
           previousState.copy(
-              // insert at 0 for UI
               teams = listOf(result.team) + previousState.teams,
-              filteredTeams = previousState.filteredTeams + result.team.code
+              filteredTeams = previousState.filteredTeams + result.team.code,
+              searchedTeams = emptyList(),
+              searchInput = ""
           )
       }
     }

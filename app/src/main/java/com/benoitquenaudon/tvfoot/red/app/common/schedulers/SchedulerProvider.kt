@@ -8,7 +8,8 @@ import javax.inject.Singleton
 /**
  * Provides different types of schedulers.
  */
-@Singleton class SchedulerProvider : BaseSchedulerProvider {
+@Singleton
+class SchedulerProvider : BaseSchedulerProvider {
   override fun computation(): Scheduler {
     return Schedulers.computation()
   }

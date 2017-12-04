@@ -20,9 +20,12 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.Date
 import javax.inject.Singleton
 
-@Module object NetworkModule {
+@Module
+object NetworkModule {
 
-  @JvmStatic @Provides @Singleton
+  @JvmStatic
+  @Provides
+  @Singleton
   fun provideMoshi(): Moshi {
     return Moshi.Builder()
         .add(ApplicationJsonAdapterFactory.INSTANCE)
@@ -30,17 +33,23 @@ import javax.inject.Singleton
         .build()
   }
 
-  @JvmStatic @Provides @Singleton
+  @JvmStatic
+  @Provides
+  @Singleton
   fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
     return HttpLoggingInterceptor().setLevel(if (BuildConfig.DEBUG) BODY else NONE)
   }
 
-  @JvmStatic @Provides @Singleton
+  @JvmStatic
+  @Provides
+  @Singleton
   fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
     return OkHttpClient.Builder().addNetworkInterceptor(httpLoggingInterceptor).build()
   }
 
-  @JvmStatic @Provides @Singleton
+  @JvmStatic
+  @Provides
+  @Singleton
   fun provideRetrofit(moshi: Moshi, okHttpClient: OkHttpClient): Retrofit {
     return Retrofit.Builder().addConverterFactory(MoshiConverterFactory.create(moshi))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -49,12 +58,16 @@ import javax.inject.Singleton
         .build()
   }
 
-  @JvmStatic @Provides @Singleton
+  @JvmStatic
+  @Provides
+  @Singleton
   fun provideOkHttp3Downloader(okHttpClient: OkHttpClient): OkHttp3Downloader {
     return OkHttp3Downloader(okHttpClient)
   }
 
-  @JvmStatic @Provides @Singleton
+  @JvmStatic
+  @Provides
+  @Singleton
   fun providePicasso(context: Application, okHttp3Downloader: OkHttp3Downloader): Picasso {
     return Picasso.Builder(context).downloader(okHttp3Downloader).build()
   }

@@ -49,13 +49,17 @@ sealed class MatchesResult : MviResult {
       object InFlight : LoadTagsResult()
     }
 
-    sealed class SearchTeamResult : FilterResult() {
-      data class Success(val teams: List<Team>) : SearchTeamResult()
-      data class Failure(val throwable: Throwable) : SearchTeamResult()
-      object InFlight : SearchTeamResult()
+    sealed class SearchInputResult : FilterResult() {
+      sealed class SearchTeamResult : SearchInputResult() {
+        data class Success(val searchedInput: String, val teams: List<Team>) : SearchTeamResult()
+        data class Failure(val throwable: Throwable) : SearchTeamResult()
+        data class InFlight(val searchedInput: String) : SearchTeamResult()
+      }
+
+      object ClearSearchResult : SearchInputResult()
     }
 
-    object ClearSearchResult : FilterResult()
+    object ClearSearchInputResult : FilterResult()
 
     @Suppress("DataClassPrivateConstructor")
     data class SearchedTeamSelectedResult private constructor(
@@ -69,7 +73,8 @@ sealed class MatchesResult : MviResult {
               FilterTeam(
                   code = searchedTeam.code,
                   type = searchedTeam.type,
-                  name = searchedTeam.name
+                  name = searchedTeam.name,
+                  country = searchedTeam.country
               )
           )
         }

@@ -5,9 +5,12 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-@Module object LibrariesModule {
+@Module
+object LibrariesModule {
 
-  @JvmStatic @Provides @Singleton
+  @JvmStatic
+  @Provides
+  @Singleton
   fun provideLibraries(): List<Library> {
     return arrayListOf(
         Library("Android support libraries",

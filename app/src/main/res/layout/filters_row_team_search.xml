@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
   <data>
     <variable
-        name="filter"
+        name="input"
         type="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchInputDisplayable"
         />
     <variable
@@ -22,11 +23,13 @@
         android:id="@+id/filter_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_search_gray_24px"
         android:hint="@string/team_search_input_hint"
         android:imeOptions="actionDone"
         android:inputType="text"
         android:maxLines="1"
         android:onTextChanged="@{handler::onSearchInputChanged}"
+        android:text="@{input.inputText}"
         />
   </LinearLayout>
 </layout>

@@ -18,9 +18,12 @@ sealed class MatchesAction : MviAction {
 
     object LoadTagsAction : FilterAction()
 
-    data class SearchTeamAction(val input: String) : FilterAction()
+    sealed class SearchInputAction : FilterAction() {
+      data class SearchTeamAction(val input: String) : SearchInputAction()
+      object ClearSearchAction : SearchInputAction()
+    }
 
-    object ClearSearchAction : FilterAction()
+    object ClearSearchInputAction : FilterAction()
 
     data class SearchedTeamSelectedAction(val team: TeamSearchResultDisplayable) : FilterAction()
   }

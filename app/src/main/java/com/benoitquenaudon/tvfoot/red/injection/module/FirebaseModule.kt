@@ -8,14 +8,19 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-@Module object FirebaseModule {
+@Module
+object FirebaseModule {
 
-  @JvmStatic @Provides @Singleton
+  @JvmStatic
+  @Provides
+  @Singleton
   fun provideFirebaseAnalytics(context: Application): FirebaseAnalytics {
     return FirebaseAnalytics.getInstance(context)
   }
 
-  @JvmStatic @Provides @Singleton
+  @JvmStatic
+  @Provides
+  @Singleton
   fun provideRedFirebaseAnalytics(firebaseAnalytics: FirebaseAnalytics): BaseRedFirebaseAnalytics {
     return RedFirebaseAnalytics(firebaseAnalytics)
   }

@@ -2,11 +2,13 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterHeaderDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterSearchLoadingRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersCompetitionDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersTeamDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchInputDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
+import com.benoitquenaudon.tvfoot.red.databinding.FiltersHeaderBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowCompetitionBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamSearchBinding
@@ -56,13 +58,9 @@ sealed class FiltersViewHolder<out B : ViewDataBinding, in T : FiltersItemDispla
       val adapter: FiltersAdapter
   ) : FiltersViewHolder<FiltersRowTeamSearchBinding, TeamSearchInputDisplayable>(binding) {
     override fun bind(item: TeamSearchInputDisplayable) {
-      binding.filter = item
+      binding.input = item
       binding.handler = adapter
       binding.executePendingBindings()
-      // TODO(benoit) clean search result when losing focus
-      // binding.filterInput.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
-      //   Timber.d("CONNARD $hasFocus $v")
-      // }
     }
 
     override fun unbind() {
@@ -82,20 +80,34 @@ sealed class FiltersViewHolder<out B : ViewDataBinding, in T : FiltersItemDispla
     }
 
     override fun unbind() {
+      binding.filterTeamResultName.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
       binding.handler = null
     }
   }
 
-  class FilterSearchLoadingRowViewHolder(
-      binding: RowLoadingBinding
-  ) : FiltersViewHolder<RowLoadingBinding, FilterSearchLoadingRowDisplayable>(binding) {
-
-    override fun bind(item: FilterSearchLoadingRowDisplayable) {
-      // nothing to do
+  class FilterHeaderViewHolder(
+      binding: FiltersHeaderBinding
+  ) : FiltersViewHolder<FiltersHeaderBinding, FilterHeaderDisplayable>(binding) {
+    override fun bind(item: FilterHeaderDisplayable) {
+      binding.header = binding.root.context.getString(item.headerStringId)
     }
 
     override fun unbind() {
       // nothing to do
     }
+  }
+
+  sealed class FilterEmptyViewHolder<out B : ViewDataBinding, in T : FiltersItemDisplayable>(
+      binding: B
+  ) : FiltersViewHolder<B, T>(binding) {
+    override fun bind(item: T) {
+    }
+
+    override fun unbind() {
+    }
+
+    class FilterSearchLoadingRowViewHolder(
+        binding: RowLoadingBinding
+    ) : FilterEmptyViewHolder<RowLoadingBinding, FilterSearchLoadingRowDisplayable>(binding)
   }
 }

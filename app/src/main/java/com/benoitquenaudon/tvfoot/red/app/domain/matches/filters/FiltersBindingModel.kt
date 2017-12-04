@@ -1,9 +1,11 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
 import android.databinding.ObservableBoolean
+import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.data.entity.FilterTeam
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterHeaderDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterSearchLoadingRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersCompetitionDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersTeamDisplayable
@@ -24,10 +26,11 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
   fun updateFromState(state: MatchesViewState) {
     filteredTags = state.filteredTags.keys
     loadingTags.set(state.tagsLoading)
-    hasFilters.set(filteredTags.isNotEmpty())
+    hasFilters.set(filteredTags.isNotEmpty() || state.filteredTeams.isNotEmpty())
 
     adapter.setFiltersItems(
         buildFilterList(
+            state.searchInput,
             state.tags,
             state.searchedTeams,
             state.searchingTeam,
@@ -38,6 +41,7 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
   }
 
   private fun buildFilterList(
+      inputText: String,
       tags: List<Tag>,
       searchedTeams: List<TeamSearchResultDisplayable>,
       searchingTeam: Boolean,
@@ -58,6 +62,7 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
               code = it.code,
               name = it.name,
               type = it.type,
+              country = it.country,
               filtered = filteredTeams.contains(it.code)
           )
         }
@@ -68,6 +73,20 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
       searchedTeams.filter { searched -> teams.none { it.code == searched.code } }
     }
 
-    return listOf(TeamSearchInputDisplayable) + teamSearchDisplayables + teamFilters + tagFilters
+    // so ugly TODO(benoit) refactor this shit
+    return listOf(TeamSearchInputDisplayable(inputText)) +
+        teamSearchDisplayables +
+        if (teamFilters.isEmpty()) {
+          emptyList()
+        } else {
+          listOf(FilterHeaderDisplayable(R.string.teams))
+        } +
+        teamFilters +
+        if (tagFilters.isEmpty()) {
+          emptyList()
+        } else {
+          listOf(FilterHeaderDisplayable(R.string.competitions))
+        } +
+        tagFilters
   }
 }

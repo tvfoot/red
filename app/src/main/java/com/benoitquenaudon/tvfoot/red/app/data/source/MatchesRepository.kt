@@ -20,6 +20,6 @@ class MatchesRepository @Inject constructor(
   override fun loadTags(): Single<List<Tag>> = tvfootService.getTags(TagsFilter())
 
   companion object Constant {
-    private val MATCH_PER_PAGE = 100
+    private val MATCH_PER_PAGE = 500
   }
 }

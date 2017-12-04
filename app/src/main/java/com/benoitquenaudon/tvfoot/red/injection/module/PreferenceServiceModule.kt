@@ -6,9 +6,12 @@ import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 
-@Module object PreferenceServiceModule {
+@Module
+object PreferenceServiceModule {
 
-  @JvmStatic @Provides fun provideSharedPreferences(context: Application): SharedPreferences {
+  @JvmStatic
+  @Provides
+  fun provideSharedPreferences(context: Application): SharedPreferences {
     return context.getSharedPreferences("Red", MODE_PRIVATE)
   }
 }
