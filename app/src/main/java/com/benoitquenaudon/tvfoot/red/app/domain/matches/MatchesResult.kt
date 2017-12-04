@@ -49,13 +49,15 @@ sealed class MatchesResult : MviResult {
       object InFlight : LoadTagsResult()
     }
 
-    sealed class SearchTeamResult : FilterResult() {
-      data class Success(val searchedInput: String, val teams: List<Team>) : SearchTeamResult()
-      data class Failure(val throwable: Throwable) : SearchTeamResult()
-      object InFlight : SearchTeamResult()
-    }
+    sealed class SearchInputResult : FilterResult() {
+      sealed class SearchTeamResult : SearchInputResult() {
+        data class Success(val searchedInput: String, val teams: List<Team>) : SearchTeamResult()
+        data class Failure(val throwable: Throwable) : SearchTeamResult()
+        data class InFlight(val searchedInput: String) : SearchTeamResult()
+      }
 
-    object ClearSearchResult : FilterResult()
+      object ClearSearchResult : SearchInputResult()
+    }
 
     object ClearSearchInputResult : FilterResult()
 

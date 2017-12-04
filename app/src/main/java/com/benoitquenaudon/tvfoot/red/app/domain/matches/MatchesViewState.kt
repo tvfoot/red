@@ -66,4 +66,8 @@ data class MatchesViewState(
   companion object {
     fun idle(): MatchesViewState = MatchesViewState()
   }
+
+  override fun toString(): String {
+    return "searchInput is : $searchInput"
+  }
 }

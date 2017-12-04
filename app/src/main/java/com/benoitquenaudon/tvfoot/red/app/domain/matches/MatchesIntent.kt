@@ -22,9 +22,10 @@ sealed class MatchesIntent : MviIntent {
 
     object FilterInitialIntent : FilterIntent()
 
-    data class SearchTeamIntent(val input: String) : FilterIntent()
-
-    object ClearSearchIntent : FilterIntent()
+    sealed class SearchInputIntent : FilterIntent() {
+      data class SearchTeamIntent(val input: String) : SearchInputIntent()
+      object ClearSearchIntent : SearchInputIntent()
+    }
 
     object ClearSearchInputIntent : FilterIntent()
 

@@ -47,9 +47,32 @@ sealed class FiltersItemDisplayable {
     }
   }
 
-  data class TeamSearchInputDisplayable(val text: String) : FiltersItemDisplayable() {
-    override fun isSameAs(
-        other: FiltersItemDisplayable) = other is TeamSearchInputDisplayable
+  /**
+   * We don't want the LayoutManager / DiffUtil and others to repaint our EditText so we cheat.
+   * The reason is the state's inputText is not correctly synced with the UI's input. I don't know
+   * if that is feasible but it sounds like hard.
+   *
+   * We only use a counter for the diffUtil do know if this is a new displayable or not.
+   * We however need the inputText for when the view is recycled and rebound.
+   */
+  data class TeamSearchInputDisplayable private constructor(
+      private val counter: Int
+  ) : FiltersItemDisplayable() {
+    var inputText: String = ""
+
+    override fun isSameAs(other: FiltersItemDisplayable): Boolean {
+      return other is TeamSearchInputDisplayable
+    }
+
+    companion object {
+      private var counter = 0
+
+      operator fun invoke(text: String): TeamSearchInputDisplayable {
+        if (text.isEmpty()) counter++
+
+        return TeamSearchInputDisplayable(counter).apply { inputText = text }
+      }
+    }
   }
 
   data class TeamSearchResultDisplayable(

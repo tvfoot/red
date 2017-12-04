@@ -17,9 +17,9 @@ import com.benoitquenaudon.tvfoot.red.app.common.BaseFragment
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesActivity
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearFilters
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearSearchIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.FilterInitialIntent
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchTeamIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchInputIntent.ClearSearchIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchInputIntent.SearchTeamIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchedTeamSelectedIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent.ToggleFilterCompetitionIntent
@@ -123,15 +123,20 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
   private fun searchTeamIntent(): Observable<SearchTeamIntent> =
       filtersAdapter.filterSearchInputObservable
           .distinctUntilChanged()
-          .filter { it.length > 2 }
-          .debounce(300, MILLISECONDS)
+          .publish { shared ->
+            Observable.merge(
+                shared.filter { it.length > 2 }.debounce(300, MILLISECONDS),
+                shared.filter { it.length <= 2 }
+            )
+          }
           .map(::SearchTeamIntent)
 
   private fun clearSearchTeamInputIntent(): Observable<ClearSearchIntent> =
-      filtersAdapter.filterSearchInputObservable
-          .distinctUntilChanged()
-          .filter { it.length < 3 }
-          .map { ClearSearchIntent }
+      Observable.empty()
+//      filtersAdapter.filterSearchInputObservable
+//          .distinctUntilChanged()
+//          .filter { it.length < 3 }
+//          .map { ClearSearchIntent }
 
   private fun searchedTeamSelectedIntent(): Observable<SearchedTeamSelectedIntent> {
     return filtersAdapter.searchedTeamClickObservable
