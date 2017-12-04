@@ -3,6 +3,7 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.Rect
 import android.os.Bundle
@@ -21,9 +22,11 @@ import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Match.Constant.MATCH_ID
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.LoadNextPageIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshNotificationStatusIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersFragment
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchesBinding
@@ -34,6 +37,7 @@ import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -51,9 +55,12 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   private val binding: ActivityMatchesBinding by lazy(NONE) {
     DataBindingUtil.setContentView<ActivityMatchesBinding>(this, R.layout.activity_matches)
   }
+  private val refreshNotificationStatusSubject =
+      PublishSubject.create<RefreshNotificationStatusIntent>()
 
   companion object {
     private const val FRAGMENT_FILTERS = "fragment:filters"
+    private const val REFRESH_STATUS_ON_RESULT = 33
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,7 +133,9 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     viewModel.processIntents(intents())
 
     disposables.add(adapter.matchRowClickObservable
-        .subscribe { matchRowDisplayable -> flowController.toMatch(matchRowDisplayable.matchId) }
+        .subscribe { matchRowDisplayable ->
+          flowController.toMatchForResult(matchRowDisplayable.matchId, REFRESH_STATUS_ON_RESULT)
+        }
     )
     disposables.add(
         RxObservableBoolean.propertyChanges(bindingModel.areTagsLoaded)
@@ -155,8 +164,12 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     disposables.dispose()
   }
 
-  override fun intents(): Observable<MatchesIntent> =
-      Observable.merge(initialIntent(), refreshIntent(), loadNextPageIntent())
+  override fun intents(): Observable<MatchesIntent> {
+    return Observable.merge(initialIntent(),
+        refreshIntent(),
+        loadNextPageIntent(),
+        refreshNotificationStatus())
+  }
 
   private fun initialIntent(): Observable<InitialIntent> = Observable.just(InitialIntent)
 
@@ -197,7 +210,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
       val focusedView = currentFocus
       if (focusedView is EditText) {
         val outRect = Rect()
-        focusedView.getGlobalVisibleRect(outRect);
+        focusedView.getGlobalVisibleRect(outRect)
         if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
           focusedView.clearFocus()
           hideKeyboard(focusedView)
@@ -205,5 +218,21 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
       }
     }
     return super.dispatchTouchEvent(event)
+  }
+
+  private fun refreshNotificationStatus() = refreshNotificationStatusSubject
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    if (requestCode == REFRESH_STATUS_ON_RESULT) {
+      if (resultCode == RESULT_OK) {
+        if (data != null) {
+          data.getStringExtra(MATCH_ID)?.let { matchId ->
+            refreshNotificationStatusSubject.onNext(RefreshNotificationStatusIntent(matchId))
+            return
+          }
+        }
+      }
+    }
+    super.onActivityResult(requestCode, resultCode, data)
   }
 }

@@ -2,6 +2,7 @@ package com.benoitquenaudon.tvfoot.red.app.domain.match
 
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MINUTES_BEFORE_NOTIFICATION
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Match.Constant.MATCH_ID
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchBinding
 import com.jakewharton.rxbinding2.view.RxView
@@ -119,5 +121,13 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   private val isMatchNotificationActivated: Boolean
     get() = binding.notifyMatchStartFab.isActivated
 
-  override fun render(state: MatchViewState) = bindingModel.updateFromState(state)
+  override fun render(state: MatchViewState) {
+    bindingModel.updateFromState(state)
+
+    if (state.match != null) {
+      val intent = Intent("REFRESH_NOTIFICATION_STATUS")
+      intent.putExtra(MATCH_ID, state.match.matchId)
+      setResult(RESULT_OK, intent)
+    }
+  }
 }

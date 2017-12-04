@@ -35,6 +35,11 @@ sealed class MatchesResult : MviResult {
     object InFlight : LoadNextPageResult()
   }
 
+  data class RefreshNotificationStatusResult(
+      val matchId: MatchId,
+      val willBeNotified: WillBeNotified
+  ) : MatchesResult()
+
   sealed class FilterResult : MatchesResult() {
 
     object ClearFiltersResult : FilterResult()
