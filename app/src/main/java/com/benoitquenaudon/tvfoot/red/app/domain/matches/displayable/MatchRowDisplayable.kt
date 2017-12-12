@@ -92,7 +92,9 @@ private fun parseBroadcasters(
     return ArrayList()
   }
 
-  return broadcasters.map { BroadcasterRowDisplayable(it.name, it.code) }
+  return broadcasters
+      .filter { it.name != null }
+      .map { BroadcasterRowDisplayable(it.name!!, it.code) }
 }
 
 private fun parseHeadLine(homeTeam: Team, awayTeam: Team, matchLabel: String?): String {

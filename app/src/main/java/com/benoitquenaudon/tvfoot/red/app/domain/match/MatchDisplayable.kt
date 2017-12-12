@@ -88,7 +88,9 @@ data class MatchDisplayable(
     private fun parseBroadcasters(
         broadcasters: List<Broadcaster>?
     ): List<BroadcasterRowDisplayable> =
-        broadcasters?.map { BroadcasterRowDisplayable(it.name, it.code) }
+        broadcasters
+            ?.filter { it.name != null }
+            ?.map { BroadcasterRowDisplayable(it.name!!, it.code) }
             ?: emptyList()
 
     private fun parseHeadLine(homeTeam: Team, awayTeam: Team, matchLabel: String?): String =
