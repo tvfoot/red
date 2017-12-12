@@ -38,6 +38,9 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterRes
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchInputResult.ClearSearchResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchInputResult.SearchTeamResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchedTeamSelectedResult
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchedTeamSelectedResult.TeamSearchFailure
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchedTeamSelectedResult.TeamSearchInFlight
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchedTeamSelectedResult.TeamSearchSuccess
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterCompetitionResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterTeamResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadNextPageResult
@@ -245,13 +248,12 @@ class MatchesViewModel @Inject constructor(
 
   private val clearSearchInputTransformer: ObservableTransformer<ClearSearchInputAction, ClearSearchInputResult>
     get() = ObservableTransformer { actions: Observable<ClearSearchInputAction> ->
-      actions
-          .map { ClearSearchInputResult }
+      actions.map { ClearSearchInputResult }
     }
 
   private val searchedTeamSelectedTransformer: ObservableTransformer<SearchedTeamSelectedAction, SearchedTeamSelectedResult>
     get() = ObservableTransformer { actions: Observable<SearchedTeamSelectedAction> ->
-      actions.map { SearchedTeamSelectedResult(it.team) }
+      actions.map<SearchedTeamSelectedResult> { TeamSearchInFlight(it.team) }
     }
 
   private val actionToResultTransformer: ObservableTransformer<MatchesAction, MatchesResult>
@@ -407,13 +409,17 @@ class MatchesViewModel @Inject constructor(
               searchingTeam = false,
               searchedTeams = emptyList())
         is ClearSearchInputResult -> previousState.copy()
-        is SearchedTeamSelectedResult ->
-          previousState.copy(
+        is SearchedTeamSelectedResult -> when (result) {
+          is TeamSearchFailure -> TODO()
+          is TeamSearchSuccess -> TODO()
+          // TODO(benoit) need to set some new boolean to true
+          is TeamSearchInFlight -> previousState.copy(
               teams = listOf(result.team) + previousState.teams,
               filteredTeams = previousState.filteredTeams + result.team.code,
               searchedTeams = emptyList(),
               searchInput = ""
           )
+        }
         is RefreshNotificationStatusResult -> {
           val newMatches = previousState.matches.map { match ->
             if (match.matchId == result.matchId) {
