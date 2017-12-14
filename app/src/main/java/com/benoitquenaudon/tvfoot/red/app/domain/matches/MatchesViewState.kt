@@ -18,6 +18,7 @@ data class MatchesViewState(
     val error: Throwable? = null,
     val nextPageLoading: Boolean = false,
     val refreshLoading: Boolean = false,
+    val teamMatchesLoading: Boolean = false,
     val currentPage: Int = 0,
     val hasMore: Boolean = true,
     val tagsLoading: Boolean = false,
@@ -31,6 +32,7 @@ data class MatchesViewState(
     val filteredTeams: List<TeamCode> = emptyList()
 ) : MviViewState {
   fun matchesItemDisplayables(
+      loadingSpecificMatches: Boolean,
       hasMore: Boolean,
       filteredTags: Map<String, List<String>>,
       filteredTeams: List<TeamCode>
@@ -57,7 +59,7 @@ data class MatchesViewState(
       }
       items.add(match)
     }
-    if (!items.isEmpty() && hasMore) {
+    if (!items.isEmpty() && (hasMore || loadingSpecificMatches)) {
       items.add(LoadingRowDisplayable)
     }
     return items

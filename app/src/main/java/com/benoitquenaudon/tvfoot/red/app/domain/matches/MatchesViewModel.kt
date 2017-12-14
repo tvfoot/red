@@ -63,7 +63,6 @@ import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.toMap
 import io.reactivex.subjects.PublishSubject
-import java.util.ArrayList
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -313,8 +312,8 @@ class MatchesViewModel @Inject constructor(
             is RefreshResult.Failure ->
               previousState.copy(refreshLoading = false, error = result.throwable)
             is RefreshResult.Success -> {
-              val matches = checkNotNull(result.matches) { "Matches is null" }
-              val willBeNotifiedPairs = checkNotNull(result.willBeNotifiedPairs)
+              val matches = result.matches
+              val willBeNotifiedPairs = result.willBeNotifiedPairs
 
               previousState.copy(
                   refreshLoading = false,
@@ -332,12 +331,10 @@ class MatchesViewModel @Inject constructor(
             is LoadNextPageResult.Failure ->
               previousState.copy(nextPageLoading = false, error = result.throwable)
             is LoadNextPageResult.Success -> {
-              val newMatches = checkNotNull(result.matches) { "Matches are null" }
-              val willBeNotifiedPairs = checkNotNull(result.willBeNotifiedPairs)
+              val newMatches =
+                  MatchRowDisplayable.fromMatches(result.matches, result.willBeNotifiedPairs)
 
-              val matches = ArrayList<MatchRowDisplayable>()
-              matches.addAll(previousState.matches)
-              matches.addAll(MatchRowDisplayable.fromMatches(newMatches, willBeNotifiedPairs))
+              val matches = (previousState.matches + newMatches).distinct().sorted()
 
               previousState.copy(
                   nextPageLoading = false,
@@ -410,15 +407,28 @@ class MatchesViewModel @Inject constructor(
               searchedTeams = emptyList())
         is ClearSearchInputResult -> previousState.copy()
         is SearchedTeamSelectedResult -> when (result) {
-          is TeamSearchFailure -> TODO()
-          is TeamSearchSuccess -> TODO()
-          // TODO(benoit) need to set some new boolean to true
-          is TeamSearchInFlight -> previousState.copy(
-              teams = listOf(result.team) + previousState.teams,
-              filteredTeams = previousState.filteredTeams + result.team.code,
-              searchedTeams = emptyList(),
-              searchInput = ""
-          )
+          is TeamSearchFailure ->
+            previousState.copy(error = result.throwable, teamMatchesLoading = false)
+          is TeamSearchSuccess -> {
+            val newMatches =
+                MatchRowDisplayable.fromMatches(result.matches, result.willBeNotifiedPairs)
+
+            val matches = (previousState.matches + newMatches).distinct().sorted()
+
+            previousState.copy(
+                teamMatchesLoading = false,
+                matches = matches,
+                error = null
+            )
+          }
+          is TeamSearchInFlight ->
+            previousState.copy(
+                teams = listOf(result.team) + previousState.teams,
+                filteredTeams = previousState.filteredTeams + result.team.code,
+                searchedTeams = emptyList(),
+                searchInput = "",
+                teamMatchesLoading = true
+            )
         }
         is RefreshNotificationStatusResult -> {
           val newMatches = previousState.matches.map { match ->
