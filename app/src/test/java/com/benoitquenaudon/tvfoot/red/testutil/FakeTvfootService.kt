@@ -15,14 +15,10 @@ class FakeTvfootService(private val fixture: Fixture) : TvfootService {
     return Single.just(fixture.anyTeams())
   }
 
-  override fun findFuture(@Query("filter") filter: Filter): Single<List<Match>> {
+  override fun getMatches(@Query("filter") filter: Filter): Single<List<Match>> {
     if (filter.offset == 0) return Single.just(fixture.anyMatches())
     if (filter.offset > 0) return Single.just(fixture.anyNextMatches())
     throw IllegalStateException("negative offset are not supposed to be")
-  }
-
-  override fun getMatches(@Query("filter") filter: Filter): Single<List<Match>> {
-    throw IllegalStateException("implement me")
   }
 
   override fun getMatch(@Path("matchId") matchId: String): Single<Match> {

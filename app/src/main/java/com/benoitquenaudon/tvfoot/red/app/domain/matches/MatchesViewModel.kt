@@ -2,7 +2,6 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
-import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.BasePreferenceRepository
@@ -49,9 +48,6 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshRe
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
-import com.benoitquenaudon.tvfoot.red.util.MatchId
-import com.benoitquenaudon.tvfoot.red.util.WillBeNotified
-import com.benoitquenaudon.tvfoot.red.util.flatMapIterable
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
 import com.benoitquenaudon.tvfoot.red.util.logResult
@@ -59,9 +55,7 @@ import com.benoitquenaudon.tvfoot.red.util.logState
 import com.benoitquenaudon.tvfoot.red.util.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
-import io.reactivex.Single
 import io.reactivex.functions.BiFunction
-import io.reactivex.rxkotlin.toMap
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
@@ -127,23 +121,7 @@ class MatchesViewModel @Inject constructor(
   private val refreshTransformer: ObservableTransformer<RefreshAction, RefreshResult>
     get() = ObservableTransformer { actions: Observable<RefreshAction> ->
       actions.flatMap {
-        val matches: Observable<Match> = matchesRepository
-            .loadPage(0)
-            .flatMapIterable()
-            .share()
-
-        Single.zip(
-            matches.toList(),
-            matches.map(Match::id)
-                .flatMapSingle { matchId ->
-                  preferenceRepository
-                      .loadNotifyMatchStart(matchId)
-                      .map { matchId to it }
-                }.toMap(),
-            BiFunction<List<Match>,
-                Map<MatchId, WillBeNotified>,
-                Pair<List<Match>, Map<MatchId, WillBeNotified>>>(::Pair)
-        )
+        matchesRepository.loadPageWithNotificationStatus(0)
             .toObservable()
             .map<RefreshResult> { RefreshResult.Success(it.first, it.second) }
             .onErrorReturn(RefreshResult::Failure)
@@ -156,23 +134,7 @@ class MatchesViewModel @Inject constructor(
   private val loadNextPageTransformer: ObservableTransformer<LoadNextPageAction, LoadNextPageResult>
     get() = ObservableTransformer { actions: Observable<LoadNextPageAction> ->
       actions.flatMap { (pageIndex) ->
-        val matches: Observable<Match> = matchesRepository
-            .loadPage(pageIndex)
-            .flatMapIterable()
-            .share()
-
-        Single.zip(
-            matches.toList(),
-            matches.map(Match::id)
-                .flatMapSingle { matchId ->
-                  preferenceRepository
-                      .loadNotifyMatchStart(matchId)
-                      .map { matchId to it }
-                }.toMap(),
-            BiFunction<List<Match>,
-                Map<MatchId, WillBeNotified>,
-                Pair<List<Match>, Map<MatchId, WillBeNotified>>>(::Pair)
-        )
+        matchesRepository.loadPageWithNotificationStatus(pageIndex)
             .toObservable()
             .map<LoadNextPageResult> { (matches, notificationPairs) ->
               LoadNextPageResult.Success(pageIndex, matches, notificationPairs)
@@ -253,23 +215,7 @@ class MatchesViewModel @Inject constructor(
   private val searchedTeamSelectedTransformer: ObservableTransformer<SearchedTeamSelectedAction, SearchedTeamSelectedResult>
     get() = ObservableTransformer { actions: Observable<SearchedTeamSelectedAction> ->
       actions.flatMap { action ->
-        val matches: Observable<Match> = matchesRepository
-            .searchTeamMatches(action.team.code)
-            .flatMapIterable()
-            .share()
-
-        Single.zip(
-            matches.toList(),
-            matches.map(Match::id)
-                .flatMapSingle { matchId ->
-                  preferenceRepository
-                      .loadNotifyMatchStart(matchId)
-                      .map { matchId to it }
-                }.toMap(),
-            BiFunction<List<Match>,
-                Map<MatchId, WillBeNotified>,
-                Pair<List<Match>, Map<MatchId, WillBeNotified>>>(::Pair)
-        )
+        matchesRepository.searchTeamMatchesWithNotificationStatus(action.team.code)
             .toObservable()
             .map<SearchedTeamSelectedResult> { TeamSearchSuccess(it.first, it.second) }
             .onErrorReturn(::TeamSearchFailure)

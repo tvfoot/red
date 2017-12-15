@@ -6,7 +6,7 @@ import java.util.Date
 import java.util.concurrent.TimeUnit
 
 data class Where(
-    private val startAt: Long = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(3),
+    private val startAt: Long,
     private val onlyBroadcasted: Boolean = false,
     private val teams: List<TeamCondition> = emptyList()
 ) {
