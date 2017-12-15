@@ -252,7 +252,31 @@ class MatchesViewModel @Inject constructor(
 
   private val searchedTeamSelectedTransformer: ObservableTransformer<SearchedTeamSelectedAction, SearchedTeamSelectedResult>
     get() = ObservableTransformer { actions: Observable<SearchedTeamSelectedAction> ->
-      actions.map<SearchedTeamSelectedResult> { TeamSearchInFlight(it.team) }
+      actions.flatMap { action ->
+        val matches: Observable<Match> = matchesRepository
+            .searchTeamMatches(action.team.code)
+            .flatMapIterable()
+            .share()
+
+        Single.zip(
+            matches.toList(),
+            matches.map(Match::id)
+                .flatMapSingle { matchId ->
+                  preferenceRepository
+                      .loadNotifyMatchStart(matchId)
+                      .map { matchId to it }
+                }.toMap(),
+            BiFunction<List<Match>,
+                Map<MatchId, WillBeNotified>,
+                Pair<List<Match>, Map<MatchId, WillBeNotified>>>(::Pair)
+        )
+            .toObservable()
+            .map<SearchedTeamSelectedResult> { TeamSearchSuccess(it.first, it.second) }
+            .onErrorReturn(::TeamSearchFailure)
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
+            .startWith(TeamSearchInFlight(action.team))
+      }
     }
 
   private val actionToResultTransformer: ObservableTransformer<MatchesAction, MatchesResult>
@@ -355,12 +379,7 @@ class MatchesViewModel @Inject constructor(
               it.put(result.tagName,
                   previousState.tags.first { it.name == result.tagName }.targets)
             }
-            // what was I thinking ??
-            if (it.isEmpty()) {
-              previousState.copy(filteredTags = it, hasMore = true)
-            } else {
-              previousState.copy(filteredTags = it)
-            }
+            previousState.copy(filteredTags = it, hasMore = true)
           }
         }
         is ToggleFilterTeamResult -> {

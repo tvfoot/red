@@ -33,8 +33,8 @@ class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapte
     }
 
     val matchesDisplayables = state.matchesItemDisplayables(
+        state.nextPageLoading,
         loadingSpecificMatches,
-        hasMore,
         state.filteredTags,
         state.filteredTeams
     )
