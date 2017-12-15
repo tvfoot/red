@@ -18,6 +18,7 @@ data class MatchesViewState(
     val error: Throwable? = null,
     val nextPageLoading: Boolean = false,
     val refreshLoading: Boolean = false,
+    val teamMatchesLoading: Boolean = false,
     val currentPage: Int = 0,
     val hasMore: Boolean = true,
     val tagsLoading: Boolean = false,
@@ -30,8 +31,11 @@ data class MatchesViewState(
     val teams: List<FilterTeam> = emptyList(),
     val filteredTeams: List<TeamCode> = emptyList()
 ) : MviViewState {
+
+
   fun matchesItemDisplayables(
-      hasMore: Boolean,
+      nextPageLoading: Boolean,
+      loadingSpecificMatches: Boolean,
       filteredTags: Map<String, List<String>>,
       filteredTeams: List<TeamCode>
   ): List<MatchesItemDisplayable> {
@@ -57,17 +61,18 @@ data class MatchesViewState(
       }
       items.add(match)
     }
-    if (!items.isEmpty() && hasMore) {
+    if (!items.isEmpty() && (nextPageLoading || loadingSpecificMatches)) {
       items.add(LoadingRowDisplayable)
     }
     return items
   }
 
-  companion object {
-    fun idle(): MatchesViewState = MatchesViewState()
+  override fun toString(): String {
+    return "MatchesViewState(nextPageLoading=$nextPageLoading, refreshLoading=$refreshLoading, teamMatchesLoading=$teamMatchesLoading, currentPage=$currentPage, hasMore=$hasMore, tagsLoading=$tagsLoading, searchInput='$searchInput', searchingTeam=$searchingTeam)"
   }
 
-  override fun toString(): String {
-    return "searchInput is : $searchInput"
+
+  companion object {
+    fun idle(): MatchesViewState = MatchesViewState()
   }
 }

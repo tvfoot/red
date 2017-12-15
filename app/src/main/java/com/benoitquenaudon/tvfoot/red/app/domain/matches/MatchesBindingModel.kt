@@ -10,6 +10,7 @@ class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapte
   var hasData = ObservableBoolean(false)
   var nextPageLoading = false
   var hasMore = true
+  var loadingSpecificMatches = false
   var errorMessage = ObservableField<String>()
   var currentPage = 0
     private set
@@ -22,9 +23,9 @@ class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapte
     hasActiveFilters.set(state.filteredTags.isNotEmpty() || state.filteredTeams.isNotEmpty())
 
     nextPageLoading = state.nextPageLoading
-    refreshLoading.set(state.refreshLoading)
     hasError.set(state.error != null)
     hasMore = state.hasMore
+    loadingSpecificMatches = state.teamMatchesLoading
 
     if (hasError.get()) {
       val error = checkNotNull(state.error) { "state error is null" }
@@ -32,11 +33,17 @@ class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapte
     }
 
     val matchesDisplayables = state.matchesItemDisplayables(
-        hasMore,
+        state.nextPageLoading,
+        loadingSpecificMatches,
         state.filteredTags,
         state.filteredTeams
     )
-    hasData.set(matchesDisplayables.isNotEmpty() || state.refreshLoading || state.nextPageLoading)
+    refreshLoading.set(state.refreshLoading ||
+        (matchesDisplayables.isEmpty() && state.teamMatchesLoading))
+    hasData.set(matchesDisplayables.isNotEmpty() ||
+        state.refreshLoading ||
+        state.nextPageLoading ||
+        state.teamMatchesLoading)
     if (hasData.get()) {
       adapter.setMatchesItems(matchesDisplayables)
     }

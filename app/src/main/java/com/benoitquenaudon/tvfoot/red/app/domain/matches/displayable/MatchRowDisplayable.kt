@@ -30,8 +30,13 @@ data class MatchRowDisplayable private constructor(
     val tags: List<String>,
     val homeTeam: TeamRowDisplayable,
     val awayTeam: TeamRowDisplayable,
-    val willBeNotified: Boolean = false
-) : MatchesItemDisplayable {
+    val willBeNotified: Boolean = false,
+    val startAt: Long
+) : MatchesItemDisplayable, Comparable<MatchRowDisplayable> {
+  override fun compareTo(other: MatchRowDisplayable): Int {
+    return startAt.compareTo(other.startAt)
+  }
+
   override fun isSameAs(other: MatchesItemDisplayable): Boolean {
     return other is MatchRowDisplayable && this.matchId == other.matchId
   }
@@ -63,7 +68,8 @@ data class MatchRowDisplayable private constructor(
               match.awayTeam.name,
               match.awayTeam.logoPath,
               match.awayTeam.code),
-          willBeNotified = willBeNotified
+          willBeNotified = willBeNotified,
+          startAt = match.startAt.time
       )
     }
 
@@ -92,12 +98,14 @@ private fun parseBroadcasters(
     return ArrayList()
   }
 
-  return broadcasters.map { BroadcasterRowDisplayable(it.name, it.code) }
+  return broadcasters
+      .filter { it.name != null }
+      .map { BroadcasterRowDisplayable(it.name!!, it.code) }
 }
 
 private fun parseHeadLine(homeTeam: Team, awayTeam: Team, matchLabel: String?): String {
   if (homeTeam.name.isNullOrEmpty() || awayTeam.name.isNullOrEmpty()) {
-    return checkNotNull(matchLabel).toString()
+    return matchLabel ?: "undefined"
   }
 
   return homeTeam.name.toString().toUpperCase() +

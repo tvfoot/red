@@ -66,22 +66,30 @@ sealed class MatchesResult : MviResult {
 
     object ClearSearchInputResult : FilterResult()
 
-    @Suppress("DataClassPrivateConstructor")
-    data class SearchedTeamSelectedResult private constructor(
-        val team: FilterTeam
-    ) : FilterResult() {
-      companion object {
-        operator fun invoke(
-            searchedTeam: TeamSearchResultDisplayable
-        ): SearchedTeamSelectedResult {
-          return SearchedTeamSelectedResult(
-              FilterTeam(
-                  code = searchedTeam.code,
-                  type = searchedTeam.type,
-                  name = searchedTeam.name,
-                  country = searchedTeam.country
-              )
-          )
+    sealed class SearchedTeamSelectedResult : FilterResult() {
+      data class TeamSearchFailure(val throwable: Throwable) : SearchedTeamSelectedResult()
+      data class TeamSearchSuccess(
+          val matches: List<Match>,
+          val willBeNotifiedPairs: Map<MatchId, WillBeNotified>
+      ) : SearchedTeamSelectedResult()
+
+      @Suppress("DataClassPrivateConstructor")
+      data class TeamSearchInFlight private constructor(
+          val team: FilterTeam
+      ) : SearchedTeamSelectedResult() {
+        companion object {
+          operator fun invoke(
+              searchedTeam: TeamSearchResultDisplayable
+          ): TeamSearchInFlight {
+            return TeamSearchInFlight(
+                FilterTeam(
+                    code = searchedTeam.code,
+                    type = searchedTeam.type,
+                    name = searchedTeam.name,
+                    country = searchedTeam.country
+                )
+            )
+          }
         }
       }
     }

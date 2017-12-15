@@ -21,13 +21,13 @@ class MatchesHeaderDecoration(
       state: RecyclerView.State
   ) {
     val position = parent.getChildAdapterPosition(view)
+    if (position != RecyclerView.NO_POSITION && showHeaderAboveItem(position)) {
+      val headerHeight = getHeaderHeightForLayout(getHeader(parent, position).itemView)
+      outRect.set(0, headerHeight, 0, 0)
+      return
+    }
 
-    val headerHeight =
-        if (position != RecyclerView.NO_POSITION && showHeaderAboveItem(position)) {
-          getHeaderHeightForLayout(getHeader(parent, position).itemView)
-        } else 0
-
-    outRect.set(0, headerHeight, 0, 0)
+    outRect.set(0, 0, 0, 0)
   }
 
   private fun showHeaderAboveItem(adapterPosition: Int): Boolean =

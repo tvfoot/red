@@ -12,13 +12,13 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.PublishSubject
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import kotlin.properties.Delegates
 
 class MatchesViewModelTest {
-  private var stateBinder by Delegates.notNull<MatchesViewModel>()
-  private var testObserver by Delegates.notNull<TestObserver<MatchesViewState>>()
+  private lateinit var stateBinder: MatchesViewModel
+  private lateinit var testObserver: TestObserver<MatchesViewState>
 
   @Before
   fun setup() {
@@ -32,6 +32,11 @@ class MatchesViewModelTest {
     )
 
     testObserver = stateBinder.states().test()
+  }
+
+  @After
+  fun teardown() {
+    testObserver.dispose()
   }
 
   @Test
@@ -82,6 +87,9 @@ class MatchesViewModelTest {
     testObserver.assertValueAt(2, MatchesViewState::nextPageLoading)
     testObserver.assertValueAt(3) { state -> !state.nextPageLoading }
 
+    testObserver.values().forEachIndexed { index, matchesViewState ->
+      println("$index: ${matchesViewState.matches.size}")
+    }
     testObserver.values().let { viewStates ->
       assert(viewStates[3].matches.size > viewStates[2].matches.size) {
         "A next page loading should append matches"
