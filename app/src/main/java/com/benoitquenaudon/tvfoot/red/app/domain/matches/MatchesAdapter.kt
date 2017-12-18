@@ -139,6 +139,7 @@ class MatchesAdapter @Inject constructor(
 
   private fun processItemDiffs(): Disposable =
       matchesObservable
+          .observeOn(schedulerProvider.computation())
           .scan(Pair(emptyList(), null),
               { _: Pair<List<MatchesItemDisplayable>, DiffResult?>, (oldItems, newItems) ->
                 MatchesItemDisplayableDiffUtilCallback(oldItems, newItems).let { callback ->
@@ -146,7 +147,6 @@ class MatchesAdapter @Inject constructor(
                 }
               })
           .skip(1)
-          .subscribeOn(schedulerProvider.computation())
           .observeOn(schedulerProvider.ui())
           .subscribe { (newItems, diffResult) ->
             matchesItems = newItems
