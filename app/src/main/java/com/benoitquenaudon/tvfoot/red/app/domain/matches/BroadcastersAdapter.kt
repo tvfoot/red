@@ -30,8 +30,7 @@ class BroadcastersAdapter @Inject constructor(
 
   override fun getItemCount(): Int = broadcasters.size
 
-  fun add(broadcaster: BroadcasterRowDisplayable) = broadcasters.add(broadcaster)
-
+  // This should not be executed async because we are freezing the layout right afterwards
   fun addAll(broadcasters: Collection<BroadcasterRowDisplayable>) {
     this.broadcasters.addAll(broadcasters)
   }

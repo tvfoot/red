@@ -60,7 +60,11 @@ sealed class MatchesItemViewHolder<out B : ViewDataBinding, in T : MatchesItemDi
       val broadcastersAdapter = BroadcastersAdapter()
       broadcastersAdapter.addAll(match.broadcasters)
 
-      recyclerView.adapter = broadcastersAdapter
+      recyclerView.run {
+        adapter = broadcastersAdapter
+        // To allow click events to go upward
+        isLayoutFrozen = true
+      }
     }
   }
 
@@ -90,7 +94,11 @@ sealed class MatchesItemViewHolder<out B : ViewDataBinding, in T : MatchesItemDi
       val broadcastersAdapter = BroadcastersAdapter()
       broadcastersAdapter.addAll(match.broadcasters)
 
-      recyclerView.adapter = broadcastersAdapter
+      recyclerView.run {
+        adapter = broadcastersAdapter
+        // To allow click events to go upward
+        isLayoutFrozen = true
+      }
     }
   }
 
