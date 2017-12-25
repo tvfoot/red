@@ -16,10 +16,10 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class MatchReminderService : Service() {
-  @Inject lateinit var disposables: CompositeDisposable
   @Inject lateinit var matchRepository: BaseMatchRepository
   @Inject lateinit var preferenceRepository: PreferenceRepository
   @Inject lateinit var schedulerProvider: BaseSchedulerProvider
+  @Inject lateinit var disposables: CompositeDisposable
 
   override fun onBind(intent: Intent): IBinder? {
     return null
@@ -27,8 +27,7 @@ class MatchReminderService : Service() {
 
   override fun onCreate() {
     super.onCreate()
-    val redApp = application as RedApp
-    redApp.appComponent.inject(this)
+    (application as RedApp).appComponent.inject(this)
   }
 
   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {

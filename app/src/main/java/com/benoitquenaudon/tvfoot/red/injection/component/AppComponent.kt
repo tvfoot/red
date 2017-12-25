@@ -1,6 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.injection.component
 
 import com.benoitquenaudon.tvfoot.red.RedApp
+import com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchNotificationSchedulerService
 import com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchReminderService
 import com.benoitquenaudon.tvfoot.red.injection.module.ActivityModule
 import com.benoitquenaudon.tvfoot.red.injection.module.AppModule
@@ -33,5 +34,6 @@ interface AppComponent {
   fun plus(activityModule: ActivityModule): ActivityComponent
   fun inject(redApp: RedApp)
   fun inject(matchReminderService: MatchReminderService)
+  fun inject(matchNotificationSchedulerService: MatchNotificationSchedulerService)
   fun picasso(): Picasso
 }
