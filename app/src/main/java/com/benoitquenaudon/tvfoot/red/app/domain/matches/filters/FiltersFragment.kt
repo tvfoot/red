@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseFragment
-import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesActivity
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearFilters
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.FilterInitialIntent
@@ -148,13 +147,6 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
             .startWith(bindingModel.hasFilters.get()) // fix for rotation
             .subscribe {
               binding.filtersToolbar.menu.findItem(R.id.action_clear).isVisible = it
-            }
-    )
-    disposables.add(
-        toolbarClicks
-            .filter { it.itemId == R.id.action_close }
-            .subscribe {
-              activity?.let { activity -> (activity as MatchesActivity).closeDrawer() }
             }
     )
   }
