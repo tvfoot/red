@@ -8,10 +8,4 @@
       android:title="@string/filters_clearAll"
       android:visible="false"
       app:showAsAction="always|withText"/>
-  <item
-      android:id="@+id/action_close"
-      android:icon="@drawable/ic_check_black_24px"
-      android:title="@string/close_menu"
-      android:visible="true"
-      app:showAsAction="always|withText"/>
 </menu>
