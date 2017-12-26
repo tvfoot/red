@@ -31,7 +31,6 @@ import com.benoitquenaudon.tvfoot.red.databinding.FragmentFiltersBinding
 import com.jakewharton.rxbinding2.support.v7.widget.RxToolbar
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -120,14 +119,6 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
   private fun searchTeamIntent(): Observable<SearchTeamIntent> =
       filtersAdapter.filterSearchInputObservable
           .distinctUntilChanged()
-          .publish { shared ->
-            Observable.merge(
-                // Only debounce for more than 2 because search doesn't happen for lesser.
-                // should probably TODO(benoit) put that logic in the ViewModel
-                shared.filter { it.length > 2 }.debounce(300, MILLISECONDS),
-                shared.filter { it.length <= 2 }
-            )
-          }
           .map(::SearchTeamIntent)
 
   private fun searchedTeamSelectedIntent(): Observable<SearchedTeamSelectedIntent> {

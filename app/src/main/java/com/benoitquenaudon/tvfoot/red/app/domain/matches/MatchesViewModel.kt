@@ -57,6 +57,7 @@ import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -177,10 +178,11 @@ class MatchesViewModel @Inject constructor(
           is SearchTeamAction -> {
             if (action.input.length > 2) {
               teamRepository.findTeams(action.input)
+                  .subscribeOn(schedulerProvider.io())
+                  .delaySubscription(250, MILLISECONDS, schedulerProvider.ui())
                   .toObservable()
                   .map<SearchTeamResult>({ teams -> SearchTeamResult.Success(action.input, teams) })
                   .onErrorReturn(SearchTeamResult::Failure)
-                  .subscribeOn(schedulerProvider.io())
                   .observeOn(schedulerProvider.ui())
                   .startWith(SearchTeamResult.InFlight(action.input))
             } else {
