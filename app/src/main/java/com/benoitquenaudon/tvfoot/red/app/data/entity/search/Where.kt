@@ -3,7 +3,6 @@ package com.benoitquenaudon.tvfoot.red.app.data.entity.search
 import com.benoitquenaudon.tvfoot.red.util.TeamCode
 import com.squareup.moshi.formatIso8601
 import java.util.Date
-import java.util.concurrent.TimeUnit
 
 data class Where(
     private val startAt: Long,
