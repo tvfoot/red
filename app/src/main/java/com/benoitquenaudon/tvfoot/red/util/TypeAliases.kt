@@ -5,3 +5,4 @@ typealias TagTargets = List<String>
 typealias MatchId = String
 typealias WillBeNotified = Boolean
 typealias TeamCode = String
+typealias DataVersion = Int

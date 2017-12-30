@@ -23,6 +23,7 @@ import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowMatchBinding
 import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowTeamlessMatchBinding
 import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding
 import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
+import com.benoitquenaudon.tvfoot.red.util.DataVersion
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
@@ -32,7 +33,8 @@ class MatchesAdapter @Inject constructor(
     private val schedulerProvider: BaseSchedulerProvider
 ) : RecyclerView.Adapter<MatchesItemViewHolder<*, *>>() {
   private var matchesItems = emptyList<MatchesItemDisplayable>()
-  private val matchesObservable: PublishSubject<Pair<List<MatchesItemDisplayable>, List<MatchesItemDisplayable>>> = PublishSubject.create()
+  private val matchesObservable: PublishSubject<Triple<List<MatchesItemDisplayable>, List<MatchesItemDisplayable>, DataVersion>> =
+      PublishSubject.create()
   val matchRowClickObservable: PublishSubject<MatchRowDisplayable> = PublishSubject.create()
 
   init {
@@ -120,7 +122,12 @@ class MatchesAdapter @Inject constructor(
     matchRowClickObservable.onNext(match)
   }
 
+  // each time data is set, we update this variable so that if DiffUtil calculation returns
+  // after repetitive updates, we can ignore the old calculation
+  private var dataVersion = 0
+
   fun setMatchesItems(newItems: List<MatchesItemDisplayable>) {
+    dataVersion++
     when {
       matchesItems.isEmpty() -> {
         if (newItems.isEmpty()) return
@@ -133,22 +140,29 @@ class MatchesAdapter @Inject constructor(
         matchesItems = newItems
         notifyItemRangeRemoved(0, oldSize)
       }
-      else -> matchesObservable.onNext(Pair(matchesItems, newItems))
+      else -> matchesObservable.onNext(Triple(matchesItems, newItems, dataVersion))
     }
   }
 
   private fun processItemDiffs(): Disposable =
       matchesObservable
           .observeOn(schedulerProvider.computation())
-          .scan(Pair(emptyList(), null),
-              { _: Pair<List<MatchesItemDisplayable>, DiffResult?>, (oldItems, newItems) ->
-                MatchesItemDisplayableDiffUtilCallback(oldItems, newItems).let { callback ->
-                  Pair(newItems, DiffUtil.calculateDiff(callback, true))
-                }
+          .scan(Triple(emptyList(), null, 0),
+              { _: Triple<List<MatchesItemDisplayable>, DiffResult?, DataVersion>, (oldItems, newItems, startVersion) ->
+                Triple(
+                    newItems,
+                    DiffUtil.calculateDiff(
+                        MatchesItemDisplayableDiffUtilCallback(oldItems, newItems), true),
+                    startVersion)
               })
           .skip(1)
           .observeOn(schedulerProvider.ui())
-          .subscribe { (newItems, diffResult) ->
+          .subscribe { (newItems, diffResult, startVersion) ->
+            if (startVersion != dataVersion) {
+              // ignore update
+              return@subscribe
+            }
+
             matchesItems = newItems
             diffResult?.dispatchUpdatesTo(this)
           }
