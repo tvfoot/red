@@ -29,6 +29,7 @@
   <string name="no_match_found">Aucun match trouvé</string>
   <string name="close_menu">Fermer le menu</string>
   <string name="competitions">Compétitions</string>
+  <string name="broadcasters">Chaînes</string>
   <string name="teams">Equipes</string>
   <string name="add_team_to_filter">Ajouter cette équipe au filtre</string>
 </resources>

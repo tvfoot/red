@@ -7,6 +7,7 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewState
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterHeaderDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterSearchLoadingRowDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersBroadcasterDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersCompetitionDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersTeamDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchInputDisplayable
@@ -19,14 +20,19 @@ import javax.inject.Inject
 class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapter) {
 
   val loadingTags: ObservableBoolean = ObservableBoolean(true)
-  private var filteredTags: Set<String> = emptySet()
+  private var filteredCompetitions: Set<String> = emptySet()
+  private var filteredBroadcasters: Set<String> = emptySet()
 
   val hasFilters: ObservableBoolean = ObservableBoolean(false)
 
   fun updateFromState(state: MatchesViewState) {
-    filteredTags = state.filteredTags.keys
+    filteredCompetitions = state.filteredCompetitions.keys
+    filteredBroadcasters = state.filteredBroadcasters.keys
     loadingTags.set(state.tagsLoading)
-    hasFilters.set(filteredTags.isNotEmpty() || state.filteredTeams.isNotEmpty())
+    hasFilters.set(
+        filteredCompetitions.isNotEmpty() ||
+            filteredBroadcasters.isNotEmpty() ||
+            state.filteredTeams.isNotEmpty())
 
     adapter.setFiltersItems(
         buildFilterList(
@@ -48,13 +54,21 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
       teams: List<FilterTeam>,
       filteredTeams: List<TeamCode>
   ): List<FiltersItemDisplayable> {
-    val tagFilters = tags
-        .filter { it.type == "competition" }
+    val competitionFilters = tags
+        .filter(Tag::isCompetition)
         .map {
           FiltersCompetitionDisplayable(
               code = it.name,
               label = it.desc,
-              filtered = filteredTags.contains(it.name))
+              filtered = filteredCompetitions.contains(it.name))
+        }
+    val broadcasterFilters = tags
+        .filter(Tag::isBroadcast)
+        .map {
+          FiltersBroadcasterDisplayable(
+              code = it.name,
+              label = it.desc,
+              filtered = filteredBroadcasters.contains(it.name))
         }
     val teamFilters = teams
         .map {
@@ -73,7 +87,7 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
       searchedTeams.filter { searched -> teams.none { it.code == searched.code } }
     }
 
-    // so ugly TODO(benoit) refactor this shit
+    // so ugly TODO(benoit) come on, refactor this shit
     return listOf(TeamSearchInputDisplayable(inputText)) +
         teamSearchDisplayables +
         if (teamFilters.isEmpty()) {
@@ -82,11 +96,17 @@ class FiltersBindingModel @Inject constructor(private val adapter: FiltersAdapte
           listOf(FilterHeaderDisplayable(R.string.teams))
         } +
         teamFilters +
-        if (tagFilters.isEmpty()) {
+        if (competitionFilters.isEmpty()) {
           emptyList()
         } else {
           listOf(FilterHeaderDisplayable(R.string.competitions))
         } +
-        tagFilters
+        competitionFilters +
+        if (broadcasterFilters.isEmpty()) {
+          emptyList()
+        } else {
+          listOf(FilterHeaderDisplayable(R.string.broadcasters))
+        } +
+        broadcasterFilters
   }
 }

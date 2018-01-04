@@ -13,6 +13,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAct
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchInputAction.ClearSearchAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchInputAction.SearchTeamAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.SearchedTeamSelectedAction
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ToggleFilterBroadcasterAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ToggleFilterCompetitionAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.FilterAction.ToggleFilterTeamAction
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesAction.LoadNextPageAction
@@ -24,6 +25,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterInt
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchInputIntent.ClearSearchIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchInputIntent.SearchTeamIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.SearchedTeamSelectedIntent
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent.ToggleFilterBroadcasterIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent.ToggleFilterCompetitionIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ToggleFilterIntent.ToggleFilterTeamIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.InitialIntent
@@ -40,6 +42,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterRes
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchedTeamSelectedResult.TeamSearchFailure
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchedTeamSelectedResult.TeamSearchInFlight
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.SearchedTeamSelectedResult.TeamSearchSuccess
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterBroadcasterResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterCompetitionResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.FilterResult.ToggleFilterTeamResult
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.LoadNextPageResult
@@ -110,6 +113,7 @@ class MatchesViewModel @Inject constructor(
         is LoadNextPageIntent -> LoadNextPageAction(intent.pageIndex)
         is ClearFilters -> ClearFiltersAction
         is ToggleFilterCompetitionIntent -> ToggleFilterCompetitionAction(intent.tagName)
+        is ToggleFilterBroadcasterIntent -> ToggleFilterBroadcasterAction(intent.tagName)
         is ToggleFilterTeamIntent -> ToggleFilterTeamAction(intent.teamCode)
         is FilterInitialIntent -> LoadTagsAction
         is SearchTeamIntent -> SearchTeamAction(intent.input)
@@ -204,6 +208,11 @@ class MatchesViewModel @Inject constructor(
       actions.map { ToggleFilterCompetitionResult(it.tagName) }
     }
 
+  private val toggleFilterBroadcasterTransformer: ObservableTransformer<ToggleFilterBroadcasterAction, ToggleFilterBroadcasterResult>
+    get() = ObservableTransformer { actions: Observable<ToggleFilterBroadcasterAction> ->
+      actions.map { ToggleFilterBroadcasterResult(it.tagName) }
+    }
+
   private val toggleFilterTeamTransformer: ObservableTransformer<ToggleFilterTeamAction, ToggleFilterTeamResult>
     get() = ObservableTransformer { actions: Observable<ToggleFilterTeamAction> ->
       actions.map { ToggleFilterTeamResult(it.teamCode) }
@@ -237,7 +246,8 @@ class MatchesViewModel @Inject constructor(
                 .compose(refreshNotificationStatusTransformer)
         ).mergeWith(
             Observable.merge<MatchesResult>(
-                shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
+                shared.ofType(ToggleFilterBroadcasterAction::class.java)
+                    .compose(toggleFilterBroadcasterTransformer),
                 shared.ofType(ToggleFilterCompetitionAction::class.java)
                     .compose(toggleFilterCompetitionTransformer),
                 shared.ofType(ToggleFilterTeamAction::class.java)
@@ -246,6 +256,7 @@ class MatchesViewModel @Inject constructor(
             )
         ).mergeWith(
             Observable.merge<MatchesResult>(
+                shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
                 shared.ofType(SearchInputAction::class.java).compose(searchInputTransformer),
                 shared.ofType(SearchedTeamSelectedAction::class.java)
                     .compose(searchedTeamSelectedTransformer),
@@ -259,6 +270,7 @@ class MatchesViewModel @Inject constructor(
                   v !is LoadNextPageAction &&
                   v !is ClearFiltersAction &&
                   v !is ToggleFilterCompetitionAction &&
+                  v !is ToggleFilterBroadcasterAction &&
                   v !is ToggleFilterTeamAction &&
                   v !is LoadTagsAction &&
                   v !is SearchTeamAction &&
@@ -318,16 +330,31 @@ class MatchesViewModel @Inject constructor(
           }
         }
         is ClearFiltersResult ->
-          previousState.copy(filteredTags = emptyMap(), filteredTeams = emptyList())
+          previousState.copy(
+              filteredBroadcasters = emptyMap(),
+              filteredCompetitions = emptyMap(),
+              filteredTeams = emptyList()
+          )
         is ToggleFilterCompetitionResult -> {
-          previousState.filteredTags.toMutableMap().let {
+          previousState.filteredCompetitions.toMutableMap().let {
             if (it.keys.contains(result.tagName)) {
               it.remove(result.tagName)
             } else {
               it.put(result.tagName,
                   previousState.tags.first { it.name == result.tagName }.targets)
             }
-            previousState.copy(filteredTags = it, hasMore = true)
+            previousState.copy(filteredCompetitions = it, hasMore = true)
+          }
+        }
+        is ToggleFilterBroadcasterResult -> {
+          previousState.filteredBroadcasters.toMutableMap().let {
+            if (it.keys.contains(result.tagName)) {
+              it.remove(result.tagName)
+            } else {
+              it.put(result.tagName,
+                  previousState.tags.first { it.name == result.tagName }.targets)
+            }
+            previousState.copy(filteredBroadcasters = it, hasMore = true)
           }
         }
         is ToggleFilterTeamResult -> {

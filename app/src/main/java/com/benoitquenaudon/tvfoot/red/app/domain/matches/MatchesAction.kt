@@ -15,6 +15,8 @@ sealed class MatchesAction : MviAction {
   sealed class FilterAction : MatchesAction() {
     data class ToggleFilterCompetitionAction(val tagName: String) : FilterAction()
 
+    data class ToggleFilterBroadcasterAction(val tagName: String) : FilterAction()
+
     data class ToggleFilterTeamAction(val teamCode: TeamCode) : FilterAction()
 
     object ClearFiltersAction : FilterAction()

@@ -12,10 +12,12 @@ import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvide
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterHeaderDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterSearchLoadingRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersBroadcasterDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersCompetitionDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersTeamDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchInputDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterBroadcasterViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterCompetitionViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterEmptyViewHolder.FilterSearchLoadingRowViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterHeaderViewHolder
@@ -23,6 +25,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHold
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterTeamSearchViewHolder
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersViewHolder.FilterTeamViewHolder
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersHeaderBinding
+import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowBroadcasterBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowCompetitionBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamSearchBinding
@@ -57,6 +60,8 @@ class FiltersAdapter @Inject constructor(
     return when (viewType) {
       R.layout.filters_row_competition ->
         FilterCompetitionViewHolder(binding as FiltersRowCompetitionBinding, this)
+      R.layout.filters_row_broadcaster ->
+        FilterBroadcasterViewHolder(binding as FiltersRowBroadcasterBinding, this)
       R.layout.filters_row_team ->
         FilterTeamViewHolder(binding as FiltersRowTeamBinding, this)
       R.layout.filters_row_team_search ->
@@ -75,6 +80,7 @@ class FiltersAdapter @Inject constructor(
   override fun getItemViewType(position: Int): Int =
       when (filterItems[position]) {
         is FiltersCompetitionDisplayable -> R.layout.filters_row_competition
+        is FiltersBroadcasterDisplayable -> R.layout.filters_row_broadcaster
         is FiltersTeamDisplayable -> R.layout.filters_row_team
         is TeamSearchInputDisplayable -> R.layout.filters_row_team_search
         is TeamSearchResultDisplayable -> R.layout.filters_row_team_search_result
@@ -90,6 +96,13 @@ class FiltersAdapter @Inject constructor(
           holder.bind(item)
         } else {
           throw IllegalStateException("Wrong item for FilterCompetitionViewHolder $item")
+        }
+      }
+      is FilterBroadcasterViewHolder -> {
+        if (item is FiltersBroadcasterDisplayable) {
+          holder.bind(item)
+        } else {
+          throw IllegalStateException("Wrong item for FilterBroadcasterViewHolder $item")
         }
       }
       is FilterTeamSearchViewHolder -> {

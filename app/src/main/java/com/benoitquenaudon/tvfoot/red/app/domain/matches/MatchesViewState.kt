@@ -24,29 +24,36 @@ data class MatchesViewState(
     val tagsLoading: Boolean = false,
     val tagsError: Throwable? = null,
     val tags: List<Tag> = emptyList(),
-    var filteredTags: Map<TagName, TagTargets> = emptyMap(),
+    var filteredCompetitions: Map<TagName, TagTargets> = emptyMap(),
+    var filteredBroadcasters: Map<TagName, TagTargets> = emptyMap(),
     val searchInput: String = "",
     val searchingTeam: Boolean = false,
     val searchedTeams: List<TeamSearchResultDisplayable> = emptyList(),
     val teams: List<FilterTeam> = emptyList(),
     val filteredTeams: List<TeamCode> = emptyList()
 ) : MviViewState {
-
-
   fun matchesItemDisplayables(
       nextPageLoading: Boolean,
       loadingSpecificMatches: Boolean,
-      filteredTags: Map<String, List<String>>,
+      filteredBroadcasters: Map<TagName, TagTargets>,
+      filteredCompetitions: Map<TagName, TagTargets>,
       filteredTeams: List<TeamCode>
   ): List<MatchesItemDisplayable> {
 
     val headers = ArrayList<String>()
     val items = ArrayList<MatchesItemDisplayable>()
 
-    val filteredTargets = filteredTags.values.flatten().toSet()
+    val filteredCompetitionTargets = filteredCompetitions.values.flatten().toSet()
+    val filteredBroadcasterTargets = filteredBroadcasters.values.flatten().toSet()
     val filteredTeamsCodes = filteredTeams.toSet()
     for (match in matches) {
-      if (filteredTargets.isNotEmpty() && filteredTargets.intersect(match.tags).isEmpty()) {
+      if (filteredCompetitionTargets.isNotEmpty() && filteredCompetitionTargets.intersect(
+          match.tags).isEmpty()) {
+        continue
+      }
+      if (filteredBroadcasterTargets.isNotEmpty() &&
+          filteredBroadcasterTargets.intersect(
+              match.broadcasters.map { it.broadcasterCode }).isEmpty()) {
         continue
       }
       if (filteredTeamsCodes.isNotEmpty() &&

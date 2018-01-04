@@ -46,6 +46,8 @@ sealed class MatchesResult : MviResult {
 
     data class ToggleFilterCompetitionResult(val tagName: String) : FilterResult()
 
+    data class ToggleFilterBroadcasterResult(val tagName: String) : FilterResult()
+
     data class ToggleFilterTeamResult(val teamCode: TeamCode) : FilterResult()
 
     sealed class LoadTagsResult : FilterResult() {
