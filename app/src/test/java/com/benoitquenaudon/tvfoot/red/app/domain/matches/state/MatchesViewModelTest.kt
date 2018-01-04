@@ -43,9 +43,6 @@ class MatchesViewModelTest {
   fun firstInitialIntent_shouldLoadMatches() {
     stateBinder.processIntents(Observable.just(MatchesIntent.InitialIntent))
 
-    testObserver.values().forEach {
-      println(it)
-    }
     testObserver.assertValueAt(0, MatchesViewState::refreshLoading)
     testObserver.assertValueAt(1, { state -> !state.refreshLoading && state.matches.isNotEmpty() })
   }
