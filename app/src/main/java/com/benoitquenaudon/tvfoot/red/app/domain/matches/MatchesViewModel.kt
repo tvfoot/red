@@ -185,7 +185,7 @@ class MatchesViewModel @Inject constructor(
                   .subscribeOn(schedulerProvider.io())
                   .delaySubscription(250, MILLISECONDS, schedulerProvider.ui())
                   .toObservable()
-                  .map<SearchTeamResult>({ teams -> SearchTeamResult.Success(action.input, teams) })
+                  .map<SearchTeamResult> { teams -> SearchTeamResult.Success(action.input, teams) }
                   .onErrorReturn(SearchTeamResult::Failure)
                   .observeOn(schedulerProvider.ui())
                   .startWith(SearchTeamResult.InFlight(action.input))

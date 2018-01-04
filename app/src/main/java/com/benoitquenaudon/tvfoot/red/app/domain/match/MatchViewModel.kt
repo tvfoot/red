@@ -73,7 +73,7 @@ class MatchViewModel @Inject constructor(
 
   private val loadMatchTransformer: ObservableTransformer<LoadMatchAction, LoadMatchResult>
     get() = ObservableTransformer { actions: Observable<LoadMatchAction> ->
-      actions.flatMap({ (matchId) ->
+      actions.flatMap { (matchId) ->
         Single.zip<Match, Boolean, LoadMatchResult>(matchRepository.loadMatch(matchId),
             preferenceRepository.loadNotifyMatchStart(matchId),
             BiFunction<Match, Boolean, LoadMatchResult> { match, shouldNotifyMatchStart ->
@@ -84,36 +84,36 @@ class MatchViewModel @Inject constructor(
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
             .startWith(LoadMatchResult.InFlight)
-      })
+      }
     }
 
   private val notifyMatchStartTransformer: ObservableTransformer<NotifyMatchStartAction, NotifyMatchStartResult>
     get() = ObservableTransformer { actions: Observable<NotifyMatchStartAction> ->
-      actions.flatMap({ (matchId, startAt, notifyMatchStart) ->
+      actions.flatMap { (matchId, startAt, notifyMatchStart) ->
         preferenceRepository.saveNotifyMatchStart(matchId, notifyMatchStart)
             .flatMap<StreamNotification> {
               notificationRepository.scheduleNotification(matchId, startAt, notifyMatchStart)
             }
             .toObservable()
             .map { NotifyMatchStartResult(notifyMatchStart) }
-      })
+      }
     }
 
   private val actionToResultTransformer: ObservableTransformer<MatchAction, MatchResult>
     get() = ObservableTransformer { actions: Observable<MatchAction> ->
-      actions.publish({ shared ->
+      actions.publish { shared ->
         Observable.merge<MatchResult>(
             shared.ofType(LoadMatchAction::class.java).compose(loadMatchTransformer),
             shared.ofType(NotifyMatchStartAction::class.java).compose(notifyMatchStartTransformer))
             .mergeWith(
                 // Error for not implemented actions
-                shared.filter({ v ->
+                shared.filter { v ->
                   v !is LoadMatchAction && v !is NotifyMatchStartAction
-                }).flatMap({ w ->
+                }.flatMap { w ->
                   Observable.error<MatchResult>(
                       IllegalArgumentException("Unknown Action type: " + w))
-                }))
-      })
+                })
+      }
     }
 
   companion object {
