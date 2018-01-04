@@ -17,6 +17,16 @@ sealed class FiltersItemDisplayable {
       }
     }
 
+    data class FiltersBroadcasterDisplayable(
+        val code: String,
+        val label: String,
+        val filtered: Boolean
+    ) : FiltersAppliableItem() {
+      override fun isSameAs(other: FiltersItemDisplayable): Boolean {
+        return if (other is FiltersBroadcasterDisplayable) this.code == other.code else false
+      }
+    }
+
     data class FiltersTeamDisplayable(
         val code: String,
         val name: String,

@@ -4,11 +4,13 @@ import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterHeaderDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterSearchLoadingRowDisplayable
+import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersBroadcasterDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersCompetitionDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersTeamDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchInputDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersHeaderBinding
+import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowBroadcasterBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowCompetitionBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamSearchBinding
@@ -27,6 +29,22 @@ sealed class FiltersViewHolder<out B : ViewDataBinding, in T : FiltersItemDispla
   ) : FiltersViewHolder<FiltersRowCompetitionBinding, FiltersCompetitionDisplayable>(binding) {
 
     override fun bind(item: FiltersCompetitionDisplayable) {
+      binding.filter = item
+      binding.handler = adapter
+      binding.executePendingBindings()
+    }
+
+    override fun unbind() {
+      binding.handler = null
+    }
+  }
+
+  class FilterBroadcasterViewHolder(
+      binding: FiltersRowBroadcasterBinding,
+      val adapter: FiltersAdapter
+  ) : FiltersViewHolder<FiltersRowBroadcasterBinding, FiltersBroadcasterDisplayable>(binding) {
+
+    override fun bind(item: FiltersBroadcasterDisplayable) {
       binding.filter = item
       binding.handler = adapter
       binding.executePendingBindings()

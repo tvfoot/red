@@ -20,7 +20,10 @@ class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapte
   fun updateFromState(state: MatchesViewState) {
     currentPage = state.currentPage
     areTagsLoaded.set(state.tags.isNotEmpty())
-    hasActiveFilters.set(state.filteredTags.isNotEmpty() || state.filteredTeams.isNotEmpty())
+    hasActiveFilters.set(
+        state.filteredBroadcasters.isNotEmpty() ||
+        state.filteredCompetitions.isNotEmpty() ||
+            state.filteredTeams.isNotEmpty())
 
     nextPageLoading = state.nextPageLoading
     hasError.set(state.error != null)
@@ -33,10 +36,11 @@ class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapte
     }
 
     val matchesDisplayables = state.matchesItemDisplayables(
-        state.nextPageLoading,
-        loadingSpecificMatches,
-        state.filteredTags,
-        state.filteredTeams
+        nextPageLoading = state.nextPageLoading,
+        loadingSpecificMatches = loadingSpecificMatches,
+        filteredBroadcasters = state.filteredBroadcasters,
+        filteredCompetitions = state.filteredCompetitions,
+        filteredTeams = state.filteredTeams
     )
     refreshLoading.set(state.refreshLoading ||
         (matchesDisplayables.isEmpty() && state.teamMatchesLoading))

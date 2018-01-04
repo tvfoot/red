@@ -19,7 +19,7 @@ sealed class MatchesIntent : MviIntent {
 
     sealed class ToggleFilterIntent : FilterIntent() {
       data class ToggleFilterCompetitionIntent(val tagName: String) : ToggleFilterIntent()
-
+      data class ToggleFilterBroadcasterIntent(val tagName: String) : ToggleFilterIntent()
       data class ToggleFilterTeamIntent(val teamCode: TeamCode) : ToggleFilterIntent()
     }
 
