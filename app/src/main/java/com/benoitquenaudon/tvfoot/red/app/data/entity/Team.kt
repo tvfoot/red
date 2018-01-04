@@ -25,8 +25,6 @@ data class Team(
     get() = if (code == null || type == null) {
       "/images/teams/default/large/default.png"
     } else {
-      val type = checkNotNull(type) { "team's type should not be null" }
-      val code = checkNotNull(code) { "team's code should not be null" }
       when (type) {
         "nation" -> String.format("/images/teams/nations/large/%s.png", code.toLowerCase())
         "club" -> {

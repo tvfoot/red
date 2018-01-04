@@ -13,7 +13,6 @@ fun <T : Any> Predicate<T>.negate(): Predicate<T> = Predicate { t -> !test(t) }
 @CheckReturnValue
 @SchedulerSupport(SchedulerSupport.NONE)
 fun <T : Any, U : Any> Observable<T>.notOfType(clazz: Class<U>): Observable<T> {
-  checkNotNull(clazz) { "clazz is null" }
   return filter(Functions.isInstanceOf<T, U>(clazz).negate())
 }
 

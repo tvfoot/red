@@ -84,9 +84,6 @@ class MatchesViewModelTest {
     testObserver.assertValueAt(2, MatchesViewState::nextPageLoading)
     testObserver.assertValueAt(3) { state -> !state.nextPageLoading }
 
-    testObserver.values().forEachIndexed { index, matchesViewState ->
-      println("$index: ${matchesViewState.matches.size}")
-    }
     testObserver.values().let { viewStates ->
       assert(viewStates[3].matches.size > viewStates[2].matches.size) {
         "A next page loading should append matches"

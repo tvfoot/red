@@ -126,13 +126,11 @@ class MatchViewModel @Inject constructor(
             is LoadMatchResult.Failure ->
               previousState.copy(loading = false, error = matchResult.throwable)
             is LoadMatchResult.Success -> {
-              val match: Match = checkNotNull(matchResult.match) { "Match == null" }
-
               previousState.copy(
                   loading = false,
                   error = null,
                   shouldNotifyMatchStart = matchResult.shouldNotifyMatchStart,
-                  match = MatchDisplayable.fromMatch(match))
+                  match = MatchDisplayable.fromMatch(matchResult.match))
             }
           }
         }
