@@ -2,6 +2,7 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
+import com.benoitquenaudon.tvfoot.red.app.data.entity.FilterTeam
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.BasePreferenceRepository
@@ -51,6 +52,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshRe
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
+import com.benoitquenaudon.tvfoot.red.util.Quintuple
 import com.benoitquenaudon.tvfoot.red.util.TagName
 import com.benoitquenaudon.tvfoot.red.util.TagTargets
 import com.benoitquenaudon.tvfoot.red.util.logAction
@@ -172,10 +174,19 @@ class MatchesViewModel @Inject constructor(
             matchesRepository.loadTags(),
             preferenceRepository.loadFilteredCompetitionNames(),
             preferenceRepository.loadFilteredBroadcasterNames(),
-            ::Triple
+            preferenceRepository.loadFilteredTeamCodes(),
+            preferenceRepository.loadTeams(),
+            ::Quintuple
         )
             .toObservable()
-            .map<LoadTagsResult> { LoadTagsResult.Success(it.first, it.second, it.third) }
+            .map<LoadTagsResult> {
+              LoadTagsResult.Success(
+                  tags = it.first,
+                  filteredCompetitionNames = it.second,
+                  filteredBroadcasterNames = it.third,
+                  filteredTeamNames = it.fourth,
+                  teams = it.fifth)
+            }
             .onErrorReturn(LoadTagsResult::Failure)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
@@ -211,7 +222,9 @@ class MatchesViewModel @Inject constructor(
       actions.map {
         preferenceRepository.clearFilteredCompetitionNames()
         preferenceRepository.clearFilteredBroadcasterNames()
-        ClearFiltersResult }
+        preferenceRepository.clearFilteredTeamCodes()
+        ClearFiltersResult
+      }
     }
 
   private val toggleFilterCompetitionTransformer: ObservableTransformer<ToggleFilterCompetitionAction, ToggleFilterCompetitionResult>
@@ -232,7 +245,10 @@ class MatchesViewModel @Inject constructor(
 
   private val toggleFilterTeamTransformer: ObservableTransformer<ToggleFilterTeamAction, ToggleFilterTeamResult>
     get() = ObservableTransformer { actions: Observable<ToggleFilterTeamAction> ->
-      actions.map { ToggleFilterTeamResult(it.teamCode) }
+      actions.map {
+        preferenceRepository.toggleFilteredTeamCode(it.teamCode)
+        ToggleFilterTeamResult(it.teamCode)
+      }
     }
 
   private val clearSearchInputTransformer: ObservableTransformer<ClearSearchInputAction, ClearSearchInputResult>
@@ -243,7 +259,9 @@ class MatchesViewModel @Inject constructor(
   private val searchedTeamSelectedTransformer: ObservableTransformer<SearchedTeamSelectedAction, SearchedTeamSelectedResult>
     get() = ObservableTransformer { actions: Observable<SearchedTeamSelectedAction> ->
       actions.flatMap { action ->
-        matchesRepository.searchTeamMatchesWithNotificationStatus(action.team.code)
+        preferenceRepository.addTeam(FilterTeam(action.team))
+            .flatMap { preferenceRepository.toggleFilteredTeamCode(action.team.code) }
+            .flatMap { matchesRepository.searchTeamMatchesWithNotificationStatus(action.team.code) }
             .toObservable()
             .map<SearchedTeamSelectedResult> { TeamSearchSuccess(it.first, it.second) }
             .onErrorReturn(::TeamSearchFailure)
@@ -407,7 +425,9 @@ class MatchesViewModel @Inject constructor(
                   tagsLoading = false,
                   tags = displayedTags,
                   filteredBroadcasters = filteredBroadcasters,
-                  filteredCompetitions = filteredCompetitions
+                  filteredCompetitions = filteredCompetitions,
+                  filteredTeams = result.filteredTeamNames,
+                  teams = result.teams
               )
             }
           }

@@ -55,8 +55,9 @@ sealed class MatchesResult : MviResult {
       data class Success(
           val tags: List<Tag>,
           val filteredCompetitionNames: List<TagName>,
-          val filteredBroadcasterNames: List<TagName>
-//          val filteredTeamNames: List<TeamCode>
+          val filteredBroadcasterNames: List<TagName>,
+          val filteredTeamNames: List<TeamCode>,
+          val teams: List<FilterTeam>
       ) : LoadTagsResult()
 
       data class Failure(val throwable: Throwable) : LoadTagsResult()
@@ -91,14 +92,7 @@ sealed class MatchesResult : MviResult {
           operator fun invoke(
               searchedTeam: TeamSearchResultDisplayable
           ): TeamSearchInFlight {
-            return TeamSearchInFlight(
-                FilterTeam(
-                    code = searchedTeam.code,
-                    type = searchedTeam.type,
-                    name = searchedTeam.name,
-                    country = searchedTeam.country
-                )
-            )
+            return TeamSearchInFlight(FilterTeam(searchedTeam))
           }
         }
       }

@@ -55,6 +55,7 @@ class PreferenceRepository @Inject constructor(
         .flatMapIterable()
         .flatMapSingle { teamCode: TeamCode -> loadTeam(teamCode) }
         .toList()
+        .map { it.asReversed() }
   }
 
   private fun loadTeam(teamCode: TeamCode): Single<FilterTeam> {
