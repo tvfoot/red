@@ -51,6 +51,8 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshRe
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
+import com.benoitquenaudon.tvfoot.red.util.TagName
+import com.benoitquenaudon.tvfoot.red.util.TagTargets
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
 import com.benoitquenaudon.tvfoot.red.util.logResult
@@ -59,6 +61,7 @@ import com.benoitquenaudon.tvfoot.red.util.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.Singles
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
@@ -165,9 +168,14 @@ class MatchesViewModel @Inject constructor(
   private val loadTagsTransformer: ObservableTransformer<LoadTagsAction, LoadTagsResult>
     get() = ObservableTransformer { actions: Observable<LoadTagsAction> ->
       actions.flatMap {
-        matchesRepository.loadTags()
+        Singles.zip(
+            matchesRepository.loadTags(),
+            preferenceRepository.loadFilteredCompetitionNames(),
+            preferenceRepository.loadFilteredBroadcasterNames(),
+            ::Triple
+        )
             .toObservable()
-            .map<LoadTagsResult>(LoadTagsResult::Success)
+            .map<LoadTagsResult> { LoadTagsResult.Success(it.first, it.second, it.third) }
             .onErrorReturn(LoadTagsResult::Failure)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
@@ -200,17 +208,26 @@ class MatchesViewModel @Inject constructor(
 
   private val clearFilterTransformer: ObservableTransformer<ClearFiltersAction, ClearFiltersResult>
     get() = ObservableTransformer { actions: Observable<ClearFiltersAction> ->
-      actions.map { ClearFiltersResult }
+      actions.map {
+        preferenceRepository.clearFilteredCompetitionNames()
+        preferenceRepository.clearFilteredBroadcasterNames()
+        ClearFiltersResult }
     }
 
   private val toggleFilterCompetitionTransformer: ObservableTransformer<ToggleFilterCompetitionAction, ToggleFilterCompetitionResult>
     get() = ObservableTransformer { actions: Observable<ToggleFilterCompetitionAction> ->
-      actions.map { ToggleFilterCompetitionResult(it.tagName) }
+      actions.map {
+        preferenceRepository.toggleFilteredCompetitionName(it.tagName)
+        ToggleFilterCompetitionResult(it.tagName)
+      }
     }
 
   private val toggleFilterBroadcasterTransformer: ObservableTransformer<ToggleFilterBroadcasterAction, ToggleFilterBroadcasterResult>
     get() = ObservableTransformer { actions: Observable<ToggleFilterBroadcasterAction> ->
-      actions.map { ToggleFilterBroadcasterResult(it.tagName) }
+      actions.map {
+        preferenceRepository.toggleFilteredBroadcasterName(it.tagName)
+        ToggleFilterBroadcasterResult(it.tagName)
+      }
     }
 
   private val toggleFilterTeamTransformer: ObservableTransformer<ToggleFilterTeamAction, ToggleFilterTeamResult>
@@ -373,11 +390,26 @@ class MatchesViewModel @Inject constructor(
               previousState.copy(tagsLoading = true, tagsError = null)
             is LoadTagsResult.Failure ->
               previousState.copy(tagsLoading = false, tagsError = result.throwable)
-            is LoadTagsResult.Success ->
+            is LoadTagsResult.Success -> {
+              val displayedTags = result.tags.filter(Tag::display)
+              val filteredBroadcasters: Map<TagName, TagTargets> = displayedTags
+                  .filter(Tag::isBroadcast)
+                  .filter { it.name in result.filteredBroadcasterNames }
+                  .map { it.name to it.targets }
+                  .toMap()
+              val filteredCompetitions: Map<TagName, TagTargets> = displayedTags
+                  .filter(Tag::isCompetition)
+                  .filter { it.name in result.filteredCompetitionNames }
+                  .map { it.name to it.targets }
+                  .toMap()
+
               previousState.copy(
                   tagsLoading = false,
-                  tags = result.tags.filter(Tag::display)
+                  tags = displayedTags,
+                  filteredBroadcasters = filteredBroadcasters,
+                  filteredCompetitions = filteredCompetitions
               )
+            }
           }
         }
         is SearchTeamResult ->

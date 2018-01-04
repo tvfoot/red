@@ -7,6 +7,7 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviResult
 import com.benoitquenaudon.tvfoot.red.util.MatchId
+import com.benoitquenaudon.tvfoot.red.util.TagName
 import com.benoitquenaudon.tvfoot.red.util.TeamCode
 import com.benoitquenaudon.tvfoot.red.util.WillBeNotified
 
@@ -51,8 +52,15 @@ sealed class MatchesResult : MviResult {
     data class ToggleFilterTeamResult(val teamCode: TeamCode) : FilterResult()
 
     sealed class LoadTagsResult : FilterResult() {
-      data class Success(val tags: List<Tag>) : LoadTagsResult()
+      data class Success(
+          val tags: List<Tag>,
+          val filteredCompetitionNames: List<TagName>,
+          val filteredBroadcasterNames: List<TagName>
+//          val filteredTeamNames: List<TeamCode>
+      ) : LoadTagsResult()
+
       data class Failure(val throwable: Throwable) : LoadTagsResult()
+
       object InFlight : LoadTagsResult()
     }
 
