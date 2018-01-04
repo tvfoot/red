@@ -2,6 +2,7 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
+import com.benoitquenaudon.tvfoot.red.app.data.entity.FilterTeam
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.BasePreferenceRepository
@@ -51,6 +52,9 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesResult.RefreshRe
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModel
+import com.benoitquenaudon.tvfoot.red.util.Quintuple
+import com.benoitquenaudon.tvfoot.red.util.TagName
+import com.benoitquenaudon.tvfoot.red.util.TagTargets
 import com.benoitquenaudon.tvfoot.red.util.logAction
 import com.benoitquenaudon.tvfoot.red.util.logIntent
 import com.benoitquenaudon.tvfoot.red.util.logResult
@@ -59,6 +63,7 @@ import com.benoitquenaudon.tvfoot.red.util.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.Singles
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
@@ -165,9 +170,23 @@ class MatchesViewModel @Inject constructor(
   private val loadTagsTransformer: ObservableTransformer<LoadTagsAction, LoadTagsResult>
     get() = ObservableTransformer { actions: Observable<LoadTagsAction> ->
       actions.flatMap {
-        matchesRepository.loadTags()
+        Singles.zip(
+            matchesRepository.loadTags(),
+            preferenceRepository.loadFilteredCompetitionNames(),
+            preferenceRepository.loadFilteredBroadcasterNames(),
+            preferenceRepository.loadFilteredTeamCodes(),
+            preferenceRepository.loadTeams(),
+            ::Quintuple
+        )
             .toObservable()
-            .map<LoadTagsResult>(LoadTagsResult::Success)
+            .map<LoadTagsResult> {
+              LoadTagsResult.Success(
+                  tags = it.first,
+                  filteredCompetitionNames = it.second,
+                  filteredBroadcasterNames = it.third,
+                  filteredTeamNames = it.fourth,
+                  teams = it.fifth)
+            }
             .onErrorReturn(LoadTagsResult::Failure)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
@@ -185,7 +204,7 @@ class MatchesViewModel @Inject constructor(
                   .subscribeOn(schedulerProvider.io())
                   .delaySubscription(250, MILLISECONDS, schedulerProvider.ui())
                   .toObservable()
-                  .map<SearchTeamResult>({ teams -> SearchTeamResult.Success(action.input, teams) })
+                  .map<SearchTeamResult> { teams -> SearchTeamResult.Success(action.input, teams) }
                   .onErrorReturn(SearchTeamResult::Failure)
                   .observeOn(schedulerProvider.ui())
                   .startWith(SearchTeamResult.InFlight(action.input))
@@ -200,22 +219,36 @@ class MatchesViewModel @Inject constructor(
 
   private val clearFilterTransformer: ObservableTransformer<ClearFiltersAction, ClearFiltersResult>
     get() = ObservableTransformer { actions: Observable<ClearFiltersAction> ->
-      actions.map { ClearFiltersResult }
+      actions.map {
+        preferenceRepository.clearFilteredCompetitionNames()
+        preferenceRepository.clearFilteredBroadcasterNames()
+        preferenceRepository.clearFilteredTeamCodes()
+        ClearFiltersResult
+      }
     }
 
   private val toggleFilterCompetitionTransformer: ObservableTransformer<ToggleFilterCompetitionAction, ToggleFilterCompetitionResult>
     get() = ObservableTransformer { actions: Observable<ToggleFilterCompetitionAction> ->
-      actions.map { ToggleFilterCompetitionResult(it.tagName) }
+      actions.map {
+        preferenceRepository.toggleFilteredCompetitionName(it.tagName)
+        ToggleFilterCompetitionResult(it.tagName)
+      }
     }
 
   private val toggleFilterBroadcasterTransformer: ObservableTransformer<ToggleFilterBroadcasterAction, ToggleFilterBroadcasterResult>
     get() = ObservableTransformer { actions: Observable<ToggleFilterBroadcasterAction> ->
-      actions.map { ToggleFilterBroadcasterResult(it.tagName) }
+      actions.map {
+        preferenceRepository.toggleFilteredBroadcasterName(it.tagName)
+        ToggleFilterBroadcasterResult(it.tagName)
+      }
     }
 
   private val toggleFilterTeamTransformer: ObservableTransformer<ToggleFilterTeamAction, ToggleFilterTeamResult>
     get() = ObservableTransformer { actions: Observable<ToggleFilterTeamAction> ->
-      actions.map { ToggleFilterTeamResult(it.teamCode) }
+      actions.map {
+        preferenceRepository.toggleFilteredTeamCode(it.teamCode)
+        ToggleFilterTeamResult(it.teamCode)
+      }
     }
 
   private val clearSearchInputTransformer: ObservableTransformer<ClearSearchInputAction, ClearSearchInputResult>
@@ -226,7 +259,9 @@ class MatchesViewModel @Inject constructor(
   private val searchedTeamSelectedTransformer: ObservableTransformer<SearchedTeamSelectedAction, SearchedTeamSelectedResult>
     get() = ObservableTransformer { actions: Observable<SearchedTeamSelectedAction> ->
       actions.flatMap { action ->
-        matchesRepository.searchTeamMatchesWithNotificationStatus(action.team.code)
+        preferenceRepository.addTeam(FilterTeam(action.team))
+            .flatMap { preferenceRepository.toggleFilteredTeamCode(action.team.code) }
+            .flatMap { matchesRepository.searchTeamMatchesWithNotificationStatus(action.team.code) }
             .toObservable()
             .map<SearchedTeamSelectedResult> { TeamSearchSuccess(it.first, it.second) }
             .onErrorReturn(::TeamSearchFailure)
@@ -373,11 +408,28 @@ class MatchesViewModel @Inject constructor(
               previousState.copy(tagsLoading = true, tagsError = null)
             is LoadTagsResult.Failure ->
               previousState.copy(tagsLoading = false, tagsError = result.throwable)
-            is LoadTagsResult.Success ->
+            is LoadTagsResult.Success -> {
+              val displayedTags = result.tags.filter(Tag::display)
+              val filteredBroadcasters: Map<TagName, TagTargets> = displayedTags
+                  .filter(Tag::isBroadcast)
+                  .filter { it.name in result.filteredBroadcasterNames }
+                  .map { it.name to it.targets }
+                  .toMap()
+              val filteredCompetitions: Map<TagName, TagTargets> = displayedTags
+                  .filter(Tag::isCompetition)
+                  .filter { it.name in result.filteredCompetitionNames }
+                  .map { it.name to it.targets }
+                  .toMap()
+
               previousState.copy(
                   tagsLoading = false,
-                  tags = result.tags.filter(Tag::display)
+                  tags = displayedTags,
+                  filteredBroadcasters = filteredBroadcasters,
+                  filteredCompetitions = filteredCompetitions,
+                  filteredTeams = result.filteredTeamNames,
+                  teams = result.teams
               )
+            }
           }
         }
         is SearchTeamResult ->

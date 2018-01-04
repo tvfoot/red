@@ -3,6 +3,7 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.TeamSearchResultDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviIntent
 import com.benoitquenaudon.tvfoot.red.util.MatchId
+import com.benoitquenaudon.tvfoot.red.util.TagName
 import com.benoitquenaudon.tvfoot.red.util.TeamCode
 
 sealed class MatchesIntent : MviIntent {
@@ -18,8 +19,8 @@ sealed class MatchesIntent : MviIntent {
     object ClearFilters : FilterIntent()
 
     sealed class ToggleFilterIntent : FilterIntent() {
-      data class ToggleFilterCompetitionIntent(val tagName: String) : ToggleFilterIntent()
-      data class ToggleFilterBroadcasterIntent(val tagName: String) : ToggleFilterIntent()
+      data class ToggleFilterCompetitionIntent(val tagName: TagName) : ToggleFilterIntent()
+      data class ToggleFilterBroadcasterIntent(val tagName: TagName) : ToggleFilterIntent()
       data class ToggleFilterTeamIntent(val teamCode: TeamCode) : ToggleFilterIntent()
     }
 

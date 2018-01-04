@@ -122,10 +122,10 @@ private fun parseMatchDay(matchLabel: String?, matchDay: String?): String? {
     if (matchDay.isNullOrEmpty()) return null // happens sometimes...
 
     val dayAsInt: Int? = matchDay?.toIntOrNull()
-    if (dayAsInt == null) {
-      return checkNotNull(matchDay)
+    return if (dayAsInt == null) {
+      checkNotNull(matchDay)
     } else {
-      return "J. $matchDay"
+      "J. $matchDay"
     }
   } else {
     return checkNotNull(matchLabel)
