@@ -41,7 +41,7 @@ class MatchViewModel @Inject constructor(
   }
 
   override fun processIntents(intents: Observable<MatchIntent>) {
-    intents.subscribe(intentsSubject::onNext)
+    intents.subscribe(intentsSubject)
   }
 
   override fun states(): Observable<MatchViewState> = statesObservable

@@ -33,6 +33,7 @@ import com.benoitquenaudon.tvfoot.red.databinding.FragmentFiltersBinding
 import com.jakewharton.rxbinding2.support.v7.widget.RxToolbar
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -134,7 +135,7 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
   }
 
   private fun bind() {
-    disposables.add(viewModel.states().subscribe(this::render))
+    disposables.add(viewModel.states().subscribe(this::render, Timber::e))
     viewModel.processIntents(intents())
     disposables.add(
         RxObservableBoolean.propertyChanges(bindingModel.hasFilters)

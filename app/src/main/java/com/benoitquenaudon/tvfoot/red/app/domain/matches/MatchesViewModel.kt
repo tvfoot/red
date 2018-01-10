@@ -85,7 +85,7 @@ class MatchesViewModel @Inject constructor(
   override fun states(): Observable<MatchesViewState> = statesObservable
 
   override fun processIntents(intents: Observable<MatchesIntent>) {
-    intents.subscribe(intentsSubject::onNext)
+    intents.subscribe(intentsSubject)
   }
 
   private fun compose(): Observable<MatchesViewState> {
