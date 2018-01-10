@@ -84,7 +84,7 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   }
 
   private fun bind() {
-    disposables.add(viewModel.states().subscribe(this::render))
+    disposables.add(viewModel.states().subscribe(this::render, Timber::e))
     viewModel.processIntents(intents())
 
     disposables.add(RxObservableBoolean.propertyChanges(bindingModel.shouldNotifyMatchStart)
