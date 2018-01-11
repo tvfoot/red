@@ -15,5 +15,5 @@ abstract class MatchesActivityModule {
 
   @FragmentScope
   @ContributesAndroidInjector
-  internal abstract fun filtersFragment(): FiltersFragment
+  abstract fun filtersFragment(): FiltersFragment
 }

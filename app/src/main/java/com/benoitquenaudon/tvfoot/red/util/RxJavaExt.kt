@@ -5,7 +5,6 @@ import io.reactivex.Single
 import io.reactivex.annotations.CheckReturnValue
 import io.reactivex.annotations.SchedulerSupport
 import io.reactivex.functions.Predicate
-import io.reactivex.internal.functions.Functions
 
 
 fun <T : Any> Predicate<T>.negate(): Predicate<T> = Predicate { t -> !test(t) }
@@ -13,7 +12,7 @@ fun <T : Any> Predicate<T>.negate(): Predicate<T> = Predicate { t -> !test(t) }
 @CheckReturnValue
 @SchedulerSupport(SchedulerSupport.NONE)
 fun <T : Any, U : Any> Observable<T>.notOfType(clazz: Class<U>): Observable<T> {
-  return filter(Functions.isInstanceOf<T, U>(clazz).negate())
+  return filter(Predicate(clazz::isInstance).negate())
 }
 
 @CheckReturnValue
