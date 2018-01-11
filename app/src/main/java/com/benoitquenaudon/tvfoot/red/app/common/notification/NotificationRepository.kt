@@ -27,7 +27,8 @@ class NotificationRepository @Inject constructor(
 
     if (shouldNotify) {
       alarmManager.setExact(
-          AlarmManager.RTC_WAKEUP, startAt - TimeUnit.MINUTES.toMillis(MINUTES_BEFORE_NOTIFICATION),
+          AlarmManager.RTC_WAKEUP,
+          startAt - TimeUnit.MINUTES.toMillis(MINUTES_BEFORE_NOTIFICATION.toLong()),
           serviceIntent)
     } else {
       alarmManager.cancel(serviceIntent)
