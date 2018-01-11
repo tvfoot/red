@@ -11,6 +11,7 @@
   <ImageView
       android:layout_width="24dp"
       android:layout_height="24dp"
+      android:contentDescription="@string/filters"
       app:srcCompat="@drawable/ic_filter_list_white_24px"
       />
   <ImageView
@@ -19,6 +20,7 @@
       android:layout_height="8dp"
       android:layout_gravity="bottom|end"
       android:layout_margin="4dp"
+      android:contentDescription="@string/filters_are_active"
       app:srcCompat="@drawable/menu_active_badge"
       />
 </FrameLayout>

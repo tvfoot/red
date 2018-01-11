@@ -8,7 +8,7 @@ import dagger.android.DaggerApplication
 import timber.log.Timber
 
 class RedApp : DaggerApplication() {
-  override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+  override fun applicationInjector(): AndroidInjector<RedApp> {
     return DaggerAppComponent.builder().create(this)
   }
 

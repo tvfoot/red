@@ -36,6 +36,7 @@
           android:layout_alignParentTop="true"
           android:layout_marginStart="12dp"
           android:layout_marginTop="12dp"
+          android:contentDescription="@string/library_image"
           android:padding="4dp"
           android:src="@drawable/avatar_placeholder"
           app:layout_constraintStart_toStartOf="parent"

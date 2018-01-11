@@ -21,7 +21,10 @@
   <string name="pref_about_oss_licenses">Open source licenses</string>
   <string name="library_header_desc">Baked with the help of these amazing libraries</string>
   <string name="library_link_label">Website</string>
-  <string name="will_be_notify_desc">You will be notified %d minutes before the game starts</string>
+  <plurals name="will_be_notify_desc">
+    <item quantity="one">You will be notified %d minute before the game starts</item>
+    <item quantity="other">You will be notified %d minutes before the game starts</item>
+  </plurals>
   <string name="filters">Filters</string>
   <string name="filters_clearAll">Clear all</string>
   <string name="notification_match_starting_channel_name">Start of games</string>
@@ -32,4 +35,8 @@
   <string name="broadcasters">Broadcasters</string>
   <string name="teams">Teams</string>
   <string name="add_team_to_filter">Add this team to the filter</string>
+  <string name="filters_are_active">Some filters are activated</string>
+  <string name="library_image">Library image</string>
+  <string name="notification_indicator">Notification indicator</string>
+  <string name="no_broadcaster">No broadcaster</string>
 </resources>
