@@ -1,7 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
 
-import android.app.Activity
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
@@ -13,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
-import com.benoitquenaudon.tvfoot.red.app.common.BaseFragment
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.ClearFilters
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.FilterIntent.FilterInitialIntent
@@ -31,13 +29,14 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisp
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.FragmentFiltersBinding
 import com.jakewharton.rxbinding2.support.v7.widget.RxToolbar
+import dagger.android.support.DaggerFragment
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
-class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState> {
+class FiltersFragment : DaggerFragment(), MviView<MatchesIntent, MatchesViewState> {
   @Inject lateinit var disposables: CompositeDisposable
   @Inject lateinit var bindingModel: FiltersBindingModel
   @Inject lateinit var filtersAdapter: FiltersAdapter
@@ -54,12 +53,6 @@ class FiltersFragment : BaseFragment(), MviView<MatchesIntent, MatchesViewState>
 
   companion object Factory {
     fun newInstance(): FiltersFragment = FiltersFragment()
-  }
-
-  @Suppress("OverridingDeprecatedMember", "DEPRECATION")
-  override fun onAttach(activity: Activity?) {
-    fragmentComponent.inject(this)
-    super.onAttach(activity)
   }
 
   override fun onCreateView(

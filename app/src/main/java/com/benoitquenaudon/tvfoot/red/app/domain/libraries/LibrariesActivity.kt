@@ -21,7 +21,6 @@ class LibrariesActivity : BaseActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    activityComponent.inject(this)
 
     setSupportActionBar(binding.librariesToolbar)
     supportActionBar?.let {

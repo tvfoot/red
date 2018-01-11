@@ -65,7 +65,6 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    activityComponent.inject(this)
 
     setupView()
     bind()

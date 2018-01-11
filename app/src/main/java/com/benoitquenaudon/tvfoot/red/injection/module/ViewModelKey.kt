@@ -12,4 +12,4 @@ import kotlin.reflect.KClass
 @Target(FUNCTION, PROPERTY_GETTER, PROPERTY_SETTER)
 @Retention(RUNTIME)
 @MapKey
-internal annotation class ViewModelKey(val value: KClass<out ViewModel>)
+annotation class ViewModelKey(val value: KClass<out ViewModel>)

@@ -45,7 +45,6 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    activityComponent.inject(this)
 
     val intent = intent
     matchId = intent.getStringExtra(Match.MATCH_ID)

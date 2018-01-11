@@ -1,15 +1,9 @@
 package com.benoitquenaudon.tvfoot.red.app.common
 
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import com.benoitquenaudon.tvfoot.red.injection.component.ActivityComponent
-import com.benoitquenaudon.tvfoot.red.util.newActivityComponent
+import dagger.android.support.DaggerAppCompatActivity
 
-abstract class BaseActivity : AppCompatActivity() {
-  val activityComponent: ActivityComponent by lazy {
-    this.newActivityComponent()
-  }
-
+abstract class BaseActivity : DaggerAppCompatActivity() {
   override fun onOptionsItemSelected(item: MenuItem) =
       when (item.itemId) {
         android.R.id.home -> {
