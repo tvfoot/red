@@ -59,8 +59,7 @@ class MatchViewModel @Inject constructor(
         .doOnNext(this::logAction)
         .compose<MatchResult>(actionToResultTransformer)
         .doOnNext(this::logResult)
-        .scan(MatchViewState.idle(),
-            reducer)
+        .scan(MatchViewState.idle(), MatchViewStateMachine)
         .doOnNext(this::logState)
   }
 
@@ -115,29 +114,4 @@ class MatchViewModel @Inject constructor(
                 })
       }
     }
-
-  companion object {
-    private val reducer = BiFunction { previousState: MatchViewState, matchResult: MatchResult ->
-      when (matchResult) {
-        is LoadMatchResult -> {
-          when (matchResult) {
-            is LoadMatchResult.InFlight ->
-              previousState.copy(loading = true, error = null)
-            is LoadMatchResult.Failure ->
-              previousState.copy(loading = false, error = matchResult.throwable)
-            is LoadMatchResult.Success -> {
-              previousState.copy(
-                  loading = false,
-                  error = null,
-                  shouldNotifyMatchStart = matchResult.shouldNotifyMatchStart,
-                  match = MatchDisplayable.fromMatch(matchResult.match))
-            }
-          }
-        }
-        is NotifyMatchStartResult -> {
-          previousState.copy(shouldNotifyMatchStart = matchResult.shouldNotifyMatchStart)
-        }
-      }
-    }
-  }
 }
