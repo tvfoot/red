@@ -50,7 +50,7 @@ ext {
             buildToolsVersion: '26.0.2']
 
   lib = [supportLibraryVersion          : '27.0.2',
-         constraintLayoutVersion        : '1.1.0-beta3',
+         constraintLayoutVersion        : '1.1.0-beta4',
          picassoVersion                 : '2.5.2',
          picassoOkHttp3DownloaderVersion: '1.1.0',
          okHttpVersion                  : '3.6.0',
@@ -68,7 +68,7 @@ ext {
          rxAndroidVersion               : '2.0.1',
          retrofit2RxJava2Adapter        : '1.0.0',
          leakCanaryVersion              : '1.5.4',
-         firebaseVersion                : '11.6.2',
+         firebaseVersion                : '11.8.0',
          rxBindingVersion               : '2.0.0',
          rxDataBindingVersion           : '2.0.0',
          archComponentsVersion          : '1.0.0']
