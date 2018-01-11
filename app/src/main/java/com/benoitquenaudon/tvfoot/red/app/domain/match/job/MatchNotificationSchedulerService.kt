@@ -2,11 +2,11 @@ package com.benoitquenaudon.tvfoot.red.app.domain.match.job
 
 import android.app.job.JobParameters
 import android.app.job.JobService
-import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationRepository
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.source.MatchRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
+import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
@@ -22,8 +22,8 @@ class MatchNotificationSchedulerService : JobService() {
   private val nowOnCreate: Long = System.currentTimeMillis()
 
   override fun onCreate() {
+    AndroidInjection.inject(this)
     super.onCreate()
-    (application as RedApp).appComponent.inject(this)
   }
 
   override fun onStartJob(params: JobParameters?): Boolean {

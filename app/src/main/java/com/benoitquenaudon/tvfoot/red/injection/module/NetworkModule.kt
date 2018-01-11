@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.injection.module
 
-import android.app.Application
 import com.benoitquenaudon.tvfoot.red.BuildConfig
+import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.api.TvfootService
 import com.benoitquenaudon.tvfoot.red.app.data.entity.ApplicationJsonAdapterFactory
 import com.jakewharton.picasso.OkHttp3Downloader
@@ -68,7 +68,7 @@ object NetworkModule {
   @JvmStatic
   @Provides
   @Singleton
-  fun providePicasso(context: Application, okHttp3Downloader: OkHttp3Downloader): Picasso {
+  fun providePicasso(context: RedApp, okHttp3Downloader: OkHttp3Downloader): Picasso {
     return Picasso.Builder(context).downloader(okHttp3Downloader).build()
   }
 }

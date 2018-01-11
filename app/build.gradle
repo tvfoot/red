@@ -112,7 +112,6 @@ dependencies {
   implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.lib.retrofitVersion"
   implementation "com.squareup.moshi:moshi:$rootProject.lib.moshiVersion"
   implementation "com.squareup.moshi:moshi-adapters:$rootProject.lib.moshiVersion"
-  implementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
   implementation "com.google.firebase:firebase-core:$rootProject.lib.firebaseVersion"
   implementation "com.google.firebase:firebase-perf:$rootProject.lib.firebaseVersion"
   // Only use crash reporting in the "prod" product flavor
@@ -125,6 +124,10 @@ dependencies {
   debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.lib.leakCanaryVersion"
   releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.lib.leakCanaryVersion"
   kapt "com.android.databinding:compiler:$android_plugin_version"
+  implementation "com.google.dagger:dagger-android:$rootProject.lib.daggerVersion"
+  implementation "com.google.dagger:dagger-android-support:$rootProject.lib.daggerVersion"
+  implementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
+  kapt "com.google.dagger:dagger-android-processor:$rootProject.lib.daggerVersion"
   kapt "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
   implementation 'se.ansman.kotshi:api:0.1.1'
   kapt 'se.ansman.kotshi:compiler:0.1.1'

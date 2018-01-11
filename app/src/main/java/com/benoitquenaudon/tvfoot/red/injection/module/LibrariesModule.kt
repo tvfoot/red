@@ -12,7 +12,7 @@ object LibrariesModule {
   @Provides
   @Singleton
   fun provideLibraries(): List<Library> {
-    return arrayListOf(
+    return listOf(
         Library("Android support libraries",
             "The Android support libraries offer a number of features that are not built into the framework.",
             "https://developer.android.com/topic/libraries/support-library",

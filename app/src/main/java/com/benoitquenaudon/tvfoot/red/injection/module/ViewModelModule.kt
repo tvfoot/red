@@ -13,14 +13,14 @@ import dagger.multibindings.IntoMap
   @Binds
   @IntoMap
   @ViewModelKey(MatchesViewModel::class)
-  internal abstract fun bindMatchesViewModel(matchesViewModel: MatchesViewModel): ViewModel
+  abstract fun bindMatchesViewModel(matchesViewModel: MatchesViewModel): ViewModel
 
   @Binds
   @IntoMap
   @ViewModelKey(MatchViewModel::class)
-  internal abstract fun bindMatchViewModel(matchViewModel: MatchViewModel): ViewModel
+  abstract fun bindMatchViewModel(matchViewModel: MatchViewModel): ViewModel
 
-  @Binds internal abstract fun bindViewModelFactory(
+  @Binds abstract fun bindViewModelFactory(
       factory: RedViewModelFactory
   ): ViewModelProvider.Factory
 }

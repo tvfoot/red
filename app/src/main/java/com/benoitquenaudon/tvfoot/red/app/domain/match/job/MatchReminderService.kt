@@ -3,19 +3,19 @@ package com.benoitquenaudon.tvfoot.red.app.domain.match.job
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MatchNotificationHelper
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
+import dagger.android.DaggerService
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import timber.log.Timber
 import javax.inject.Inject
 
-class MatchReminderService : Service() {
+class MatchReminderService : DaggerService() {
   @Inject lateinit var matchRepository: BaseMatchRepository
   @Inject lateinit var preferenceRepository: PreferenceRepository
   @Inject lateinit var schedulerProvider: BaseSchedulerProvider
@@ -23,11 +23,6 @@ class MatchReminderService : Service() {
 
   override fun onBind(intent: Intent): IBinder? {
     return null
-  }
-
-  override fun onCreate() {
-    super.onCreate()
-    (application as RedApp).appComponent.inject(this)
   }
 
   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {

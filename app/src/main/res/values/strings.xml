@@ -21,7 +21,10 @@
   <string name="pref_about_oss_licenses">Licenses Open source</string>
   <string name="library_header_desc">Préparé avec l\'aide de ces fantastiques librairies</string>
   <string name="library_link_label">Website</string>
-  <string name="will_be_notify_desc">Vous recevrez une notification %d minutes avant que le match commence</string>
+  <plurals name="will_be_notify_desc">
+    <item quantity="one">Vous recevrez une notification %d minute avant que le match commence</item>
+    <item quantity="other">Vous recevrez une notification %d minutes avant que le match commence</item>
+  </plurals>
   <string name="filters">Filtres</string>
   <string name="filters_clearAll">Supprimer tout</string>
   <string name="notification_match_starting_channel_name">Début de matchs</string>
@@ -32,4 +35,8 @@
   <string name="broadcasters">Chaînes</string>
   <string name="teams">Equipes</string>
   <string name="add_team_to_filter">Ajouter cette équipe au filtre</string>
+  <string name="filters_are_active">Des filtres sont actifs</string>
+  <string name="library_image">Image de la librairie</string>
+  <string name="notification_indicator">Indicateur de notification</string>
+  <string name="no_broadcaster">Match non diffusé</string>
 </resources>

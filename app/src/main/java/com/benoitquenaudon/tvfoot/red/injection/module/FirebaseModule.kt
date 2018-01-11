@@ -1,6 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.injection.module
 
-import android.app.Application
+import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.firebase.RedFirebaseAnalytics
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -14,7 +14,7 @@ object FirebaseModule {
   @JvmStatic
   @Provides
   @Singleton
-  fun provideFirebaseAnalytics(context: Application): FirebaseAnalytics {
+  fun provideFirebaseAnalytics(context: RedApp): FirebaseAnalytics {
     return FirebaseAnalytics.getInstance(context)
   }
 

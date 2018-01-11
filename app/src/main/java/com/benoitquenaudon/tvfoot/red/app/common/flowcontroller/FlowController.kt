@@ -8,10 +8,10 @@ import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import javax.inject.Inject
 
-
-class FlowController @Inject constructor(private val firebaseAnalytics: FirebaseAnalytics,
-    private val activity: Activity) {
-
+class FlowController @Inject constructor(
+    private val firebaseAnalytics: FirebaseAnalytics,
+    private val activity: Activity
+) {
   fun toMatches() {
     navigate(FlowIntentFactory.toMatchesIntent())
   }

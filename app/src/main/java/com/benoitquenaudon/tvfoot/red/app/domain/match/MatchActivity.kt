@@ -45,7 +45,6 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    activityComponent.inject(this)
 
     val intent = intent
     matchId = intent.getStringExtra(Match.MATCH_ID)
@@ -91,7 +90,10 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
         .subscribe { shouldNotifyMatchStart ->
           if (shouldNotifyMatchStart) {
             Snackbar.make(binding.root,
-                getString(R.string.will_be_notify_desc, MINUTES_BEFORE_NOTIFICATION),
+                resources.getQuantityString(
+                    R.plurals.will_be_notify_desc,
+                    MINUTES_BEFORE_NOTIFICATION,
+                    MINUTES_BEFORE_NOTIFICATION),
                 Snackbar.LENGTH_LONG).show()
           }
         })
