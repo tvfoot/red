@@ -9,8 +9,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.benoitquenaudon.tvfoot.red.R
-import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.api.TvfootService
+import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.Target
 
@@ -20,15 +20,13 @@ fun setTvFootTeamLogoToLeftDrawable(textView: TextView, logoPath: String?) {
 
   val mediumLogoPath = logoPath.replace("/large/", "/medium/")
 
-  RedApp.getApp(textView.context)
-      .appComponent
-      .picasso()
+  Picasso.get()
       .load(Uri.parse(TvfootService.BASE_URL + mediumLogoPath))
       .into(object : Target {
         override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
         }
 
-        override fun onBitmapFailed(errorDrawable: Drawable?) {
+        override fun onBitmapFailed(exception: Exception, errorDrawable: Drawable?) {
         }
 
         override fun onBitmapLoaded(bitmap: Bitmap?, from: LoadedFrom?) {
@@ -68,9 +66,7 @@ fun setTvFootBroadcasterLogo(imageView: ImageView, logoPath: String?) {
 }
 
 private fun loadTvFootImage(imageView: ImageView, path: String, placeholderResId: Int) {
-  RedApp.getApp(imageView.context)
-      .appComponent
-      .picasso()
+  Picasso.get()
       .load(Uri.parse(TvfootService.BASE_URL + path))
       .fit().centerInside()
       .placeholder(placeholderResId)

@@ -35,5 +35,4 @@ interface AppComponent {
   fun inject(redApp: RedApp)
   fun inject(matchReminderService: MatchReminderService)
   fun inject(matchNotificationSchedulerService: MatchNotificationSchedulerService)
-  fun picasso(): Picasso
 }

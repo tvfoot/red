@@ -51,7 +51,7 @@ ext {
 
   lib = [supportLibraryVersion          : '27.0.2',
          constraintLayoutVersion        : '1.1.0-beta4',
-         picassoVersion                 : '2.5.2',
+         picassoVersion                 : '3.0.0-SNAPSHOT',
          picassoOkHttp3DownloaderVersion: '1.1.0',
          okHttpVersion                  : '3.9.0',
          retrofitVersion                : '2.2.0',
