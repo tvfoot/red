@@ -10,6 +10,7 @@ import com.benoitquenaudon.tvfoot.red.injection.module.NetworkModule
 import com.benoitquenaudon.tvfoot.red.injection.module.PreferenceServiceModule
 import com.benoitquenaudon.tvfoot.red.injection.module.RxFactoryModule
 import com.benoitquenaudon.tvfoot.red.injection.module.SchedulerModule
+import com.benoitquenaudon.tvfoot.red.injection.module.ServiceBindingModule
 import com.benoitquenaudon.tvfoot.red.injection.module.ServiceModule
 import com.benoitquenaudon.tvfoot.red.injection.module.ViewModelModule
 import dagger.Component
@@ -22,6 +23,7 @@ import javax.inject.Singleton
 @Component(modules = [
   AndroidSupportInjectionModule::class,
   ActivityBindingModule::class,
+  ServiceBindingModule::class,
   AppModule::class,
   NetworkModule::class,
   ServiceModule::class,

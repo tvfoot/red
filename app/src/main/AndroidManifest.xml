@@ -48,8 +48,6 @@
       </intent-filter>
     </activity>
 
-    <service android:name=".app.domain.match.job.MatchReminderService"/>
-
     <activity
         android:name=".app.domain.match.MatchActivity"
         android:label="@string/match_detail_activity_label"
@@ -120,6 +118,9 @@
         <action android:name="android.intent.action.BOOT_COMPLETED"/>
       </intent-filter>
     </receiver>
+
+    <service android:name=".app.domain.match.job.MatchReminderService"/>
+
     <service
         android:name=".app.domain.match.job.MatchNotificationSchedulerService"
         android:exported="false"
