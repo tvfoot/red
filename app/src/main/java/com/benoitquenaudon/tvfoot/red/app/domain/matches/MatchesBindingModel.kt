@@ -22,7 +22,7 @@ class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapte
     areTagsLoaded.set(state.tags.isNotEmpty())
     hasActiveFilters.set(
         state.filteredBroadcasters.isNotEmpty() ||
-        state.filteredCompetitions.isNotEmpty() ||
+            state.filteredCompetitions.isNotEmpty() ||
             state.filteredTeams.isNotEmpty())
 
     nextPageLoading = state.nextPageLoading
