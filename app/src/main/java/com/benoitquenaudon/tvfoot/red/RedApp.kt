@@ -1,6 +1,5 @@
 package com.benoitquenaudon.tvfoot.red
 
-import android.content.Context
 import com.benoitquenaudon.tvfoot.red.injection.component.DaggerAppComponent
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
@@ -32,11 +31,5 @@ class RedApp : DaggerApplication() {
       return
     }
     LeakCanary.install(this)
-  }
-
-  companion object Component {
-    fun getApp(context: Context): RedApp {
-      return context.applicationContext as RedApp
-    }
   }
 }
