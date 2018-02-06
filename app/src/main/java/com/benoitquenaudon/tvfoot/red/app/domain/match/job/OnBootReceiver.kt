@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import androidx.content.systemService
 import com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchNotificationSchedulerService.Companion.MATCH_NOTIFICATION_SCHEDULER_JOB_ID
 import timber.log.Timber
 
@@ -22,8 +23,7 @@ class OnBootReceiver : BroadcastReceiver() {
           .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
           .build()
 
-      val jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-      jobScheduler.schedule(jobInfo)
+      context.systemService<JobScheduler>().schedule(jobInfo)
     } else {
       Timber.e("Intent's action is unknown: ${intent.action}")
     }

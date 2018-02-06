@@ -3,8 +3,8 @@ package com.benoitquenaudon.tvfoot.red.app.common.flowcontroller
 import android.app.Activity
 import android.content.Intent
 import android.content.Intent.URI_INTENT_SCHEME
-import android.net.Uri
 import android.os.Bundle
+import androidx.net.toUri
 import com.google.firebase.analytics.FirebaseAnalytics
 import javax.inject.Inject
 
@@ -41,7 +41,7 @@ class FlowController @Inject constructor(
   }
 
   fun toLibrary(link: String) {
-    val intent = Intent(Intent.ACTION_VIEW).also { it.data = Uri.parse(link) }
+    val intent = Intent(Intent.ACTION_VIEW).also { it.data = link.toUri() }
     activity.startActivity(intent)
   }
 }
