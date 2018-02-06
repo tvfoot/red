@@ -2,6 +2,7 @@ package com.benoitquenaudon.tvfoot.red.app.data.source
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import androidx.content.edit
 import com.benoitquenaudon.tvfoot.red.app.common.StreamNotification
 import com.benoitquenaudon.tvfoot.red.app.common.StreamNotification.INSTANCE
 import com.benoitquenaudon.tvfoot.red.app.data.entity.FilterTeam
@@ -26,7 +27,9 @@ class PreferenceRepository @Inject constructor(
     } else {
       removeToBeNotifiedMatchId(matchId)
     }
-    preferences.edit().putBoolean(notifyMatchStartPrefKey(matchId), notifyMatchStart).apply()
+    preferences.edit {
+      putBoolean(notifyMatchStartPrefKey(matchId), notifyMatchStart)
+    }
     return Single.just(INSTANCE)
   }
 
