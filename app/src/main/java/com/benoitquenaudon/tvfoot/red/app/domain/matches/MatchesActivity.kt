@@ -196,7 +196,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     }
   }
 
-  fun closeDrawer() {
+  private fun closeDrawer() {
     binding.drawerLayout.closeDrawer(GravityCompat.END)
   }
 
