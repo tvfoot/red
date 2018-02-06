@@ -129,8 +129,9 @@ dependencies {
   implementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
   kapt "com.google.dagger:dagger-android-processor:$rootProject.lib.daggerVersion"
   kapt "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
-  implementation 'se.ansman.kotshi:api:0.1.1'
-  kapt 'se.ansman.kotshi:compiler:0.1.1'
+  implementation "se.ansman.kotshi:api:$rootProject.lib.kotshiVersion"
+  kapt "se.ansman.kotshi:compiler:$rootProject.lib.kotshiVersion"
+  implementation "androidx.core:core-ktx:$rootProject.lib.androidxVersion"
 
   // JVM Tests
   testImplementation "junit:junit:$rootProject.lib.junitVersion"
