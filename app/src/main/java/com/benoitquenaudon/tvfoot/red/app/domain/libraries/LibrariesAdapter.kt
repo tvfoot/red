@@ -13,7 +13,7 @@ import javax.inject.Inject
 class LibrariesAdapter @Inject constructor(
     val libraries: List<Library>
 ) : RecyclerView.Adapter<ViewHolder>() {
-  val libraryClickObservable = PublishSubject.create<Library>()
+  val libraryClickObservable: PublishSubject<Library> = PublishSubject.create()
 
   override fun getItemCount(): Int = libraries.size + 1
 
@@ -47,7 +47,7 @@ class LibrariesAdapter @Inject constructor(
   }
 
   companion object Constant {
-    val VIEW_TYPE_HEADER: Int = 0
-    val VIEW_TYPE_LIBRARY: Int = 1
+    const val VIEW_TYPE_HEADER: Int = 0
+    const val VIEW_TYPE_LIBRARY: Int = 1
   }
 }

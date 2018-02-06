@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
+import androidx.util.getOrDefault
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesItemViewHolder.MatchHeaderViewHolder
 
 
@@ -40,9 +41,10 @@ class MatchesHeaderDecoration(
   private fun getHeader(parent: RecyclerView, position: Int): RecyclerView.ViewHolder {
     val headerPosition = matchesAdapter.closestHeaderPosition(position)
 
-    val holder = headerViewHolderCache[headerPosition] ?:
+    val holder = headerViewHolderCache.getOrDefault(
+        headerPosition,
         (matchesAdapter.onCreateViewHolder(parent, matchesAdapter.getItemViewType(headerPosition))
-            as MatchHeaderViewHolder).also { headerViewHolderCache.put(headerPosition, it) }
+            as MatchHeaderViewHolder).also { headerViewHolderCache.put(headerPosition, it) })
 
     matchesAdapter.onBindViewHolder(holder, headerPosition)
 
