@@ -8,6 +8,7 @@ import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.DITHER_FLAG
 import android.graphics.Paint.FILTER_BITMAP_FLAG
 import android.graphics.Shader.TileMode.CLAMP
+import androidx.graphics.createBitmap
 import com.squareup.picasso.Transformation
 
 object CircleTransform : Transformation {
@@ -17,7 +18,7 @@ object CircleTransform : Transformation {
     val y = (source.height - size) / 2
 
     val squared = Bitmap.createBitmap(source, x, y, size, size)
-    val result = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+    val result = createBitmap(size, size)
 
     val canvas = Canvas(result)
     val paint = Paint(FILTER_BITMAP_FLAG or DITHER_FLAG or ANTI_ALIAS_FLAG)
@@ -27,7 +28,7 @@ object CircleTransform : Transformation {
     canvas.drawCircle(r, r, r, paint)
 
     if (source != result) {
-      source.recycle();
+      source.recycle()
     }
 
     return result
