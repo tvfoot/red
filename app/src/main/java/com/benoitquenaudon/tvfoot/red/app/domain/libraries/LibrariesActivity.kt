@@ -11,9 +11,12 @@ import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
 class LibrariesActivity : BaseActivity() {
-  @Inject lateinit var flowController: FlowController
-  @Inject lateinit var adapter: LibrariesAdapter
-  @Inject lateinit var disposables: CompositeDisposable
+  @Inject
+  lateinit var flowController: FlowController
+  @Inject
+  lateinit var adapter: LibrariesAdapter
+  @Inject
+  lateinit var disposables: CompositeDisposable
 
   private val binding: ActivityLibrariesBinding by lazy(NONE) {
     DataBindingUtil.setContentView<ActivityLibrariesBinding>(this, R.layout.activity_libraries)
@@ -23,15 +26,16 @@ class LibrariesActivity : BaseActivity() {
     super.onCreate(savedInstanceState)
 
     setSupportActionBar(binding.librariesToolbar)
-    supportActionBar?.let {
-      it.setDisplayShowTitleEnabled(false)
-      it.setDisplayHomeAsUpEnabled(true)
+    supportActionBar?.run {
+      setDisplayShowTitleEnabled(false)
+      setDisplayHomeAsUpEnabled(true)
     }
 
     binding.librariesRecyclerView.adapter = adapter
 
-    disposables.add(adapter.libraryClickObservable
-        .subscribe { library -> flowController.toLibrary(library.link) })
+    disposables
+        .add(adapter.libraryClickObservable
+            .subscribe { library -> flowController.toLibrary(library.link) })
   }
 
   override fun onDestroy() {

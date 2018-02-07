@@ -12,7 +12,7 @@ class LibraryViewHolder(
     val binding: LibraryRowBinding,
     val adapter: LibrariesAdapter
 ) : RecyclerView.ViewHolder(binding.root) {
-  var library: Library by Delegates.notNull<Library>()
+  var library: Library by Delegates.notNull()
 
   fun bind(library: Library) {
     this.library = library

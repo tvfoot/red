@@ -188,15 +188,15 @@ class PreferenceRepository @Inject constructor(
   }
 
   companion object {
-    private val TO_BE_NOTIFIED_MATCH_IDS_KEY = "TO_BE_NOTIFIED_MATCH_IDS"
-    private val FILTERED_COMPETITIONS_KEY = "FILTERED_COMPETITIONS_KEY"
-    private val FILTERED_BROADCASTERS_KEY = "FILTERED_BROADCASTERS_KEY"
-    private val FILTERED_TEAMS_KEY = "FILTERED_TEAMS_KEY"
-    private val TEAM_CODES_KEY = "TEAM_CODES_KEY"
-    private val TEAM_CODE_KEY = "TEAM_CODE_KEY_"
-    private val TEAM_NAME_KEY = "TEAM_NAME_KEY_"
-    private val TEAM_TYPE_KEY = "TEAM_TYPE_KEY_"
-    private val TEAM_COUNTRY_KEY = "TEAM_COUNTRY_KEY_"
+    private const val TO_BE_NOTIFIED_MATCH_IDS_KEY = "TO_BE_NOTIFIED_MATCH_IDS"
+    private const val FILTERED_COMPETITIONS_KEY = "FILTERED_COMPETITIONS_KEY"
+    private const val FILTERED_BROADCASTERS_KEY = "FILTERED_BROADCASTERS_KEY"
+    private const val FILTERED_TEAMS_KEY = "FILTERED_TEAMS_KEY"
+    private const val TEAM_CODES_KEY = "TEAM_CODES_KEY"
+    private const val TEAM_CODE_KEY = "TEAM_CODE_KEY_"
+    private const val TEAM_NAME_KEY = "TEAM_NAME_KEY_"
+    private const val TEAM_TYPE_KEY = "TEAM_TYPE_KEY_"
+    private const val TEAM_COUNTRY_KEY = "TEAM_COUNTRY_KEY_"
 
     private fun notifyMatchStartPrefKey(matchId: String): String {
       return "NOTIFY_MATCH_START_$matchId"

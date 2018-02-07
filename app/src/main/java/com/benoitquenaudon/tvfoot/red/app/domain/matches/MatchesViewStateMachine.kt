@@ -27,7 +27,7 @@ object MatchesViewStateMachine : BiFunction<MatchesViewState, MatchesResult, Mat
     return when (result) {
       is RefreshResult -> {
         when (result) {
-          is RefreshResult.InFlight ->
+          RefreshResult.InFlight ->
             previousState.copy(refreshLoading = true, error = null)
           is RefreshResult.Failure ->
             previousState.copy(refreshLoading = false, error = result.throwable)
@@ -46,7 +46,7 @@ object MatchesViewStateMachine : BiFunction<MatchesViewState, MatchesResult, Mat
       }
       is LoadNextPageResult -> {
         when (result) {
-          is LoadNextPageResult.InFlight ->
+          LoadNextPageResult.InFlight ->
             previousState.copy(nextPageLoading = true, error = null)
           is LoadNextPageResult.Failure ->
             previousState.copy(nextPageLoading = false, error = result.throwable)
@@ -65,7 +65,7 @@ object MatchesViewStateMachine : BiFunction<MatchesViewState, MatchesResult, Mat
           }
         }
       }
-      is ClearFiltersResult ->
+      ClearFiltersResult ->
         previousState.copy(
             filteredBroadcasters = emptyMap(),
             filteredCompetitions = emptyMap(),
@@ -76,8 +76,7 @@ object MatchesViewStateMachine : BiFunction<MatchesViewState, MatchesResult, Mat
           if (it.keys.contains(result.tagName)) {
             it.remove(result.tagName)
           } else {
-            it.put(result.tagName,
-                previousState.tags.first { it.name == result.tagName }.targets)
+            it[result.tagName] = previousState.tags.first { it.name == result.tagName }.targets
           }
           previousState.copy(filteredCompetitions = it, hasMore = true)
         }
@@ -87,8 +86,7 @@ object MatchesViewStateMachine : BiFunction<MatchesViewState, MatchesResult, Mat
           if (it.keys.contains(result.tagName)) {
             it.remove(result.tagName)
           } else {
-            it.put(result.tagName,
-                previousState.tags.first { it.name == result.tagName }.targets)
+            it[result.tagName] = previousState.tags.first { it.name == result.tagName }.targets
           }
           previousState.copy(filteredBroadcasters = it, hasMore = true)
         }
@@ -105,7 +103,7 @@ object MatchesViewStateMachine : BiFunction<MatchesViewState, MatchesResult, Mat
       }
       is LoadTagsResult -> {
         when (result) {
-          is LoadTagsResult.InFlight ->
+          LoadTagsResult.InFlight ->
             previousState.copy(tagsLoading = true, tagsError = null)
           is LoadTagsResult.Failure ->
             previousState.copy(tagsLoading = false, tagsError = result.throwable)
@@ -148,11 +146,11 @@ object MatchesViewStateMachine : BiFunction<MatchesViewState, MatchesResult, Mat
                 searchInput = result.searchedInput
             )
         }
-      is ClearSearchResult ->
+      ClearSearchResult ->
         previousState.copy(
             searchingTeam = false,
             searchedTeams = emptyList())
-      is ClearSearchInputResult -> previousState.copy()
+      ClearSearchInputResult -> previousState.copy()
       is SearchedTeamSelectedResult -> when (result) {
         is TeamSearchFailure ->
           previousState.copy(error = result.throwable, teamMatchesLoading = false)

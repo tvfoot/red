@@ -85,8 +85,8 @@ class MatchesAdapter @Inject constructor(
         }
       }
       is LoadingRowViewHolder -> {
-        if (item is LoadingRowDisplayable) {
-          holder.bind(item)
+        if (item == LoadingRowDisplayable) {
+          holder.bind(LoadingRowDisplayable)
         } else {
           throw IllegalStateException("Wrong item for LoadingRowViewHolder $item")
         }
@@ -112,7 +112,7 @@ class MatchesAdapter @Inject constructor(
             R.layout.matches_row_match
           }
           is HeaderRowDisplayable -> R.layout.matches_row_header
-          is LoadingRowDisplayable -> R.layout.row_loading
+          LoadingRowDisplayable -> R.layout.row_loading
           else -> throw UnsupportedOperationException(
               "Don't know how to deal with this item: $matchesItems[position]")
         }

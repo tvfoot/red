@@ -84,7 +84,7 @@ class FiltersAdapter @Inject constructor(
         is FiltersTeamDisplayable -> R.layout.filters_row_team
         is TeamSearchInputDisplayable -> R.layout.filters_row_team_search
         is TeamSearchResultDisplayable -> R.layout.filters_row_team_search_result
-        is FilterSearchLoadingRowDisplayable -> R.layout.row_loading
+        FilterSearchLoadingRowDisplayable -> R.layout.row_loading
         is FilterHeaderDisplayable -> R.layout.filters_header
       }
 

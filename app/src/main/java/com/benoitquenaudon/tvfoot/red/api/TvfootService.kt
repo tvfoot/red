@@ -12,7 +12,7 @@ import retrofit2.http.Query
 
 interface TvfootService {
   companion object {
-    val BASE_URL = "https://tvfoot.net"
+    const val BASE_URL = "https://tvfoot.net"
   }
 
   // e.g.: filter:{"where":{"start-at":{"gte":"2016-09-21T00:00:00.072Z"},"deleted":{"neq":1}},"order":"start-at ASC, weight ASC","limit":1500}

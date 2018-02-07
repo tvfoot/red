@@ -4,7 +4,5 @@ import android.support.annotation.NonNull
 import android.support.annotation.Size
 
 interface BaseRedFirebaseAnalytics {
-  fun logEvent(
-      @NonNull @Size(min = 1L, max = 40L) string: String,
-      vararg pairs: Pair<String, String>)
+  fun logEvent(@NonNull @Size(min = 1L, max = 40L) action: String, value: String)
 }

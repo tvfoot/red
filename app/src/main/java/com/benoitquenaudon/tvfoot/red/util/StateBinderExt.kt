@@ -9,20 +9,20 @@ import timber.log.Timber
 
 fun RedViewModel<out MviIntent, out MviViewState>.logIntent(intent: MviIntent) {
   Timber.d("Intent: %s", intent)
-  firebaseAnalytics.logEvent("intent", "intent" to intent.toString())
+  firebaseAnalytics.logEvent("intent", intent.toString())
 }
 
 fun RedViewModel<out MviIntent, out MviViewState>.logAction(action: MviAction) {
   Timber.d("Action: %s", action)
-  firebaseAnalytics.logEvent("action", "action" to action.toString())
+  firebaseAnalytics.logEvent("action", action.toString())
 }
 
 fun RedViewModel<out MviIntent, out MviViewState>.logResult(result: MviResult) {
   Timber.d("Result: %s", result)
-  firebaseAnalytics.logEvent("result", "result" to result.toString())
+  firebaseAnalytics.logEvent("result", result.toString())
 }
 
 fun RedViewModel<out MviIntent, out MviViewState>.logState(state: MviViewState) {
   Timber.d("State: %s", state)
-  firebaseAnalytics.logEvent("state", "state" to state.toString())
+  firebaseAnalytics.logEvent("state", state.toString())
 }

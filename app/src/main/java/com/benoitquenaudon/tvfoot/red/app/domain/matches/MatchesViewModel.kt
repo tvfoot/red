@@ -107,18 +107,18 @@ class MatchesViewModel @Inject constructor(
 
   private fun actionFromIntent(intent: MatchesIntent): MatchesAction =
       when (intent) {
-        is InitialIntent -> RefreshAction
-        is RefreshIntent -> RefreshAction
+        InitialIntent -> RefreshAction
+        RefreshIntent -> RefreshAction
         is LoadNextPageIntent -> LoadNextPageAction(intent.pageIndex)
-        is ClearFilters -> ClearFiltersAction
+        ClearFilters -> ClearFiltersAction
         is ToggleFilterCompetitionIntent -> ToggleFilterCompetitionAction(intent.tagName)
         is ToggleFilterBroadcasterIntent -> ToggleFilterBroadcasterAction(intent.tagName)
         is ToggleFilterTeamIntent -> ToggleFilterTeamAction(intent.teamCode)
-        is FilterInitialIntent -> LoadTagsAction
+        FilterInitialIntent -> LoadTagsAction
         is SearchTeamIntent -> SearchTeamAction(intent.input)
-        is ClearSearchIntent -> ClearSearchAction
+        ClearSearchIntent -> ClearSearchAction
         is SearchedTeamSelectedIntent -> SearchedTeamSelectedAction(intent.team)
-        is ClearSearchInputIntent -> ClearSearchInputAction
+        ClearSearchInputIntent -> ClearSearchInputAction
         is RefreshNotificationStatusIntent -> RefreshNotificationStatusAction(intent.matchId)
       }
 
@@ -206,7 +206,7 @@ class MatchesViewModel @Inject constructor(
               Observable.just(SearchTeamResult.Success(action.input, emptyList()))
             }
           }
-          is ClearSearchAction -> Observable.just(ClearSearchResult)
+          ClearSearchAction -> Observable.just(ClearSearchResult)
         }
       }
     }
@@ -295,17 +295,17 @@ class MatchesViewModel @Inject constructor(
         ).mergeWith(
             // Error for not implemented actions
             shared.filter { v ->
-              v !is RefreshAction &&
+              v != RefreshAction &&
                   v !is LoadNextPageAction &&
-                  v !is ClearFiltersAction &&
+                  v != ClearFiltersAction &&
                   v !is ToggleFilterCompetitionAction &&
                   v !is ToggleFilterBroadcasterAction &&
                   v !is ToggleFilterTeamAction &&
-                  v !is LoadTagsAction &&
+                  v != LoadTagsAction &&
                   v !is SearchTeamAction &&
-                  v !is ClearSearchAction &&
+                  v != ClearSearchAction &&
                   v !is SearchedTeamSelectedAction &&
-                  v !is ClearSearchInputAction &&
+                  v != ClearSearchInputAction &&
                   v !is RefreshNotificationStatusAction
             }.flatMap { w ->
               Observable.error<MatchesResult>(

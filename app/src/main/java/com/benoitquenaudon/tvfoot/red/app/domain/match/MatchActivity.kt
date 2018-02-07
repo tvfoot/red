@@ -28,14 +28,18 @@ import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
 class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
-  @Inject lateinit var matchBroadcastersAdapter: MatchBroadcastersAdapter
-  @Inject lateinit var flowController: FlowController
-  @Inject lateinit var disposables: CompositeDisposable
-  @Inject lateinit var bindingModel: MatchBindingModel
-  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+  @Inject
+  lateinit var matchBroadcastersAdapter: MatchBroadcastersAdapter
+  @Inject
+  lateinit var flowController: FlowController
+  @Inject
+  lateinit var disposables: CompositeDisposable
+  @Inject
+  lateinit var bindingModel: MatchBindingModel
+  @Inject
+  lateinit var viewModelFactory: ViewModelProvider.Factory
   private val viewModel: MatchViewModel by lazy(NONE) {
-    ViewModelProviders.of(this, viewModelFactory).get(
-        MatchViewModel::class.java)
+    ViewModelProviders.of(this, viewModelFactory).get(MatchViewModel::class.java)
   }
 
   private val binding: ActivityMatchBinding by lazy(NONE) {
@@ -76,9 +80,9 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
     binding.bindingModel = bindingModel
 
     setSupportActionBar(binding.matchToolbar)
-    supportActionBar?.let {
-      it.setDisplayShowTitleEnabled(false)
-      it.setDisplayHomeAsUpEnabled(true)
+    supportActionBar?.run {
+      setDisplayShowTitleEnabled(false)
+      setDisplayHomeAsUpEnabled(true)
     }
   }
 

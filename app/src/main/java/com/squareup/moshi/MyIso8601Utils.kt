@@ -3,7 +3,7 @@ package com.squareup.moshi
 import java.util.Date
 
 /**
- * I should, of course, never do that.
+ * bad boy
  */
 internal fun String.parseIso8601() = Iso8601Utils.parse(this)
 

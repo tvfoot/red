@@ -67,6 +67,6 @@ class MatchReminderService : DaggerService() {
   }
 
   companion object {
-    val ACTION_PUBLISH_NOTIFICATION = "com.benoitquenaudon.tvfoot.red.action.PUBLISH_NOTIFICATION"
+    const val ACTION_PUBLISH_NOTIFICATION = "com.benoitquenaudon.tvfoot.red.action.PUBLISH_NOTIFICATION"
   }
 }

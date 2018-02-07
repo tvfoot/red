@@ -81,7 +81,7 @@ class MatchesRepository @Inject constructor(
   }
 
   companion object Constant {
-    private val MATCH_PER_PAGE = 300
-    private val TEAM_SEARCH_LIMIT = 1500
+    private const val MATCH_PER_PAGE = 300
+    private const val TEAM_SEARCH_LIMIT = 1500
   }
 }

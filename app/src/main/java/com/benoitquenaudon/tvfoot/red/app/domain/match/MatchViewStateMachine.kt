@@ -9,7 +9,7 @@ object MatchViewStateMachine : BiFunction<MatchViewState, MatchResult, MatchView
     return when (matchResult) {
       is LoadMatchResult -> {
         when (matchResult) {
-          is LoadMatchResult.InFlight ->
+          LoadMatchResult.InFlight ->
             previousState.copy(loading = true, error = null)
           is LoadMatchResult.Failure ->
             previousState.copy(loading = false, error = matchResult.throwable)

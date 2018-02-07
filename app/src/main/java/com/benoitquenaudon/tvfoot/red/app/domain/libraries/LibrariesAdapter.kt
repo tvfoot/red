@@ -21,7 +21,6 @@ class LibrariesAdapter @Inject constructor(
     if (holder is LibraryViewHolder) {
       holder.bind(libraries[position - 1]) // adjust for header
     }
-
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,9 +29,11 @@ class LibrariesAdapter @Inject constructor(
           LayoutInflater.from(parent.context).inflate(R.layout.library_header_row, parent, false))
     } else if (viewType == VIEW_TYPE_LIBRARY) {
       val layoutInflater = LayoutInflater.from(parent.context)
-      val binding: LibraryRowBinding = DataBindingUtil.inflate(layoutInflater,
-          R.layout.library_row,
-          parent, false)
+      val binding: LibraryRowBinding =
+          DataBindingUtil.inflate(
+              layoutInflater,
+              R.layout.library_row,
+              parent, false)
       return LibraryViewHolder(binding, this)
     }
     throw IllegalStateException("unknown viewType $viewType")

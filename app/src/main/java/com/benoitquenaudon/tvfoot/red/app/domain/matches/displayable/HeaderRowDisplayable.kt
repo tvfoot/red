@@ -57,10 +57,10 @@ data class HeaderRowDisplayable private constructor(
         return HeaderRowDisplayable(id, dangerResId, true, displayedDate)
       }
 
-      if (date.time.isCurrentYear(nowCalendar)) {
-        displayedDate = monthDateFormat.format(date).capitalize()
+      displayedDate = if (date.time.isCurrentYear(nowCalendar)) {
+        monthDateFormat.format(date).capitalize()
       } else {
-        displayedDate = yearDateFormat.format(date)
+        yearDateFormat.format(date)
       }
 
       return HeaderRowDisplayable(id, dangerResId, false, displayedDate)
