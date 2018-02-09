@@ -28,7 +28,7 @@ object NetworkModule {
   @Singleton
   fun provideMoshi(): Moshi {
     return Moshi.Builder()
-        .add(ApplicationJsonAdapterFactory.INSTANCE)
+        .add(ApplicationJsonAdapterFactory)
         .add(Date::class.java, Rfc3339DateJsonAdapter())
         .build()
   }

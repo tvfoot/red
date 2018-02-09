@@ -71,7 +71,7 @@ ext {
          firebaseVersion                : '11.8.0',
          rxBindingVersion               : '2.0.0',
          rxDataBindingVersion           : '2.0.0',
-         kotshiVersion                  : '0.3.0',
+         kotshiVersion                  : '1.0.0',
          androidxVersion                : '0.1',
          archComponentsVersion          : '1.1.0']
 }
