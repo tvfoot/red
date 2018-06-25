@@ -48,9 +48,7 @@ fun setTvFootTeamMediumLogo(imageView: ImageView, logoPath: String?) {
 
   val mediumLogoPath = logoPath
       .replace("/large/", "/medium/")
-      .apply {
-        replace(".png", "@2x.png")
-      }
+      .replace(".png", "@2x.png")
 
   loadTvFootImage(
       imageView = imageView,
