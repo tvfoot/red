@@ -6,10 +6,8 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import androidx.content.systemService
 import com.benoitquenaudon.tvfoot.red.app.domain.match.job.MatchNotificationSchedulerService.Companion.MATCH_NOTIFICATION_SCHEDULER_JOB_ID
 import timber.log.Timber
-
 
 /**
  * Alarms set via AlarmManager are deleted on reboot.
@@ -23,7 +21,7 @@ class OnBootReceiver : BroadcastReceiver() {
           .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
           .build()
 
-      context.systemService<JobScheduler>().schedule(jobInfo)
+      (context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler).schedule(jobInfo)
     } else {
       Timber.e("Intent's action is unknown: ${intent.action}")
     }

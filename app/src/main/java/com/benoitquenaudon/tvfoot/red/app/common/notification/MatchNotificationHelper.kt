@@ -10,12 +10,10 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
-import androidx.content.systemService
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchActivity
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchDisplayable
-
 
 class MatchNotificationHelper(
     private val context: Context,
@@ -53,7 +51,7 @@ class MatchNotificationHelper(
         .setSubText(matchDisplayable.competition)
         .setWhen(match.startAt.time)
 
-    context.systemService<NotificationManager>()
+    (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
         .notify(NotificationRepository.matchIdAsInt(match.id), notificationBuilder.build())
   }
 
@@ -64,7 +62,8 @@ class MatchNotificationHelper(
         NotificationManager.IMPORTANCE_DEFAULT).also {
       it.setShowBadge(false)
     }
-    context.systemService<NotificationManager>().createNotificationChannel(channel)
+    (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+        .createNotificationChannel(channel)
   }
 
   companion object Constant {
