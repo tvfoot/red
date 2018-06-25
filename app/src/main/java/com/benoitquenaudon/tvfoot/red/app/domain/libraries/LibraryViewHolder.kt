@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.libraries
 
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
-import androidx.net.toUri
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.databinding.LibraryRowBinding
 import com.benoitquenaudon.tvfoot.red.util.CircleTransform
@@ -19,8 +19,8 @@ class LibraryViewHolder(
     binding.library = library
     binding.handler = adapter
 
-    Picasso.get()
-        .load(library.imageUrl.toUri())
+    Picasso.with(binding.root.context)
+        .load(Uri.parse(library.imageUrl))
         .placeholder(R.drawable.avatar_placeholder)
         .apply {
           if (library.circleCrop) {

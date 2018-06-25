@@ -45,8 +45,8 @@ ext {
   config = [applicationId    : 'com.benoitquenaudon.tvfoot.red',
             versionName      : '1.2',
             minSdkVersion    : 21,
-            targetSdkVersion : 27,
-            compileSdkVersion: 27,
+            targetSdkVersion : 28,
+            compileSdkVersion: 28,
             buildToolsVersion: '27.0.3']
 
   lib = [supportLibraryVersion          : '27.0.2',
@@ -56,7 +56,7 @@ ext {
          okHttpVersion                  : '3.9.0',
          retrofitVersion                : '2.2.0',
          daggerVersion                  : '2.14.1',
-         moshiVersion                   : '1.5.0',
+         moshiVersion                   : '1.6.0',
          timberVersion                  : '4.6.0',
          jsr305Version                  : '3.0.1',
          junitVersion                   : '4.12',
@@ -71,7 +71,6 @@ ext {
          firebaseVersion                : '11.8.0',
          rxBindingVersion               : '2.0.0',
          rxDataBindingVersion           : '2.0.0',
-         kotshiVersion                  : '1.0.0',
          androidxVersion                : '0.1',
          archComponentsVersion          : '1.1.0']
 }

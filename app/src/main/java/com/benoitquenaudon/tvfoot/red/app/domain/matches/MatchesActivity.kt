@@ -21,7 +21,7 @@ import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
-import com.benoitquenaudon.tvfoot.red.app.data.entity.Match.Constant.MATCH_ID
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Match.Companion.MATCH_ID
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.LoadNextPageIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshIntent
@@ -40,7 +40,6 @@ import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
-
 
 class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState> {
   @Inject lateinit var adapter: MatchesAdapter

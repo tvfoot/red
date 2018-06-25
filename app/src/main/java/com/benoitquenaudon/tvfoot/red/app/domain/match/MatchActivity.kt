@@ -17,7 +17,7 @@ import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MINUTES_BEFORE_NOTIFICATION
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
-import com.benoitquenaudon.tvfoot.red.app.data.entity.Match.Constant.MATCH_ID
+import com.benoitquenaudon.tvfoot.red.app.data.entity.Match.Companion.MATCH_ID
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchBinding
 import com.jakewharton.rxbinding2.view.RxView

@@ -103,7 +103,7 @@ dependencies {
   implementation "io.reactivex.rxjava2:rxjava:$rootProject.lib.rxJavaVersion"
   implementation "io.reactivex.rxjava2:rxkotlin:$rootProject.lib.rxKotlinVersion"
   implementation "io.reactivex.rxjava2:rxandroid:$rootProject.lib.rxAndroidVersion"
-  implementation "com.squareup.picasso:picasso:$rootProject.lib.picassoVersion"
+  implementation "com.squareup.picasso3:picasso:$rootProject.lib.picassoVersion"
   implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:$rootProject.lib.picassoOkHttp3DownloaderVersion"
   implementation "com.squareup.okhttp3:okhttp:$rootProject.lib.okHttpVersion"
   implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.lib.okHttpVersion"
@@ -112,6 +112,7 @@ dependencies {
   implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.lib.retrofitVersion"
   implementation "com.squareup.moshi:moshi:$rootProject.lib.moshiVersion"
   implementation "com.squareup.moshi:moshi-adapters:$rootProject.lib.moshiVersion"
+  kapt "com.squareup.moshi:moshi-kotlin-codegen:$rootProject.lib.moshiVersion"
   implementation "com.google.firebase:firebase-core:$rootProject.lib.firebaseVersion"
   implementation "com.google.firebase:firebase-perf:$rootProject.lib.firebaseVersion"
   // Only use crash reporting in the "prod" product flavor
@@ -129,8 +130,6 @@ dependencies {
   implementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
   kapt "com.google.dagger:dagger-android-processor:$rootProject.lib.daggerVersion"
   kapt "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
-  implementation "se.ansman.kotshi:api:$rootProject.lib.kotshiVersion"
-  kapt "se.ansman.kotshi:compiler:$rootProject.lib.kotshiVersion"
   implementation "androidx.core:core-ktx:$rootProject.lib.androidxVersion"
 
   // JVM Tests
@@ -150,8 +149,16 @@ Resolves dependency versions across test and production APKs, specifically, tran
 dependencies. This is required since Espresso internally has a dependency on support-annotations.
 */
 configurations.all {
-  resolutionStrategy.force "com.android.support:support-annotations:$rootProject.lib.supportLibraryVersion"
   resolutionStrategy.force "com.google.code.findbugs:jsr305:$rootProject.lib.jsr305Version"
+
+  resolutionStrategy {
+    eachDependency { details ->
+      // Force all of the primary support libraries to use the same version.
+      if (details.requested.group == 'com.android.support') {
+        details.useVersion rootProject.lib.supportLibraryVersion
+      }
+    }
+  }
 }
 
 apply plugin: 'com.google.gms.google-services'

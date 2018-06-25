@@ -3,9 +3,9 @@ package com.benoitquenaudon.tvfoot.red.app.data.entity
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag.TagType.BROADCASTER
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag.TagType.COMPETITION
 import com.squareup.moshi.Json
-import se.ansman.kotshi.JsonSerializable
+import com.squareup.moshi.JsonClass
 
-@JsonSerializable
+@JsonClass(generateAdapter = true)
 data class Tag(
     val name: String,
     val desc: String,

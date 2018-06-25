@@ -3,10 +3,9 @@ package com.benoitquenaudon.tvfoot.red.injection.module
 import com.benoitquenaudon.tvfoot.red.BuildConfig
 import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.api.TvfootService
-import com.benoitquenaudon.tvfoot.red.app.data.entity.ApplicationJsonAdapterFactory
 import com.jakewharton.picasso.OkHttp3Downloader
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.Rfc3339DateJsonAdapter
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
@@ -28,7 +27,6 @@ object NetworkModule {
   @Singleton
   fun provideMoshi(): Moshi {
     return Moshi.Builder()
-        .add(ApplicationJsonAdapterFactory)
         .add(Date::class.java, Rfc3339DateJsonAdapter())
         .build()
   }

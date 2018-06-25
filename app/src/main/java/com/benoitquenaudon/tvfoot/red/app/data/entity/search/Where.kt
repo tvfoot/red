@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.data.entity.search
 
 import com.benoitquenaudon.tvfoot.red.util.TeamCode
-import com.squareup.moshi.formatIso8601
+import com.squareup.moshi.adapters.formatIso8601
 import java.util.Date
 
 data class Where(

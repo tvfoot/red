@@ -1,4 +1,4 @@
-package com.squareup.moshi
+package com.squareup.moshi.adapters
 
 import java.util.Date
 

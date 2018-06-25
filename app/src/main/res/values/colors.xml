@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#323232</color>
-  <color name="colorPrimaryLight">#575757</color>
-  <color name="colorPrimaryDark">#292929</color>
+  <!--<color name="colorPrimary">#323232</color>-->
+  <!--<color name="colorPrimaryLight">#575757</color>-->
+  <!--<color name="colorPrimaryDark">#292929</color>-->
+  <!--<color name="colorAccent">#34b7cd</color>-->
+  <!--<color name="colorAccentDark">#00879c</color>-->
+  <!--<color name="colorDanger">#e33135</color>-->
+  <!--<color name="colorWhite">#ffffff</color>-->
+  <!--<color name="colorGrayLighter">#f6f7f9</color>-->
+  <!--<color name="colorGrayLight">#e9ebee</color>-->
+  <!--<color name="colorGrayMediumLight">#b9bbbe</color>-->
+  <!--<color name="colorGray">#90949c</color>-->
+  <!--<color name="colorGrayDark">#53565d</color>-->
+  <!--<color name="colorGrayDarker">@color/colorPrimary</color>-->
+  <!--World Cup-->
+  <color name="colorPrimary">#234B7B</color>
+  <color name="colorPrimaryLight">#4F6F95</color>
+  <color name="colorPrimaryDark">#0D3A6E</color>
   <color name="colorAccent">#34b7cd</color>
   <color name="colorAccentDark">#00879c</color>
-  <color name="colorDanger">#e33135</color>
+  <color name="colorDanger">#E85659</color>
   <color name="colorWhite">#ffffff</color>
   <color name="colorGrayLighter">#f6f7f9</color>
   <color name="colorGrayLight">#e9ebee</color>
+  <color name="colorGrayLightForHeaders">#4F6F95</color>
   <color name="colorGrayMediumLight">#b9bbbe</color>
   <color name="colorGray">#90949c</color>
+  <color name="colorForHeader">#ffffff</color>
   <color name="colorGrayDark">#53565d</color>
   <color name="colorGrayDarker">@color/colorPrimary</color>
 </resources>

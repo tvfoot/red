@@ -1,10 +1,10 @@
 package com.benoitquenaudon.tvfoot.red.app.data.entity
 
 import com.squareup.moshi.Json
-import se.ansman.kotshi.JsonSerializable
+import com.squareup.moshi.JsonClass
 import java.util.Date
 
-@JsonSerializable
+@JsonClass(generateAdapter = true)
 data class Match(
     val id: String,
     val label: String?,
@@ -19,7 +19,7 @@ data class Match(
     val tags: List<String>?
 ) {
 
-  companion object Constant {
+  companion object {
     val MATCH_ID = "MATCH_ID"
   }
 }
