@@ -18,7 +18,7 @@ data class Team(
     get() = name == null
 
   companion object Constant {
-    val DEFAULT_CODE = "default"
+    const val DEFAULT_CODE = "default"
   }
 
   val logoPath: String
@@ -31,7 +31,7 @@ data class Team(
           val country = checkNotNull(country) { "team's country should not be null" }
           "/images/teams/${country.stripAccents()}/large/${code.toLowerCase()}.png"
         }
-        else -> throw IllegalStateException("Unknown type " + type)
+        else -> throw IllegalStateException("Unknown type $type")
       }
     }
 }

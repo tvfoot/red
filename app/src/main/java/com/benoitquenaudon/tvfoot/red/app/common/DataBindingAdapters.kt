@@ -39,6 +39,25 @@ fun setTvFootTeamLogoToLeftDrawable(textView: TextView, logoPath: String?) {
       })
 }
 
+@BindingAdapter("tvfootTeamMediumLogoPath")
+fun setTvFootTeamMediumLogo(imageView: ImageView, logoPath: String?) {
+  if (logoPath == null) {
+    // in_flight, errors etc.
+    return
+  }
+
+  val mediumLogoPath = logoPath
+      .replace("/large/", "/medium/")
+      .apply {
+        replace(".png", "@2x.png")
+      }
+
+  loadTvFootImage(
+      imageView = imageView,
+      path = mediumLogoPath,
+      placeholderResId = R.drawable.default_team_logo)
+}
+
 @BindingAdapter("tvfootTeamLogoPath")
 fun setTvFootTeamLogo(imageView: ImageView, logoPath: String?) {
   if (logoPath == null) {

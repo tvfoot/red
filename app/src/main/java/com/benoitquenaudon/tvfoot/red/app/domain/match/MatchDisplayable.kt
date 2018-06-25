@@ -105,8 +105,10 @@ data class MatchDisplayable(
     private fun parseMatchDay(matchLabel: String?, matchDay: String?): String =
         if (matchLabel != null && !matchLabel.isEmpty()) {
           matchLabel
+        } else if (matchDay != null && !matchDay.isEmpty()) {
+          "J. $matchDay"
         } else {
-          "J. " + matchDay!!
+          ""
         }
 
     private fun isMatchLive(startAt: Date): Boolean {

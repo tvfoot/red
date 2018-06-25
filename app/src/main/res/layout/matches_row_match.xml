@@ -33,7 +33,7 @@
         app:layout_constraintEnd_toStartOf="@+id/match_start_time"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tvfootTeamLogoPath="@{match.homeTeam.logoPath}"
+        app:tvfootTeamMediumLogoPath="@{match.homeTeam.logoPath}"
         tools:src="@drawable/default_team_logo"
         />
     <TextView
@@ -101,7 +101,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/match_start_time"
         app:layout_constraintTop_toTopOf="parent"
-        app:tvfootTeamLogoPath="@{match.awayTeam.logoPath}"
+        app:tvfootTeamMediumLogoPath="@{match.awayTeam.logoPath}"
         tools:src="@drawable/default_team_logo"
         />
     <TextView
