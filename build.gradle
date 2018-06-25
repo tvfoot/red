@@ -43,7 +43,7 @@ task clean(type: Delete) {
 
 ext {
   config = [applicationId    : 'com.benoitquenaudon.tvfoot.red',
-            versionName      : '1.2',
+            versionName      : '1.2.1',
             minSdkVersion    : 21,
             targetSdkVersion : 28,
             compileSdkVersion: 28,
