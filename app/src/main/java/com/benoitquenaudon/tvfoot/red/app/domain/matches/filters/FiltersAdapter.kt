@@ -32,28 +32,32 @@ import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamSearchBinding
 import com.benoitquenaudon.tvfoot.red.databinding.FiltersRowTeamSearchResultBinding
 import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding
 import com.benoitquenaudon.tvfoot.red.injection.scope.FragmentScope
+import com.benoitquenaudon.tvfoot.red.util.errorHandlingSubscribe
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 @FragmentScope
 class FiltersAdapter @Inject constructor(
-    private val schedulerProvider: BaseSchedulerProvider
+  private val schedulerProvider: BaseSchedulerProvider
 ) : RecyclerView.Adapter<FiltersViewHolder<*, *>>() {
   private var filterItems = emptyList<FiltersItemDisplayable>()
   private val filtersObservable: PublishSubject<Pair<List<FiltersItemDisplayable>, List<FiltersItemDisplayable>>> =
-      PublishSubject.create()
+    PublishSubject.create()
   val filterItemClickObservable: PublishSubject<FiltersAppliableItem> = PublishSubject.create()
   val filterSearchInputObservable: PublishSubject<String> = PublishSubject.create()
   val searchedTeamClickObservable: PublishSubject<TeamSearchResultDisplayable> =
-      PublishSubject.create()
+    PublishSubject.create()
 
   init {
     // calling it to enable subscription
     processItemDiffs()
   }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FiltersViewHolder<*, *> {
+  override fun onCreateViewHolder(
+    parent: ViewGroup,
+    viewType: Int
+  ): FiltersViewHolder<*, *> {
     val layoutInflater = LayoutInflater.from(parent.context)
     val binding = DataBindingUtil.inflate<ViewDataBinding>(layoutInflater, viewType, parent, false)
 
@@ -73,22 +77,26 @@ class FiltersAdapter @Inject constructor(
       R.layout.filters_header ->
         FilterHeaderViewHolder(binding as FiltersHeaderBinding)
       else -> throw UnsupportedOperationException(
-          "don't know how to deal with this viewType: " + viewType)
+          "don't know how to deal with this viewType: " + viewType
+      )
     }
   }
 
   override fun getItemViewType(position: Int): Int =
-      when (filterItems[position]) {
-        is FiltersCompetitionDisplayable -> R.layout.filters_row_competition
-        is FiltersBroadcasterDisplayable -> R.layout.filters_row_broadcaster
-        is FiltersTeamDisplayable -> R.layout.filters_row_team
-        is TeamSearchInputDisplayable -> R.layout.filters_row_team_search
-        is TeamSearchResultDisplayable -> R.layout.filters_row_team_search_result
-        FilterSearchLoadingRowDisplayable -> R.layout.row_loading
-        is FilterHeaderDisplayable -> R.layout.filters_header
-      }
+    when (filterItems[position]) {
+      is FiltersCompetitionDisplayable -> R.layout.filters_row_competition
+      is FiltersBroadcasterDisplayable -> R.layout.filters_row_broadcaster
+      is FiltersTeamDisplayable -> R.layout.filters_row_team
+      is TeamSearchInputDisplayable -> R.layout.filters_row_team_search
+      is TeamSearchResultDisplayable -> R.layout.filters_row_team_search_result
+      FilterSearchLoadingRowDisplayable -> R.layout.row_loading
+      is FilterHeaderDisplayable -> R.layout.filters_header
+    }
 
-  override fun onBindViewHolder(holder: FiltersViewHolder<*, *>, position: Int) {
+  override fun onBindViewHolder(
+    holder: FiltersViewHolder<*, *>,
+    position: Int
+  ) {
     val item = filterItems[position]
     return when (holder) {
       is FilterCompetitionViewHolder -> {
@@ -148,7 +156,12 @@ class FiltersAdapter @Inject constructor(
   fun onClick(filter: FiltersAppliableItem) = filterItemClickObservable.onNext(filter)
 
   @Suppress("UNUSED_PARAMETER")
-  fun onSearchInputChanged(text: CharSequence, start: Int, before: Int, count: Int) {
+  fun onSearchInputChanged(
+    text: CharSequence,
+    start: Int,
+    before: Int,
+    count: Int
+  ) {
     filterSearchInputObservable.onNext(text.toString())
   }
 
@@ -174,19 +187,19 @@ class FiltersAdapter @Inject constructor(
   }
 
   private fun processItemDiffs(): Disposable =
-      filtersObservable
-          .scan(Pair(emptyList(), null),
-              { _: Pair<List<FiltersItemDisplayable>, DiffResult?>, (oldItems, newItems) ->
-                val callback = FiltersItemDisplayableDiffUtilCallback().apply {
-                  bindItems(oldItems, newItems)
-                }
-                Pair(newItems, DiffUtil.calculateDiff(callback, true))
-              })
-          .skip(1)
-          .subscribeOn(schedulerProvider.computation())
-          .observeOn(schedulerProvider.ui())
-          .subscribe { (newItems, diffResult) ->
-            filterItems = newItems
-            diffResult?.dispatchUpdatesTo(this)
+    filtersObservable
+        .scan(Pair(emptyList(), null))
+        { _: Pair<List<FiltersItemDisplayable>, DiffResult?>, (oldItems, newItems) ->
+          val callback = FiltersItemDisplayableDiffUtilCallback().apply {
+            bindItems(oldItems, newItems)
           }
+          Pair(newItems, DiffUtil.calculateDiff(callback, true))
+        }
+        .skip(1)
+        .subscribeOn(schedulerProvider.computation())
+        .observeOn(schedulerProvider.ui())
+        .errorHandlingSubscribe { (newItems, diffResult) ->
+          filterItems = newItems
+          diffResult?.dispatchUpdatesTo(this)
+        }
 }

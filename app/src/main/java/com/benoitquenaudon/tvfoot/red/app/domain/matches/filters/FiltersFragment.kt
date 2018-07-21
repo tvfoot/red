@@ -1,6 +1,5 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
-
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
@@ -28,11 +27,11 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisp
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersTeamDisplayable
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.FragmentFiltersBinding
+import com.benoitquenaudon.tvfoot.red.util.errorHandlingSubscribe
 import com.jakewharton.rxbinding2.support.v7.widget.RxToolbar
 import dagger.android.support.DaggerFragment
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -43,10 +42,12 @@ class FiltersFragment : DaggerFragment(), MviView<MatchesIntent, MatchesViewStat
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private val viewModel: MatchesViewModel by lazy(NONE) {
     // we need to use MatchesActivity to get only one instance of the MatchesViewModel
-    ViewModelProviders.of(activity!!, viewModelFactory).get(MatchesViewModel::class.java)
+    ViewModelProviders.of(activity!!, viewModelFactory)
+        .get(MatchesViewModel::class.java)
   }
   private val toolbarClicks: Observable<MenuItem> by lazy {
-    RxToolbar.itemClicks(binding.filtersToolbar).share()
+    RxToolbar.itemClicks(binding.filtersToolbar)
+        .share()
   }
 
   lateinit var binding: FragmentFiltersBinding
@@ -56,15 +57,18 @@ class FiltersFragment : DaggerFragment(), MviView<MatchesIntent, MatchesViewStat
   }
 
   override fun onCreateView(
-      inflater: LayoutInflater,
-      container: ViewGroup?,
-      savedInstanceState: Bundle?
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
   ): View? {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_filters, container, false)
     return binding.root
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?
+  ) {
     super.onViewCreated(view, savedInstanceState)
 
     binding.filtersToolbar.inflateMenu(R.menu.fragment_filters)
@@ -97,26 +101,26 @@ class FiltersFragment : DaggerFragment(), MviView<MatchesIntent, MatchesViewStat
   }
 
   private fun initialIntent(): Observable<FilterInitialIntent> =
-      Observable.just(FilterInitialIntent)
+    Observable.just(FilterInitialIntent)
 
   private fun clearFilterIntent(): Observable<ClearFilters> =
-      toolbarClicks
-          .filter { it.itemId == R.id.action_clear }
-          .map { ClearFilters }
+    toolbarClicks
+        .filter { it.itemId == R.id.action_clear }
+        .map { ClearFilters }
 
   private fun filterClickIntent(): Observable<ToggleFilterIntent> =
-      filtersAdapter.filterItemClickObservable.map { item ->
-        when (item) {
-          is FiltersCompetitionDisplayable -> ToggleFilterCompetitionIntent(item.code)
-          is FiltersTeamDisplayable -> ToggleFilterTeamIntent(item.code)
-          is FiltersBroadcasterDisplayable -> ToggleFilterBroadcasterIntent(item.code)
-        }
+    filtersAdapter.filterItemClickObservable.map { item ->
+      when (item) {
+        is FiltersCompetitionDisplayable -> ToggleFilterCompetitionIntent(item.code)
+        is FiltersTeamDisplayable -> ToggleFilterTeamIntent(item.code)
+        is FiltersBroadcasterDisplayable -> ToggleFilterBroadcasterIntent(item.code)
       }
+    }
 
   private fun searchTeamIntent(): Observable<SearchTeamIntent> =
-      filtersAdapter.filterSearchInputObservable
-          .distinctUntilChanged()
-          .map(::SearchTeamIntent)
+    filtersAdapter.filterSearchInputObservable
+        .distinctUntilChanged()
+        .map(::SearchTeamIntent)
 
   private fun searchedTeamSelectedIntent(): Observable<SearchedTeamSelectedIntent> {
     return filtersAdapter.searchedTeamClickObservable
@@ -128,12 +132,12 @@ class FiltersFragment : DaggerFragment(), MviView<MatchesIntent, MatchesViewStat
   }
 
   private fun bind() {
-    disposables.add(viewModel.states().subscribe(this::render, Timber::e))
+    disposables.add(viewModel.states().errorHandlingSubscribe(this::render))
     viewModel.processIntents(intents())
     disposables.add(
         RxObservableBoolean.propertyChanges(bindingModel.hasFilters)
             .startWith(bindingModel.hasFilters.get()) // fix for rotation
-            .subscribe {
+            .errorHandlingSubscribe {
               binding.filtersToolbar.menu.findItem(R.id.action_clear).isVisible = it
             }
     )

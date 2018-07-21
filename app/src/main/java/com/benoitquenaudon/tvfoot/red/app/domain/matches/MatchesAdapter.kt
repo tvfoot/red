@@ -24,17 +24,18 @@ import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowTeamlessMatchBinding
 import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding
 import com.benoitquenaudon.tvfoot.red.injection.scope.ActivityScope
 import com.benoitquenaudon.tvfoot.red.util.DataVersion
+import com.benoitquenaudon.tvfoot.red.util.errorHandlingSubscribe
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 @ActivityScope
 class MatchesAdapter @Inject constructor(
-    private val schedulerProvider: BaseSchedulerProvider
+  private val schedulerProvider: BaseSchedulerProvider
 ) : RecyclerView.Adapter<MatchesItemViewHolder<*, *>>() {
   private var matchesItems = emptyList<MatchesItemDisplayable>()
   private val matchesObservable: PublishSubject<Triple<List<MatchesItemDisplayable>, List<MatchesItemDisplayable>, DataVersion>> =
-      PublishSubject.create()
+    PublishSubject.create()
   val matchRowClickObservable: PublishSubject<MatchRowDisplayable> = PublishSubject.create()
 
   init {
@@ -42,7 +43,10 @@ class MatchesAdapter @Inject constructor(
     processItemDiffs()
   }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchesItemViewHolder<*, *> {
+  override fun onCreateViewHolder(
+    parent: ViewGroup,
+    viewType: Int
+  ): MatchesItemViewHolder<*, *> {
     val layoutInflater = LayoutInflater.from(parent.context)
     val binding = DataBindingUtil.inflate<ViewDataBinding>(layoutInflater, viewType, parent, false)
 
@@ -56,11 +60,15 @@ class MatchesAdapter @Inject constructor(
       R.layout.row_loading ->
         LoadingRowViewHolder(binding as RowLoadingBinding)
       else -> throw UnsupportedOperationException(
-          "don't know how to deal with this viewType: " + viewType)
+          "don't know how to deal with this viewType: " + viewType
+      )
     }
   }
 
-  override fun onBindViewHolder(holder: MatchesItemViewHolder<*, *>, position: Int) {
+  override fun onBindViewHolder(
+    holder: MatchesItemViewHolder<*, *>,
+    position: Int
+  ) {
     val item: MatchesItemDisplayable = matchesItems[position]
     return when (holder) {
       is MatchHeaderViewHolder -> {
@@ -104,19 +112,20 @@ class MatchesAdapter @Inject constructor(
   }
 
   override fun getItemViewType(position: Int): Int =
-      matchesItems[position].let { item ->
-        when (item) {
-          is MatchRowDisplayable -> if (item.homeTeam.name.isNullOrEmpty()) {
-            R.layout.matches_row_teamless_match
-          } else {
-            R.layout.matches_row_match
-          }
-          is HeaderRowDisplayable -> R.layout.matches_row_header
-          LoadingRowDisplayable -> R.layout.row_loading
-          else -> throw UnsupportedOperationException(
-              "Don't know how to deal with this item: $matchesItems[position]")
+    matchesItems[position].let { item ->
+      when (item) {
+        is MatchRowDisplayable -> if (item.homeTeam.name.isNullOrEmpty()) {
+          R.layout.matches_row_teamless_match
+        } else {
+          R.layout.matches_row_match
         }
+        is HeaderRowDisplayable -> R.layout.matches_row_header
+        LoadingRowDisplayable -> R.layout.row_loading
+        else -> throw UnsupportedOperationException(
+            "Don't know how to deal with this item: $matchesItems[position]"
+        )
       }
+    }
 
   fun onClick(match: MatchRowDisplayable) {
     matchRowClickObservable.onNext(match)
@@ -145,27 +154,29 @@ class MatchesAdapter @Inject constructor(
   }
 
   private fun processItemDiffs(): Disposable =
-      matchesObservable
-          .observeOn(schedulerProvider.computation())
-          .scan(Triple(emptyList(), null, 0),
-              { _: Triple<List<MatchesItemDisplayable>, DiffResult?, DataVersion>, (oldItems, newItems, startVersion) ->
-                Triple(
-                    newItems,
-                    DiffUtil.calculateDiff(
-                        MatchesItemDisplayableDiffUtilCallback(oldItems, newItems), true),
-                    startVersion)
-              })
-          .skip(1)
-          .observeOn(schedulerProvider.ui())
-          .subscribe { (newItems, diffResult, startVersion) ->
-            if (startVersion != dataVersion) {
-              // ignore update
-              return@subscribe
-            }
-
-            matchesItems = newItems
-            diffResult?.dispatchUpdatesTo(this)
+    matchesObservable
+        .observeOn(schedulerProvider.computation())
+        .scan(Triple(emptyList(), null, 0))
+        { _: Triple<List<MatchesItemDisplayable>, DiffResult?, DataVersion>, (oldItems, newItems, startVersion) ->
+          Triple(
+              newItems,
+              DiffUtil.calculateDiff(
+                  MatchesItemDisplayableDiffUtilCallback(oldItems, newItems), true
+              ),
+              startVersion
+          )
+        }
+        .skip(1)
+        .observeOn(schedulerProvider.ui())
+        .errorHandlingSubscribe { (newItems, diffResult, startVersion) ->
+          if (startVersion != dataVersion) {
+            // ignore update
+            return@errorHandlingSubscribe
           }
+
+          matchesItems = newItems
+          diffResult?.dispatchUpdatesTo(this)
+        }
 
   fun closestHeaderPosition(position: Int): Int {
     if (position < 0) throw IllegalStateException("should have a header")

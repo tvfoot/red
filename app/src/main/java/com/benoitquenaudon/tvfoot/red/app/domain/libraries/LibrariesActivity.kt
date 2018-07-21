@@ -6,6 +6,7 @@ import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityLibrariesBinding
+import com.benoitquenaudon.tvfoot.red.util.errorHandlingSubscribe
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
@@ -35,7 +36,7 @@ class LibrariesActivity : BaseActivity() {
 
     disposables
         .add(adapter.libraryClickObservable
-            .subscribe { library -> flowController.toLibrary(library.link) })
+            .errorHandlingSubscribe { library -> flowController.toLibrary(library.link) })
   }
 
   override fun onDestroy() {

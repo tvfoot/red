@@ -6,11 +6,11 @@ import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationReposi
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.source.MatchRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
+import com.benoitquenaudon.tvfoot.red.util.errorHandlingSubscribe
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
-
 
 class MatchNotificationSchedulerService : JobService() {
   @Inject
@@ -32,17 +32,18 @@ class MatchNotificationSchedulerService : JobService() {
   }
 
   override fun onStartJob(params: JobParameters?): Boolean {
-    preferenceRepository.loadToBeNotifiedMatchIds()
-        .flatMapSingle { matchId -> matchRepository.loadMatch(matchId) }
-        .filter { it.startAt.time > nowOnCreate }
-        .map { it.id to it.startAt.time }
-        .flatMapSingle { (matchId, startAt) ->
-          notificationRepository.scheduleNotification(matchId, startAt, true)
-        }
-        .doFinally { jobFinished(params, false) }
-        .doOnError(Timber::e)
-        .subscribeOn(schedulerProvider.io())
-        .subscribe()
+    disposables.add(
+        preferenceRepository.loadToBeNotifiedMatchIds()
+            .flatMapSingle { matchId -> matchRepository.loadMatch(matchId) }
+            .filter { it.startAt.time > nowOnCreate }
+            .map { it.id to it.startAt.time }
+            .flatMapSingle { (matchId, startAt) ->
+              notificationRepository.scheduleNotification(matchId, startAt, true)
+            }
+            .doFinally { jobFinished(params, false) }
+            .doOnError(Timber::e)
+            .subscribeOn(schedulerProvider.io())
+            .errorHandlingSubscribe())
 
     return true
   }
