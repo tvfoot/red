@@ -20,6 +20,7 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match.Companion.MATCH_ID
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchBinding
+import com.benoitquenaudon.tvfoot.red.util.errorHandlingSubscribe
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -87,11 +88,11 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   }
 
   private fun bind() {
-    disposables.add(viewModel.states().subscribe(this::render, Timber::e))
+    disposables.add(viewModel.states().errorHandlingSubscribe(this::render))
     viewModel.processIntents(intents())
 
     disposables.add(RxObservableBoolean.propertyChanges(bindingModel.shouldNotifyMatchStart)
-        .subscribe { shouldNotifyMatchStart ->
+        .errorHandlingSubscribe { shouldNotifyMatchStart ->
           if (shouldNotifyMatchStart) {
             Snackbar.make(binding.root,
                 resources.getQuantityString(

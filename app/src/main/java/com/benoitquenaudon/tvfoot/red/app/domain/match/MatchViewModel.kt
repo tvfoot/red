@@ -22,6 +22,7 @@ import com.benoitquenaudon.tvfoot.red.util.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
@@ -35,13 +36,24 @@ class MatchViewModel @Inject constructor(
     private val schedulerProvider: BaseSchedulerProvider,
     firebaseAnalytics: BaseRedFirebaseAnalytics
 ) : RedViewModel<MatchIntent, MatchViewState>(firebaseAnalytics) {
+  private val disposables = CompositeDisposable()
 
   private val statesObservable: Observable<MatchViewState> by lazy(NONE) {
     compose().skip(1).replay(1).autoConnect(0)
   }
 
   override fun processIntents(intents: Observable<MatchIntent>) {
-    intents.subscribe(intentsSubject::onNext, intentsSubject::onError)
+    disposables.add(
+        intents.subscribe(
+            intentsSubject::onNext,
+            intentsSubject::onError
+        )
+    )
+  }
+
+  override fun onCleared() {
+    disposables.dispose()
+    super.onCleared()
   }
 
   override fun states(): Observable<MatchViewState> = statesObservable

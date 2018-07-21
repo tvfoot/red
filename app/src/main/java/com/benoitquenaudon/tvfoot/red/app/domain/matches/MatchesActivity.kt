@@ -29,6 +29,7 @@ import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent.RefreshNo
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersFragment
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchesBinding
+import com.benoitquenaudon.tvfoot.red.util.errorHandlingSubscribe
 import com.benoitquenaudon.tvfoot.red.util.getDrawableCompat
 import com.benoitquenaudon.tvfoot.red.util.hideKeyboard
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
@@ -37,7 +38,6 @@ import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
@@ -48,14 +48,15 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   @Inject lateinit var disposables: CompositeDisposable
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   private val viewModel: MatchesViewModel by lazy(NONE) {
-    ViewModelProviders.of(this, viewModelFactory).get(MatchesViewModel::class.java)
+    ViewModelProviders.of(this, viewModelFactory)
+        .get(MatchesViewModel::class.java)
   }
 
   private val binding: ActivityMatchesBinding by lazy(NONE) {
     DataBindingUtil.setContentView<ActivityMatchesBinding>(this, R.layout.activity_matches)
   }
   private val refreshNotificationStatusSubject =
-      PublishSubject.create<RefreshNotificationStatusIntent>()
+    PublishSubject.create<RefreshNotificationStatusIntent>()
 
   companion object {
     private const val FRAGMENT_FILTERS = "fragment:filters"
@@ -92,66 +93,69 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     menuInflater.inflate(R.menu.matches_settings_menu, menu)
     disposables.add(
         RxView.clicks(menu.findItem(R.id.matches_filters_item).actionView)
-            .subscribe { openFiltersDrawer() }
+            .errorHandlingSubscribe { openFiltersDrawer() }
     )
 
     return true
   }
 
   override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-    menu.findItem(R.id.matches_filters_item).isVisible = bindingModel.areTagsLoaded.get()
+    menu.findItem(R.id.matches_filters_item)
+        .isVisible = bindingModel.areTagsLoaded.get()
 
-    menu.findItem(R.id.matches_filters_item).actionView
+    menu.findItem(R.id.matches_filters_item)
+        .actionView
         .findViewById<View>(R.id.filters_usage_badge)
         .visibility = if (bindingModel.hasActiveFilters.get()) VISIBLE else GONE
     return super.onPrepareOptionsMenu(menu)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean =
-      when (item.itemId) {
-        R.id.matches_settings_item -> {
-          flowController.toSettings()
-          true
-        }
-        R.id.matches_filters_item -> {
-          // should not be called because we use a actionLayout
-          openFiltersDrawer()
-          true
-        }
-        else -> super.onOptionsItemSelected(item)
+    when (item.itemId) {
+      R.id.matches_settings_item -> {
+        flowController.toSettings()
+        true
       }
+      R.id.matches_filters_item -> {
+        // should not be called because we use a actionLayout
+        openFiltersDrawer()
+        true
+      }
+      else -> super.onOptionsItemSelected(item)
+    }
 
   private fun openFiltersDrawer() {
     binding.drawerLayout.openDrawer(Gravity.END)
   }
 
   private fun bind() {
-    disposables.add(viewModel.states().subscribe(this::render, Timber::e))
+    disposables.add(viewModel.states().errorHandlingSubscribe(this::render))
     viewModel.processIntents(intents())
 
     disposables.add(adapter.matchRowClickObservable
-        .subscribe { matchRowDisplayable ->
+        .errorHandlingSubscribe { matchRowDisplayable ->
           flowController.toMatchForResult(matchRowDisplayable.matchId, REFRESH_STATUS_ON_RESULT)
         }
     )
     disposables.add(
         RxObservableBoolean.propertyChanges(bindingModel.areTagsLoaded)
-            .subscribe { invalidateOptionsMenu() }
+            .errorHandlingSubscribe { invalidateOptionsMenu() }
     )
     disposables.add(
         RxObservableBoolean.propertyChanges(bindingModel.hasActiveFilters)
-            .subscribe { invalidateOptionsMenu() }
+            .errorHandlingSubscribe { invalidateOptionsMenu() }
     )
 
     disposables.add(
-        RxView.clicks(binding.toolbarImageView).subscribe {
-          (binding.recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition().let {
-            if (it < 35) {
-              binding.recyclerView.smoothScrollToPosition(0)
-            } else {
-              binding.recyclerView.scrollToPosition(0)
-            }
-          }
+        RxView.clicks(binding.toolbarImageView).errorHandlingSubscribe {
+          (binding.recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+              .let {
+                if (it < 35) {
+                  binding.recyclerView.smoothScrollToPosition(0)
+                } else {
+                  binding.recyclerView.scrollToPosition(0)
+                }
+              }
         }
     )
   }
@@ -162,16 +166,19 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
   }
 
   override fun intents(): Observable<MatchesIntent> {
-    return Observable.merge(initialIntent(),
+    return Observable.merge(
+        initialIntent(),
         refreshIntent(),
         loadNextPageIntent(),
-        refreshNotificationStatus())
+        refreshNotificationStatus()
+    )
   }
 
   private fun initialIntent(): Observable<InitialIntent> = Observable.just(InitialIntent)
 
   private fun refreshIntent(): Observable<RefreshIntent> {
-    return RxSwipeRefreshLayout.refreshes(binding.swipeRefreshLayout).map { RefreshIntent }
+    return RxSwipeRefreshLayout.refreshes(binding.swipeRefreshLayout)
+        .map { RefreshIntent }
   }
 
   private fun loadNextPageIntent(): Observable<LoadNextPageIntent> {
@@ -219,14 +226,19 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
 
   private fun refreshNotificationStatus() = refreshNotificationStatusSubject
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+  override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+  ) {
     if (requestCode == REFRESH_STATUS_ON_RESULT) {
       if (resultCode == RESULT_OK) {
         if (data != null) {
-          data.getStringExtra(MATCH_ID)?.let { matchId ->
-            refreshNotificationStatusSubject.onNext(RefreshNotificationStatusIntent(matchId))
-            return
-          }
+          data.getStringExtra(MATCH_ID)
+              ?.let { matchId ->
+                refreshNotificationStatusSubject.onNext(RefreshNotificationStatusIntent(matchId))
+                return
+              }
         }
       }
     }

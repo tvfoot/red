@@ -57,6 +57,7 @@ import com.benoitquenaudon.tvfoot.red.util.logState
 import com.benoitquenaudon.tvfoot.red.util.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Singles
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit.MILLISECONDS
@@ -64,22 +65,30 @@ import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
 class MatchesViewModel @Inject constructor(
-    private val intentsSubject: PublishSubject<MatchesIntent>,
-    private val matchesRepository: BaseMatchesRepository,
-    private val teamRepository: BaseTeamRepository,
-    private val preferenceRepository: BasePreferenceRepository,
-    private val schedulerProvider: BaseSchedulerProvider,
-    firebaseAnalytics: BaseRedFirebaseAnalytics
+  private val intentsSubject: PublishSubject<MatchesIntent>,
+  private val matchesRepository: BaseMatchesRepository,
+  private val teamRepository: BaseTeamRepository,
+  private val preferenceRepository: BasePreferenceRepository,
+  private val schedulerProvider: BaseSchedulerProvider,
+  firebaseAnalytics: BaseRedFirebaseAnalytics
 ) : RedViewModel<MatchesIntent, MatchesViewState>(firebaseAnalytics) {
+  private val disposables = CompositeDisposable()
 
   private val statesObservable: Observable<MatchesViewState> by lazy(NONE) {
-    compose().skip(1).replay(1).autoConnect(0)
+    compose().skip(1)
+        .replay(1)
+        .autoConnect(0)
   }
 
   override fun states(): Observable<MatchesViewState> = statesObservable
 
   override fun processIntents(intents: Observable<MatchesIntent>) {
-    intents.subscribe(intentsSubject::onNext, intentsSubject::onError)
+    disposables.add(intents.subscribe(intentsSubject::onNext, intentsSubject::onError))
+  }
+
+  override fun onCleared() {
+    disposables.dispose()
+    super.onCleared()
   }
 
   private fun compose(): Observable<MatchesViewState> {
@@ -106,21 +115,21 @@ class MatchesViewModel @Inject constructor(
   }
 
   private fun actionFromIntent(intent: MatchesIntent): MatchesAction =
-      when (intent) {
-        InitialIntent -> RefreshAction
-        RefreshIntent -> RefreshAction
-        is LoadNextPageIntent -> LoadNextPageAction(intent.pageIndex)
-        ClearFilters -> ClearFiltersAction
-        is ToggleFilterCompetitionIntent -> ToggleFilterCompetitionAction(intent.tagName)
-        is ToggleFilterBroadcasterIntent -> ToggleFilterBroadcasterAction(intent.tagName)
-        is ToggleFilterTeamIntent -> ToggleFilterTeamAction(intent.teamCode)
-        FilterInitialIntent -> LoadTagsAction
-        is SearchTeamIntent -> SearchTeamAction(intent.input)
-        ClearSearchIntent -> ClearSearchAction
-        is SearchedTeamSelectedIntent -> SearchedTeamSelectedAction(intent.team)
-        ClearSearchInputIntent -> ClearSearchInputAction
-        is RefreshNotificationStatusIntent -> RefreshNotificationStatusAction(intent.matchId)
-      }
+    when (intent) {
+      InitialIntent -> RefreshAction
+      RefreshIntent -> RefreshAction
+      is LoadNextPageIntent -> LoadNextPageAction(intent.pageIndex)
+      ClearFilters -> ClearFiltersAction
+      is ToggleFilterCompetitionIntent -> ToggleFilterCompetitionAction(intent.tagName)
+      is ToggleFilterBroadcasterIntent -> ToggleFilterBroadcasterAction(intent.tagName)
+      is ToggleFilterTeamIntent -> ToggleFilterTeamAction(intent.teamCode)
+      FilterInitialIntent -> LoadTagsAction
+      is SearchTeamIntent -> SearchTeamAction(intent.input)
+      ClearSearchIntent -> ClearSearchAction
+      is SearchedTeamSelectedIntent -> SearchedTeamSelectedAction(intent.team)
+      ClearSearchInputIntent -> ClearSearchInputAction
+      is RefreshNotificationStatusIntent -> RefreshNotificationStatusAction(intent.matchId)
+    }
 
   private val refreshTransformer: ObservableTransformer<RefreshAction, RefreshResult>
     get() = ObservableTransformer { actions: Observable<RefreshAction> ->
@@ -179,7 +188,8 @@ class MatchesViewModel @Inject constructor(
                   filteredCompetitionNames = it.second,
                   filteredBroadcasterNames = it.third,
                   filteredTeamNames = it.fourth,
-                  teams = it.fifth)
+                  teams = it.fifth
+              )
             }
             .onErrorReturn(LoadTagsResult::Failure)
             .subscribeOn(schedulerProvider.io())
@@ -273,44 +283,49 @@ class MatchesViewModel @Inject constructor(
             shared.ofType(LoadNextPageAction::class.java).compose(loadNextPageTransformer),
             shared.ofType(RefreshNotificationStatusAction::class.java)
                 .compose(refreshNotificationStatusTransformer)
-        ).mergeWith(
-            Observable.merge<MatchesResult>(
-                shared.ofType(ToggleFilterBroadcasterAction::class.java)
-                    .compose(toggleFilterBroadcasterTransformer),
-                shared.ofType(ToggleFilterCompetitionAction::class.java)
-                    .compose(toggleFilterCompetitionTransformer),
-                shared.ofType(ToggleFilterTeamAction::class.java)
-                    .compose(toggleFilterTeamTransformer),
-                shared.ofType(LoadTagsAction::class.java).compose(loadTagsTransformer)
+        )
+            .mergeWith(
+                Observable.merge<MatchesResult>(
+                    shared.ofType(ToggleFilterBroadcasterAction::class.java)
+                        .compose(toggleFilterBroadcasterTransformer),
+                    shared.ofType(ToggleFilterCompetitionAction::class.java)
+                        .compose(toggleFilterCompetitionTransformer),
+                    shared.ofType(ToggleFilterTeamAction::class.java)
+                        .compose(toggleFilterTeamTransformer),
+                    shared.ofType(LoadTagsAction::class.java).compose(loadTagsTransformer)
+                )
             )
-        ).mergeWith(
-            Observable.merge<MatchesResult>(
-                shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
-                shared.ofType(SearchInputAction::class.java).compose(searchInputTransformer),
-                shared.ofType(SearchedTeamSelectedAction::class.java)
-                    .compose(searchedTeamSelectedTransformer),
-                shared.ofType(ClearSearchInputAction::class.java).compose(
-                    clearSearchInputTransformer)
+            .mergeWith(
+                Observable.merge<MatchesResult>(
+                    shared.ofType(ClearFiltersAction::class.java).compose(clearFilterTransformer),
+                    shared.ofType(SearchInputAction::class.java).compose(searchInputTransformer),
+                    shared.ofType(SearchedTeamSelectedAction::class.java)
+                        .compose(searchedTeamSelectedTransformer),
+                    shared.ofType(ClearSearchInputAction::class.java).compose(
+                        clearSearchInputTransformer
+                    )
+                )
             )
-        ).mergeWith(
-            // Error for not implemented actions
-            shared.filter { v ->
-              v != RefreshAction &&
-                  v !is LoadNextPageAction &&
-                  v != ClearFiltersAction &&
-                  v !is ToggleFilterCompetitionAction &&
-                  v !is ToggleFilterBroadcasterAction &&
-                  v !is ToggleFilterTeamAction &&
-                  v != LoadTagsAction &&
-                  v !is SearchTeamAction &&
-                  v != ClearSearchAction &&
-                  v !is SearchedTeamSelectedAction &&
-                  v != ClearSearchInputAction &&
-                  v !is RefreshNotificationStatusAction
-            }.flatMap { w ->
-              Observable.error<MatchesResult>(
-                  IllegalArgumentException("Unknown Action type: " + w))
-            })
+            .mergeWith(
+                // Error for not implemented actions
+                shared.filter { v ->
+                  v != RefreshAction &&
+                      v !is LoadNextPageAction &&
+                      v != ClearFiltersAction &&
+                      v !is ToggleFilterCompetitionAction &&
+                      v !is ToggleFilterBroadcasterAction &&
+                      v !is ToggleFilterTeamAction &&
+                      v != LoadTagsAction &&
+                      v !is SearchTeamAction &&
+                      v != ClearSearchAction &&
+                      v !is SearchedTeamSelectedAction &&
+                      v != ClearSearchInputAction &&
+                      v !is RefreshNotificationStatusAction
+                }.flatMap { w ->
+                  Observable.error<MatchesResult>(
+                      IllegalArgumentException("Unknown Action type: " + w)
+                  )
+                })
       }
     }
 }

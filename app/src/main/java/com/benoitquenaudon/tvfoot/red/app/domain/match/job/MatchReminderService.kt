@@ -8,6 +8,7 @@ import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvide
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
+import com.benoitquenaudon.tvfoot.red.util.errorHandlingSubscribe
 import dagger.android.DaggerService
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -25,7 +26,11 @@ class MatchReminderService : DaggerService() {
     return null
   }
 
-  override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+  override fun onStartCommand(
+    intent: Intent,
+    flags: Int,
+    startId: Int
+  ): Int {
     val matchId = checkNotNull(intent.getStringExtra(Match.MATCH_ID)) { "matchId == null" }
 
     if (intent.action == null) {
@@ -47,12 +52,9 @@ class MatchReminderService : DaggerService() {
               .map { (matchId) -> matchId }
               .subscribeOn(schedulerProvider.io())
               .doFinally { stopSelf(startId) }
-              .subscribe(
-                  { match ->
-                    MatchNotificationHelper(applicationContext, match).publishMatchStarting()
-                  },
-                  { error -> Timber.e(error, "Could not display the game's notification") }
-              )
+              .errorHandlingSubscribe { match ->
+                MatchNotificationHelper(applicationContext, match).publishMatchStarting()
+              }
       )
     } else {
       Timber.w("Don't know this action %s", action)
@@ -67,6 +69,7 @@ class MatchReminderService : DaggerService() {
   }
 
   companion object {
-    const val ACTION_PUBLISH_NOTIFICATION = "com.benoitquenaudon.tvfoot.red.action.PUBLISH_NOTIFICATION"
+    const val ACTION_PUBLISH_NOTIFICATION =
+      "com.benoitquenaudon.tvfoot.red.action.PUBLISH_NOTIFICATION"
   }
 }
