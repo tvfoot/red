@@ -4,7 +4,6 @@ import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.injection.module.ActivityBindingModule
 import com.benoitquenaudon.tvfoot.red.injection.module.AppModule
 import com.benoitquenaudon.tvfoot.red.injection.module.BaseImplementationModule
-import com.benoitquenaudon.tvfoot.red.injection.module.FirebaseModule
 import com.benoitquenaudon.tvfoot.red.injection.module.LibrariesModule
 import com.benoitquenaudon.tvfoot.red.injection.module.NetworkModule
 import com.benoitquenaudon.tvfoot.red.injection.module.PreferenceServiceModule
@@ -18,7 +17,6 @@ import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
-
 @Singleton
 @Component(modules = [
   AndroidSupportInjectionModule::class,
@@ -31,7 +29,6 @@ import javax.inject.Singleton
   PreferenceServiceModule::class,
   SchedulerModule::class,
   RxFactoryModule::class,
-  FirebaseModule::class,
   LibrariesModule::class,
   BaseImplementationModule::class])
 interface AppComponent : AndroidInjector<RedApp> {

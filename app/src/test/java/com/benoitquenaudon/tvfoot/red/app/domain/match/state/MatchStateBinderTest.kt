@@ -1,12 +1,10 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match.state
 
-import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
-import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
-import com.benoitquenaudon.tvfoot.red.app.common.firebase.NoopRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.notification.NotificationRepository
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.ImmediateSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.source.FakeMatchRepository
+import com.benoitquenaudon.tvfoot.red.app.data.source.PreferenceRepository
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchIntent.InitialIntent
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchViewModel
@@ -35,15 +33,13 @@ class MatchStateBinderTest {
 
     val intents = PublishSubject.create<MatchIntent>()
     val schedulerProvider: BaseSchedulerProvider = ImmediateSchedulerProvider()
-    val redFirebaseAnalytics: BaseRedFirebaseAnalytics = NoopRedFirebaseAnalytics
 
     matchStateBinder = MatchViewModel(
         intents,
         FakeMatchRepository(),
         preferenceRepository,
         notificationRepository,
-        schedulerProvider,
-        redFirebaseAnalytics
+        schedulerProvider
     )
 
     matchStateBinder.states().test()

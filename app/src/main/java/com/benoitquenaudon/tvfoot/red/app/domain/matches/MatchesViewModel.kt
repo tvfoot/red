@@ -1,6 +1,5 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
-import com.benoitquenaudon.tvfoot.red.app.common.firebase.BaseRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.FilterTeam
 import com.benoitquenaudon.tvfoot.red.app.data.source.BaseMatchesRepository
@@ -69,9 +68,8 @@ class MatchesViewModel @Inject constructor(
   private val matchesRepository: BaseMatchesRepository,
   private val teamRepository: BaseTeamRepository,
   private val preferenceRepository: BasePreferenceRepository,
-  private val schedulerProvider: BaseSchedulerProvider,
-  firebaseAnalytics: BaseRedFirebaseAnalytics
-) : RedViewModel<MatchesIntent, MatchesViewState>(firebaseAnalytics) {
+  private val schedulerProvider: BaseSchedulerProvider
+) : RedViewModel<MatchesIntent, MatchesViewState>() {
   private val disposables = CompositeDisposable()
 
   private val statesObservable: Observable<MatchesViewState> by lazy(NONE) {
