@@ -1,6 +1,5 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.state
 
-import com.benoitquenaudon.tvfoot.red.app.common.firebase.NoopRedFirebaseAnalytics
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.ImmediateSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.source.FakeMatchesRepository
 import com.benoitquenaudon.tvfoot.red.app.data.source.FakePreferenceRepository
@@ -27,8 +26,7 @@ class MatchesViewModelTest {
         FakeMatchesRepository(),
         FakeTeamRepository(),
         FakePreferenceRepository(),
-        ImmediateSchedulerProvider(),
-        NoopRedFirebaseAnalytics
+        ImmediateSchedulerProvider()
     )
 
     testObserver = stateBinder.states().test()

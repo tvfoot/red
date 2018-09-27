@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
   compileSdkVersion rootProject.config.compileSdkVersion
@@ -80,15 +79,8 @@ androidExtensions {
   experimental = true
 }
 
-android.applicationVariants.all {
-  // Set this to false to disable Firebase Performance Monitoring at compile time
-  FirebasePerformance {
-    instrumentationEnabled true
-  }
-}
-
 dependencies {
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
   implementation "android.arch.lifecycle:extensions:$rootProject.lib.archComponentsVersion"
   kapt "android.arch.lifecycle:compiler:$rootProject.lib.archComponentsVersion"
   implementation "com.android.support:appcompat-v7:$rootProject.lib.supportLibraryVersion"
@@ -113,10 +105,6 @@ dependencies {
   implementation "com.squareup.moshi:moshi:$rootProject.lib.moshiVersion"
   implementation "com.squareup.moshi:moshi-adapters:$rootProject.lib.moshiVersion"
   kapt "com.squareup.moshi:moshi-kotlin-codegen:$rootProject.lib.moshiVersion"
-  implementation "com.google.firebase:firebase-core:$rootProject.lib.firebaseVersion"
-  implementation "com.google.firebase:firebase-perf:$rootProject.lib.firebaseVersion"
-  // Only use crash reporting in the "prod" product flavor
-  prodImplementation "com.google.firebase:firebase-crash:$rootProject.lib.firebaseVersion"
   implementation "com.jakewharton.rxbinding2:rxbinding:$rootProject.lib.rxBindingVersion"
   implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$rootProject.lib.rxBindingVersion"
   implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$rootProject.lib.rxBindingVersion"
@@ -160,5 +148,3 @@ configurations.all {
     }
   }
 }
-
-apply plugin: 'com.google.gms.google-services'
