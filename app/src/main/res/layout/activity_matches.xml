@@ -57,7 +57,7 @@
           app:layout_behavior="@string/appbar_scrolling_view_behavior"
           app:refreshing="@{bindingModel.refreshLoading}"
           app:visible="@{bindingModel.hasData}"
-          tools:visibility="gone"
+          tools:visibility="visible"
           >
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -77,6 +77,7 @@
           android:text="@string/no_match_found"
           android:textSize="20sp"
           app:visible="@{!bindingModel.hasData}"
+          tools:visibility="gone"
           />
 
       <TextView
@@ -86,6 +87,7 @@
           android:text="@{bindingModel.errorMessage}"
           android:textSize="16sp"
           app:visible="@{bindingModel.hasError}"
+          tools:visibility="gone"
           />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

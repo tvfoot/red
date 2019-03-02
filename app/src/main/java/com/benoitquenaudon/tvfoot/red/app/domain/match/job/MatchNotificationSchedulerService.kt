@@ -54,6 +54,6 @@ class MatchNotificationSchedulerService : JobService() {
   }
 
   companion object {
-    const val MATCH_NOTIFICATION_SCHEDULER_JOB_ID = 806
+    const val MATCH_NOTIFICATION_SCHEDULER_JOB_ID = 806 // 33
   }
 }
