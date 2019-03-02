@@ -64,7 +64,8 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
 
     if (matchId == null) {
       Timber.w("matchDisplayable id is null %s", uri)
-      Toast.makeText(this, "matchDisplayable id is null with uri $uri", Toast.LENGTH_LONG).show()
+      Toast.makeText(this, "Cannot find any record for this match.", Toast.LENGTH_LONG)
+          .show()
       flowController.toMatches()
       finish()
       return

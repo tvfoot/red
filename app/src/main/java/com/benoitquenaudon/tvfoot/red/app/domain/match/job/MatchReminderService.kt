@@ -38,16 +38,17 @@ class MatchReminderService : DaggerService() {
       return Service.START_NOT_STICKY
     }
 
-    val action: String = intent.action
+    val action: String? = intent.action
     if (action == ACTION_PUBLISH_NOTIFICATION) {
       disposables.add(
-          Single.zip<Match, Boolean, Pair<Match, Boolean>>(
-              matchRepository.loadMatch(matchId),
-              preferenceRepository.loadNotifyMatchStart(matchId),
-              BiFunction<Match, Boolean, Pair<Match, Boolean>> { first, second ->
-                Pair(first, second)
-              }
-          )
+          Single
+              .zip<Match, Boolean, Pair<Match, Boolean>>(
+                  matchRepository.loadMatch(matchId),
+                  preferenceRepository.loadNotifyMatchStart(matchId),
+                  BiFunction<Match, Boolean, Pair<Match, Boolean>> { first, second ->
+                    Pair(first, second)
+                  }
+              )
               .filter { (_, shouldNotify) -> shouldNotify }
               .map { (matchId) -> matchId }
               .subscribeOn(schedulerProvider.io())
