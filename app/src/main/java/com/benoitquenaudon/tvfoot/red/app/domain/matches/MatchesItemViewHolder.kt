@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
-import android.databinding.ViewDataBinding
-import android.support.v7.widget.RecyclerView
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.RecyclerView
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.HeaderRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.LoadingRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
@@ -14,7 +14,7 @@ import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding
 
 sealed class MatchesItemViewHolder<out B : ViewDataBinding, in T : MatchesItemDisplayable>(
     val binding: B
-) : RecyclerView.ViewHolder(binding.root) {
+) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
 
   abstract fun bind(item: T)
   abstract fun unbind()

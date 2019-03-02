@@ -8,7 +8,7 @@ import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.DITHER_FLAG
 import android.graphics.Paint.FILTER_BITMAP_FLAG
 import android.graphics.Shader.TileMode.CLAMP
-import androidx.graphics.createBitmap
+import androidx.core.graphics.createBitmap
 import com.squareup.picasso.Transformation
 
 object CircleTransform : Transformation {

@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match
 
-import android.databinding.ObservableBoolean
-import android.databinding.ObservableField
+import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableField
 import javax.inject.Inject
 
 class MatchBindingModel @Inject constructor(
@@ -24,10 +24,10 @@ class MatchBindingModel @Inject constructor(
       val error = checkNotNull(state.error) { "state error is null" }
       errorMessage.set(error.toString())
     }
-    if (hasData.get() && //
-        (match.get() == null || match.get() != state.match)) {
+    if (hasData.get()
+        && (match.get() == null || match.get() != state.match)) {
       match.set(state.match)
-      broadcastersAdapter.addAll(match.get().broadcasters)
+      broadcastersAdapter.addAll(match.get()!!.broadcasters)
     }
   }
 }

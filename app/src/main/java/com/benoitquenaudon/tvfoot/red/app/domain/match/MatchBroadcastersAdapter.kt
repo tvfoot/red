@@ -1,8 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match
 
-import android.databinding.DataBindingUtil
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.ViewHolder
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.benoitquenaudon.tvfoot.red.R.layout
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @ActivityScope
 class MatchBroadcastersAdapter @Inject constructor(
-) : RecyclerView.Adapter<MatchBroadcastersAdapter.MatchBroadcasterViewHolder>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<MatchBroadcastersAdapter.MatchBroadcasterViewHolder>() {
   private val broadcasters = ArrayList<BroadcasterRowDisplayable>()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchBroadcasterViewHolder {

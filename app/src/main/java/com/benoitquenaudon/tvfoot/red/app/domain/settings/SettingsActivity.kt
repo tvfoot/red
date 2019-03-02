@@ -8,7 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceActivity
 import android.preference.PreferenceFragment
-import android.support.v4.app.NavUtils
+import androidx.core.app.NavUtils
 import android.view.MenuItem
 import com.benoitquenaudon.tvfoot.red.BuildConfig
 import com.benoitquenaudon.tvfoot.red.R

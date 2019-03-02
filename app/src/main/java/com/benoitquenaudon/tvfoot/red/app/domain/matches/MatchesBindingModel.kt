@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
-import android.databinding.ObservableBoolean
-import android.databinding.ObservableField
+import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableField
 import javax.inject.Inject
 
 class MatchesBindingModel @Inject constructor(private val adapter: MatchesAdapter) {

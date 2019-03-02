@@ -1,10 +1,10 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
+import androidx.recyclerview.widget.DividerItemDecoration
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -74,7 +74,11 @@ class FiltersFragment : DaggerFragment(), MviView<MatchesIntent, MatchesViewStat
     binding.filtersToolbar.inflateMenu(R.menu.fragment_filters)
 
     binding.filtersList.apply {
-      addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+      addItemDecoration(
+          androidx.recyclerview.widget.DividerItemDecoration(
+              context, androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
+          )
+      )
       adapter = filtersAdapter
     }
 

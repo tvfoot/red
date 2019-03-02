@@ -1,15 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.databinding.DataBindingUtil
 import android.graphics.Rect
 import android.os.Bundle
-import android.support.v4.view.GravityCompat
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -17,6 +10,10 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.EditText
+import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
@@ -83,7 +80,10 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
           .add(R.id.filters, FiltersFragment.newInstance(), FRAGMENT_FILTERS)
           .commit()
     }
-    val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL).apply {
+    val divider = androidx.recyclerview.widget.DividerItemDecoration(
+        this, androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
+    )
+        .apply {
       setDrawable(this@MatchesActivity.getDrawableCompat(R.drawable.one_line_divider))
     }
     binding.recyclerView.addItemDecoration(divider)
@@ -125,7 +125,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     }
 
   private fun openFiltersDrawer() {
-    binding.drawerLayout.openDrawer(Gravity.END)
+    binding.drawerLayout.openDrawer(GravityCompat.END)
   }
 
   private fun bind() {
@@ -148,7 +148,7 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
 
     disposables.add(
         RxView.clicks(binding.toolbarImageView).errorHandlingSubscribe {
-          (binding.recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+          (binding.recyclerView.layoutManager as androidx.recyclerview.widget.LinearLayoutManager).findFirstVisibleItemPosition()
               .let {
                 if (it < 35) {
                   binding.recyclerView.smoothScrollToPosition(0)
@@ -185,9 +185,9 @@ class MatchesActivity : BaseActivity(), MviView<MatchesIntent, MatchesViewState>
     return RxRecyclerView.scrollEvents(binding.recyclerView)
         .filter { bindingModel.hasMore && !bindingModel.nextPageLoading }
         .filter { scrollEvent ->
-          val layoutManager = scrollEvent.view().layoutManager as LinearLayoutManager
+          val layoutManager = scrollEvent.view().layoutManager as androidx.recyclerview.widget.LinearLayoutManager
           val lastPosition = layoutManager.findLastVisibleItemPosition()
-          lastPosition == scrollEvent.view().adapter.itemCount - 1
+          lastPosition == (scrollEvent.view().adapter?.itemCount ?: 1) - 1
         }
         .map { LoadNextPageIntent(bindingModel.currentPage + 1) }
   }

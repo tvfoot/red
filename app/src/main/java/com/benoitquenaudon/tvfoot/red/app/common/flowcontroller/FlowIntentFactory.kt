@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.common.flowcontroller
 
 import android.content.Intent
-import androidx.net.toUri
+import androidx.core.net.toUri
 
 object FlowIntentFactory {
   fun toMatchesIntent(): Intent = Intent(Intent.ACTION_VIEW, "tvfoot://tvfoot/".toUri())

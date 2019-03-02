@@ -2,7 +2,7 @@ package com.benoitquenaudon.tvfoot.red.app.common.flowcontroller
 
 import android.app.Activity
 import android.content.Intent
-import androidx.net.toUri
+import androidx.core.net.toUri
 import javax.inject.Inject
 
 class FlowController @Inject constructor(

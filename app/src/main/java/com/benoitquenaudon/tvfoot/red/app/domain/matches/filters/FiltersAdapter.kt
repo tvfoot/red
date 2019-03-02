@@ -1,10 +1,10 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
-import android.support.v7.util.DiffUtil
-import android.support.v7.util.DiffUtil.DiffResult
-import android.support.v7.widget.RecyclerView
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DiffUtil.DiffResult
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.benoitquenaudon.tvfoot.red.R
@@ -40,7 +40,7 @@ import javax.inject.Inject
 @FragmentScope
 class FiltersAdapter @Inject constructor(
   private val schedulerProvider: BaseSchedulerProvider
-) : RecyclerView.Adapter<FiltersViewHolder<*, *>>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<FiltersViewHolder<*, *>>() {
   private var filterItems = emptyList<FiltersItemDisplayable>()
   private val filtersObservable: PublishSubject<Pair<List<FiltersItemDisplayable>, List<FiltersItemDisplayable>>> =
     PublishSubject.create()
@@ -146,8 +146,8 @@ class FiltersAdapter @Inject constructor(
     }
   }
 
-  override fun onViewRecycled(holder: FiltersViewHolder<*, *>?) {
-    holder?.unbind()
+  override fun onViewRecycled(holder: FiltersViewHolder<*, *>) {
+    holder.unbind()
     super.onViewRecycled(holder)
   }
 

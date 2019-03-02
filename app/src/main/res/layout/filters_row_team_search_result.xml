@@ -24,7 +24,7 @@
       android:foreground="?attr/selectableItemBackground"
       android:onClick="@{() -> handler.onSearchTeamSelected(team)}"
       >
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_gray_light_shape"
@@ -79,6 +79,6 @@
           app:layout_constraintTop_toTopOf="parent"
           app:srcCompat="@drawable/ic_close_black_24px"
           />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
   </FrameLayout>
 </layout>

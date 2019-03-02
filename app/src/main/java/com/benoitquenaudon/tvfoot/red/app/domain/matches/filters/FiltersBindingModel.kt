@@ -1,6 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
-import android.databinding.ObservableBoolean
+import androidx.databinding.ObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.data.entity.FilterTeam
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Tag

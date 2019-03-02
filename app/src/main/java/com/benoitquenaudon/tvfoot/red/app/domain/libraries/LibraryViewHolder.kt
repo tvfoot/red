@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.libraries
 
 import android.net.Uri
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.databinding.LibraryRowBinding
 import com.benoitquenaudon.tvfoot.red.util.CircleTransform
@@ -11,7 +11,7 @@ import kotlin.properties.Delegates
 class LibraryViewHolder(
     val binding: LibraryRowBinding,
     val adapter: LibrariesAdapter
-) : RecyclerView.ViewHolder(binding.root) {
+) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
   var library: Library by Delegates.notNull()
 
   fun bind(library: Library) {

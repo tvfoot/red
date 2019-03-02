@@ -1,6 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import kotlin.properties.Delegates
 
 class FiltersItemDisplayableDiffUtilCallback : DiffUtil.Callback() {

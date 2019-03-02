@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.injection.module
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.benoitquenaudon.tvfoot.red.app.domain.match.MatchViewModel
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesViewModel
 import com.benoitquenaudon.tvfoot.red.app.mvi.RedViewModelFactory

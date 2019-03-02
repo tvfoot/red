@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
-import android.databinding.DataBindingUtil
-import android.support.v7.widget.RecyclerView
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.benoitquenaudon.tvfoot.red.R
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @ActivityScope
 class BroadcastersAdapter @Inject constructor(
-) : RecyclerView.Adapter<BroadcastersAdapter.BroadcasterViewHolder>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<BroadcastersAdapter.BroadcasterViewHolder>() {
   private val broadcasters = ArrayList<BroadcasterRowDisplayable>()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BroadcasterViewHolder {
@@ -37,7 +37,7 @@ class BroadcastersAdapter @Inject constructor(
 
   class BroadcasterViewHolder(
       private val binding: BroadcasterRowBinding
-  ) : RecyclerView.ViewHolder(binding.root) {
+  ) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
 
     fun bind(broadcaster: BroadcasterRowDisplayable) {
       binding.broadcasterLogoPath = broadcaster.logoPath

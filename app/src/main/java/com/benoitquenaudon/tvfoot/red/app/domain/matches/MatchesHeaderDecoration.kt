@@ -2,27 +2,26 @@ package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
 import android.graphics.Canvas
 import android.graphics.Rect
-import android.support.v7.widget.RecyclerView
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
-import androidx.util.getOrDefault
+import androidx.core.util.getOrDefault
+import androidx.recyclerview.widget.RecyclerView
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesItemViewHolder.MatchHeaderViewHolder
-
 
 class MatchesHeaderDecoration(
     private val matchesAdapter: MatchesAdapter
-) : RecyclerView.ItemDecoration() {
+) : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
   private val headerViewHolderCache: SparseArray<MatchHeaderViewHolder> = SparseArray()
 
   override fun getItemOffsets(
       outRect: Rect,
       view: View,
-      parent: RecyclerView,
-      state: RecyclerView.State
+      parent: androidx.recyclerview.widget.RecyclerView,
+      state: androidx.recyclerview.widget.RecyclerView.State
   ) {
     val position = parent.getChildAdapterPosition(view)
-    if (position != RecyclerView.NO_POSITION && showHeaderAboveItem(position)) {
+    if (position != androidx.recyclerview.widget.RecyclerView.NO_POSITION && showHeaderAboveItem(position)) {
       val headerHeight = getHeaderHeightForLayout(getHeader(parent, position).itemView)
       outRect.set(0, headerHeight, 0, 0)
       return
@@ -38,7 +37,7 @@ class MatchesHeaderDecoration(
       matchesAdapter.closestHeaderPosition(firstPosition) ==
           matchesAdapter.closestHeaderPosition(secondPosition)
 
-  private fun getHeader(parent: RecyclerView, position: Int): RecyclerView.ViewHolder {
+  private fun getHeader(parent: androidx.recyclerview.widget.RecyclerView, position: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
     val headerPosition = matchesAdapter.closestHeaderPosition(position)
 
     val holder = headerViewHolderCache.getOrDefault(
@@ -72,7 +71,7 @@ class MatchesHeaderDecoration(
     return 0
   }
 
-  override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+  override fun onDrawOver(canvas: Canvas, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
     val childCount = parent.childCount
     var previousHeaderPosition: Int = -1
 
@@ -80,7 +79,7 @@ class MatchesHeaderDecoration(
       val child = parent.getChildAt(layoutPos)
       val adapterPos = parent.getChildAdapterPosition(child)
 
-      if (adapterPos != RecyclerView.NO_POSITION) {
+      if (adapterPos != androidx.recyclerview.widget.RecyclerView.NO_POSITION) {
         val headerPosition = matchesAdapter.closestHeaderPosition(adapterPos)
 
         if (headerPosition != previousHeaderPosition) {
@@ -102,7 +101,7 @@ class MatchesHeaderDecoration(
   }
 
   private fun getHeaderTop(
-      parent: RecyclerView,
+      parent: androidx.recyclerview.widget.RecyclerView,
       child: View,
       header: View,
       layoutPos: Int,
@@ -115,7 +114,7 @@ class MatchesHeaderDecoration(
       // find next view with header and compute the offscreen push if needed
       for (i in 1 until count) {
         val adapterPosHere = parent.getChildAdapterPosition(parent.getChildAt(i))
-        if (adapterPosHere != RecyclerView.NO_POSITION) {
+        if (adapterPosHere != androidx.recyclerview.widget.RecyclerView.NO_POSITION) {
           val nextHeaderPosition = matchesAdapter.closestHeaderPosition(adapterPosHere)
           if (nextHeaderPosition != headerPosition) {
             val next = parent.getChildAt(i)
