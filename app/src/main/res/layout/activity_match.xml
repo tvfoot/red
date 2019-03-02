@@ -10,19 +10,19 @@
         />
   </data>
 
-  <android.support.design.widget.CoordinatorLayout
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:fitsSystemWindows="true"
       tools:context=".app.domain.match.MatchActivity"
       >
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.TvFoot.AppBarOverlay"
         >
 
-      <android.support.v7.widget.Toolbar
+      <androidx.appcompat.widget.Toolbar
           android:id="@+id/match_toolbar"
           android:layout_width="match_parent"
           android:layout_height="?attr/actionBarSize"
@@ -39,8 +39,8 @@
             android:src="@drawable/logo"
             />
 
-      </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
+      </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -63,7 +63,7 @@
         android:fitsSystemWindows="true"
         app:visible="@{bindingModel.hasData}"
         >
-      <android.support.constraint.ConstraintLayout
+      <androidx.constraintlayout.widget.ConstraintLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           tools:context="com.benoitquenaudon.tvfoot.red.view.MatchListActivity"
@@ -179,14 +179,14 @@
             tools:text="SKM Stadium, Bakou"
             />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/match_detail_broadcasters"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="12dp"
             android:overScrollMode="never"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -194,7 +194,7 @@
             app:layout_constraintVertical_bias="0.3"
             tools:listitem="@layout/broadcaster_row_large"
             />
-      </android.support.constraint.ConstraintLayout>
+      </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
     <TextView
@@ -205,7 +205,7 @@
         app:visible="@{bindingModel.hasError}"
         />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/notify_match_start_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -222,5 +222,5 @@
         tools:src="@drawable/ic_notifications_none_white_24px"
         tools:tint="@color/colorAccent"
         />
-  </android.support.design.widget.CoordinatorLayout>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

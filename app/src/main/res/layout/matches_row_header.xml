@@ -11,7 +11,7 @@
         />
   </data>
 
-  <android.support.constraint.ConstraintLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@color/colorGrayLightForHeaders"
@@ -49,5 +49,5 @@
         tools:text="SAMEDI, 15 OCTOBRE 2016"
         />
 
-  </android.support.constraint.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

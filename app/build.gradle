@@ -12,7 +12,7 @@ android {
     targetSdkVersion rootProject.config.targetSdkVersion
     versionCode Integer.parseInt(System.getenv('CIRCLE_BUILD_NUM') ?: "153")
     versionName rootProject.config.versionName
-    testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     vectorDrawables {
       useSupportLibrary true
     }
@@ -81,16 +81,16 @@ androidExtensions {
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-  implementation "android.arch.lifecycle:extensions:$rootProject.lib.archComponentsVersion"
-  kapt "android.arch.lifecycle:compiler:$rootProject.lib.archComponentsVersion"
-  implementation "com.android.support:appcompat-v7:$rootProject.lib.supportLibraryVersion"
-  implementation "com.android.support:support-annotations:$rootProject.lib.supportLibraryVersion"
-  implementation "com.android.support:design:$rootProject.lib.supportLibraryVersion"
-  implementation "com.android.support:recyclerview-v7:$rootProject.lib.supportLibraryVersion"
-  implementation "com.android.support:design:$rootProject.lib.supportLibraryVersion"
-  implementation "com.android.support:support-v4:$rootProject.lib.supportLibraryVersion"
-  implementation "com.android.support:cardview-v7:$rootProject.lib.supportLibraryVersion"
-  implementation "com.android.support.constraint:constraint-layout:$rootProject.lib.constraintLayoutVersion"
+  implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lib.archComponentsVersion"
+  kapt "androidx.lifecycle:lifecycle-compiler:$rootProject.lib.archComponentsVersion"
+  implementation "androidx.appcompat:appcompat:$rootProject.lib.appCompatVersion"
+  implementation "androidx.annotation:annotation:$rootProject.lib.supportLibraryVersion"
+  implementation "com.google.android.material:material:$rootProject.lib.supportLibraryVersion"
+  implementation "androidx.recyclerview:recyclerview:$rootProject.lib.supportLibraryVersion"
+  implementation "com.google.android.material:material:$rootProject.lib.supportLibraryVersion"
+  implementation "androidx.legacy:legacy-support-v4:$rootProject.lib.supportLibraryVersion"
+  implementation "androidx.cardview:cardview:$rootProject.lib.supportLibraryVersion"
+  implementation "androidx.constraintlayout:constraintlayout:$rootProject.lib.constraintLayoutVersion"
   implementation "com.jakewharton.timber:timber:$rootProject.lib.timberVersion"
   implementation "io.reactivex.rxjava2:rxjava:$rootProject.lib.rxJavaVersion"
   implementation "io.reactivex.rxjava2:rxkotlin:$rootProject.lib.rxKotlinVersion"
@@ -112,13 +112,13 @@ dependencies {
   implementation "com.benoitquenaudon:rxdatabinding:$rootProject.lib.rxDataBindingVersion"
   debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.lib.leakCanaryVersion"
   releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.lib.leakCanaryVersion"
-  kapt "com.android.databinding:compiler:$android_plugin_version"
+  kapt "androidx.databinding:databinding-compiler:$android_plugin_version"
   implementation "com.google.dagger:dagger-android:$rootProject.lib.daggerVersion"
   implementation "com.google.dagger:dagger-android-support:$rootProject.lib.daggerVersion"
   implementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
   kapt "com.google.dagger:dagger-android-processor:$rootProject.lib.daggerVersion"
   kapt "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
-  implementation "androidx.core:core-ktx:$rootProject.lib.androidxVersion"
+  implementation "androidx.core:core-ktx:$rootProject.lib.ktxVersion"
 
   // JVM Tests
   testImplementation "junit:junit:$rootProject.lib.junitVersion"
@@ -127,8 +127,8 @@ dependencies {
   testImplementation "com.squareup.retrofit2:retrofit-mock:$rootProject.lib.retrofitVersion"
   kaptTest "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
 
-  androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$rootProject.lib.espressoVersion"
-  androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.lib.espressoVersion"
+  androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.lib.espressoVersion"
+  androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.lib.espressoVersion"
   kaptAndroidTest "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
 }
 

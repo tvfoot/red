@@ -14,7 +14,7 @@
         />
   </data>
 
-  <android.support.constraint.ConstraintLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@drawable/ripple_white_background"
@@ -64,18 +64,18 @@
         app:layout_constraintTop_toBottomOf="@+id/match_headline"
         tools:text="18:50"
         />
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/match_broadcasters"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintLeft_toLeftOf="@+id/match_start_time"
         app:layout_constraintRight_toRightOf="@+id/match_start_time"
         app:layout_constraintTop_toBottomOf="@+id/match_start_time"
         app:layout_constraintWidth_default="wrap"
         tools:listitem="@layout/broadcaster_row"
         />
-  </android.support.constraint.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

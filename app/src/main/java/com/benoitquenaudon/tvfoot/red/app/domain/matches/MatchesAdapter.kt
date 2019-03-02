@@ -1,12 +1,11 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
-import android.support.v7.util.DiffUtil
-import android.support.v7.util.DiffUtil.DiffResult
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DiffUtil.DiffResult
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesItemViewHolder.LoadingRowViewHolder
@@ -32,7 +31,7 @@ import javax.inject.Inject
 @ActivityScope
 class MatchesAdapter @Inject constructor(
   private val schedulerProvider: BaseSchedulerProvider
-) : RecyclerView.Adapter<MatchesItemViewHolder<*, *>>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<MatchesItemViewHolder<*, *>>() {
   private var matchesItems = emptyList<MatchesItemDisplayable>()
   private val matchesObservable: PublishSubject<Triple<List<MatchesItemDisplayable>, List<MatchesItemDisplayable>, DataVersion>> =
     PublishSubject.create()
@@ -102,8 +101,8 @@ class MatchesAdapter @Inject constructor(
     }
   }
 
-  override fun onViewRecycled(holder: MatchesItemViewHolder<*, *>?) {
-    holder?.unbind()
+  override fun onViewRecycled(holder: MatchesItemViewHolder<*, *>) {
+    holder.unbind()
     super.onViewRecycled(holder)
   }
 

@@ -1,13 +1,12 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match
 
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.AUTHORITIES
 import com.benoitquenaudon.tvfoot.red.PATH_MATCH
@@ -21,6 +20,7 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Match.Companion.MATCH_ID
 import com.benoitquenaudon.tvfoot.red.app.mvi.MviView
 import com.benoitquenaudon.tvfoot.red.databinding.ActivityMatchBinding
 import com.benoitquenaudon.tvfoot.red.util.errorHandlingSubscribe
+import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -120,8 +120,12 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
   private fun fabClickIntent(): Observable<MatchIntent.NotifyMatchStartIntent> {
     return RxView.clicks(binding.notifyMatchStartFab)
         .map {
-          MatchIntent.NotifyMatchStartIntent(bindingModel.match.get().matchId,
-              bindingModel.match.get().startAt, !isMatchNotificationActivated)
+          val match = bindingModel.match.get()!!
+          MatchIntent.NotifyMatchStartIntent(
+              match.matchId,
+              match.startAt,
+              !isMatchNotificationActivated
+          )
         }
   }
 

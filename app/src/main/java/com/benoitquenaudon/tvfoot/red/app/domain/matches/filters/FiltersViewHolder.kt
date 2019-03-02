@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
-import android.databinding.ViewDataBinding
-import android.support.v7.widget.RecyclerView
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.RecyclerView
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterHeaderDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterSearchLoadingRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersBroadcasterDisplayable
@@ -19,7 +19,7 @@ import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding
 
 sealed class FiltersViewHolder<out B : ViewDataBinding, in T : FiltersItemDisplayable>(
     val binding: B
-) : RecyclerView.ViewHolder(binding.root) {
+) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
   abstract fun bind(item: T)
   abstract fun unbind()
 

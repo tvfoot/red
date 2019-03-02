@@ -2,7 +2,7 @@ package com.benoitquenaudon.tvfoot.red.app.data.source
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
-import androidx.content.edit
+import androidx.core.content.edit
 import com.benoitquenaudon.tvfoot.red.app.common.StreamNotification
 import com.benoitquenaudon.tvfoot.red.app.common.StreamNotification.INSTANCE
 import com.benoitquenaudon.tvfoot.red.app.data.entity.FilterTeam
@@ -13,7 +13,6 @@ import com.benoitquenaudon.tvfoot.red.util.flatMapIterable
 import io.reactivex.Observable
 import io.reactivex.Single
 import javax.inject.Inject
-
 
 class PreferenceRepository @Inject constructor(
     private val preferences: SharedPreferences

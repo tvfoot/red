@@ -6,7 +6,8 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import okio.Okio
+import okio.buffer
+import okio.source
 import java.io.IOException
 import java.lang.reflect.Type
 import javax.inject.Inject
@@ -49,7 +50,7 @@ class Fixture @Inject constructor(private val moshi: Moshi) {
     val inputStream = this.javaClass.classLoader.getResourceAsStream(filename)
 
     try {
-      val reader = JsonReader.of(Okio.buffer(Okio.source(inputStream)))
+      val reader = JsonReader.of(inputStream.source().buffer())
       val adapter = moshi.adapter<T>(typeOfT)
       val result = adapter.fromJson(reader)
 

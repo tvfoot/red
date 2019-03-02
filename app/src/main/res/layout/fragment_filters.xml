@@ -14,7 +14,7 @@
       android:orientation="vertical"
       >
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/filters_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,12 +24,12 @@
         app:titleTextColor="@color/colorWhite"
         />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/filters_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:visible="@{!bindingModel.loadingTags}"
         tools:context="com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersFragment"
         tools:listitem="@layout/filters_row_competition"

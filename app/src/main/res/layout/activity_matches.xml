@@ -9,13 +9,13 @@
         type="com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesBindingModel"
         />
   </data>
-  <android.support.v4.widget.DrawerLayout
+  <androidx.drawerlayout.widget.DrawerLayout
       android:id="@+id/drawer_layout"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:fitsSystemWindows="true"
       >
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
@@ -23,13 +23,13 @@
         tools:context=".app.domain.matches.MatchesActivity"
         >
 
-      <android.support.design.widget.AppBarLayout
+      <com.google.android.material.appbar.AppBarLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:theme="@style/Theme.TvFoot.AppBarOverlay"
           >
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/matches_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -46,10 +46,10 @@
               android:src="@drawable/logo"
               />
 
-        </android.support.v7.widget.Toolbar>
-      </android.support.design.widget.AppBarLayout>
+        </androidx.appcompat.widget.Toolbar>
+      </com.google.android.material.appbar.AppBarLayout>
 
-      <android.support.v4.widget.SwipeRefreshLayout
+      <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
           xmlns:android="http://schemas.android.com/apk/res/android"
           android:id="@+id/swipe_refresh_layout"
           android:layout_width="match_parent"
@@ -59,15 +59,15 @@
           app:visible="@{bindingModel.hasData}"
           tools:visibility="gone"
           >
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:context="com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesActivity"
             tools:listitem="@layout/matches_row_match"
             />
-      </android.support.v4.widget.SwipeRefreshLayout>
+      </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
       <TextView
           android:id="@+id/empty_view"
@@ -88,7 +88,7 @@
           app:visible="@{bindingModel.hasError}"
           />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <FrameLayout
         android:id="@+id/filters"
@@ -98,5 +98,5 @@
         android:clickable="true"
         android:focusable="true"
         />
-  </android.support.v4.widget.DrawerLayout>
+  </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

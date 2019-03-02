@@ -1,6 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
 
 sealed class FiltersItemDisplayable {

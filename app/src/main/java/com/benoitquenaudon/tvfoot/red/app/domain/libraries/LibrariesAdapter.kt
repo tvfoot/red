@@ -1,8 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.libraries
 
-import android.databinding.DataBindingUtil
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.ViewHolder
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.benoitquenaudon.tvfoot.red.R
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class LibrariesAdapter @Inject constructor(
     val libraries: List<Library>
-) : RecyclerView.Adapter<ViewHolder>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<ViewHolder>() {
   val libraryClickObservable: PublishSubject<Library> = PublishSubject.create()
 
   override fun getItemCount(): Int = libraries.size + 1

@@ -14,7 +14,7 @@
         />
   </data>
 
-  <android.support.constraint.ConstraintLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@drawable/ripple_white_background"
@@ -119,14 +119,14 @@
         app:layout_constraintTop_toBottomOf="@+id/match_away_team_icon"
         tools:text="STRASBOURG"
         />
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/match_broadcasters"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:gravity="center"
         android:orientation="vertical"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintLeft_toLeftOf="@+id/match_start_time"
         app:layout_constraintRight_toRightOf="@+id/match_start_time"
         app:layout_constraintTop_toBottomOf="@+id/match_competition"
@@ -147,5 +147,5 @@
         app:srcCompat="@drawable/ic_tv_black_off_24px"
         app:visible="@{match.broadcasters.isEmpty}"
         />
-  </android.support.constraint.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

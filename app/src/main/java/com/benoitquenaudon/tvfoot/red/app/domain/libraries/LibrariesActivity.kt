@@ -1,6 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.libraries
 
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity

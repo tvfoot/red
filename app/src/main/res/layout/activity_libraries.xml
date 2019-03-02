@@ -6,20 +6,20 @@
     >
 
 
-  <android.support.design.widget.CoordinatorLayout
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:animateLayoutChanges="true"
       android:fitsSystemWindows="true"
       tools:context=".app.domain.libraries.LibrariesActivity"
       >
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.TvFoot.AppBarOverlay"
         >
 
-      <android.support.v7.widget.Toolbar
+      <androidx.appcompat.widget.Toolbar
           android:id="@+id/libraries_toolbar"
           android:layout_width="match_parent"
           android:layout_height="?attr/actionBarSize"
@@ -36,16 +36,16 @@
             android:src="@drawable/logo"
             />
 
-      </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
+      </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/librariesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="com.benoitquenaudon.tvfoot.red.app.domain.libraries.LibrariesActivity"
         />
-  </android.support.design.widget.CoordinatorLayout>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
