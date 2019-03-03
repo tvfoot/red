@@ -23,6 +23,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import timber.log.Timber
+import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 class MatchReminderService : DaggerService() {
@@ -60,6 +61,7 @@ class MatchReminderService : DaggerService() {
             .setContentTitle(getString(R.string.loading_info))
             .setSmallIcon(R.drawable.logo)
             .setAutoCancel(true)
+            .setProgress(0, 0, true)
             .setContentIntent(pendingIntent)
             .build()
 
