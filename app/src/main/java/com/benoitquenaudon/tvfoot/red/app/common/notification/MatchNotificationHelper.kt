@@ -67,6 +67,6 @@ class MatchNotificationHelper(
   }
 
   companion object Constant {
-    private const val NOTIFICATION_CHANNEL = "match_starting"
+    const val NOTIFICATION_CHANNEL = "match_starting"
   }
 }

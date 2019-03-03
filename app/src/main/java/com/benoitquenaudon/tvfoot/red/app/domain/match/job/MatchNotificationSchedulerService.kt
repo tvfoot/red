@@ -13,16 +13,11 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class MatchNotificationSchedulerService : JobService() {
-  @Inject
-  lateinit var disposables: CompositeDisposable
-  @Inject
-  lateinit var matchRepository: MatchRepository
-  @Inject
-  lateinit var notificationRepository: NotificationRepository
-  @Inject
-  lateinit var preferenceRepository: PreferenceRepository
-  @Inject
-  lateinit var schedulerProvider: BaseSchedulerProvider
+  @Inject lateinit var disposables: CompositeDisposable
+  @Inject lateinit var matchRepository: MatchRepository
+  @Inject lateinit var notificationRepository: NotificationRepository
+  @Inject lateinit var preferenceRepository: PreferenceRepository
+  @Inject lateinit var schedulerProvider: BaseSchedulerProvider
 
   private val nowOnCreate: Long = System.currentTimeMillis()
 

@@ -39,4 +39,5 @@
   <string name="library_image">Library image</string>
   <string name="notification_indicator">Notification indicator</string>
   <string name="no_broadcaster">No broadcaster</string>
+  <string name="loading_info">Loading information about the next game</string>
 </resources>

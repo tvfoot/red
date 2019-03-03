@@ -39,4 +39,5 @@
   <string name="library_image">Image de la librairie</string>
   <string name="notification_indicator">Indicateur de notification</string>
   <string name="no_broadcaster">Match non diffusé</string>
+  <string name="loading_info">Information pour le prochain match en cours de chargement</string>
 </resources>

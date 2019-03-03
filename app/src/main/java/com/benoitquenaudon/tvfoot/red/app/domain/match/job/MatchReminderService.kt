@@ -1,8 +1,17 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.match.job
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
+import com.benoitquenaudon.tvfoot.red.R
+import com.benoitquenaudon.tvfoot.red.R.string
+import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowIntentFactory.toMatchesIntent
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MatchNotificationHelper
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
@@ -24,6 +33,41 @@ class MatchReminderService : DaggerService() {
 
   override fun onBind(intent: Intent): IBinder? {
     return null
+  }
+
+  override fun onCreate() {
+    super.onCreate()
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      val pendingIntent: PendingIntent = toMatchesIntent().let { notificationIntent ->
+        PendingIntent.getActivity(this, 0, notificationIntent, 0)
+      }
+
+      val channel =
+        NotificationChannel(
+            MatchNotificationHelper.NOTIFICATION_CHANNEL,
+            this.getString(string.notification_match_starting_channel_name),
+            NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
+          setShowBadge(false)
+        }
+
+      this.getSystemService(NotificationManager::class.java)
+          .createNotificationChannel(channel)
+
+      val notification: Notification =
+        Notification.Builder(this, MatchNotificationHelper.NOTIFICATION_CHANNEL)
+            .setContentTitle(getString(R.string.loading_info))
+            .setSmallIcon(R.drawable.logo)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .build()
+
+      (this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+          .notify(FOREGROUND_NOTIFICATION_ID, notification)
+
+      startForeground(FOREGROUND_NOTIFICATION_ID, notification)
+    }
   }
 
   override fun onStartCommand(
@@ -72,5 +116,6 @@ class MatchReminderService : DaggerService() {
   companion object {
     const val ACTION_PUBLISH_NOTIFICATION =
       "com.benoitquenaudon.tvfoot.red.action.PUBLISH_NOTIFICATION"
+    const val FOREGROUND_NOTIFICATION_ID = 33
   }
 }
