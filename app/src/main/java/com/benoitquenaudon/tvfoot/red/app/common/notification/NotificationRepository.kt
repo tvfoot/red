@@ -3,6 +3,7 @@ package com.benoitquenaudon.tvfoot.red.app.common.notification
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.os.Build
 import com.benoitquenaudon.tvfoot.red.RedApp
 import com.benoitquenaudon.tvfoot.red.app.common.StreamNotification
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
@@ -22,8 +23,22 @@ class NotificationRepository @Inject constructor(
         .setAction(MatchReminderService.ACTION_PUBLISH_NOTIFICATION)
         .putExtra(Match.MATCH_ID, matchId)
 
-    val serviceIntent = PendingIntent
-        .getService(context, matchIdAsInt(matchId), intent, PendingIntent.FLAG_CANCEL_CURRENT)
+    val serviceIntent =
+      if (Build.VERSION.SDK_INT >= 26) {
+        PendingIntent.getForegroundService(
+            context,
+            matchIdAsInt(matchId),
+            intent,
+            PendingIntent.FLAG_CANCEL_CURRENT
+        )
+      } else {
+        PendingIntent.getService(
+            context,
+            matchIdAsInt(matchId),
+            intent,
+            PendingIntent.FLAG_CANCEL_CURRENT
+        )
+      }
 
     if (shouldNotify) {
       alarmManager.setExact(
