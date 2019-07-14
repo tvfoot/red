@@ -1,0 +1,40 @@
+import java.lang.Integer;
+import kotlin.collections.List;
+
+CREATE TABLE match (
+  id TEXT NOT NULL PRIMARY KEY,
+  label TEXT,
+  startAt INTEGER NOT NULL,
+  matchDay TEXT,
+  homeTeam BLOB AS Team NOT NULL,
+  awayTeam BLOB AS Team NOT NULL,
+  broadcasters BLOB AS List<String> DEFAULT NULL,
+  place TEXT,
+  competitionCode TEXT NOT NULL,
+  postponed INTEGER AS Boolean DEFAULT NULL,
+  tags BLOB AS List<String> DEFAULT NULL
+);
+
+select:
+SELECT *
+FROM match;
+
+insertRow:
+INSERT OR REPLACE INTO match VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+insert:
+INSERT OR REPLACE INTO match VALUES ?;
+
+updateRow:
+UPDATE match
+SET label = ?,
+    startAt = ?,
+    matchDay = ?,
+    homeTeam = ?,
+    awayTeam = ?,
+    broadcasters = ?,
+    place = ?,
+    competitionCode = ?,
+    postponed = ?,
+    tags = ?
+WHERE id = ?;

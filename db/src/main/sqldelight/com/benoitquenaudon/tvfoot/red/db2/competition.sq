@@ -1,0 +1,25 @@
+CREATE TABLE competition (
+  code TEXT NOT NULL PRIMARY KEY,
+  name TEXT NOT NULL,
+  country TEXT,
+  url TEXT,
+  gender TEXT
+);
+
+select:
+SELECT *
+FROM competition;
+
+insertRow:
+INSERT OR REPLACE INTO competition VALUES (?, ?, ?, ?, ?);
+
+insert:
+INSERT OR REPLACE INTO competition VALUES ?;
+
+updateRow:
+UPDATE competition
+SET name = ?,
+    country = ?,
+    url = ?,
+    gender = ?
+WHERE code = ?;

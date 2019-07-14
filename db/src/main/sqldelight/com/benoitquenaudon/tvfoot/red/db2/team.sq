@@ -1,0 +1,35 @@
+CREATE TABLE team (
+  id TEXT NOT NULL PRIMARY KEY,
+  code TEXT,
+  name TEXT,
+  fullname TEXT,
+  city TEXT,
+  country TEXT,
+  url TEXT,
+  stadium TEXT,
+  twitter TEXT,
+  type TEXT
+);
+
+select:
+SELECT *
+FROM team;
+
+insertRow:
+INSERT OR REPLACE INTO team VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+insert:
+INSERT OR REPLACE INTO team VALUES ?;
+
+updateRow:
+UPDATE team
+SET code = ?,
+    name = ?,
+    fullname = ?,
+    city = ?,
+    country = ?,
+    url = ?,
+    stadium = ?,
+    twitter = ?,
+    type = ?
+WHERE id = ?;

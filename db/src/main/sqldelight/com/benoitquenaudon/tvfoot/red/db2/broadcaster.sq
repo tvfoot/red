@@ -1,0 +1,21 @@
+CREATE TABLE broadcaster (
+  code TEXT NOT NULL PRIMARY KEY,
+  name TEXT,
+  url TEXT
+);
+
+select:
+SELECT *
+FROM broadcaster;
+
+insertRow:
+INSERT OR REPLACE INTO broadcaster VALUES (?, ?, ?);
+
+insert:
+INSERT OR REPLACE INTO broadcaster VALUES ?;
+
+updateRow:
+UPDATE broadcaster
+SET name = ?,
+    url = ?
+WHERE code = ?;

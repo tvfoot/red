@@ -1,0 +1,39 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.squareup.sqldelight'
+apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'org.jetbrains.kotlin.android.extensions'
+
+sqldelight {
+  RedDatabase {
+    packageName = "com.benoitquenaudon.tvfoot.red.db"
+  }
+}
+
+android {
+  compileSdkVersion versions.compileSdk
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  defaultConfig {
+    minSdkVersion versions.minSdk
+  }
+}
+
+androidExtensions {
+  experimental = true
+  features = ["parcelize"]
+}
+
+dependencies {
+  api deps.kotlin.stdlib.jdk8
+  implementation deps.timber
+}
+
+afterEvaluate {
+  project.tasks.withType(Test) { task ->
+    task.dependsOn("verifyDebugRedDatabaseMigration")
+  }
+}
