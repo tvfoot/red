@@ -7,9 +7,9 @@ import com.benoitquenaudon.tvfoot.red.app.data.entity.Match
 import com.benoitquenaudon.tvfoot.red.app.data.entity.Team
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.BroadcasterRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchesItemDisplayable
-import kotlinx.android.parcel.Parcelize
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import kotlinx.android.parcel.Parcelize
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale

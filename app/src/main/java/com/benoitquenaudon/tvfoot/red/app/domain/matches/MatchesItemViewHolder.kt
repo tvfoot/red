@@ -1,7 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.RecyclerView
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.HeaderRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.LoadingRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.MatchRowDisplayable
@@ -10,7 +9,6 @@ import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowHeaderBinding
 import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowMatchBinding
 import com.benoitquenaudon.tvfoot.red.databinding.MatchesRowTeamlessMatchBinding
 import com.benoitquenaudon.tvfoot.red.databinding.RowLoadingBinding
-
 
 sealed class MatchesItemViewHolder<out B : ViewDataBinding, in T : MatchesItemDisplayable>(
     val binding: B

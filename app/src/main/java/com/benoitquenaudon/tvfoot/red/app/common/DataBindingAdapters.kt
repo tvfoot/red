@@ -1,6 +1,5 @@
 package com.benoitquenaudon.tvfoot.red.app.common
 
-import androidx.databinding.BindingAdapter
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -8,6 +7,7 @@ import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.api.TvfootService
 import com.squareup.picasso.Picasso

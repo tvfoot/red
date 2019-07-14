@@ -65,7 +65,7 @@ sealed class FiltersItemDisplayable {
    * We only use a counter for the diffUtil do know if this is a new displayable or not.
    * We however need the inputText for when the view is recycled and rebound.
    */
-  data class TeamSearchInputDisplayable private constructor(
+  data class TeamSearchInputDisplayable internal constructor(
       private val counter: Int
   ) : FiltersItemDisplayable() {
     var inputText: String = ""

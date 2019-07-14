@@ -52,7 +52,7 @@ class MatchActivity : BaseActivity(), MviView<MatchIntent, MatchViewState> {
     super.onCreate(savedInstanceState)
 
     val intent = intent
-    matchId = intent.getStringExtra(Match.MATCH_ID)
+    matchId = intent.getStringExtra(MATCH_ID)
 
     val uri: Uri? = intent.data
     if (matchId == null && AUTHORITIES.contains(uri?.authority) && SCHEMES.contains(uri?.scheme)) {

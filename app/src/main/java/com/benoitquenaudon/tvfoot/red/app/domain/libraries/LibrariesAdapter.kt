@@ -1,10 +1,9 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.libraries
 
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.databinding.LibraryRowBinding
 import io.reactivex.subjects.PublishSubject

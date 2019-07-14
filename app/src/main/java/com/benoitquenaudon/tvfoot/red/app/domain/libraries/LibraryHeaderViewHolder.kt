@@ -1,6 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.libraries
 
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
 class LibraryHeaderViewHolder(val view: View) : ViewHolder(view)

@@ -67,7 +67,7 @@ class MatchViewModel @Inject constructor(
         .doOnNext(this::logIntent)
         .map(this::actionFromIntent)
         .doOnNext(this::logAction)
-        .compose<MatchResult>(actionToResultTransformer)
+        .compose(actionToResultTransformer)
         .doOnNext(this::logResult)
         .scan(MatchViewState.idle(), MatchViewStateMachine)
         .doOnNext(this::logState)

@@ -1,12 +1,11 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DiffUtil.DiffResult
-import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterHeaderDisplayable

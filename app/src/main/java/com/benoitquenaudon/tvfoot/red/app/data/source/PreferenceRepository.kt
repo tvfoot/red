@@ -37,19 +37,19 @@ class PreferenceRepository @Inject constructor(
   }
 
   override fun loadFilteredBroadcasterNames(): Single<List<TagName>> {
-    return Single.just(preferences.getStringSet(FILTERED_BROADCASTERS_KEY, emptySet()).toList())
+    return Single.just(preferences.getStringSet(FILTERED_BROADCASTERS_KEY, emptySet())!!.toList())
   }
 
   override fun loadFilteredCompetitionNames(): Single<List<TagName>> {
-    return Single.just(preferences.getStringSet(FILTERED_COMPETITIONS_KEY, emptySet()).toList())
+    return Single.just(preferences.getStringSet(FILTERED_COMPETITIONS_KEY, emptySet())!!.toList())
   }
 
   override fun loadFilteredTeamCodes(): Single<List<TeamCode>> {
-    return Single.just(preferences.getStringSet(FILTERED_TEAMS_KEY, emptySet()).toList())
+    return Single.just(preferences.getStringSet(FILTERED_TEAMS_KEY, emptySet())!!.toList())
   }
 
   private fun loadTeamCodes(): Single<List<TeamCode>> {
-    return Single.just(preferences.getStringSet(TEAM_CODES_KEY, emptySet()).toList())
+    return Single.just(preferences.getStringSet(TEAM_CODES_KEY, emptySet())!!.toList())
   }
 
   override fun loadTeams(): Single<List<FilterTeam>> {

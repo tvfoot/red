@@ -10,7 +10,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import com.benoitquenaudon.tvfoot.red.R
-import com.benoitquenaudon.tvfoot.red.R.string
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowIntentFactory.toMatchesIntent
 import com.benoitquenaudon.tvfoot.red.app.common.notification.MatchNotificationHelper
 import com.benoitquenaudon.tvfoot.red.app.common.schedulers.BaseSchedulerProvider
@@ -23,7 +22,6 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import timber.log.Timber
-import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 class MatchReminderService : DaggerService() {
@@ -47,7 +45,7 @@ class MatchReminderService : DaggerService() {
       val channel =
         NotificationChannel(
             MatchNotificationHelper.NOTIFICATION_CHANNEL,
-            this.getString(string.notification_match_starting_channel_name),
+            this.getString(R.string.notification_match_starting_channel_name),
             NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
           setShowBadge(false)

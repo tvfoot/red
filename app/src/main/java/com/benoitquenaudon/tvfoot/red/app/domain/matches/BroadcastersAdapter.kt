@@ -1,9 +1,8 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches
 
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.displayable.BroadcasterRowDisplayable
 import com.benoitquenaudon.tvfoot.red.databinding.BroadcasterRowBinding

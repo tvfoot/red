@@ -1,7 +1,7 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.libraries
 
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
+import androidx.databinding.DataBindingUtil
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.common.BaseActivity
 import com.benoitquenaudon.tvfoot.red.app.common.flowcontroller.FlowController

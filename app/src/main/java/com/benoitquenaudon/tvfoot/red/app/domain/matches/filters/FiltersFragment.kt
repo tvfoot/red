@@ -1,14 +1,13 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import androidx.recyclerview.widget.DividerItemDecoration
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.benoitquenaudon.rxdatabinding.databinding.RxObservableBoolean
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.MatchesIntent

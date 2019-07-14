@@ -1,7 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.matches.filters
 
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.RecyclerView
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterHeaderDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FilterSearchLoadingRowDisplayable
 import com.benoitquenaudon.tvfoot.red.app.domain.matches.filters.FiltersItemDisplayable.FiltersAppliableItem.FiltersBroadcasterDisplayable

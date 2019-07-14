@@ -1,7 +1,6 @@
 package com.benoitquenaudon.tvfoot.red.app.domain.libraries
 
 import android.net.Uri
-import androidx.recyclerview.widget.RecyclerView
 import com.benoitquenaudon.tvfoot.red.R
 import com.benoitquenaudon.tvfoot.red.databinding.LibraryRowBinding
 import com.benoitquenaudon.tvfoot.red.util.CircleTransform
