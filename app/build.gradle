@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.jetbrains.kotlin.android'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'org.jetbrains.kotlin.android.extensions'
+apply plugin: 'org.jetbrains.kotlin.kapt'
 
 android {
   compileSdkVersion versions.compileSdk
@@ -72,10 +72,6 @@ android {
   sourceSets {
     androidTest.java.srcDirs += 'src/androidTest/kotlin'
   }
-}
-
-androidExtensions {
-  experimental = true
 }
 
 dependencies {
