@@ -119,7 +119,7 @@ buildscript {
           'bindingRecyclerView': "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:${versions.rxBinding}",
           'bindingAppCompat': "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${versions.rxBinding}",
           'bindingSupport': "com.jakewharton.rxbinding2:rxbinding-support-v4:${versions.rxBinding}",
-          'dataBinding': 'com.benoitquenaudon:rxdatabinding:2.0.0'
+          'dataBinding': 'com.benoitquenaudon:rxdatabinding:2.0.0',
           'relay': 'com.jakewharton.rxrelay2:rxrelay:2.1.0',
           'replayingShare': 'com.jakewharton.rx2:replaying-share-kotlin:2.0.0',
           'idler': 'com.squareup.rx.idler:rx2-idler:0.9.0',
