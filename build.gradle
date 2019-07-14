@@ -40,6 +40,7 @@ buildscript {
   ]
 
   ext.deps = [
+      // Android
       'androidx': [
           // TODO(benoit) this one only to 1.1.0?
           'annotations': 'androidx.annotation:annotation:1.1.0',
@@ -48,6 +49,7 @@ buildscript {
           'constraintLayout': "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}",
           'dataBindingCompiler': "androidx.databinding:databinding-compiler:${versions.androidGradle}",
           'design': 'com.google.android.material:material:1.0.0',
+          'ktx': "androidx.core:core-ktx:1.0.1",
           'legacy': "androidx.legacy:legacy-support-v4:${versions.supportLibrary}",
           'lifecycle': [
               'compiler': "androidx.lifecycle:lifecycle-compiler:${versions.archComponents}",
@@ -61,14 +63,13 @@ buildscript {
               'runner': 'androidx.test:runner:1.1.0',
               'rules': 'androidx.test:rules:1.1.0',
           ],
-          'ktx': "androidx.core:core-ktx:1.0.1",
       ],
-
       'tools': [
           'agp': "com.android.tools.build:gradle:${versions.androidGradle}",
           'testutils': "com.android.tools:testutils:${versions.lint}"
       ],
 
+      // Square
       'moshi': [
           'core': "com.squareup.moshi:moshi:${versions.moshi}",
           'adapters': "com.squareup.moshi:moshi-adapters:${versions.moshi}",
@@ -76,32 +77,40 @@ buildscript {
       ],
       'okhttp': [
           'core': "com.squareup.okhttp3:okhttp:${versions.okhttp}",
-          'mock': "com.squareup.okhttp3:mockwebserver:${versions.okhttp}",
           'loggingInterceptor': "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}",
-      ],
-      'retrofit': [
-          'core': "com.squareup.retrofit2:retrofit:${versions.retrofit}",
-          'moshi': "com.squareup.retrofit2:converter-moshi:${versions.retrofit}",
-          'rx2': "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",
-          'mock': "com.squareup.retrofit2:retrofit-mock:${versions.retrofit}",
+          'mock': "com.squareup.okhttp3:mockwebserver:${versions.okhttp}",
       ],
       'picasso': [
           'core': 'com.squareup.picasso3:picasso:3.0.0-SNAPSHOT',
           'okhttp3': 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0',
       ],
-      'sqlBrite': [
-          'core': 'com.squareup.sqlbrite2:sqlbrite-kotlin:2.0.0',
+      'retrofit': [
+          'core': "com.squareup.retrofit2:retrofit:${versions.retrofit}",
+          'mock': "com.squareup.retrofit2:retrofit-mock:${versions.retrofit}",
+          'moshi': "com.squareup.retrofit2:converter-moshi:${versions.retrofit}",
+          'rx2': "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",
       ],
-
-      'dagger': [
-          'runtime': "com.google.dagger:dagger:${versions.dagger}",
-          'compiler': "com.google.dagger:dagger-compiler:${versions.dagger}",
-          'android': "com.google.dagger:dagger-android:${versions.dagger}",
-          'androidCompiler': "com.google.dagger:dagger-android-processor:${versions.dagger}",
-          'androidSupport': "com.google.dagger:dagger-android-support:${versions.dagger}",
+      'sqldelight': [
+          'runtime': [
+              'common': "com.squareup.sqldelight:runtime:${versions.sqldelight}",
+              'jdk': "com.squareup.sqldelight:runtime-jvm:${versions.sqldelight}",
+          ],
+          'driver': [
+              'android': "com.squareup.sqldelight:android-driver:${versions.sqldelight}",
+              'sqlite': "com.squareup.sqldelight:sqlite-driver:${versions.sqldelight}",
+          ],
+          'paging': "com.squareup.sqldelight:android-paging-extensions:${versions.sqldelight}",
+          'rx2': "com.squareup.sqldelight:rxjava2-extensions:${versions.sqldelight}",
       ],
 
       // Third-party dependencies.
+      'dagger': [
+          'android': "com.google.dagger:dagger-android:${versions.dagger}",
+          'androidCompiler': "com.google.dagger:dagger-android-processor:${versions.dagger}",
+          'androidSupport': "com.google.dagger:dagger-android-support:${versions.dagger}",
+          'runtime': "com.google.dagger:dagger:${versions.dagger}",
+          'compiler': "com.google.dagger:dagger-compiler:${versions.dagger}",
+      ],
       'timber': 'com.jakewharton.timber:timber:4.7.1',
       'rx2': [
           'core': 'io.reactivex.rxjava2:rxjava:2.2.5',
@@ -110,11 +119,11 @@ buildscript {
           'bindingRecyclerView': "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:${versions.rxBinding}",
           'bindingAppCompat': "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${versions.rxBinding}",
           'bindingSupport': "com.jakewharton.rxbinding2:rxbinding-support-v4:${versions.rxBinding}",
-          'replayingShare': 'com.jakewharton.rx2:replaying-share-kotlin:2.0.0',
+          'dataBinding': 'com.benoitquenaudon:rxdatabinding:2.0.0'
           'relay': 'com.jakewharton.rxrelay2:rxrelay:2.1.0',
+          'replayingShare': 'com.jakewharton.rx2:replaying-share-kotlin:2.0.0',
           'idler': 'com.squareup.rx.idler:rx2-idler:0.9.0',
           'kotlin': 'io.reactivex.rxjava2:rxkotlin:2.2.0',
-          'dataBinding': 'com.benoitquenaudon:rxdatabinding:2.0.0'
       ],
       'koptional': [
           'core': 'com.gojuno.koptional:koptional:1.5.0',
