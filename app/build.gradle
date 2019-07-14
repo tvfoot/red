@@ -4,14 +4,13 @@ apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'kotlin-kapt'
 
 android {
-  compileSdkVersion rootProject.config.compileSdkVersion
-  buildToolsVersion rootProject.config.buildToolsVersion
+  compileSdkVersion versions.compileSdk
   defaultConfig {
-    applicationId rootProject.config.applicationId
-    minSdkVersion rootProject.config.minSdkVersion
-    targetSdkVersion rootProject.config.targetSdkVersion
+    applicationId red.applicationId
+    minSdkVersion versions.minSdk
+    targetSdkVersion versions.targetSdk
     versionCode Integer.parseInt(System.getenv('CIRCLE_BUILD_NUM') ?: "153")
-    versionName rootProject.config.versionName
+    versionName red.versionName
     testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     vectorDrawables {
       useSupportLibrary true
@@ -80,56 +79,55 @@ androidExtensions {
 }
 
 dependencies {
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-  implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lib.archComponentsVersion"
-  kapt "androidx.lifecycle:lifecycle-compiler:$rootProject.lib.archComponentsVersion"
-  implementation "androidx.appcompat:appcompat:$rootProject.lib.appCompatVersion"
-  implementation "androidx.annotation:annotation:$rootProject.lib.supportLibraryVersion"
-  implementation "com.google.android.material:material:$rootProject.lib.supportLibraryVersion"
-  implementation "androidx.recyclerview:recyclerview:$rootProject.lib.supportLibraryVersion"
-  implementation "com.google.android.material:material:$rootProject.lib.supportLibraryVersion"
-  implementation "androidx.legacy:legacy-support-v4:$rootProject.lib.supportLibraryVersion"
-  implementation "androidx.cardview:cardview:$rootProject.lib.supportLibraryVersion"
-  implementation "androidx.constraintlayout:constraintlayout:$rootProject.lib.constraintLayoutVersion"
-  implementation "com.jakewharton.timber:timber:$rootProject.lib.timberVersion"
-  implementation "io.reactivex.rxjava2:rxjava:$rootProject.lib.rxJavaVersion"
-  implementation "io.reactivex.rxjava2:rxkotlin:$rootProject.lib.rxKotlinVersion"
-  implementation "io.reactivex.rxjava2:rxandroid:$rootProject.lib.rxAndroidVersion"
-  implementation "com.squareup.picasso3:picasso:$rootProject.lib.picassoVersion"
-  implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:$rootProject.lib.picassoOkHttp3DownloaderVersion"
-  implementation "com.squareup.okhttp3:okhttp:$rootProject.lib.okHttpVersion"
-  implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.lib.okHttpVersion"
-  implementation "com.squareup.retrofit2:retrofit:$rootProject.lib.retrofitVersion"
-  implementation "com.squareup.retrofit2:converter-moshi:$rootProject.lib.retrofitVersion"
-  implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.lib.retrofitVersion"
-  implementation "com.squareup.moshi:moshi:$rootProject.lib.moshiVersion"
-  implementation "com.squareup.moshi:moshi-adapters:$rootProject.lib.moshiVersion"
-  kapt "com.squareup.moshi:moshi-kotlin-codegen:$rootProject.lib.moshiVersion"
-  implementation "com.jakewharton.rxbinding2:rxbinding:$rootProject.lib.rxBindingVersion"
-  implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$rootProject.lib.rxBindingVersion"
-  implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$rootProject.lib.rxBindingVersion"
-  implementation "com.jakewharton.rxbinding2:rxbinding-support-v4:$rootProject.lib.rxBindingVersion"
-  implementation "com.benoitquenaudon:rxdatabinding:$rootProject.lib.rxDataBindingVersion"
-  debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.lib.leakCanaryVersion"
-  releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.lib.leakCanaryVersion"
-  kapt "androidx.databinding:databinding-compiler:$android_plugin_version"
-  implementation "com.google.dagger:dagger-android:$rootProject.lib.daggerVersion"
-  implementation "com.google.dagger:dagger-android-support:$rootProject.lib.daggerVersion"
-  implementation "com.google.dagger:dagger:$rootProject.lib.daggerVersion"
-  kapt "com.google.dagger:dagger-android-processor:$rootProject.lib.daggerVersion"
-  kapt "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
-  implementation "androidx.core:core-ktx:$rootProject.lib.ktxVersion"
+  implementation deps.kotlin.stdlib.jdk8
+  implementation deps.androidx.lifecycle.extensions
+  kapt deps.androidx.lifecycle.compiler
+  implementation deps.androidx.appCompat
+  implementation deps.androidx.annotations
+  implementation deps.androidx.design
+  implementation deps.androidx.recyclerView
+  implementation deps.androidx.legacy
+  implementation deps.androidx.cardView
+  implementation deps.androidx.constraintLayout
+  implementation deps.timber
+  implementation deps.rx2.core
+  implementation deps.rx2.kotlin
+  implementation deps.rx2.android
+  implementation deps.picasso.core
+  implementation deps.picasso.okhttp3
+  implementation deps.okhttp.core
+  implementation deps.okhttp.loggingInterceptor
+  implementation deps.retrofit.core
+  implementation deps.retrofit.moshi
+  implementation deps.retrofit.rx2
+  implementation deps.moshi.core
+  implementation deps.moshi.adapters
+  kapt deps.moshi.kotlin
+  implementation deps.rx2.binding
+  implementation deps.rx2.bindingRecyclerView
+  implementation deps.rx2.bindingAppCompat
+  implementation deps.rx2.bindingSupport
+  implementation deps.rx2.dataBinding
+  kapt deps.androidx.dataBindingCompiler
+  implementation deps.dagger.runtime
+  implementation deps.dagger.android
+  implementation deps.dagger.androidSupport
+  kapt deps.dagger.androidCompiler
+  kapt deps.dagger.compiler
+
+  implementation deps.androidx.ktx
 
   // JVM Tests
-  testImplementation "junit:junit:$rootProject.lib.junitVersion"
-  testImplementation "com.squareup.okhttp3:mockwebserver:$rootProject.lib.okHttpVersion"
-  testImplementation "org.mockito:mockito-core:$rootProject.lib.mockitoVersion"
-  testImplementation "com.squareup.retrofit2:retrofit-mock:$rootProject.lib.retrofitVersion"
-  kaptTest "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
+  testImplementation deps.junit
+  testImplementation deps.okhttp.mock
+  testImplementation deps.mockito
+  testImplementation deps.mockitoKotlin
+  testImplementation deps.retrofit.mock
+  kaptTest deps.dagger.compiler
 
-  androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.lib.espressoVersion"
-  androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.lib.espressoVersion"
-  kaptAndroidTest "com.google.dagger:dagger-compiler:$rootProject.lib.daggerVersion"
+  androidTestImplementation deps.androidx.test.espresso
+  androidTestImplementation deps.androidx.test.espressoContrib
+  kaptAndroidTest deps.dagger.compiler
 }
 
 /*
@@ -137,13 +135,13 @@ Resolves dependency versions across test and production APKs, specifically, tran
 dependencies. This is required since Espresso internally has a dependency on support-annotations.
 */
 configurations.all {
-  resolutionStrategy.force "com.google.code.findbugs:jsr305:$rootProject.lib.jsr305Version"
+  resolutionStrategy.force "com.google.code.findbugs:jsr305:$versions.jsr305"
 
   resolutionStrategy {
     eachDependency { details ->
       // Force all of the primary support libraries to use the same version.
       if (details.requested.group == 'com.android.support') {
-        details.useVersion rootProject.lib.supportLibraryVersion
+        details.useVersion versions.supportLibrary
       }
     }
   }
