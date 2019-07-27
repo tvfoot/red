@@ -6,13 +6,13 @@ CREATE TABLE match (
   label TEXT,
   startAt INTEGER NOT NULL,
   matchDay TEXT,
-  homeTeam BLOB AS Team NOT NULL,
-  awayTeam BLOB AS Team NOT NULL,
-  broadcasters BLOB AS List<String> DEFAULT NULL,
+  homeTeamId TEXT NOT NULL,
+  awayTeamId TEXT NOT NULL,
+  broadcasterCodes TEXT AS List<String> DEFAULT NULL,
   place TEXT,
   competitionCode TEXT NOT NULL,
   postponed INTEGER AS Boolean DEFAULT NULL,
-  tags BLOB AS List<String> DEFAULT NULL
+  tags TEXT AS List<String> DEFAULT NULL
 );
 
 select:
@@ -30,9 +30,9 @@ UPDATE match
 SET label = ?,
     startAt = ?,
     matchDay = ?,
-    homeTeam = ?,
-    awayTeam = ?,
-    broadcasters = ?,
+    homeTeamId = ?,
+    awayTeamId = ?,
+    broadcasterCodes = ?,
     place = ?,
     competitionCode = ?,
     postponed = ?,
