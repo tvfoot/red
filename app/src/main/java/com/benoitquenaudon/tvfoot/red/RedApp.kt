@@ -1,15 +1,9 @@
 package com.benoitquenaudon.tvfoot.red
 
-import com.benoitquenaudon.tvfoot.red.injection.component.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
+import android.app.Application
 import timber.log.Timber
 
-class RedApp : DaggerApplication() {
-  override fun applicationInjector(): AndroidInjector<RedApp> {
-    return DaggerAppComponent.builder().create(this)
-  }
-
+class RedApp : Application() {
   override fun onCreate() {
     super.onCreate()
 
