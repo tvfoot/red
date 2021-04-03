@@ -108,22 +108,8 @@ dependencies {
   implementation deps.dagger.runtime
   implementation deps.dagger.android
   implementation deps.dagger.androidSupport
-  kapt deps.dagger.androidCompiler
-  kapt deps.dagger.compiler
 
   implementation deps.androidx.ktx
-
-  // JVM Tests
-  testImplementation deps.junit
-  testImplementation deps.okhttp.mock
-  testImplementation deps.mockito
-  testImplementation deps.mockitoKotlin
-  testImplementation deps.retrofit.mock
-  kaptTest deps.dagger.compiler
-
-  androidTestImplementation deps.androidx.test.espresso
-  androidTestImplementation deps.androidx.test.espressoContrib
-  kaptAndroidTest deps.dagger.compiler
 }
 
 /*

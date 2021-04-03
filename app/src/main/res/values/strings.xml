@@ -29,7 +29,7 @@
   <string name="filters_clearAll">Supprimer tout</string>
   <string name="notification_match_starting_channel_name">Début de matchs</string>
   <string name="team_search_input_hint">Votre équipe…</string>
-  <string name="no_match_found">Aucun match trouvé</string>
+  <string name="byebye">L\'aventure TVFoot s\'arrête malheureusement ici, merci à tous et bon foot!</string>
   <string name="close_menu">Fermer le menu</string>
   <string name="competitions">Compétitions</string>
   <string name="broadcasters">Chaînes</string>
